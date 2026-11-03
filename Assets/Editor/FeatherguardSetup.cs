@@ -23,13 +23,14 @@ namespace Featherguard.EditorTools
         const string AbilityDir = "Assets/Data/Abilities";
         const string UnitDir = "Assets/Data/Units";
         const string EncounterDir = "Assets/Data/Encounters";
+        const string UpgradeDir = "Assets/Data/Upgrades";
         const string SceneDir = "Assets/Scenes";
         const string ScenePath = "Assets/Scenes/Battle.unity";
 
         [MenuItem("Featherguard/Rebuild Battle Scene")]
         public static void Run()
         {
-            foreach (var dir in new[] { VfxDir, MaterialDir, AnimationDir, AbilityDir, UnitDir, EncounterDir, SceneDir })
+            foreach (var dir in new[] { VfxDir, MaterialDir, AnimationDir, AbilityDir, UnitDir, EncounterDir, UpgradeDir, SceneDir })
                 Directory.CreateDirectory(dir);
             AssetDatabase.Refresh();
 
@@ -81,8 +82,59 @@ namespace Featherguard.EditorTools
                 CreateEncounter("Battle08", "Obóz jaszczurów", 1.3f, 1.15f, 25, false, new[] { b, s, b }, new[] { g, b, g }),
                 CreateEncounter("Battle09", "Herszt", 1.3f, 1.15f, 40, true, new[] { g, g }, new[] { s, c, s }),
             };
+            run.upgrades = CreateUpgrades();
             EditorUtility.SetDirty(run);
             return run;
+        }
+
+        static UpgradeDefinition[] CreateUpgrades()
+        {
+            var list = new List<UpgradeDefinition>();
+
+            void Add(string id, string name, string description, Rarity rarity, UpgradeScope scope, RunBonus bonus = RunBonus.None, float amount = 0f,
+                bool curse = false, params StatModifier[] modifiers)
+            {
+                var u = LoadOrCreate<UpgradeDefinition>($"{UpgradeDir}/{id}.asset");
+                u.displayName = name;
+                u.description = description;
+                u.rarity = rarity;
+                u.scope = scope;
+                u.runBonus = bonus;
+                u.runAmount = amount;
+                u.curse = curse;
+                u.modifiers = modifiers;
+                EditorUtility.SetDirty(u);
+                list.Add(u);
+            }
+
+            StatModifier M(StatType stat, float multiply) => new(stat, multiply: multiply);
+            StatModifier A(StatType stat, float add) => new(stat, add: add);
+
+            Add("SharpFeathers", "Ostre pióra", "+15% obrażeń", Rarity.Common, UpgradeScope.Hero, modifiers: M(StatType.Damage, 0.15f));
+            Add("ThickFeathers", "Gęste pióra", "+15% max HP", Rarity.Common, UpgradeScope.Hero, modifiers: M(StatType.MaxHealth, 0.15f));
+            Add("KeenEye", "Bystre oko", "+6% szansy na kryt", Rarity.Common, UpgradeScope.Hero, modifiers: A(StatType.CritChance, 0.06f));
+            Add("WarmNest", "Ciepłe gniazdo", "+20% leczenia", Rarity.Common, UpgradeScope.Hero, modifiers: M(StatType.Healing, 0.2f));
+            Add("DownJacket", "Puchowa kurtka", "-10% otrzymywanych obrażeń", Rarity.Common, UpgradeScope.Hero, modifiers: M(StatType.DamageTaken, -0.1f));
+            Add("Penny", "Grosik", "+15% zdobywanego złota", Rarity.Common, UpgradeScope.Run, RunBonus.GoldGain, 0.15f);
+            Add("Horseshoe", "Podkowa", "+1 szczęścia (lepsze bębny i karty)", Rarity.Common, UpgradeScope.Run, RunBonus.Luck, 1f);
+            Add("FuryBlade", "Ostrze furii", "+25% obrażeń", Rarity.Rare, UpgradeScope.Hero, modifiers: M(StatType.Damage, 0.25f));
+            Add("CruelTalons", "Okrutne szpony", "+30% obrażeń krytycznych", Rarity.Rare, UpgradeScope.Hero, modifiers: A(StatType.CritDamage, 0.3f));
+            Add("VampireBeak", "Wampirzy dziób", "15% zadanych obrażeń wraca jako HP", Rarity.Rare, UpgradeScope.Hero, modifiers: A(StatType.Lifesteal, 0.15f));
+            Add("HotBlood", "Gorąca krew", "+30% przyrostu Furii", Rarity.Rare, UpgradeScope.Hero, modifiers: M(StatType.RageGain, 0.3f));
+            Add("SteelFeathers", "Stalowe pióra", "+25% max HP", Rarity.Rare, UpgradeScope.Hero, modifiers: M(StatType.MaxHealth, 0.25f));
+            Add("Clover", "Czterolistna koniczyna", "+2 szczęścia", Rarity.Rare, UpgradeScope.Run, RunBonus.Luck, 2f);
+            Add("Frenzy", "Szał", "+20% obrażeń i +12% szansy na kryt", Rarity.Epic, UpgradeScope.Hero, modifiers: new[] { M(StatType.Damage, 0.2f), A(StatType.CritChance, 0.12f) });
+            Add("Flock", "Stado", "+12% obrażeń dla wszystkich", Rarity.Epic, UpgradeScope.Party, modifiers: M(StatType.Damage, 0.12f));
+            Add("Bastion", "Bastion", "-20% otrzymywanych obrażeń dla wszystkich", Rarity.Epic, UpgradeScope.Party, modifiers: M(StatType.DamageTaken, -0.2f));
+            Add("Treasurer", "Skarbnik", "+40% zdobywanego złota", Rarity.Epic, UpgradeScope.Run, RunBonus.GoldGain, 0.4f);
+            Add("Phoenix", "Feniks", "+40% max HP i +30% leczenia", Rarity.Legendary, UpgradeScope.Hero, modifiers: new[] { M(StatType.MaxHealth, 0.4f), M(StatType.Healing, 0.3f) });
+            Add("Jackpot", "Jackpot", "+4 szczęścia", Rarity.Legendary, UpgradeScope.Run, RunBonus.Luck, 4f);
+            Add("ForestWrath", "Gniew lasu", "+25% obrażeń i +10% kryt dla wszystkich", Rarity.Legendary, UpgradeScope.Party, modifiers: new[] { M(StatType.Damage, 0.25f), A(StatType.CritChance, 0.1f) });
+            Add("CurseFrailty", "Kruchość", "-12% max HP dla wszystkich", Rarity.Common, UpgradeScope.Party, curse: true, modifiers: M(StatType.MaxHealth, -0.12f));
+            Add("CurseDull", "Tępe dzioby", "-10% obrażeń dla wszystkich", Rarity.Common, UpgradeScope.Party, curse: true, modifiers: M(StatType.Damage, -0.1f));
+            Add("CurseExposed", "Odsłonięcie", "+15% otrzymywanych obrażeń dla wszystkich", Rarity.Common, UpgradeScope.Party, curse: true, modifiers: M(StatType.DamageTaken, 0.15f));
+            Add("CurseGreed", "Dziurawa sakiewka", "-25% zdobywanego złota", Rarity.Common, UpgradeScope.Run, RunBonus.GoldGain, -0.25f, curse: true);
+            return list.ToArray();
         }
 
         static EncounterDefinition CreateEncounter(string id, string name, float health, float damage, int gold, bool boss, params UnitDefinition[][] waves)

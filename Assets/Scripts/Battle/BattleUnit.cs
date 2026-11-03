@@ -98,6 +98,7 @@ namespace Featherguard.Battle
                 StatType.CritChance => 0.15f,
                 StatType.CritDamage => 1.5f,
                 StatType.MaxHealth => Definition.maxHealth,
+                StatType.Lifesteal => 0f,
                 _ => 1f,
             };
             float multiplier = 1f;

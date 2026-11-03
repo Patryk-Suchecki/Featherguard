@@ -112,6 +112,28 @@ namespace Featherguard.EditorTools
                     b = Buffer(0.3f);
                     Noise(b, rng, 0f, 0.28f, 0.6f, 0.08f, 10f, 0.05f, 0.25f);
                     break;
+                case SfxId.Tick:
+                    b = Buffer(0.04f);
+                    Tone(b, 0f, 0.035f, 2400f, 2000f, 0.45f, 0.0005f, 90f, Wave.Square);
+                    break;
+                case SfxId.Coin:
+                    b = Buffer(0.35f);
+                    Tone(b, 0f, 0.08f, 1976f, 1976f, 0.4f, 0.001f, 20f, Wave.Square);
+                    Tone(b, 0.07f, 0.28f, 2637f, 2637f, 0.45f, 0.001f, 9f, Wave.Square);
+                    break;
+                case SfxId.Jackpot:
+                    b = Buffer(1.6f);
+                    for (int i = 0; i < 8; i++)
+                        Tone(b, i * 0.07f, 0.5f, 523f * Mathf.Pow(2f, i / 4f), 523f * Mathf.Pow(2f, i / 4f), 0.3f, 0.002f, 6f, Wave.Square);
+                    Tone(b, 0.56f, 1f, 2093f, 2093f, 0.3f, 0.005f, 3f, Wave.Triangle);
+                    Tone(b, 0.56f, 1f, 1568f, 1568f, 0.3f, 0.005f, 3f, Wave.Triangle);
+                    Noise(b, rng, 0.5f, 1f, 0.15f, 0.01f, 4f, 0.2f, 0.9f);
+                    break;
+                case SfxId.Lose:
+                    b = Buffer(0.8f);
+                    Tone(b, 0f, 0.25f, 330f, 320f, 0.4f, 0.005f, 6f, Wave.Square);
+                    Tone(b, 0.22f, 0.5f, 247f, 200f, 0.4f, 0.005f, 4f, Wave.Square);
+                    break;
                 default:
                     b = Buffer(0.05f);
                     break;

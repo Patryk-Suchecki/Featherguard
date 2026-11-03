@@ -6,6 +6,7 @@ namespace Featherguard.Battle
     public class RunDefinition : ScriptableObject
     {
         public EncounterDefinition[] encounters;
+        public UpgradeDefinition[] upgrades;
         [Range(0f, 1f)] public float restHeal = 0.2f;
         [Range(0f, 1f)] public float reviveHealth = 0.3f;
         public int goldPerKill = 3;

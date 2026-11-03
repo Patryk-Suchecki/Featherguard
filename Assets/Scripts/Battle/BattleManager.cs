@@ -45,13 +45,19 @@ namespace Featherguard.Battle
         IEnumerator Start()
         {
             Time.timeScale = 1f;
-            if (!RunState.Active)
-                RunState.Begin(config.run);
-            encounter = RunState.Current;
             gameObject.AddComponent<HitFeedback>().Init(config.sounds, cameraShake);
             gameObject.AddComponent<Vfx>().Init(config.particleMaterial);
             hud = gameObject.AddComponent<BattleHud>();
             hud.Init(this, battleCamera);
+            if (!RunState.Active)
+            {
+                yield return CampScreen.Show(hud);
+                RunState.Begin(config.run, config.heroes);
+            }
+            encounter = RunState.Current;
+            hud.RefreshGold();
+            rage = RunState.StartRage;
+            RunState.StartRage = 0f;
 
             for (int i = 0; i < config.heroes.Length; i++)
             {
@@ -111,7 +117,7 @@ namespace Featherguard.Battle
 
         public void NewRun()
         {
-            RunState.Begin(config.run);
+            RunState.End();
             Reload();
         }
 
@@ -339,7 +345,7 @@ namespace Featherguard.Battle
             var waves = encounter.waves;
             hud.SetProgress(RunState.EncounterIndex + 1, RunState.EncounterCount, index + 1, waves.Length);
             if (index == 0)
-                hud.ShowBanner(encounter.boss ? $"BOSS: {encounter.displayName}" : encounter.displayName);
+                hud.ShowBanner(encounter.boss ? $"BOSS: {encounter.displayName}" : RunState.CurrentElite ? $"ELITA: {encounter.displayName}" : encounter.displayName);
             else
                 hud.ShowBanner(index == waves.Length - 1 ? "Ostatnia fala!" : $"Fala {index + 1}");
 
@@ -347,8 +353,9 @@ namespace Featherguard.Battle
             for (int i = 0; i < wave.Length; i++)
             {
                 var unit = BattleUnit.Spawn(wave[i], EnemySlots[i] + Vector3.right * 6f, config);
-                unit.AddModifier(new StatModifier(StatType.MaxHealth, multiply: encounter.enemyHealth - 1f));
-                unit.AddModifier(new StatModifier(StatType.Damage, multiply: encounter.enemyDamage - 1f));
+                float elite = RunState.CurrentElite ? 1.35f : 1f;
+                unit.AddModifier(new StatModifier(StatType.MaxHealth, multiply: encounter.enemyHealth * elite - 1f));
+                unit.AddModifier(new StatModifier(StatType.Damage, multiply: encounter.enemyDamage * elite - 1f));
                 unit.SetHealth(unit.MaxHealth);
                 unit.HomePosition = EnemySlots[i];
                 AddUnit(enemies, unit);
@@ -495,7 +502,14 @@ namespace Featherguard.Battle
                     target.Reaction.Flash();
                     target.Reaction.Knockback(actor.Facing, heavy ? 0.4f : 0.22f);
                     hud.Popup(target.Top, crit ? $"{dealt}!" : dealt.ToString(), crit ? PopupStyle.Crit : PopupStyle.Damage);
-                    AddRage(dealt * (actor.Team == Team.Heroes ? 0.45f : 0.25f));
+                    AddRage(dealt * (actor.Team == Team.Heroes ? 0.45f * actor.Stat(StatType.RageGain) : 0.25f));
+                    float lifesteal = actor.Stat(StatType.Lifesteal);
+                    if (lifesteal > 0f && actor.IsAlive)
+                    {
+                        int stolen = actor.ApplyHeal(Mathf.RoundToInt(dealt * lifesteal));
+                        if (stolen > 0)
+                            hud.Popup(actor.Top, $"+{stolen}", PopupStyle.Heal);
+                    }
 
                     if (target.IsAlive)
                         target.Animator.Play("Hit");
@@ -563,16 +577,16 @@ namespace Featherguard.Battle
             HitFeedback.Instance.Play(victory ? SfxId.Victory : SfxId.Defeat, 1f, 0f);
             if (!victory)
             {
-                hud.ShowRunEnd(false);
+                hud.ShowRunEnd(false, MetaProgress.RecordRun(false));
                 yield break;
             }
-            int goldBefore = RunState.Gold;
             RunState.RecordVictory(heroes);
             hud.RefreshGold();
+            yield return new WaitForSeconds(0.8f);
             if (RunState.IsFinal)
-                hud.ShowRunEnd(true);
+                hud.ShowRunEnd(true, MetaProgress.RecordRun(true));
             else
-                hud.ShowVictory(RunState.Gold - goldBefore);
+                RewardFlow.Play(hud, this);
         }
 
         IEnumerator HopTo(BattleUnit unit, Vector3 destination, float duration, float height)

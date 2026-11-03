@@ -22,6 +22,31 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ca45297fdcb387148b2ed511b8cfbae9, type: 2}
   - {fileID: 11400000, guid: 21e1147b4ab621740b0803bc1cf4c1f1, type: 2}
   - {fileID: 11400000, guid: 8c04f8cee9a223b42a298102e881878b, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: cd63909fda139e94488d68c7ea440ce3, type: 2}
+  - {fileID: 11400000, guid: a3c270f2812dea245a73160e428a4bf9, type: 2}
+  - {fileID: 11400000, guid: aefeb3bb7103a1244a86cc5d972d8f33, type: 2}
+  - {fileID: 11400000, guid: a610ecc4a28db774da1be84ae643cba6, type: 2}
+  - {fileID: 11400000, guid: 0fc0a234578cb914e81a0a12132e16b9, type: 2}
+  - {fileID: 11400000, guid: 1d05b0c78f01dd0468e2c950c487b495, type: 2}
+  - {fileID: 11400000, guid: a56fa05b79b973d49a795ddb9c85d733, type: 2}
+  - {fileID: 11400000, guid: 3439d11b7e96bb240bd85f819eed1915, type: 2}
+  - {fileID: 11400000, guid: a95245a185d4961429c90a3dbc915ee8, type: 2}
+  - {fileID: 11400000, guid: 48fa63890051c854c84708470e1e3c1d, type: 2}
+  - {fileID: 11400000, guid: 8c509bd12e5c8e64da0d3008d6fa9c1b, type: 2}
+  - {fileID: 11400000, guid: 7a0e278e6f1575d43b33bd05809bd171, type: 2}
+  - {fileID: 11400000, guid: a6a526bf6bb2cae4aa2501c908cb78f8, type: 2}
+  - {fileID: 11400000, guid: 9132e944b32c6554b91c371926b54624, type: 2}
+  - {fileID: 11400000, guid: 44a6b9cb9372ae148bc0edf46eaf1a85, type: 2}
+  - {fileID: 11400000, guid: 7c6f2681a062bd244a1d284122bda156, type: 2}
+  - {fileID: 11400000, guid: 60787cc3d62a8c74f8a9d0f7cf944f3b, type: 2}
+  - {fileID: 11400000, guid: affc5761714debd458ef9691a32cda23, type: 2}
+  - {fileID: 11400000, guid: 0e3454794ded16546b49fd92e485eea7, type: 2}
+  - {fileID: 11400000, guid: 74651ebd93599a049a66e440e9617695, type: 2}
+  - {fileID: 11400000, guid: 59d1c95991cfce84da65fa88c6288120, type: 2}
+  - {fileID: 11400000, guid: 9a33c4f18b3086b42887e5d4cf46e2fb, type: 2}
+  - {fileID: 11400000, guid: 174deff4c0adab44488ec7bb3503d498, type: 2}
+  - {fileID: 11400000, guid: 146d5a70429417e41a38dcab019ea18d, type: 2}
   restHeal: 0.2
   reviveHealth: 0.3
   goldPerKill: 3

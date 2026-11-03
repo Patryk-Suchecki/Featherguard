@@ -129,18 +129,15 @@ namespace Featherguard.UI
 
         public void Popup(Vector3 world, string text, PopupStyle style) => UI.Popup.Spawn(popupLayer, view, world, text, style);
 
-        public void ShowVictory(int goldEarned)
-        {
-            var panel = Overlay("Victory", "WYGRANA!", new Color(1f, 0.85f, 0.25f),
-                $"+{goldEarned} zł  ·  bohaterowie odpoczywają");
-            AddButton(panel, "Dalej", new Vector2(0f, -110f), new Color(0.2f, 0.55f, 0.25f, 1f), battle.ContinueRun);
-        }
+        public RectTransform Canvas => canvas;
 
-        public void ShowRunEnd(bool victory)
+        public void ShowRunEnd(bool victory, int feathers)
         {
-            var panel = Overlay("RunEnd", victory ? "RUN UKOŃCZONY!" : "PORAŻKA", victory ? new Color(1f, 0.85f, 0.25f) : new Color(1f, 0.35f, 0.3f),
+            var panel = Overlay("RunEnd", victory ? "WYPRAWA UKOŃCZONA!" : "PORAŻKA", victory ? new Color(1f, 0.85f, 0.25f) : new Color(1f, 0.35f, 0.3f),
                 $"Wygrane walki: {RunState.BattlesWon}/{RunState.EncounterCount}   ·   Pokonani wrogowie: {RunState.Kills}   ·   Zdobyte złoto: {RunState.GoldEarned}");
-            AddButton(panel, "Nowy run", new Vector2(0f, -110f), new Color(0.2f, 0.55f, 0.25f, 1f), battle.NewRun);
+            Ui.Label(Ui.Rect("Feathers", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -50f), new Vector2(1600f, 50f)),
+                $"+{feathers} złotych piór  ·  Zebrane karty: {RunState.Taken.Count}", 34, TextAnchor.MiddleCenter, new Color(1f, 0.82f, 0.3f));
+            AddButton(panel, "Do obozu", new Vector2(0f, -150f), new Color(0.2f, 0.55f, 0.25f, 1f), battle.NewRun);
         }
 
         public RectTransform Overlay(string name, string title, Color titleColor, string subtitle)

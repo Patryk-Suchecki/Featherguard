@@ -46,6 +46,8 @@ namespace Featherguard.Feel
             Vfx.Instance.Burst(point, color, heavy ? 34 : 18, heavy ? 8f : 5.5f, heavy ? 0.42f : 0.3f);
         }
 
+        public void Shake(float strength, float seconds) => shake.Shake(strength, seconds);
+
         public void Hitstop(float duration)
         {
             hitstopUntil = Mathf.Max(hitstopUntil, Time.unscaledTime + duration);
