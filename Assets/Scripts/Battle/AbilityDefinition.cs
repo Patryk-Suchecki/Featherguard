@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Featherguard.Battle
 {
-    public enum AbilityEffect { Damage, Heal, Shield, Empower }
+    public enum AbilityEffect { Damage, Heal, Status }
     public enum AbilityTarget { Enemy, AllEnemies, Ally, AllAllies }
     public enum AbilityDelivery { Melee, Arrow, Magic, Instant }
 
@@ -18,6 +18,7 @@ namespace Featherguard.Battle
         public int power = 20;
         public int hits = 1;
         public bool heavy;
+        public StatusApplication[] statuses = new StatusApplication[0];
         public Color fxColor = Color.white;
         public SfxId castSound;
         public SfxId impactSound;

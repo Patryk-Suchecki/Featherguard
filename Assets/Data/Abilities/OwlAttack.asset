@@ -20,6 +20,12 @@ MonoBehaviour:
   power: 20
   hits: 1
   heavy: 0
+  statuses:
+  - type: 4
+    turns: 1
+    potency: 0
+    chance: 0.35
+    onSelf: 0
   fxColor: {r: 0.4, g: 1, b: 0.6, a: 1}
   castSound: 5
   impactSound: 3

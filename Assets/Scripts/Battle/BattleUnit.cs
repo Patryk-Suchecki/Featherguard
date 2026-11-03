@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Featherguard.Feel;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -10,15 +12,16 @@ namespace Featherguard.Battle
         MeshRenderer ring;
         Material ringMaterial;
         float ringBaseScale;
+        readonly List<StatusEffect> statuses = new();
+        readonly List<StatModifier> modifiers = new();
 
         public UnitDefinition Definition { get; private set; }
         public Team Team => Definition.team;
         public int Health { get; private set; }
-        public int MaxHealth => Definition.maxHealth;
+        public int MaxHealth => Mathf.Max(1, Mathf.RoundToInt(Stat(StatType.MaxHealth)));
         public bool IsAlive => Health > 0;
         public bool HasActed { get; set; }
-        public bool Shielded { get; set; }
-        public bool Empowered { get; set; }
+        public IReadOnlyList<StatusEffect> Statuses => statuses;
         public Vector3 HomePosition { get; set; }
         public UnitAnimator Animator { get; private set; }
         public HitReaction Reaction { get; private set; }
@@ -48,7 +51,7 @@ namespace Featherguard.Battle
 
             var unit = root.AddComponent<BattleUnit>();
             unit.Definition = definition;
-            unit.Health = definition.maxHealth;
+            unit.Health = unit.MaxHealth;
             unit.HomePosition = position;
             unit.Animator = model.AddComponent<UnitAnimator>();
             unit.Reaction = root.AddComponent<HitReaction>();
@@ -88,10 +91,91 @@ namespace Featherguard.Battle
                 ringMaterial.color = color.Value;
         }
 
+        public float Stat(StatType stat)
+        {
+            float value = stat switch
+            {
+                StatType.CritChance => 0.15f,
+                StatType.CritDamage => 1.5f,
+                StatType.MaxHealth => Definition.maxHealth,
+                _ => 1f,
+            };
+            float multiplier = 1f;
+            foreach (var modifier in modifiers.Concat(StatusModifiers()))
+            {
+                if (modifier.stat != stat) continue;
+                value += modifier.add;
+                multiplier += modifier.multiply;
+            }
+            return value * Mathf.Max(0f, multiplier);
+        }
+
+        IEnumerable<StatModifier> StatusModifiers()
+        {
+            foreach (var status in statuses)
+            {
+                switch (status.Type)
+                {
+                    case StatusType.Shield: yield return new StatModifier(StatType.DamageTaken, multiply: -0.5f); break;
+                    case StatusType.Empower: yield return new StatModifier(StatType.Damage, multiply: 0.5f); break;
+                    case StatusType.Weaken: yield return new StatModifier(StatType.Damage, multiply: -0.3f); break;
+                }
+            }
+        }
+
+        public void AddModifier(StatModifier modifier)
+        {
+            modifiers.Add(modifier);
+            Health = Mathf.Min(Health, MaxHealth);
+            Changed?.Invoke();
+        }
+
+        public bool Has(StatusType type) => statuses.Any(s => s.Type == type);
+
+        public void AddStatus(StatusApplication application, bool ownTurn)
+        {
+            var existing = statuses.FirstOrDefault(s => s.Type == application.type);
+            if (existing != null)
+            {
+                existing.Turns = Mathf.Max(existing.Turns, application.turns);
+                existing.Potency = Mathf.Max(existing.Potency, application.potency);
+                existing.Fresh |= ownTurn;
+            }
+            else
+            {
+                statuses.Add(new StatusEffect { Type = application.type, Turns = application.turns, Potency = application.potency, Fresh = ownTurn });
+            }
+            Changed?.Invoke();
+        }
+
+        public void RemoveStatus(StatusType type)
+        {
+            if (statuses.RemoveAll(s => s.Type == type) > 0)
+                Changed?.Invoke();
+        }
+
+        public void EndTurn()
+        {
+            foreach (var status in statuses)
+            {
+                if (status.Fresh)
+                    status.Fresh = false;
+                else
+                    status.Turns--;
+            }
+            statuses.RemoveAll(s => s.Turns <= 0);
+            Changed?.Invoke();
+        }
+
+        public void ClearStatuses()
+        {
+            statuses.Clear();
+            Changed?.Invoke();
+        }
+
         public int ApplyDamage(int amount)
         {
-            if (Shielded)
-                amount = Mathf.CeilToInt(amount * 0.5f);
+            amount = Mathf.RoundToInt(amount * Stat(StatType.DamageTaken));
             amount = Mathf.Clamp(amount, 0, Health);
             Health -= amount;
             Changed?.Invoke();
@@ -100,6 +184,7 @@ namespace Featherguard.Battle
 
         public int ApplyHeal(int amount)
         {
+            if (!IsAlive) return 0;
             amount = Mathf.Clamp(amount, 0, MaxHealth - Health);
             Health += amount;
             Changed?.Invoke();

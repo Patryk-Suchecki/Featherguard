@@ -13,7 +13,6 @@ namespace Featherguard.Battle
     public class BattleManager : MonoBehaviour
     {
         const float MaxRage = 100f;
-        const float CritChance = 0.15f;
 
         static readonly Vector3[] HeroSlots = { new(-2.3f, 0f, 0.45f), new(-3.7f, 0f, -0.55f), new(-5.0f, 0f, 0.6f) };
         static readonly Vector3[] EnemySlots = { new(2.3f, 0f, 0.45f), new(3.7f, 0f, -0.55f), new(5.0f, 0f, 0.6f) };
@@ -32,6 +31,8 @@ namespace Featherguard.Battle
         IEnumerator pendingAction;
         float rage;
         int waveIndex;
+        bool finished;
+        bool waveAdvanced;
 
         public IReadOnlyList<BattleUnit> Heroes => heroes;
         public BattleUnit Selected { get; private set; }
@@ -159,36 +160,79 @@ namespace Featherguard.Battle
             while (true)
             {
                 yield return PlayerTurn();
-                if (!AnyAlive(enemies))
-                {
-                    if (waveIndex + 1 >= config.waves.Length)
-                    {
-                        yield return EndBattle(true);
-                        yield break;
-                    }
-                    yield return new WaitForSeconds(0.6f);
-                    yield return SpawnWave(waveIndex + 1);
-                    continue;
-                }
+                yield return AfterTurn();
+                if (finished) yield break;
+                if (waveAdvanced) continue;
 
                 yield return EnemyTurn();
-                if (!AnyAlive(heroes))
+                yield return AfterTurn();
+                if (finished) yield break;
+            }
+        }
+
+        IEnumerator AfterTurn()
+        {
+            waveAdvanced = false;
+            if (!AnyAlive(heroes))
+            {
+                finished = true;
+                yield return EndBattle(false);
+            }
+            else if (!AnyAlive(enemies))
+            {
+                if (waveIndex + 1 >= config.encounter.waves.Length)
                 {
-                    yield return EndBattle(false);
+                    finished = true;
+                    yield return EndBattle(true);
                     yield break;
+                }
+                waveAdvanced = true;
+                yield return new WaitForSeconds(0.6f);
+                yield return SpawnWave(waveIndex + 1);
+            }
+        }
+
+        IEnumerator BeginTurn(List<BattleUnit> side)
+        {
+            foreach (var unit in side.Where(u => u.IsAlive).ToList())
+            {
+                var poison = unit.Statuses.FirstOrDefault(st => st.Type == StatusType.Poison);
+                if (poison != null)
+                {
+                    int dealt = unit.ApplyDamage(poison.Potency);
+                    unit.Reaction.Flash();
+                    Vfx.Instance.Rise(unit.transform.position, StatusEffect.Tint(StatusType.Poison), unit.Radius);
+                    HitFeedback.Instance.Play(SfxId.Hit, 0.5f);
+                    hud.Popup(unit.Top, dealt.ToString(), PopupStyle.Damage);
+                    if (unit.IsAlive)
+                        unit.Animator.Play("Hit");
+                    else
+                        Kill(unit);
+                    yield return new WaitForSeconds(0.35f);
+                }
+                if (unit.IsAlive && unit.Has(StatusType.Stun))
+                {
+                    hud.Popup(unit.Top, "Ogłuszony", PopupStyle.Buff);
+                    yield return new WaitForSeconds(0.25f);
                 }
             }
         }
 
+        static void EndTurn(List<BattleUnit> side)
+        {
+            foreach (var unit in side.Where(u => u.IsAlive))
+                unit.EndTurn();
+        }
+
         IEnumerator PlayerTurn()
         {
+            hud.ShowBanner("Twoja tura");
+            yield return BeginTurn(heroes);
             foreach (var hero in heroes)
             {
-                hero.HasActed = false;
-                hero.Shielded = false;
+                hero.HasActed = hero.Has(StatusType.Stun);
                 hero.NotifyChanged();
             }
-            hud.ShowBanner("Twoja tura");
             AcceptingInput = true;
             Select(FirstReadyHero());
 
@@ -209,20 +253,23 @@ namespace Featherguard.Battle
 
             AcceptingInput = false;
             Select(null);
+            EndTurn(heroes);
         }
 
         IEnumerator EnemyTurn()
         {
             hud.ShowBanner("Tura wroga");
             yield return new WaitForSeconds(0.8f);
+            yield return BeginTurn(enemies);
             foreach (var enemy in enemies.ToList())
             {
-                if (!enemy.IsAlive) continue;
-                if (!AnyAlive(heroes)) yield break;
+                if (!enemy.IsAlive || enemy.Has(StatusType.Stun)) continue;
+                if (!AnyAlive(heroes)) break;
                 var (ability, target) = ChooseEnemyAction(enemy);
                 yield return Execute(enemy, ability, target);
                 yield return new WaitForSeconds(0.2f);
             }
+            EndTurn(enemies);
         }
 
         (AbilityDefinition, BattleUnit) ChooseEnemyAction(BattleUnit enemy)
@@ -237,8 +284,27 @@ namespace Featherguard.Battle
                 if (wounded != null && Random.value < 0.75f)
                     return (support, wounded);
             }
+            var attack = enemy.Definition.attack;
             var living = heroes.Where(h => h.IsAlive).ToList();
-            return (enemy.Definition.attack, living[Random.Range(0, living.Count)]);
+            var taunting = living.Where(h => h.Has(StatusType.Taunt)).ToList();
+            if (taunting.Count > 0)
+                return (attack, taunting[Random.Range(0, taunting.Count)]);
+
+            float expected = attack.power * attack.hits * enemy.Stat(StatType.Damage);
+            var weights = living.Select(h =>
+            {
+                float weight = 1f + 2f * (1f - (float)h.Health / h.MaxHealth);
+                if (expected * h.Stat(StatType.DamageTaken) >= h.Health) weight += 3f;
+                if (h.Has(StatusType.Shield)) weight *= 0.5f;
+                return weight;
+            }).ToList();
+            float roll = Random.value * weights.Sum();
+            for (int i = 0; i < living.Count; i++)
+            {
+                roll -= weights[i];
+                if (roll <= 0f) return (attack, living[i]);
+            }
+            return (attack, living[^1]);
         }
 
         IEnumerator SpawnWave(int index)
@@ -248,10 +314,11 @@ namespace Featherguard.Battle
                 StartCoroutine(Sink(fallen));
             enemies.Clear();
 
-            hud.SetWave(index + 1, config.waves.Length);
-            hud.ShowBanner(index == config.waves.Length - 1 ? "Ostatnia fala!" : $"Fala {index + 1}");
+            var waves = config.encounter.waves;
+            hud.SetWave(index + 1, waves.Length);
+            hud.ShowBanner(index == waves.Length - 1 ? "Ostatnia fala!" : $"Fala {index + 1}");
 
-            var wave = config.waves[index].enemies;
+            var wave = waves[index].enemies;
             for (int i = 0; i < wave.Length; i++)
             {
                 var unit = BattleUnit.Spawn(wave[i], EnemySlots[i] + Vector3.right * 6f, config);
@@ -323,11 +390,11 @@ namespace Featherguard.Battle
                 }
             }
 
-            if (ability.effect == AbilityEffect.Damage && actor.Empowered)
-            {
-                actor.Empowered = false;
-                actor.NotifyChanged();
-            }
+            if (ability.effect == AbilityEffect.Damage)
+                actor.RemoveStatus(StatusType.Empower);
+            if (actor.IsAlive)
+                foreach (var application in ability.statuses.Where(a => a.onSelf))
+                    TryApplyStatus(actor, actor, application);
             yield return new WaitForSeconds(0.35f);
         }
 
@@ -388,10 +455,9 @@ namespace Featherguard.Battle
             {
                 case AbilityEffect.Damage:
                 {
-                    bool crit = Random.value < CritChance;
-                    float amount = ability.power * Random.Range(0.9f, 1.1f);
-                    if (actor.Empowered) amount *= 1.5f;
-                    if (crit) amount *= 1.5f;
+                    bool crit = Random.value < actor.Stat(StatType.CritChance);
+                    float amount = ability.power * actor.Stat(StatType.Damage) * Random.Range(0.9f, 1.1f);
+                    if (crit) amount *= actor.Stat(StatType.CritDamage);
                     int dealt = target.ApplyDamage(Mathf.RoundToInt(amount));
                     bool heavy = ability.heavy || crit;
 
@@ -411,37 +477,37 @@ namespace Featherguard.Battle
                 }
                 case AbilityEffect.Heal:
                 {
-                    int healed = target.ApplyHeal(ability.power);
+                    int healed = target.ApplyHeal(Mathf.RoundToInt(ability.power * actor.Stat(StatType.Healing)));
                     Vfx.Instance.Rise(target.transform.position, ability.fxColor, target.Radius);
                     feedback.Play(ability.impactSound);
                     hud.Popup(target.Top, $"+{healed}", PopupStyle.Heal);
                     break;
                 }
-                case AbilityEffect.Shield:
+                case AbilityEffect.Status:
                 {
-                    target.Shielded = true;
-                    target.NotifyChanged();
                     Vfx.Instance.Rise(target.transform.position, ability.fxColor, target.Radius);
                     feedback.Play(ability.impactSound);
-                    hud.Popup(target.Top, "Tarcza", PopupStyle.Buff);
-                    break;
-                }
-                case AbilityEffect.Empower:
-                {
-                    target.Empowered = true;
-                    target.NotifyChanged();
-                    Vfx.Instance.Rise(target.transform.position, ability.fxColor, target.Radius);
-                    feedback.Play(ability.impactSound);
-                    hud.Popup(target.Top, "Moc!", PopupStyle.Buff);
                     break;
                 }
             }
+
+            if (target.IsAlive)
+                foreach (var application in ability.statuses.Where(a => !a.onSelf))
+                    TryApplyStatus(actor, target, application);
+        }
+
+        void TryApplyStatus(BattleUnit actor, BattleUnit target, StatusApplication application)
+        {
+            if (Random.value > application.chance) return;
+            target.AddStatus(application, target.Team == actor.Team);
+            hud.Popup(target.Top + Vector3.up * 0.35f, StatusEffect.Announcement(application.type), PopupStyle.Buff);
         }
 
         void Kill(BattleUnit unit)
         {
             unit.Animator.Play("Death", 0.04f);
             unit.SetRing(null);
+            unit.ClearStatuses();
             HitFeedback.Instance.Play(SfxId.Death);
         }
 

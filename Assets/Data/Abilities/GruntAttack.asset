@@ -20,6 +20,7 @@ MonoBehaviour:
   power: 15
   hits: 1
   heavy: 0
+  statuses: []
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3

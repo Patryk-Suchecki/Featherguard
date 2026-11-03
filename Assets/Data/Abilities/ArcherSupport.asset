@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: ArcherSupport
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Okrzyk bojowy
-  effect: 3
+  effect: 2
   target: 2
   delivery: 3
   animationState: Cast
   power: 0
   hits: 1
   heavy: 0
+  statuses:
+  - type: 1
+    turns: 1
+    potency: 0
+    chance: 1
+    onSelf: 0
   fxColor: {r: 1, g: 0.6, b: 0.2, a: 1}
   castSound: 0
   impactSound: 8

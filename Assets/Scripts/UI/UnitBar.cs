@@ -14,7 +14,7 @@ namespace Featherguard.UI
         RectTransform rect;
         RectTransform fill;
         Text health;
-        Text status;
+        RectTransform statusRow;
         CanvasGroup group;
 
         public static UnitBar Create(BattleUnit unit, RectTransform parent, Camera view)
@@ -37,8 +37,7 @@ namespace Featherguard.UI
             Ui.Image(bar.fill, unit.Team == Team.Heroes ? HeroFill : EnemyFill);
             bar.health = Ui.Label(Ui.Stretch("Health", background), "", 15, TextAnchor.MiddleCenter, Color.white);
 
-            var status = Ui.Rect("Status", rect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 48f), new Vector2(170f, 20f));
-            bar.status = Ui.Label(status, "", 17, TextAnchor.LowerCenter, new Color(0.55f, 0.85f, 1f));
+            bar.statusRow = Ui.Rect("Status", rect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 50f), new Vector2(170f, 22f));
 
             unit.Changed += bar.Refresh;
             bar.Refresh();
@@ -68,7 +67,27 @@ namespace Featherguard.UI
             fill.anchorMax = new Vector2(Mathf.Max(0.001f, fraction), 1f);
             fill.offsetMax = new Vector2(fraction > 0f ? -3f : 0f, -3f);
             health.text = $"{unit.Health}/{unit.MaxHealth}";
-            status.text = (unit.Shielded ? "TARCZA " : "") + (unit.Empowered ? "MOC" : "");
+            RefreshStatuses();
+        }
+
+        void RefreshStatuses()
+        {
+            const float width = 52f;
+            const float spacing = 4f;
+            for (int i = statusRow.childCount - 1; i >= 0; i--)
+                Destroy(statusRow.GetChild(i).gameObject);
+            statusRow.DetachChildren();
+
+            var statuses = unit.Statuses;
+            float start = -(statuses.Count - 1) * (width + spacing) * 0.5f;
+            for (int i = 0; i < statuses.Count; i++)
+            {
+                var status = statuses[i];
+                var chip = Ui.Rect(status.Type.ToString(), statusRow, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
+                    new Vector2(start + i * (width + spacing), 0f), new Vector2(width, 22f));
+                Ui.Image(chip, StatusEffect.Tint(status.Type) * new Color(0.75f, 0.75f, 0.75f, 0.95f));
+                Ui.Label(Ui.Stretch("Label", chip), $"{StatusEffect.Label(status.Type)}{status.Turns}", 15, TextAnchor.MiddleCenter, Color.white);
+            }
         }
     }
 }

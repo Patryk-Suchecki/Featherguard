@@ -22,13 +22,14 @@ namespace Featherguard.EditorTools
         const string DataDir = "Assets/Data";
         const string AbilityDir = "Assets/Data/Abilities";
         const string UnitDir = "Assets/Data/Units";
+        const string EncounterDir = "Assets/Data/Encounters";
         const string SceneDir = "Assets/Scenes";
         const string ScenePath = "Assets/Scenes/Battle.unity";
 
         [MenuItem("Featherguard/Rebuild Battle Scene")]
         public static void Run()
         {
-            foreach (var dir in new[] { VfxDir, MaterialDir, AnimationDir, AbilityDir, UnitDir, SceneDir })
+            foreach (var dir in new[] { VfxDir, MaterialDir, AnimationDir, AbilityDir, UnitDir, EncounterDir, SceneDir })
                 Directory.CreateDirectory(dir);
             AssetDatabase.Refresh();
 
@@ -48,12 +49,10 @@ namespace Featherguard.EditorTools
 
             var config = LoadOrCreate<BattleConfig>($"{DataDir}/BattleConfig.asset");
             config.heroes = new[] { units["Knight"], units["Archer"], units["Owl"] };
-            config.waves = new[]
-            {
-                new BattleConfig.Wave { enemies = new[] { units["Grunt"], units["Shaman"], units["Grunt"] } },
-                new BattleConfig.Wave { enemies = new[] { units["Grunt"], units["Brute"], units["Grunt"] } },
-                new BattleConfig.Wave { enemies = new[] { units["Brute"], units["Shaman"], units["Brute"] } },
-            };
+            config.encounter = CreateEncounter("Forest1", "Leśna polana",
+                new[] { units["Grunt"], units["Shaman"], units["Grunt"] },
+                new[] { units["Grunt"], units["Brute"], units["Grunt"] },
+                new[] { units["Brute"], units["Shaman"], units["Brute"] });
             config.arrowPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{EnvironmentDir}/Arrow.fbx");
             config.flashMaterial = flash;
             config.particleMaterial = particle;
@@ -66,12 +65,24 @@ namespace Featherguard.EditorTools
             Debug.Log("Featherguard: battle scene rebuilt.");
         }
 
+        static EncounterDefinition CreateEncounter(string id, string name, params UnitDefinition[][] waves)
+        {
+            var encounter = LoadOrCreate<EncounterDefinition>($"{EncounterDir}/{id}.asset");
+            encounter.displayName = name;
+            encounter.waves = waves.Select(w => new EncounterDefinition.Wave { enemies = w }).ToArray();
+            EditorUtility.SetDirty(encounter);
+            return encounter;
+        }
+
+        static StatusApplication Status(StatusType type, int turns = 1, int potency = 0, float chance = 1f, bool onSelf = false) =>
+            new() { type = type, turns = turns, potency = potency, chance = chance, onSelf = onSelf };
+
         static Dictionary<string, AbilityDefinition> CreateAbilities()
         {
             var list = new Dictionary<string, AbilityDefinition>();
 
             void Add(string id, string name, AbilityEffect effect, AbilityTarget target, AbilityDelivery delivery, string state,
-                int power, Color color, SfxId cast, SfxId impact, int hits = 1, bool heavy = false)
+                int power, Color color, SfxId cast, SfxId impact, int hits = 1, bool heavy = false, params StatusApplication[] statuses)
             {
                 var a = LoadOrCreate<AbilityDefinition>($"{AbilityDir}/{id}.asset");
                 a.displayName = name;
@@ -82,6 +93,7 @@ namespace Featherguard.EditorTools
                 a.power = power;
                 a.hits = hits;
                 a.heavy = heavy;
+                a.statuses = statuses;
                 a.fxColor = color;
                 a.castSound = cast;
                 a.impactSound = impact;
@@ -91,18 +103,18 @@ namespace Featherguard.EditorTools
 
             var spark = new Color(1f, 0.62f, 0.15f);
             Add("KnightAttack", "Cięcie", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 30, spark, SfxId.Slash, SfxId.Hit);
-            Add("KnightSupport", "Osłona", AbilityEffect.Shield, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 0, new Color(0.45f, 0.75f, 1f), SfxId.None, SfxId.Shield);
-            Add("KnightSpecial", "Grom Tarczy", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 85, new Color(1f, 0.7f, 0.25f), SfxId.Slash, SfxId.Smash, heavy: true);
-            Add("ArcherAttack", "Podwójny strzał", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Arrow, "Attack", 14, spark, SfxId.Arrow, SfxId.Hit, hits: 2);
-            Add("ArcherSupport", "Okrzyk bojowy", AbilityEffect.Empower, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 0, new Color(1f, 0.6f, 0.2f), SfxId.None, SfxId.Buff);
-            Add("ArcherSpecial", "Deszcz strzał", AbilityEffect.Damage, AbilityTarget.AllEnemies, AbilityDelivery.Arrow, "Attack", 24, spark, SfxId.Arrow, SfxId.Hit, hits: 2, heavy: true);
-            Add("OwlAttack", "Iskra", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 20, new Color(0.4f, 1f, 0.6f), SfxId.Magic, SfxId.Hit);
+            Add("KnightSupport", "Osłona", AbilityEffect.Status, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 0, new Color(0.45f, 0.75f, 1f), SfxId.None, SfxId.Shield, statuses: new[] { Status(StatusType.Shield), Status(StatusType.Taunt, onSelf: true) });
+            Add("KnightSpecial", "Grom Tarczy", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 85, new Color(1f, 0.7f, 0.25f), SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun) });
+            Add("ArcherAttack", "Podwójny strzał", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Arrow, "Attack", 14, spark, SfxId.Arrow, SfxId.Hit, hits: 2, statuses: new[] { Status(StatusType.Poison, 2, 5, 0.3f) });
+            Add("ArcherSupport", "Okrzyk bojowy", AbilityEffect.Status, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 0, new Color(1f, 0.6f, 0.2f), SfxId.None, SfxId.Buff, statuses: new[] { Status(StatusType.Empower) });
+            Add("ArcherSpecial", "Deszcz strzał", AbilityEffect.Damage, AbilityTarget.AllEnemies, AbilityDelivery.Arrow, "Attack", 24, spark, SfxId.Arrow, SfxId.Hit, hits: 2, heavy: true, statuses: new[] { Status(StatusType.Poison, 2, 6) });
+            Add("OwlAttack", "Iskra", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 20, new Color(0.4f, 1f, 0.6f), SfxId.Magic, SfxId.Hit, statuses: new[] { Status(StatusType.Weaken, chance: 0.35f) });
             Add("OwlSupport", "Leczenie", AbilityEffect.Heal, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 40, new Color(0.45f, 1f, 0.5f), SfxId.None, SfxId.Heal);
             Add("OwlSpecial", "Odrodzenie lasu", AbilityEffect.Heal, AbilityTarget.AllAllies, AbilityDelivery.Instant, "Cast", 60, new Color(0.5f, 1f, 0.6f), SfxId.None, SfxId.Heal, heavy: true);
             Add("GruntAttack", "Pałka", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 15, spark, SfxId.Slash, SfxId.Hit);
-            Add("ShamanAttack", "Klątwa", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 12, new Color(0.8f, 0.4f, 1f), SfxId.Magic, SfxId.Hit);
+            Add("ShamanAttack", "Klątwa", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 12, new Color(0.8f, 0.4f, 1f), SfxId.Magic, SfxId.Hit, statuses: new[] { Status(StatusType.Weaken, chance: 0.5f) });
             Add("ShamanSupport", "Mroczne leczenie", AbilityEffect.Heal, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 25, new Color(0.8f, 0.45f, 1f), SfxId.None, SfxId.Heal);
-            Add("BruteAttack", "Miażdżenie", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 26, spark, SfxId.Slash, SfxId.Smash, heavy: true);
+            Add("BruteAttack", "Miażdżenie", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 26, spark, SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun, chance: 0.25f) });
             return list;
         }
 
