@@ -143,6 +143,11 @@ namespace Featherguard.Battle
                 ability ??= Selected.Definition.support;
 
             if (ability == null || ability.TargetsEnemies != (unit.Team == Team.Enemies)) return;
+            if (ability.TargetsEnemies && !ability.TargetsAll && !unit.Has(StatusType.Taunt) && enemies.Any(e => e.IsAlive && e.Has(StatusType.Taunt)))
+            {
+                hud.Popup(unit.Top, "Prowokacja!", PopupStyle.Buff);
+                return;
+            }
             Use(Selected, ability, unit);
         }
 
@@ -175,8 +180,11 @@ namespace Featherguard.Battle
             bool showAllies = ability == null ? Selected.Definition.support != null : !ability.TargetsEnemies;
 
             if (showEnemies)
-                foreach (var enemy in enemies.Where(e => e.IsAlive))
+            {
+                bool taunted = (ability == null || !ability.TargetsAll) && enemies.Any(e => e.IsAlive && e.Has(StatusType.Taunt));
+                foreach (var enemy in enemies.Where(e => e.IsAlive && (!taunted || e.Has(StatusType.Taunt))))
                     enemy.SetRing(EnemyRing);
+            }
             if (showAllies)
                 foreach (var hero in heroes.Where(h => h.IsAlive))
                     hero.SetRing(AllyRing);
@@ -272,6 +280,7 @@ namespace Featherguard.Battle
                     RefreshHighlights();
                     yield return pendingAction;
                     pendingAction = null;
+                    yield return CheckEnrage();
                     if (!AnyAlive(enemies)) break;
                     AcceptingInput = true;
                     Select(FirstReadyHero());
@@ -294,15 +303,62 @@ namespace Featherguard.Battle
                 if (!enemy.IsAlive || enemy.Has(StatusType.Stun)) continue;
                 if (!AnyAlive(heroes)) break;
                 var (ability, target) = ChooseEnemyAction(enemy);
+                enemy.TurnsTaken++;
                 yield return Execute(enemy, ability, target);
+                yield return CheckEnrage();
                 yield return new WaitForSeconds(0.2f);
             }
             EndTurn(enemies);
         }
 
+        IEnumerator CheckEnrage()
+        {
+            foreach (var boss in enemies.Where(e => e.IsAlive && !e.Enraged && e.Definition.enrageAt > 0f).ToList())
+            {
+                if (boss.Health > boss.MaxHealth * boss.Definition.enrageAt) continue;
+                boss.Enraged = true;
+                hud.Callout($"{boss.Definition.displayName} wpada w szał!");
+                HitFeedback.Instance.Play(SfxId.Rage, 1f, 0f);
+                HitFeedback.Instance.Shake(0.25f, 0.6f);
+                Vfx.Instance.Burst(boss.Center, new Color(1f, 0.3f, 0.1f), 40, 7f, 0.45f);
+                boss.AddModifier(new StatModifier(StatType.Damage, multiply: 0.4f));
+                boss.Animator.Play("Victory", 0.1f);
+                yield return new WaitForSeconds(0.9f);
+                foreach (var summon in boss.Definition.enrageSummons)
+                {
+                    int slot = System.Array.FindIndex(EnemySlots, s => !enemies.Any(e => e.IsAlive && Vector3.Distance(e.HomePosition, s) < 0.1f));
+                    if (slot < 0) break;
+                    foreach (var fallen in enemies.Where(e => !e.IsAlive && Vector3.Distance(e.HomePosition, EnemySlots[slot]) < 0.1f).ToList())
+                    {
+                        enemies.Remove(fallen);
+                        StartCoroutine(Sink(fallen));
+                    }
+                    var unit = BattleUnit.Spawn(summon, EnemySlots[slot] + Vector3.right * 6f, config);
+                    unit.HomePosition = EnemySlots[slot];
+                    unit.AddModifier(new StatModifier(StatType.MaxHealth, multiply: encounter.enemyHealth - 1f));
+                    unit.AddModifier(new StatModifier(StatType.Damage, multiply: encounter.enemyDamage - 1f));
+                    unit.SetHealth(unit.MaxHealth);
+                    AddUnit(enemies, unit);
+                    HitFeedback.Instance.Play(SfxId.Whoosh, 0.6f);
+                    StartCoroutine(HopTo(unit, EnemySlots[slot], 0.55f, 1.1f));
+                    yield return new WaitForSeconds(0.25f);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+
         (AbilityDefinition, BattleUnit) ChooseEnemyAction(BattleUnit enemy)
         {
+            var def = enemy.Definition;
+            if (def.special != null && def.specialEvery > 0 && enemy.TurnsTaken % def.specialEvery == 0)
+                return (def.special, null);
             var support = enemy.Definition.support;
+            if (support != null && support.effect == AbilityEffect.Status && Random.value < 0.45f)
+            {
+                var unshielded = enemies.Where(e => e.IsAlive && !e.Has(StatusType.Shield)).ToList();
+                if (unshielded.Count > 0)
+                    return (support, unshielded[Random.Range(0, unshielded.Count)]);
+            }
             if (support != null && support.effect == AbilityEffect.Heal)
             {
                 var wounded = enemies

@@ -256,6 +256,79 @@ def brute():
     return b, LIZARD_BONES, A.LIZARD, A.melee
 
 
+def spitter():
+    m = common_mats()
+    skin = material("SpitterSkin", (0.62, 0.72, 0.18))
+    belly = material("SpitterBelly", (0.95, 0.9, 0.55))
+    spikes = material("SpitterSpikes", (0.2, 0.5, 0.25))
+    eye = material("SpitterEye", (0.9, 0.3, 0.9), rough=0.3)
+    venom = material("Venom", (0.45, 1.0, 0.2), emit=2.5, rough=0.1)
+    cloth = material("SpitterCloth", (0.3, 0.22, 0.12))
+
+    b = MeshBuilder()
+    lizard_base(b, m, skin, belly, spikes, eye, torso_scale=(0.25, 0.22, 0.34))
+    for side in (1, -1):
+        b.sphere("head", skin, (0.16 * side, -0.2, 1.17), (0.07, 0.06, 0.05))
+    b.sphere("head", venom, (0, -0.42, 1.12), (0.04, 0.03, 0.04), seg=8, rings=6)
+    b.cone("hips", cloth, (0, 0.0, 0.42), 0.28, 0.25, 0.16, seg=12)
+    b.between("torso", m["leather"], (0.2, -0.2, 1.02), (-0.24, -0.16, 0.6), 0.025, 0.025, seg=6)
+    for i in range(3):
+        b.sphere("torso", venom, (0.12 - i * 0.12, -0.22, 0.86 - i * 0.07), (0.045, 0.045, 0.06), seg=8, rings=6)
+    b.between("weapon", m["wood"], (-0.36, -0.12, 0.3), (-0.36, -0.12, 1.25), 0.025, 0.02, seg=8)
+    b.sphere("weapon", venom, (-0.36, -0.12, 1.3), (0.06, 0.06, 0.06), seg=10, rings=8)
+    return b, LIZARD_BONES, A.LIZARD, A.cast
+
+
+def guard():
+    m = common_mats()
+    skin = material("GuardSkin", (0.3, 0.45, 0.62))
+    belly = material("GuardBelly", (0.82, 0.85, 0.8))
+    spikes = material("GuardSpikes", (0.85, 0.85, 0.9))
+    eye = material("GuardEye", (1.0, 0.7, 0.15), rough=0.3)
+    shield = material("GuardShield", (0.55, 0.32, 0.15))
+
+    b = MeshBuilder()
+    lizard_base(b, m, skin, belly, spikes, eye, torso_scale=(0.31, 0.27, 0.36))
+    b.sphere("head", m["steel"], (0, -0.08, 1.28), (0.21, 0.23, 0.13), cut_below=1.25)
+    b.cone("head", m["steel"], (0, -0.08, 1.38), 0.03, 0.0, 0.12)
+    b.sphere("torso", m["steel"], (0, -0.06, 0.86), (0.3, 0.27, 0.22), cut_below=0.7)
+    b.cone("offhand", shield, (0.42, -0.2, 0.6), 0.27, 0.27, 0.05, rot=(90, 0, 0), seg=16)
+    b.cone("offhand", m["steel"], (0.42, -0.25, 0.6), 0.09, 0.09, 0.03, rot=(90, 0, 0), seg=12)
+    b.between("weapon", m["wood"], (-0.36, -0.12, 0.1), (-0.36, -0.12, 1.45), 0.025, 0.025, seg=8)
+    b.cone("weapon", m["steel"], (-0.36, -0.12, 1.45), 0.05, 0.0, 0.22, seg=6)
+    return b, LIZARD_BONES, A.LIZARD, A.melee
+
+
+def chieftain():
+    m = common_mats()
+    skin = material("ChiefSkin", (0.42, 0.14, 0.16))
+    belly = material("ChiefBelly", (0.9, 0.62, 0.42))
+    spikes = material("ChiefSpikes", (0.08, 0.07, 0.08))
+    eye = material("ChiefEye", (1.0, 0.2, 0.1), rough=0.2, emit=1.5)
+    cape = material("ChiefCape", (0.12, 0.1, 0.25))
+    ember = material("Ember", (1.0, 0.45, 0.1), emit=3.0, rough=0.2)
+
+    b = MeshBuilder()
+    lizard_base(b, m, skin, belly, spikes, eye, torso_scale=(0.37, 0.31, 0.4))
+    for i in range(5):
+        a = math.radians(-60 + i * 30)
+        b.cone("head", m["gold"], (0.15 * math.sin(a), -0.1 + 0.12 * (1 - math.cos(a)), 1.36), 0.035, 0.0, 0.16, seg=4)
+    b.cone("head", m["gold"], (0, -0.08, 1.36), 0.17, 0.17, 0.05, seg=14)
+    b.sphere("head", ember, (0, -0.24, 1.37), (0.025, 0.02, 0.025), seg=6, rings=4)
+    for side in (1, -1):
+        arm = "arm.L" if side > 0 else "arm.R"
+        b.sphere(arm, m["gold"], (0.34 * side, -0.02, 0.94), (0.13, 0.13, 0.09), cut_below=0.9)
+        b.cone(arm, spikes, (0.4 * side, -0.02, 1.0), 0.04, 0.0, 0.14, rot=(0, 50 * side, 0))
+    b.cone("torso", cape, (0, 0.16, 0.6), 0.36, 0.22, 0.62, seg=14)
+    b.sphere("hips", m["leather"], (0, -0.01, 0.55), (0.3, 0.27, 0.05))
+    b.cube("hips", m["gold"], (0, -0.29, 0.55), (0.1, 0.02, 0.08))
+    b.between("weapon", m["wood"], (-0.36, -0.12, 0.2), (-0.36, -0.12, 1.4), 0.035, 0.035, seg=8)
+    b.cube("weapon", m["steel"], (-0.36, -0.28, 1.28), (0.02, 0.18, 0.2))
+    b.cube("weapon", m["steel"], (-0.36, 0.04, 1.28), (0.02, 0.12, 0.14))
+    b.ico("weapon", ember, (-0.36, -0.12, 1.43), (0.05, 0.05, 0.05))
+    return b, LIZARD_BONES, A.LIZARD, A.melee
+
+
 CHARACTERS = {
     "Knight": knight,
     "Archer": archer,
@@ -263,6 +336,9 @@ CHARACTERS = {
     "Grunt": grunt,
     "Shaman": shaman,
     "Brute": brute,
+    "Spitter": spitter,
+    "Guard": guard,
+    "Chieftain": chieftain,
 }
 
 

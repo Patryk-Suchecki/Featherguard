@@ -69,18 +69,20 @@ namespace Featherguard.EditorTools
             var s = u["Shaman"];
             var b = u["Brute"];
             var c = u["Chieftain"];
+            var p = u["Spitter"];
+            var t = u["Guard"];
             var run = LoadOrCreate<RunDefinition>($"{DataDir}/Run.asset");
             run.encounters = new[]
             {
                 CreateEncounter("Battle01", "Skraj lasu", 1f, 1f, 10, false, new[] { g, g }),
                 CreateEncounter("Battle02", "Leśna ścieżka", 1f, 1f, 12, false, new[] { g, s, g }),
                 CreateEncounter("Battle03", "Stary dąb", 1f, 1f, 14, false, new[] { g, g }, new[] { s, g }),
-                CreateEncounter("Battle04", "Wykrot", 1.05f, 1f, 16, false, new[] { g, b, g }),
-                CreateEncounter("Battle05", "Mglisty jar", 1.1f, 1.05f, 18, false, new[] { s, g, s }, new[] { g, b }),
-                CreateEncounter("Battle06", "Bagienko", 1.15f, 1.1f, 20, false, new[] { b, s, g }, new[] { g, g, g }),
-                CreateEncounter("Battle07", "Kamienny bród", 1.2f, 1.1f, 22, false, new[] { b, g, b }, new[] { s, s }),
-                CreateEncounter("Battle08", "Obóz jaszczurów", 1.3f, 1.15f, 25, false, new[] { b, s, b }, new[] { g, b, g }),
-                CreateEncounter("Battle09", "Herszt", 1.3f, 1.15f, 40, true, new[] { g, g }, new[] { s, c, s }),
+                CreateEncounter("Battle04", "Wykrot", 1.05f, 1f, 16, false, new[] { g, b, p }),
+                CreateEncounter("Battle05", "Mglisty jar", 1.1f, 1.05f, 18, false, new[] { p, t, s }, new[] { g, b }),
+                CreateEncounter("Battle06", "Bagienko", 1.15f, 1.1f, 20, false, new[] { p, s, p }, new[] { g, t, g }),
+                CreateEncounter("Battle07", "Kamienny bród", 1.2f, 1.1f, 22, false, new[] { b, t, b }, new[] { s, p }),
+                CreateEncounter("Battle08", "Obóz jaszczurów", 1.3f, 1.15f, 25, false, new[] { t, s, b }, new[] { p, b, g }),
+                CreateEncounter("Battle09", "Herszt", 1.3f, 1.15f, 40, true, new[] { g, t, g }, new[] { p, c, s }),
             };
             run.upgrades = CreateUpgrades();
             EditorUtility.SetDirty(run);
@@ -191,6 +193,10 @@ namespace Featherguard.EditorTools
             Add("ShamanAttack", "Klątwa", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 12, new Color(0.8f, 0.4f, 1f), SfxId.Magic, SfxId.Hit, statuses: new[] { Status(StatusType.Weaken, chance: 0.5f) });
             Add("ShamanSupport", "Mroczne leczenie", AbilityEffect.Heal, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 25, new Color(0.8f, 0.45f, 1f), SfxId.None, SfxId.Heal);
             Add("BruteAttack", "Miażdżenie", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 26, spark, SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun, chance: 0.25f) });
+            Add("SpitterAttack", "Jad", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 9, new Color(0.5f, 1f, 0.2f), SfxId.Magic, SfxId.Hit, statuses: new[] { Status(StatusType.Poison, 2, 6, 0.7f) });
+            Add("GuardAttack", "Pchnięcie włócznią", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 14, spark, SfxId.Slash, SfxId.Hit);
+            Add("GuardSupport", "Mur tarcz", AbilityEffect.Status, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 0, new Color(0.45f, 0.7f, 1f), SfxId.None, SfxId.Shield, statuses: new[] { Status(StatusType.Shield), Status(StatusType.Taunt, onSelf: true) });
+            Add("ChieftainSpecial", "Trzęsienie ziemi", AbilityEffect.Damage, AbilityTarget.AllEnemies, AbilityDelivery.Instant, "Attack", 22, new Color(1f, 0.45f, 0.15f), SfxId.Smash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Weaken, chance: 0.5f) });
             Add("ChieftainAttack", "Gniew Herszta", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 34, spark, SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun, chance: 0.35f) });
             return list;
         }
@@ -224,7 +230,12 @@ namespace Featherguard.EditorTools
             Add("Grunt", "Zbir", Team.Enemies, 80, 1.5f, 1f, "GruntAttack", null, null);
             Add("Shaman", "Szaman", Team.Enemies, 70, 1.5f, 1f, "ShamanAttack", "ShamanSupport", null);
             Add("Brute", "Osiłek", Team.Enemies, 170, 1.5f, 1.4f, "BruteAttack", null, null);
-            Add("Chieftain", "Herszt", Team.Enemies, 420, 1.5f, 1.75f, "ChieftainAttack", null, null, "Brute");
+            Add("Spitter", "Plujka", Team.Enemies, 65, 1.5f, 1f, "SpitterAttack", null, null);
+            Add("Guard", "Tarczownik", Team.Enemies, 110, 1.5f, 1.1f, "GuardAttack", "GuardSupport", null);
+            Add("Chieftain", "Herszt", Team.Enemies, 460, 1.5f, 1.6f, "ChieftainAttack", null, "ChieftainSpecial");
+            units["Chieftain"].specialEvery = 3;
+            units["Chieftain"].enrageAt = 0.5f;
+            units["Chieftain"].enrageSummons = new[] { units["Grunt"], units["Grunt"] };
             return units;
         }
 

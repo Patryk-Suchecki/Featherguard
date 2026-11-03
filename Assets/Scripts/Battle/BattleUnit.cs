@@ -21,6 +21,8 @@ namespace Featherguard.Battle
         public int MaxHealth => Mathf.Max(1, Mathf.RoundToInt(Stat(StatType.MaxHealth)));
         public bool IsAlive => Health > 0;
         public bool HasActed { get; set; }
+        public int TurnsTaken { get; set; }
+        public bool Enraged { get; set; }
         public IReadOnlyList<StatusEffect> Statuses => statuses;
         public Vector3 HomePosition { get; set; }
         public UnitAnimator Animator { get; private set; }

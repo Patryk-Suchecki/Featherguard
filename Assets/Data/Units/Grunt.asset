@@ -22,3 +22,6 @@ MonoBehaviour:
   attack: {fileID: 11400000, guid: 65daa8f476e1d6442942f98c73b52757, type: 2}
   support: {fileID: 0}
   special: {fileID: 0}
+  specialEvery: 0
+  enrageAt: 0
+  enrageSummons: []

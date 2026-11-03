@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
+  m_Name: Spitter
+  m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
+  displayName: Plujka
+  team: 1
+  model: {fileID: 919132149155446097, guid: 60ab8668bcb332245a2f94edef6427cf, type: 3}
+  animator: {fileID: 9100000, guid: 07bf4df16306bf6468b6eceec0e58974, type: 2}
+  modelScale: 1
+  height: 1.5
+  maxHealth: 65
+  attack: {fileID: 11400000, guid: 650a9e3be9a9e8442a04afc7fbce96d2, type: 2}
+  support: {fileID: 0}
+  special: {fileID: 0}
+  specialEvery: 0
+  enrageAt: 0
+  enrageSummons: []

@@ -17,5 +17,8 @@ namespace Featherguard.Battle
         public AbilityDefinition attack;
         public AbilityDefinition support;
         public AbilityDefinition special;
+        public int specialEvery;
+        [Range(0f, 1f)] public float enrageAt;
+        public UnitDefinition[] enrageSummons = new UnitDefinition[0];
     }
 }

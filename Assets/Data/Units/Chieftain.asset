@@ -14,11 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
   displayName: Herszt
   team: 1
-  model: {fileID: 919132149155446097, guid: 06010ed07d1efb044b0af00003c6a643, type: 3}
-  animator: {fileID: 9100000, guid: 70cf1467121688b4fa6563e82af9dc8d, type: 2}
-  modelScale: 1.75
+  model: {fileID: 919132149155446097, guid: 7a0b4341ba4a894488697ea1c4e7ac73, type: 3}
+  animator: {fileID: 9100000, guid: 4eb669808260fca4ba3d67b637669430, type: 2}
+  modelScale: 1.6
   height: 1.5
-  maxHealth: 420
+  maxHealth: 460
   attack: {fileID: 11400000, guid: e07ddc7cfbadad34589c38de58d2fd0a, type: 2}
   support: {fileID: 0}
-  special: {fileID: 0}
+  special: {fileID: 11400000, guid: fb6a568397e3b2a4eb68680a10cea919, type: 2}
+  specialEvery: 3
+  enrageAt: 0.5
+  enrageSummons:
+  - {fileID: 11400000, guid: 35a54204ca81a6b46882804b28f08a75, type: 2}
+  - {fileID: 11400000, guid: 35a54204ca81a6b46882804b28f08a75, type: 2}
