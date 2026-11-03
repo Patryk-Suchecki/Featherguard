@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
+  m_Name: ArcherSupport
+  m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
+  displayName: Okrzyk bojowy
+  effect: 3
+  target: 2
+  delivery: 3
+  animationState: Cast
+  power: 0
+  hits: 1
+  heavy: 0
+  fxColor: {r: 1, g: 0.6, b: 0.2, a: 1}
+  castSound: 0
+  impactSound: 8

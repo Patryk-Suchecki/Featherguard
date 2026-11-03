@@ -33,4 +33,5 @@ sysinfo.txt
 *.aab
 *.unitypackage
 crashlytics-build.properties
-/Art/Blender/*.blend1
+*.blend1
+__pycache__/

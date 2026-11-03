@@ -1,0 +1,56 @@
+{
+  "clips": [
+    {
+      "name": "Idle",
+      "start": 1,
+      "end": 41,
+      "loop": true,
+      "events": []
+    },
+    {
+      "name": "Attack",
+      "start": 1,
+      "end": 26,
+      "loop": false,
+      "events": [
+        {
+          "name": "OnHitFrame",
+          "frame": 8
+        }
+      ]
+    },
+    {
+      "name": "Cast",
+      "start": 1,
+      "end": 30,
+      "loop": false,
+      "events": [
+        {
+          "name": "OnHitFrame",
+          "frame": 16
+        }
+      ]
+    },
+    {
+      "name": "Hit",
+      "start": 1,
+      "end": 14,
+      "loop": false,
+      "events": []
+    },
+    {
+      "name": "Death",
+      "start": 1,
+      "end": 30,
+      "loop": false,
+      "events": []
+    },
+    {
+      "name": "Victory",
+      "start": 1,
+      "end": 31,
+      "loop": true,
+      "events": []
+    }
+  ]
+}
