@@ -49,10 +49,7 @@ namespace Featherguard.EditorTools
 
             var config = LoadOrCreate<BattleConfig>($"{DataDir}/BattleConfig.asset");
             config.heroes = new[] { units["Knight"], units["Archer"], units["Owl"] };
-            config.encounter = CreateEncounter("Forest1", "Leśna polana",
-                new[] { units["Grunt"], units["Shaman"], units["Grunt"] },
-                new[] { units["Grunt"], units["Brute"], units["Grunt"] },
-                new[] { units["Brute"], units["Shaman"], units["Brute"] });
+            config.run = CreateRun(units);
             config.arrowPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{EnvironmentDir}/Arrow.fbx");
             config.flashMaterial = flash;
             config.particleMaterial = particle;
@@ -65,10 +62,37 @@ namespace Featherguard.EditorTools
             Debug.Log("Featherguard: battle scene rebuilt.");
         }
 
-        static EncounterDefinition CreateEncounter(string id, string name, params UnitDefinition[][] waves)
+        static RunDefinition CreateRun(Dictionary<string, UnitDefinition> u)
+        {
+            var g = u["Grunt"];
+            var s = u["Shaman"];
+            var b = u["Brute"];
+            var c = u["Chieftain"];
+            var run = LoadOrCreate<RunDefinition>($"{DataDir}/Run.asset");
+            run.encounters = new[]
+            {
+                CreateEncounter("Battle01", "Skraj lasu", 1f, 1f, 10, false, new[] { g, g }),
+                CreateEncounter("Battle02", "Leśna ścieżka", 1f, 1f, 12, false, new[] { g, s, g }),
+                CreateEncounter("Battle03", "Stary dąb", 1f, 1f, 14, false, new[] { g, g }, new[] { s, g }),
+                CreateEncounter("Battle04", "Wykrot", 1.05f, 1f, 16, false, new[] { g, b, g }),
+                CreateEncounter("Battle05", "Mglisty jar", 1.1f, 1.05f, 18, false, new[] { s, g, s }, new[] { g, b }),
+                CreateEncounter("Battle06", "Bagienko", 1.15f, 1.1f, 20, false, new[] { b, s, g }, new[] { g, g, g }),
+                CreateEncounter("Battle07", "Kamienny bród", 1.2f, 1.1f, 22, false, new[] { b, g, b }, new[] { s, s }),
+                CreateEncounter("Battle08", "Obóz jaszczurów", 1.3f, 1.15f, 25, false, new[] { b, s, b }, new[] { g, b, g }),
+                CreateEncounter("Battle09", "Herszt", 1.3f, 1.15f, 40, true, new[] { g, g }, new[] { s, c, s }),
+            };
+            EditorUtility.SetDirty(run);
+            return run;
+        }
+
+        static EncounterDefinition CreateEncounter(string id, string name, float health, float damage, int gold, bool boss, params UnitDefinition[][] waves)
         {
             var encounter = LoadOrCreate<EncounterDefinition>($"{EncounterDir}/{id}.asset");
             encounter.displayName = name;
+            encounter.enemyHealth = health;
+            encounter.enemyDamage = damage;
+            encounter.goldReward = gold;
+            encounter.boss = boss;
             encounter.waves = waves.Select(w => new EncounterDefinition.Wave { enemies = w }).ToArray();
             EditorUtility.SetDirty(encounter);
             return encounter;
@@ -115,6 +139,7 @@ namespace Featherguard.EditorTools
             Add("ShamanAttack", "Klątwa", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Magic, "Attack", 12, new Color(0.8f, 0.4f, 1f), SfxId.Magic, SfxId.Hit, statuses: new[] { Status(StatusType.Weaken, chance: 0.5f) });
             Add("ShamanSupport", "Mroczne leczenie", AbilityEffect.Heal, AbilityTarget.Ally, AbilityDelivery.Instant, "Cast", 25, new Color(0.8f, 0.45f, 1f), SfxId.None, SfxId.Heal);
             Add("BruteAttack", "Miażdżenie", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 26, spark, SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun, chance: 0.25f) });
+            Add("ChieftainAttack", "Gniew Herszta", AbilityEffect.Damage, AbilityTarget.Enemy, AbilityDelivery.Melee, "Attack", 34, spark, SfxId.Slash, SfxId.Smash, heavy: true, statuses: new[] { Status(StatusType.Stun, chance: 0.35f) });
             return list;
         }
 
@@ -122,14 +147,15 @@ namespace Featherguard.EditorTools
         {
             var units = new Dictionary<string, UnitDefinition>();
 
-            void Add(string id, string name, Team team, int health, float height, float scale, string attack, string support, string special)
+            void Add(string id, string name, Team team, int health, float height, float scale, string attack, string support, string special, string model = null)
             {
                 var u = LoadOrCreate<UnitDefinition>($"{UnitDir}/{id}.asset");
-                string fbx = $"{CharacterDir}/{id}.fbx";
+                model ??= id;
+                string fbx = $"{CharacterDir}/{model}.fbx";
                 u.displayName = name;
                 u.team = team;
                 u.model = AssetDatabase.LoadAssetAtPath<GameObject>(fbx);
-                u.animator = CreateController(id, fbx);
+                u.animator = CreateController(model, fbx);
                 u.maxHealth = health;
                 u.height = height;
                 u.modelScale = scale;
@@ -146,6 +172,7 @@ namespace Featherguard.EditorTools
             Add("Grunt", "Zbir", Team.Enemies, 80, 1.5f, 1f, "GruntAttack", null, null);
             Add("Shaman", "Szaman", Team.Enemies, 70, 1.5f, 1f, "ShamanAttack", "ShamanSupport", null);
             Add("Brute", "Osiłek", Team.Enemies, 170, 1.5f, 1.4f, "BruteAttack", null, null);
+            Add("Chieftain", "Herszt", Team.Enemies, 420, 1.5f, 1.75f, "ChieftainAttack", null, null, "Brute");
             return units;
         }
 

@@ -6,7 +6,7 @@ namespace Featherguard.Battle
     public class BattleConfig : ScriptableObject
     {
         public UnitDefinition[] heroes;
-        public EncounterDefinition encounter;
+        public RunDefinition run;
         public GameObject arrowPrefab;
         public Material flashMaterial;
         public Material particleMaterial;

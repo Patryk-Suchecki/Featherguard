@@ -28,6 +28,7 @@ namespace Featherguard.Battle
         readonly List<BattleUnit> heroes = new();
         readonly List<BattleUnit> enemies = new();
         BattleHud hud;
+        EncounterDefinition encounter;
         IEnumerator pendingAction;
         float rage;
         int waveIndex;
@@ -44,13 +45,22 @@ namespace Featherguard.Battle
         IEnumerator Start()
         {
             Time.timeScale = 1f;
+            if (!RunState.Active)
+                RunState.Begin(config.run);
+            encounter = RunState.Current;
             gameObject.AddComponent<HitFeedback>().Init(config.sounds, cameraShake);
             gameObject.AddComponent<Vfx>().Init(config.particleMaterial);
             hud = gameObject.AddComponent<BattleHud>();
             hud.Init(this, battleCamera);
 
             for (int i = 0; i < config.heroes.Length; i++)
-                AddUnit(heroes, BattleUnit.Spawn(config.heroes[i], HeroSlots[i], config));
+            {
+                var hero = BattleUnit.Spawn(config.heroes[i], HeroSlots[i], config);
+                foreach (var modifier in RunState.ModifiersOf(hero.Definition))
+                    hero.AddModifier(modifier);
+                hero.SetHealth(RunState.StoredHealth(hero.Definition) ?? hero.MaxHealth);
+                AddUnit(heroes, hero);
+            }
             hud.BuildHeroCards();
 
             yield return SpawnWave(0);
@@ -93,7 +103,19 @@ namespace Featherguard.Battle
             RefreshHighlights();
         }
 
-        public void Restart()
+        public void ContinueRun()
+        {
+            RunState.Advance();
+            Reload();
+        }
+
+        public void NewRun()
+        {
+            RunState.Begin(config.run);
+            Reload();
+        }
+
+        static void Reload()
         {
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -180,7 +202,7 @@ namespace Featherguard.Battle
             }
             else if (!AnyAlive(enemies))
             {
-                if (waveIndex + 1 >= config.encounter.waves.Length)
+                if (waveIndex + 1 >= encounter.waves.Length)
                 {
                     finished = true;
                     yield return EndBattle(true);
@@ -314,14 +336,20 @@ namespace Featherguard.Battle
                 StartCoroutine(Sink(fallen));
             enemies.Clear();
 
-            var waves = config.encounter.waves;
-            hud.SetWave(index + 1, waves.Length);
-            hud.ShowBanner(index == waves.Length - 1 ? "Ostatnia fala!" : $"Fala {index + 1}");
+            var waves = encounter.waves;
+            hud.SetProgress(RunState.EncounterIndex + 1, RunState.EncounterCount, index + 1, waves.Length);
+            if (index == 0)
+                hud.ShowBanner(encounter.boss ? $"BOSS: {encounter.displayName}" : encounter.displayName);
+            else
+                hud.ShowBanner(index == waves.Length - 1 ? "Ostatnia fala!" : $"Fala {index + 1}");
 
             var wave = waves[index].enemies;
             for (int i = 0; i < wave.Length; i++)
             {
                 var unit = BattleUnit.Spawn(wave[i], EnemySlots[i] + Vector3.right * 6f, config);
+                unit.AddModifier(new StatModifier(StatType.MaxHealth, multiply: encounter.enemyHealth - 1f));
+                unit.AddModifier(new StatModifier(StatType.Damage, multiply: encounter.enemyDamage - 1f));
+                unit.SetHealth(unit.MaxHealth);
                 unit.HomePosition = EnemySlots[i];
                 AddUnit(enemies, unit);
                 HitFeedback.Instance.Play(SfxId.Whoosh, 0.5f);
@@ -509,6 +537,13 @@ namespace Featherguard.Battle
             unit.SetRing(null);
             unit.ClearStatuses();
             HitFeedback.Instance.Play(SfxId.Death);
+            if (unit.Team == Team.Enemies)
+            {
+                RunState.Kills++;
+                RunState.AddGold(RunState.Run.goldPerKill);
+                hud.RefreshGold();
+                hud.Popup(unit.Top + Vector3.up * 0.6f, $"+{RunState.Run.goldPerKill} zł", PopupStyle.Gold);
+            }
         }
 
         void AddRage(float amount)
@@ -526,7 +561,18 @@ namespace Featherguard.Battle
                 if (unit.IsAlive)
                     unit.Animator.Play("Victory", 0.15f);
             HitFeedback.Instance.Play(victory ? SfxId.Victory : SfxId.Defeat, 1f, 0f);
-            hud.ShowEnd(victory);
+            if (!victory)
+            {
+                hud.ShowRunEnd(false);
+                yield break;
+            }
+            int goldBefore = RunState.Gold;
+            RunState.RecordVictory(heroes);
+            hud.RefreshGold();
+            if (RunState.IsFinal)
+                hud.ShowRunEnd(true);
+            else
+                hud.ShowVictory(RunState.Gold - goldBefore);
         }
 
         IEnumerator HopTo(BattleUnit unit, Vector3 destination, float duration, float height)

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Featherguard.UI
 {
-    public enum PopupStyle { Damage, Crit, Heal, Buff }
+    public enum PopupStyle { Damage, Crit, Heal, Buff, Gold }
 
     public class Popup : MonoBehaviour
     {
@@ -25,6 +25,7 @@ namespace Featherguard.UI
                 PopupStyle.Crit => (64, new Color(1f, 0.85f, 0.15f)),
                 PopupStyle.Heal => (44, new Color(0.45f, 1f, 0.45f)),
                 PopupStyle.Buff => (36, new Color(0.55f, 0.85f, 1f)),
+                PopupStyle.Gold => (38, new Color(1f, 0.82f, 0.2f)),
                 _ => (46, Color.white),
             };
             var rect = Ui.Rect("Popup", parent, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(240f, 80f));

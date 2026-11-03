@@ -191,6 +191,12 @@ namespace Featherguard.Battle
             return amount;
         }
 
+        public void SetHealth(int value)
+        {
+            Health = Mathf.Clamp(value, 0, MaxHealth);
+            Changed?.Invoke();
+        }
+
         public void NotifyChanged() => Changed?.Invoke();
     }
 }

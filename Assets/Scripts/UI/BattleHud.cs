@@ -19,6 +19,7 @@ namespace Featherguard.UI
         RectTransform barLayer;
         RectTransform popupLayer;
         Text wave;
+        Text gold;
         Text banner;
         Text hint;
         Text callout;
@@ -53,6 +54,9 @@ namespace Featherguard.UI
 
             wave = Ui.Label(Ui.Rect("Wave", canvas, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(40f, -30f), new Vector2(400f, 50f)),
                 "", 36, TextAnchor.UpperLeft, Color.white);
+            gold = Ui.Label(Ui.Rect("Gold", canvas, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-40f, -30f), new Vector2(400f, 50f)),
+                "", 36, TextAnchor.UpperRight, new Color(1f, 0.82f, 0.2f));
+            RefreshGold();
             banner = Ui.Label(Ui.Rect("Banner", canvas, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -40f), new Vector2(1200f, 90f)),
                 "", 68, TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.5f));
             hint = Ui.Label(Ui.Rect("Hint", canvas, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -135f), new Vector2(1600f, 44f)),
@@ -106,7 +110,10 @@ namespace Featherguard.UI
                 Destroy(bar.gameObject);
         }
 
-        public void SetWave(int current, int total) => wave.text = $"Fala {current}/{total}";
+        public void SetProgress(int encounter, int encounters, int current, int total) =>
+            wave.text = total > 1 ? $"Walka {encounter}/{encounters}  ·  Fala {current}/{total}" : $"Walka {encounter}/{encounters}";
+
+        public void RefreshGold() => gold.text = $"{RunState.Gold} zł";
 
         public void ShowBanner(string text)
         {
@@ -122,18 +129,38 @@ namespace Featherguard.UI
 
         public void Popup(Vector3 world, string text, PopupStyle style) => UI.Popup.Spawn(popupLayer, view, world, text, style);
 
-        public void ShowEnd(bool victory)
+        public void ShowVictory(int goldEarned)
         {
-            var panel = Ui.Stretch("End", canvas);
-            Ui.Image(panel, new Color(0f, 0f, 0f, 0.55f), true);
-            Ui.Label(Ui.Rect("Title", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 110f), new Vector2(1400f, 160f)),
-                victory ? "ZWYCIĘSTWO!" : "PORAŻKA", 130, TextAnchor.MiddleCenter, victory ? new Color(1f, 0.85f, 0.25f) : new Color(1f, 0.35f, 0.3f));
-            Ui.Label(Ui.Rect("Subtitle", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 10f), new Vector2(1400f, 60f)),
-                victory ? "Las znów jest bezpieczny." : "Jaszczury przejęły las...", 40, TextAnchor.MiddleCenter, Color.white);
-            var button = Ui.Rect("Restart", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -110f), new Vector2(420f, 90f));
-            Ui.Button(button, new Color(0.2f, 0.55f, 0.25f, 1f), battle.Restart);
-            Ui.Label(Ui.Stretch("Label", button), "Zagraj ponownie", 36, TextAnchor.MiddleCenter, Color.white);
+            var panel = Overlay("Victory", "WYGRANA!", new Color(1f, 0.85f, 0.25f),
+                $"+{goldEarned} zł  ·  bohaterowie odpoczywają");
+            AddButton(panel, "Dalej", new Vector2(0f, -110f), new Color(0.2f, 0.55f, 0.25f, 1f), battle.ContinueRun);
+        }
+
+        public void ShowRunEnd(bool victory)
+        {
+            var panel = Overlay("RunEnd", victory ? "RUN UKOŃCZONY!" : "PORAŻKA", victory ? new Color(1f, 0.85f, 0.25f) : new Color(1f, 0.35f, 0.3f),
+                $"Wygrane walki: {RunState.BattlesWon}/{RunState.EncounterCount}   ·   Pokonani wrogowie: {RunState.Kills}   ·   Zdobyte złoto: {RunState.GoldEarned}");
+            AddButton(panel, "Nowy run", new Vector2(0f, -110f), new Color(0.2f, 0.55f, 0.25f, 1f), battle.NewRun);
+        }
+
+        public RectTransform Overlay(string name, string title, Color titleColor, string subtitle)
+        {
+            var panel = Ui.Stretch(name, canvas);
+            Ui.Image(panel, new Color(0f, 0f, 0f, 0.6f), true);
+            Ui.Label(Ui.Rect("Title", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 110f), new Vector2(1600f, 160f)),
+                title, 120, TextAnchor.MiddleCenter, titleColor);
+            Ui.Label(Ui.Rect("Subtitle", panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 10f), new Vector2(1600f, 60f)),
+                subtitle, 34, TextAnchor.MiddleCenter, Color.white);
             hint.text = "";
+            return panel;
+        }
+
+        public static RectTransform AddButton(RectTransform parent, string label, Vector2 position, Color color, UnityEngine.Events.UnityAction onClick)
+        {
+            var button = Ui.Rect(label, parent, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), position, new Vector2(420f, 90f));
+            Ui.Button(button, color, onClick);
+            Ui.Label(Ui.Stretch("Label", button), label, 36, TextAnchor.MiddleCenter, Color.white);
+            return button;
         }
 
         void Update()
