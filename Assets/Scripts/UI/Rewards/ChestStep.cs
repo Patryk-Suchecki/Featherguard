@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Featherguard.Feel;
 using Featherguard.Run;
 using UnityEngine;
@@ -23,19 +21,7 @@ namespace Featherguard.UI
             yield return screen.WaitChoice();
             if (screen.Choice == Leave) yield break;
 
-            var shown = new List<UpgradeOffer>();
-            var reward = session.DrawOffers(1, context.Economy.chestRarity).FirstOrDefault();
-            if (reward.IsValid)
-            {
-                session.Apply(reward);
-                shown.Add(reward);
-            }
-            var curse = session.DrawCurse();
-            if (curse.IsValid)
-            {
-                session.Apply(curse);
-                shown.Add(curse);
-            }
+            var shown = PathRewards.OpenChest(session);
 
             screen.Open("SKRZYNIA OTWARTA", "Nagroda i cena");
             FeedbackHub.Ui(SfxId.Jackpot, 0.8f);

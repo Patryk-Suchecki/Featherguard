@@ -1,5 +1,6 @@
 using System.Collections;
 using Featherguard.Feel;
+using Featherguard.Run;
 using UnityEngine;
 
 namespace Featherguard.UI
@@ -14,12 +15,10 @@ namespace Featherguard.UI
 
         public IEnumerator Run(RewardContext context)
         {
-            var session = context.Session;
-            var wallet = session.Wallet;
-            int stake = session.CurrentGoldReward;
-            if (stake <= 0 || !wallet.CanAfford(stake)) yield break;
-
-            float chance = context.Economy.GambleChance(session.Luck);
+            var gamble = new Gamble(context.Session);
+            if (!gamble.Available) yield break;
+            int stake = gamble.Stake;
+            float chance = gamble.Chance;
             var screen = context.Screen;
             screen.Open("PODWÓJNIE ALBO NIC?", $"Stawka: {stake} zł  ·  Szansa: {Mathf.RoundToInt(chance * 100f)}%");
             var box = Ui.Centered("Wheel", screen.Root, new Vector2(0f, 40f), new Vector2(760f, 380f));
@@ -33,17 +32,15 @@ namespace Featherguard.UI
             Object.Destroy(keep.gameObject);
             if (screen.Choice == Keep) yield break;
 
-            bool win = session.Random.Value < chance;
+            bool win = gamble.Resolve();
             yield return SpinWheel(wheel, stake, win);
             if (win)
             {
-                wallet.Deposit(stake);
                 screen.RefreshHeader("PODWOJONE!", "");
                 yield return screen.Jackpot($"+{stake} zł", false, -260f);
             }
             else
             {
-                wallet.Lose(stake);
                 screen.RefreshHeader("PRZEPADŁO", "");
                 FeedbackHub.Ui(SfxId.Lose);
                 FeedbackHub.Instance.Shake(0.15f, 0.35f);

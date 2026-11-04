@@ -79,19 +79,26 @@ namespace Featherguard.Game
         {
             if (!result.Victory)
             {
-                RunEndScreen.Show(hud, session, false, Meta.RecordRun(session, false), NewRun);
+                FinishRun(false);
                 yield break;
             }
             session.RecordVictory(result);
             yield return new WaitForSeconds(0.8f);
             if (session.IsFinal)
             {
-                RunEndScreen.Show(hud, session, true, Meta.RecordRun(session, true), NewRun);
+                FinishRun(true);
                 yield break;
             }
             yield return RewardSequence.Play(hud, session);
             session.Advance();
             Reload();
+        }
+
+        void FinishRun(bool completed)
+        {
+            int feathers = Meta.RecordRun(session, completed);
+            RunSession.End();
+            RunEndScreen.Show(hud, session, completed, feathers, NewRun);
         }
 
         void AbandonRun()

@@ -1,5 +1,6 @@
 using System.Collections;
 using Featherguard.Feel;
+using Featherguard.Run;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,35 +16,30 @@ namespace Featherguard.UI
 
         public IEnumerator Run(RewardContext context)
         {
-            var session = context.Session;
-            var economy = context.Economy;
-            var wallet = session.Wallet;
             var screen = context.Screen;
-            var offers = session.DrawOffers(economy.shopOffers);
-            var sold = new bool[offers.Count];
+            var shop = new Shop(context.Session);
 
             while (true)
             {
                 screen.Open("SKLEP", "Złoto albo krew — wybór należy do ciebie");
-                float start = -(offers.Count - 1) * Spacing * 0.5f;
-                for (int i = 0; i < offers.Count; i++)
+                float start = -(shop.Offers.Count - 1) * Spacing * 0.5f;
+                for (int i = 0; i < shop.Offers.Count; i++)
                 {
                     float x = start + i * Spacing;
-                    var card = screen.Card(offers[i], new Vector2(x, 30f), sold[i] ? SoldLabel : "", -1);
+                    var card = screen.Card(shop.Offers[i], new Vector2(x, 30f), shop.IsSold(i) ? SoldLabel : "", -1);
                     card.localScale = Vector3.one * 0.86f;
-                    if (sold[i])
+                    if (shop.IsSold(i))
                     {
                         card.gameObject.AddComponent<CanvasGroup>().alpha = 0.35f;
                         continue;
                     }
-                    var rarity = offers[i].Upgrade.rarity;
-                    int price = economy.GoldPrice(rarity);
-                    var gold = screen.Button(price.ToString(), new Vector2(x - 98f, -272f), wallet.CanAfford(price) ? Ui.GoColor : Ui.NeutralColor, i, "Coin", new Vector2(186f, 110f));
-                    gold.GetComponent<Button>().interactable = wallet.CanAfford(price);
-                    screen.Button($"-{Mathf.RoundToInt(economy.BloodPrice(rarity) * 100f)}%", new Vector2(x + 98f, -272f), Ui.RiskColor, BloodOffset + i, "Lifesteal", new Vector2(186f, 110f));
+                    bool affordable = shop.CanAfford(i);
+                    var gold = screen.Button(shop.GoldPrice(i).ToString(), new Vector2(x - 98f, -272f), affordable ? Ui.GoColor : Ui.NeutralColor, i, "Coin", new Vector2(186f, 110f));
+                    gold.GetComponent<Button>().interactable = affordable;
+                    screen.Button($"-{Mathf.RoundToInt(shop.BloodPrice(i) * 100f)}%", new Vector2(x + 98f, -272f), Ui.RiskColor, BloodOffset + i, "Lifesteal", new Vector2(186f, 110f));
                 }
-                var heal = screen.Button($"Leczenie ({economy.shopHealCost})", new Vector2(-260f, -410f), wallet.CanAfford(economy.shopHealCost) ? Ui.GoColor : Ui.NeutralColor, HealChoice, "Heal");
-                heal.GetComponent<Button>().interactable = wallet.CanAfford(economy.shopHealCost);
+                var heal = screen.Button($"Leczenie ({shop.HealCost})", new Vector2(-260f, -410f), shop.CanAffordHeal ? Ui.GoColor : Ui.NeutralColor, HealChoice, "Heal");
+                heal.GetComponent<Button>().interactable = shop.CanAffordHeal;
                 screen.Button("Wyjdź", new Vector2(260f, -410f), Ui.NeutralColor, ExitChoice, "Flag");
                 yield return screen.WaitChoice();
 
@@ -51,31 +47,18 @@ namespace Featherguard.UI
                 if (choice == ExitChoice) yield break;
                 if (choice == HealChoice)
                 {
-                    if (wallet.TrySpend(economy.shopHealCost))
-                    {
-                        session.Party.HealAll(economy.shopHealFraction);
-                        FeedbackHub.Ui(SfxId.Heal);
-                    }
-                    continue;
+                    if (shop.BuyHeal()) FeedbackHub.Ui(SfxId.Heal);
                 }
-
-                bool blood = choice >= BloodOffset;
-                int index = blood ? choice - BloodOffset : choice;
-                if (index < 0 || index >= offers.Count || sold[index]) continue;
-                var tier = offers[index].Upgrade.rarity;
-                if (blood)
+                else if (choice >= BloodOffset)
                 {
-                    session.Party.HurtAll(economy.BloodPrice(tier));
+                    if (!shop.BuyWithBlood(choice - BloodOffset)) continue;
                     FeedbackHub.Ui(SfxId.Hit);
                     FeedbackHub.Instance.Shake(0.1f, 0.25f);
                 }
-                else if (wallet.TrySpend(economy.GoldPrice(tier)))
+                else if (shop.BuyWithGold(choice))
                 {
                     FeedbackHub.Ui(SfxId.Coin);
                 }
-                else continue;
-                session.Apply(offers[index]);
-                sold[index] = true;
             }
         }
     }

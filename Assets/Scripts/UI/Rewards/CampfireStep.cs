@@ -1,5 +1,6 @@
 using System.Collections;
 using Featherguard.Feel;
+using Featherguard.Run;
 using UnityEngine;
 
 namespace Featherguard.UI
@@ -8,8 +9,7 @@ namespace Featherguard.UI
     {
         public IEnumerator Run(RewardContext context)
         {
-            float heal = context.Economy.campfireHeal;
-            context.Session.Party.HealAll(heal);
+            float heal = PathRewards.Rest(context.Session);
             var screen = context.Screen;
             screen.Open("OGNISKO", $"Drużyna odpoczywa: +{Mathf.RoundToInt(heal * 100f)}% HP");
             Ui.Icon(screen.Root, "Campfire", new Vector2(0f, 20f), 300f);

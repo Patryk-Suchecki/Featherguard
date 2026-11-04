@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Featherguard.Core;
 using Featherguard.Run;
 using UnityEngine;
 
@@ -20,8 +18,7 @@ namespace Featherguard.UI
         public IEnumerator Run(RewardContext context)
         {
             var session = context.Session;
-            var definition = session.Definition;
-            var nodes = session.NextIsFinal ? definition.beforeBossNodes.ToList() : Draw(definition.pathNodes, definition.pathChoices, session.Random);
+            var nodes = PathRewards.Choices(session);
             if (nodes.Count == 0) yield break;
 
             var screen = context.Screen;
@@ -46,26 +43,13 @@ namespace Featherguard.UI
             Ui.Wrapped(Ui.Centered("Description", rect, new Vector2(0f, -160f), new Vector2(460f, 150f)), node.description, 32, TextAnchor.MiddleCenter, new Color(0.92f, 0.94f, 1f));
             return rect;
         }
-
-        static List<PathNode> Draw(IEnumerable<PathNode> pool, int count, IRandomSource random)
-        {
-            var remaining = pool.ToList();
-            var picked = new List<PathNode>();
-            while (picked.Count < count && remaining.Count > 0)
-            {
-                var node = WeightedRandom.Pick(remaining, n => n.weight, random);
-                remaining.Remove(node);
-                picked.Add(node);
-            }
-            return picked;
-        }
     }
 
     public sealed class EliteStep : IRewardStep
     {
         public IEnumerator Run(RewardContext context)
         {
-            context.Session.NextElite = true;
+            PathRewards.ChooseElite(context.Session);
             yield break;
         }
     }

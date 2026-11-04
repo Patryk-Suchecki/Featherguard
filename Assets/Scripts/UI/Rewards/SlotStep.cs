@@ -26,15 +26,14 @@ namespace Featherguard.UI
             yield return screen.WaitChoice();
             Object.Destroy(spin.gameObject);
 
-            var reels = SlotRules.Roll(config, session, session.Random);
+            var outcome = SlotRules.Play(config, session, context.Round);
+            var reels = outcome.Reels;
             yield return machine.Spin(reels);
-            var outcome = SlotRules.Evaluate(config, reels);
             if (outcome.Matches >= 2)
                 for (int i = 0; i < reels.Length; i++)
                     if (reels[i] == outcome.Symbol)
                         machine.Highlight(i, outcome.Matches >= 3 ? JackpotFrame : PairFrame);
 
-            outcome.Reward?.Grant(session, context);
             screen.RefreshHeader("WYGRANA!", reward);
             string text = outcome.Reward?.text ?? "";
             if (outcome.IsJackpot)

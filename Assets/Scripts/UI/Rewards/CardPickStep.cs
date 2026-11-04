@@ -23,34 +23,30 @@ namespace Featherguard.UI
 
         public IEnumerator Run(RewardContext context)
         {
-            var session = context.Session;
             var screen = context.Screen;
-            var offers = session.DrawOffers(context.Economy.cardChoices, minimum);
-            while (true)
+            var draft = new CardDraft(context.Round, minimum);
+            while (!draft.IsEmpty)
             {
-                int cost = context.Economy.RerollCost(context.Rerolls);
                 screen.Open(title, "Dotknij karty, aby ją zabrać");
-                yield return Reveal(screen, offers, _ => "", 0f, true);
-                bool affordable = session.Wallet.CanAfford(cost);
-                var reroll = screen.Button($"Losuj ({cost} zł)", new Vector2(0f, -400f), affordable ? Ui.RiskColor : Ui.NeutralColor, RerollChoice, "Dice");
+                yield return Reveal(screen, draft.Offers, _ => "", 0f, true);
+                bool affordable = draft.CanReroll;
+                var reroll = screen.Button($"Losuj ({draft.RerollCost} zł)", new Vector2(0f, -400f), affordable ? Ui.RiskColor : Ui.NeutralColor, RerollChoice, "Dice");
                 reroll.GetComponent<Button>().interactable = affordable;
                 yield return screen.WaitChoice();
 
                 if (screen.Choice == RerollChoice)
                 {
-                    if (!session.Wallet.TrySpend(cost)) continue;
-                    context.Rerolls++;
-                    offers = session.DrawOffers(context.Economy.cardChoices, minimum);
+                    draft.Reroll();
                     continue;
                 }
-                session.Apply(offers[screen.Choice]);
+                if (!draft.Pick(screen.Choice)) continue;
                 FeedbackHub.Ui(SfxId.Buff);
                 yield return new WaitForSecondsRealtime(0.25f);
                 yield break;
             }
         }
 
-        public static IEnumerator Reveal(RewardScreen screen, List<UpgradeOffer> offers, System.Func<UpgradeOffer, string> footer, float y, bool selectable)
+        public static IEnumerator Reveal(RewardScreen screen, IReadOnlyList<UpgradeOffer> offers, System.Func<UpgradeOffer, string> footer, float y, bool selectable)
         {
             float start = -(offers.Count - 1) * Spacing * 0.5f;
             for (int i = 0; i < offers.Count; i++)

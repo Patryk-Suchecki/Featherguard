@@ -10,23 +10,18 @@ namespace Featherguard.UI
         IEnumerator Run(RewardContext context);
     }
 
-    public sealed class RewardContext : IRewardQueue
+    public sealed class RewardContext
     {
-        readonly Queue<Rarity> pendingCards = new();
-
-        public RunSession Session { get; }
-        public EconomyConfig Economy => Session.Economy;
+        public RewardRound Round { get; }
+        public RunSession Session => Round.Session;
+        public EconomyConfig Economy => Round.Economy;
         public RewardScreen Screen { get; }
-        public int Rerolls { get; set; }
 
-        public RewardContext(RunSession session, RewardScreen screen)
+        public RewardContext(RewardRound round, RewardScreen screen)
         {
-            Session = session;
+            Round = round;
             Screen = screen;
         }
-
-        public void QueueCard(Rarity minimum) => pendingCards.Enqueue(minimum);
-        public bool TryTakeCard(out Rarity minimum) => pendingCards.TryDequeue(out minimum);
     }
 
     public static class RewardSequence
@@ -34,20 +29,20 @@ namespace Featherguard.UI
         public static IEnumerator Play(BattleHud hud, RunSession session)
         {
             hud.SetHudVisible(false);
-            var context = new RewardContext(session, new RewardScreen(hud, session, hud));
-            foreach (var step in Steps(session))
+            var context = new RewardContext(new RewardRound(session), new RewardScreen(hud, session, hud));
+            foreach (var step in Steps(context.Round))
                 yield return step.Run(context);
-            while (context.TryTakeCard(out var minimum))
+            while (context.Round.TryTakeCard(out var minimum))
                 yield return new CardPickStep(minimum, "DODATKOWA KARTA!").Run(context);
             yield return new PathStep().Run(context);
             context.Screen.Close();
         }
 
-        static IEnumerable<IRewardStep> Steps(RunSession session)
+        static IEnumerable<IRewardStep> Steps(RewardRound round)
         {
             yield return new SlotStep();
             yield return new GambleStep();
-            yield return new CardPickStep(session.CurrentElite ? session.Economy.eliteCardRarity : Rarity.Common, "WYBIERZ KARTĘ");
+            yield return new CardPickStep(round.FirstCardRarity, "WYBIERZ KARTĘ");
         }
     }
 }
