@@ -13,19 +13,41 @@ MonoBehaviour:
   m_Name: ChieftainAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Gniew Herszta
-  effect: 0
   target: 0
-  delivery: 0
   animationState: Attack
-  power: 34
   hits: 1
   heavy: 1
-  statuses:
-  - type: 3
-    turns: 1
-    potency: 0
-    chance: 0.35
-    onSelf: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 2
+  delivery:
+    rid: 4550530190041940090
+  effects:
+  - rid: 4550530190041940091
+  - rid: 4550530190041940092
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530190041940090
+      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        approachTime: 0.3
+        approachHop: 0.55
+        returnTime: 0.32
+        returnHop: 0.45
+        hitInterval: 0.15
+        recovery: 0.4
+        reach: 0.3
+    - rid: 4550530190041940091
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 34
+    - rid: 4550530190041940092
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 9ed2d30f57628cf47a79c05b0c8892b2, type: 2}
+          turns: 1
+          potency: 0
+          chance: 0.35
+          onSelf: 0

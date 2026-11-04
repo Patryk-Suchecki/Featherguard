@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: "Ciep\u0142e gniazdo"
   description: +20% leczenia
+  icon: {fileID: 21300000, guid: 97a1f7a1c793e0346a0008f7dbdd0c3f, type: 3}
   rarity: 0
   scope: 0
   curse: 0

@@ -13,14 +13,31 @@ MonoBehaviour:
   m_Name: GuardAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Pchni\u0119cie w\u0142\xF3czni\u0105"
-  effect: 0
   target: 0
-  delivery: 0
   animationState: Attack
-  power: 14
   hits: 1
   heavy: 0
-  statuses: []
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3
+  delivery:
+    rid: 4550530190041940088
+  effects:
+  - rid: 4550530190041940089
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530190041940088
+      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        approachTime: 0.3
+        approachHop: 0.55
+        returnTime: 0.32
+        returnHop: 0.45
+        hitInterval: 0.15
+        recovery: 0.4
+        reach: 0.3
+    - rid: 4550530190041940089
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 14

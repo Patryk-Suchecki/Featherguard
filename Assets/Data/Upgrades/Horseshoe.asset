@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: Podkowa
   description: "+1 szcz\u0119\u015Bcia (lepsze b\u0119bny i karty)"
+  icon: {fileID: 21300000, guid: 6771cc63622e36d40a642a948dbcd1ee, type: 3}
   rarity: 0
   scope: 2
   curse: 0

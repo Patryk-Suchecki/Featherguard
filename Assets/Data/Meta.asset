@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe83d5b69fdc345a4c7983f4b8aa99, type: 3}
+  m_Name: Meta
+  m_EditorClassIdentifier: Featherguard::Featherguard.Meta.MetaConfig
+  perks:
+  - {fileID: 11400000, guid: 66076aaedba296c4eabacc44fc5193a8, type: 2}
+  - {fileID: 11400000, guid: 9e8996ebfc1c99143aec9d05442f6751, type: 2}
+  - {fileID: 11400000, guid: 7d2535809ba25bd42874b628fc8bacf9, type: 2}
+  - {fileID: 11400000, guid: 6f69c31e03c756142a43e63b5cd00b9c, type: 2}
+  - {fileID: 11400000, guid: 2523389df5d907f4381ef06f8058ffcc, type: 2}
+  - {fileID: 11400000, guid: 455045f1f0903e94ab8e56bcfda528a4, type: 2}
+  feathersPerBattle: 1
+  goldPerFeather: 50
+  completionBonus: 10
+  saveFileName: featherguard_save.json

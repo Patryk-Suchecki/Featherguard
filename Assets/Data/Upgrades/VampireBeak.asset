@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: "Wampirzy dzi\xF3b"
   description: "15% zadanych obra\u017Ce\u0144 wraca jako HP"
+  icon: {fileID: 21300000, guid: fb28c130b06813b419f1034f21d32751, type: 3}
   rarity: 1
   scope: 0
   curse: 0

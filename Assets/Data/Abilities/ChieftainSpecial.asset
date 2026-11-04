@@ -13,19 +13,34 @@ MonoBehaviour:
   m_Name: ChieftainSpecial
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Trz\u0119sienie ziemi"
-  effect: 0
   target: 1
-  delivery: 3
   animationState: Attack
-  power: 22
   hits: 1
   heavy: 1
-  statuses:
-  - type: 4
-    turns: 1
-    potency: 0
-    chance: 0.5
-    onSelf: 0
   fxColor: {r: 1, g: 0.45, b: 0.15, a: 1}
   castSound: 2
   impactSound: 2
+  delivery:
+    rid: 4550530190041940126
+  effects:
+  - rid: 4550530190041940127
+  - rid: 4550530190041940128
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530190041940126
+      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      data: 
+    - rid: 4550530190041940127
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 22
+    - rid: 4550530190041940128
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 24792917c9b8fb3468b39eaa4cf4448e, type: 2}
+          turns: 1
+          potency: 0
+          chance: 0.5
+          onSelf: 0

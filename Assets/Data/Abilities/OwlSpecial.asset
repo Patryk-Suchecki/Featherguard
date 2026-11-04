@@ -13,14 +13,24 @@ MonoBehaviour:
   m_Name: OwlSpecial
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Odrodzenie lasu
-  effect: 1
   target: 3
-  delivery: 3
   animationState: Cast
-  power: 60
   hits: 1
   heavy: 1
-  statuses: []
   fxColor: {r: 0.5, g: 1, b: 0.6, a: 1}
   castSound: 0
   impactSound: 6
+  delivery:
+    rid: 4550530190041940124
+  effects:
+  - rid: 4550530190041940125
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530190041940124
+      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      data: 
+    - rid: 4550530190041940125
+      type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 60

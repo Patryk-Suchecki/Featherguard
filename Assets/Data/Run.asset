@@ -43,10 +43,85 @@ MonoBehaviour:
   - {fileID: 11400000, guid: affc5761714debd458ef9691a32cda23, type: 2}
   - {fileID: 11400000, guid: 0e3454794ded16546b49fd92e485eea7, type: 2}
   - {fileID: 11400000, guid: 74651ebd93599a049a66e440e9617695, type: 2}
+  curses:
   - {fileID: 11400000, guid: 59d1c95991cfce84da65fa88c6288120, type: 2}
   - {fileID: 11400000, guid: 9a33c4f18b3086b42887e5d4cf46e2fb, type: 2}
   - {fileID: 11400000, guid: 174deff4c0adab44488ec7bb3503d498, type: 2}
   - {fileID: 11400000, guid: 146d5a70429417e41a38dcab019ea18d, type: 2}
-  restHeal: 0.2
-  reviveHealth: 0.3
-  goldPerKill: 3
+  economy: {fileID: 11400000, guid: d27ef2665836b4644b288bcd07047161, type: 2}
+  slots: {fileID: 11400000, guid: 791b87bec1443c9418801a4aa697365d, type: 2}
+  rarity:
+    tiers:
+    - rarity: 0
+      label: "ZWYK\u0141A"
+      color: {r: 0.6, g: 0.65, b: 0.7, a: 1}
+      weight: 60
+      weightPerLuck: -6
+      minWeight: 10
+      requiresLegendaryUnlock: 0
+    - rarity: 1
+      label: RZADKA
+      color: {r: 0.25, g: 0.55, b: 1, a: 1}
+      weight: 28
+      weightPerLuck: 3
+      minWeight: 0
+      requiresLegendaryUnlock: 0
+    - rarity: 2
+      label: EPICKA
+      color: {r: 0.7, g: 0.3, b: 1, a: 1}
+      weight: 10
+      weightPerLuck: 2
+      minWeight: 0
+      requiresLegendaryUnlock: 0
+    - rarity: 3
+      label: LEGENDARNA
+      color: {r: 1, g: 0.7, b: 0.1, a: 1}
+      weight: 2
+      weightPerLuck: 1
+      minWeight: 0
+      requiresLegendaryUnlock: 1
+  pathChoices: 2
+  pathNodes:
+  - type: 0
+    title: "\u015Acie\u017Cka"
+    description: "Zwyk\u0142a walka"
+    icon: {fileID: 21300000, guid: aafe09ecd34a77e45a39b02e2e346fe4, type: 3}
+    color: {r: 0.26, g: 0.32, b: 0.44, a: 1}
+    weight: 1
+  - type: 1
+    title: Elita
+    description: "Silniejsi wrogowie, podw\xF3jne z\u0142oto i lepsza karta"
+    icon: {fileID: 21300000, guid: 76b4e5a2d2cab5a4aa3efbbe90856a4a, type: 3}
+    color: {r: 0.55, g: 0.14, b: 0.14, a: 1}
+    weight: 1
+  - type: 2
+    title: Sklep
+    description: "Kup karty za z\u0142oto albo zap\u0142a\u0107 krwi\u0105"
+    icon: {fileID: 21300000, guid: 046a34b9e0202844daef7c024a4682af, type: 3}
+    color: {r: 0.5, g: 0.4, b: 0.1, a: 1}
+    weight: 1
+  - type: 3
+    title: Skrzynia
+    description: "Epicka nagroda... i kl\u0105twa w pakiecie"
+    icon: {fileID: 21300000, guid: 6ad7233990ed3174f94fef48be4caf1c, type: 3}
+    color: {r: 0.38, g: 0.14, b: 0.48, a: 1}
+    weight: 1
+  - type: 4
+    title: Ognisko
+    description: "Dru\u017Cyna leczy 35% HP"
+    icon: {fileID: 21300000, guid: 322dea622e7376047a48be2bba4ac51e, type: 3}
+    color: {r: 0.18, g: 0.42, b: 0.24, a: 1}
+    weight: 1
+  beforeBossNodes:
+  - type: 2
+    title: Sklep
+    description: "Kup karty za z\u0142oto albo zap\u0142a\u0107 krwi\u0105"
+    icon: {fileID: 21300000, guid: 046a34b9e0202844daef7c024a4682af, type: 3}
+    color: {r: 0.5, g: 0.4, b: 0.1, a: 1}
+    weight: 1
+  - type: 4
+    title: Ognisko
+    description: "Dru\u017Cyna leczy 35% HP"
+    icon: {fileID: 21300000, guid: 322dea622e7376047a48be2bba4ac51e, type: 3}
+    color: {r: 0.18, g: 0.42, b: 0.24, a: 1}
+    weight: 1

@@ -23,6 +23,14 @@ MonoBehaviour:
   attack: {fileID: 11400000, guid: 1d6d82a439a584249bfac73178f9791a, type: 2}
   support: {fileID: 0}
   special: {fileID: 0}
-  specialEvery: 0
-  enrageAt: 0
-  enrageSummons: []
+  ai:
+    specialEvery: 0
+    supportChance: 0.45
+    healThreshold: 0.6
+    healChance: 0.75
+    woundedWeight: 2
+    finishWeight: 3
+  boss:
+    enrageAt: 0
+    enrageDamageBonus: 0.4
+    enrageSummons: []

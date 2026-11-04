@@ -13,24 +13,39 @@ MonoBehaviour:
   m_Name: GuardSupport
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Mur tarcz
-  effect: 2
   target: 2
-  delivery: 3
   animationState: Cast
-  power: 0
   hits: 1
   heavy: 0
-  statuses:
-  - type: 0
-    turns: 1
-    potency: 0
-    chance: 1
-    onSelf: 0
-  - type: 5
-    turns: 1
-    potency: 0
-    chance: 1
-    onSelf: 1
   fxColor: {r: 0.45, g: 0.7, b: 1, a: 1}
   castSound: 0
   impactSound: 7
+  delivery:
+    rid: 4550530190041940111
+  effects:
+  - rid: 4550530190041940112
+  - rid: 4550530190041940113
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530190041940111
+      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      data: 
+    - rid: 4550530190041940112
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 18cac823a50c7f646be33497964a8a92, type: 2}
+          turns: 1
+          potency: 0
+          chance: 1
+          onSelf: 0
+    - rid: 4550530190041940113
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 45bed00f2f72ae340bc483bee4306c12, type: 2}
+          turns: 1
+          potency: 0
+          chance: 1
+          onSelf: 1

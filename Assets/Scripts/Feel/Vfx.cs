@@ -6,11 +6,8 @@ namespace Featherguard.Feel
     {
         Material material;
 
-        public static Vfx Instance { get; private set; }
-
         public void Init(Material particleMaterial)
         {
-            Instance = this;
             material = particleMaterial;
         }
 

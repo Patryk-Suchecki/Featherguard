@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: Dziurawa sakiewka
   description: "-25% zdobywanego z\u0142ota"
+  icon: {fileID: 21300000, guid: 37eb5c9c20b956e468d42ba010dbf048, type: 3}
   rarity: 0
   scope: 2
   curse: 1

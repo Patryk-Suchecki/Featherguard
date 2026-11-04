@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: Bastion
   description: "-20% otrzymywanych obra\u017Ce\u0144 dla wszystkich"
+  icon: {fileID: 21300000, guid: ff356cf416d7b1148bae94e8554bd4b1, type: 3}
   rarity: 2
   scope: 1
   curse: 0
