@@ -1,4 +1,4 @@
-using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +8,7 @@ namespace Featherguard.UI
     {
         static readonly Color EnemyFill = new(0.92f, 0.32f, 0.26f);
 
-        BattleUnit unit;
+        UnitView unit;
         Camera view;
         RectTransform rect;
         RectTransform fill;
@@ -16,7 +16,7 @@ namespace Featherguard.UI
         RectTransform statusRow;
         CanvasGroup group;
 
-        public static UnitBar Create(BattleUnit unit, RectTransform parent, Camera view)
+        public static UnitBar Create(UnitView unit, RectTransform parent, Camera view)
         {
             var rect = Ui.Rect(unit.Definition.displayName, parent, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(220f, 110f));
             var bar = rect.gameObject.AddComponent<UnitBar>();
@@ -62,7 +62,7 @@ namespace Featherguard.UI
         {
             Ui.SetFill(fill, unit.HealthFraction);
             health.text = $"{unit.Health}/{unit.MaxHealth}";
-            StatusIconRow.Build(statusRow, unit.ActiveStatuses, 50f, true);
+            StatusIconRow.Build(statusRow, unit.Statuses, 50f, true);
         }
     }
 }

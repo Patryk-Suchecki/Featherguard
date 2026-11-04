@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Mroczne leczenie
   target: 2
-  animationState: Cast
   hits: 1
+  effects:
+  - rid: 4550530190041940064
+  animationState: Cast
   heavy: 0
   fxColor: {r: 0.8, g: 0.45, b: 1, a: 1}
   castSound: 0
   impactSound: 6
   delivery:
     rid: 4550530190041940063
-  effects:
-  - rid: 4550530190041940064
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940063
-      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data: 
     - rid: 4550530190041940064
       type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}

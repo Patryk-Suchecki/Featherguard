@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Ci\u0119cie"
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940110
+  animationState: Attack
   heavy: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3
   delivery:
     rid: 4550530190041940109
-  effects:
-  - rid: 4550530190041940110
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940109
-      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
         approachHop: 0.55

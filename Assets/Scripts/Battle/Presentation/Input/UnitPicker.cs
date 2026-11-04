@@ -4,28 +4,28 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-namespace Featherguard.Battle
+namespace Featherguard.Battle.Presentation
 {
     public interface IUnitPicker
     {
-        bool TryPick(out BattleUnit unit);
+        bool TryPick(out UnitView unit);
     }
 
     public sealed class PointerUnitPicker : IUnitPicker
     {
         readonly Camera camera;
-        readonly System.Func<IEnumerable<BattleUnit>> candidates;
+        readonly System.Func<IEnumerable<UnitView>> candidates;
         readonly float tolerance;
         readonly List<RaycastResult> uiHits = new();
 
-        public PointerUnitPicker(Camera camera, System.Func<IEnumerable<BattleUnit>> candidates, float tolerance)
+        public PointerUnitPicker(Camera camera, System.Func<IEnumerable<UnitView>> candidates, float tolerance)
         {
             this.camera = camera;
             this.candidates = candidates;
             this.tolerance = tolerance;
         }
 
-        public bool TryPick(out BattleUnit unit)
+        public bool TryPick(out UnitView unit)
         {
             unit = null;
             var pointer = Pointer.current;
@@ -44,15 +44,15 @@ namespace Featherguard.Battle
             return uiHits.Count > 0;
         }
 
-        BattleUnit Pick(Vector2 position)
+        UnitView Pick(Vector2 position)
         {
             if (Physics.Raycast(camera.ScreenPointToRay(position), out var hit, 100f))
             {
-                var direct = hit.collider.GetComponentInParent<BattleUnit>();
+                var direct = hit.collider.GetComponentInParent<UnitView>();
                 if (direct != null && direct.IsAlive) return direct;
             }
 
-            BattleUnit best = null;
+            UnitView best = null;
             float bestDistance = Screen.height * tolerance;
             foreach (var unit in candidates().Where(u => u.IsAlive))
             {

@@ -9,7 +9,7 @@ namespace Featherguard.UI
         static readonly Color Backdrop = new(0.04f, 0.04f, 0.07f, 0.85f);
         static readonly Color Badge = new(0.9f, 0.2f, 0.15f, 1f);
 
-        public static void Build(RectTransform row, IReadOnlyList<StatusEffect> statuses, float size, bool centered)
+        public static void Build(RectTransform row, IReadOnlyList<StatusSnapshot> statuses, float size, bool centered)
         {
             for (int i = row.childCount - 1; i >= 0; i--)
                 Object.Destroy(row.GetChild(i).gameObject);

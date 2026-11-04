@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Gniew Herszta
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940091
+  - rid: 4550530190041940092
+  animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 2
   delivery:
     rid: 4550530190041940090
-  effects:
-  - rid: 4550530190041940091
-  - rid: 4550530190041940092
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940090
-      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
         approachHop: 0.55

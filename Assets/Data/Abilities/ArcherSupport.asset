@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Okrzyk bojowy
   target: 2
-  animationState: Cast
   hits: 1
+  effects:
+  - rid: 4550530190041940117
+  animationState: Cast
   heavy: 0
   fxColor: {r: 1, g: 0.6, b: 0.2, a: 1}
   castSound: 0
   impactSound: 8
   delivery:
     rid: 4550530190041940116
-  effects:
-  - rid: 4550530190041940117
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940116
-      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data: 
     - rid: 4550530190041940117
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}

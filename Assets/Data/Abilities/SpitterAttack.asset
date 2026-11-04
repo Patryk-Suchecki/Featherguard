@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Jad
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940086
+  - rid: 4550530190041940087
+  animationState: Attack
   heavy: 0
   fxColor: {r: 0.5, g: 1, b: 0.2, a: 1}
   castSound: 5
   impactSound: 3
   delivery:
     rid: 4550530190041940085
-  effects:
-  - rid: 4550530190041940086
-  - rid: 4550530190041940087
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940085
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         prefab: {fileID: 0}
         speed: 10

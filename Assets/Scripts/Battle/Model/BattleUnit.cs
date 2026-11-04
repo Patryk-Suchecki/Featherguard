@@ -1,46 +1,36 @@
 using System;
 using System.Collections.Generic;
-using Featherguard.Feel;
-using UnityEngine;
+using System.Linq;
 
 namespace Featherguard.Battle
 {
-    public class BattleUnit : MonoBehaviour
+    public sealed class BattleUnit
     {
-        StatBlock stats;
+        readonly StatBlock stats;
 
-        public UnitDefinition Definition { get; private set; }
+        public UnitDefinition Definition { get; }
         public Team Team => Definition.team;
+        public int Slot { get; }
         public int Health { get; private set; }
-        public int MaxHealth => Mathf.Max(1, Mathf.RoundToInt(Stat(StatType.MaxHealth)));
+        public int MaxHealth => Math.Max(1, (int)Math.Round(Stat(StatType.MaxHealth)));
         public float HealthFraction => (float)Health / MaxHealth;
         public bool IsAlive => Health > 0;
         public bool HasActed { get; set; }
         public int TurnsTaken { get; set; }
         public bool Enraged { get; set; }
-        public Vector3 HomePosition { get; set; }
         public StatusContainer Statuses { get; } = new();
         public IReadOnlyList<StatusEffect> ActiveStatuses => Statuses.All;
-        public UnitAnimator Animator { get; private set; }
-        public HitReaction Reaction { get; private set; }
-        public SelectionRing Ring { get; private set; }
-        public float Height => Definition.height * Definition.modelScale;
-        public float Radius => 0.45f * Definition.modelScale;
-        public Vector3 Center => transform.position + Vector3.up * Height * 0.5f;
-        public Vector3 Top => transform.position + Vector3.up * (Height + 0.1f);
-        public Vector3 Facing => Team == Team.Heroes ? Vector3.right : Vector3.left;
         public bool SkipsTurn => Statuses.Any(s => s.skipsTurn);
         public bool ForcesTargeting => Statuses.Any(s => s.forcesTargeting);
+        public bool CanAct => IsAlive && !HasActed;
 
         public event Action Changed;
 
-        internal void Bind(UnitDefinition definition, StatBlock statBlock, UnitAnimator animator, HitReaction reaction, SelectionRing ring)
+        public BattleUnit(UnitDefinition definition, StatBlock statBlock, int slot)
         {
             Definition = definition;
             stats = statBlock;
-            Animator = animator;
-            Reaction = reaction;
-            Ring = ring;
+            Slot = slot;
             Health = MaxHealth;
             Statuses.Changed += NotifyChanged;
         }
@@ -50,19 +40,19 @@ namespace Featherguard.Battle
         public void AddModifier(StatModifier modifier)
         {
             stats.Add(modifier);
-            Health = Mathf.Min(Health, MaxHealth);
+            Health = Math.Min(Health, MaxHealth);
             NotifyChanged();
         }
 
         public void SetHealth(int value)
         {
-            Health = Mathf.Clamp(value, 0, MaxHealth);
+            Health = Math.Clamp(value, 0, MaxHealth);
             NotifyChanged();
         }
 
         public int ApplyDamage(int amount)
         {
-            amount = Mathf.Clamp(Mathf.RoundToInt(amount * Stat(StatType.DamageTaken)), 0, Health);
+            amount = Math.Clamp((int)Math.Round(amount * Stat(StatType.DamageTaken)), 0, Health);
             Health -= amount;
             NotifyChanged();
             return amount;
@@ -71,12 +61,19 @@ namespace Featherguard.Battle
         public int ApplyHeal(int amount)
         {
             if (!IsAlive) return 0;
-            amount = Mathf.Clamp(amount, 0, MaxHealth - Health);
+            amount = Math.Clamp(amount, 0, MaxHealth - Health);
             Health += amount;
             NotifyChanged();
             return amount;
         }
 
-        public void NotifyChanged() => Changed?.Invoke();
+        public UnitSnapshot Snapshot() => new()
+        {
+            Health = Health,
+            MaxHealth = MaxHealth,
+            Statuses = Statuses.All.Select(s => new StatusSnapshot(s.Definition, s.Turns)).ToList(),
+        };
+
+        void NotifyChanged() => Changed?.Invoke();
     }
 }

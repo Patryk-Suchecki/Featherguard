@@ -1,6 +1,8 @@
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using Featherguard.Feel;
 using Featherguard.Meta;
 using Featherguard.Run;
@@ -21,7 +23,8 @@ namespace Featherguard.Game
         FeedbackHub feedback;
         BattleHud hud;
         RunSession session;
-        BattleInstance battle;
+        BattleController battle;
+        readonly Dictionary<BattleUnit, int> killRewards = new();
 
         MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
 
@@ -46,17 +49,19 @@ namespace Featherguard.Game
             }
             hud.BindWallet(session.Wallet);
 
-            battle = new BattleInstance(session.CreateBattleSetup(), new BattleServices
+            var model = new BattleModel(session.CreateBattleSetup(), config.rules);
+            model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
+            battle = new BattleController(model, new BattleServices
             {
-                Rules = config.rules,
-                Factory = new UnitFactory(config.rules, config.flashMaterial, config.ringMaterial),
+                Config = config.presentation,
+                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial),
                 View = hud,
                 Feedback = feedback,
                 Host = this,
                 Camera = battleCamera,
             });
-            battle.EnemyKilled += OnEnemyKilled;
-            hud.BindBattle(battle.Commands, battle.Rage);
+            battle.Presenter.UnitDefeated += OnUnitDefeated;
+            hud.BindBattle(battle.Commands, battle.Presenter.Rage);
 
             yield return battle.Run();
             yield return Conclude(battle.Result);
@@ -64,10 +69,10 @@ namespace Featherguard.Game
 
         void Update() => battle?.Tick();
 
-        void OnEnemyKilled(BattleUnit enemy)
+        void OnUnitDefeated(UnitView unit)
         {
-            int gold = session.RecordKill();
-            hud.Popup(enemy.Top + Vector3.up * 0.6f, $"+{gold} zł", PopupKind.Gold);
+            if (killRewards.Remove(unit.Unit, out int gold))
+                hud.Popup(unit.Top + Vector3.up * 0.6f, $"+{gold} zł", PopupKind.Gold);
         }
 
         IEnumerator Conclude(BattleResult result)

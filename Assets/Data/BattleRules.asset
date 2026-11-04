@@ -18,26 +18,5 @@ MonoBehaviour:
   baseCritChance: 0.15
   baseCritDamage: 1.5
   damageVariance: 0.1
-  lightKnockback: 0.22
-  heavyKnockback: 0.4
-  heroSlots:
-  - {x: -2.3, y: 0, z: 0.45}
-  - {x: -3.7, y: 0, z: -0.55}
-  - {x: -5, y: 0, z: 0.6}
-  enemySlots:
-  - {x: 2.3, y: 0, z: 0.45}
-  - {x: 3.7, y: 0, z: -0.55}
-  - {x: 5, y: 0, z: 0.6}
-  spawnOffset: 6
-  heroYaw: 115
-  enemyTurnDelay: 0.8
-  betweenEnemyActions: 0.2
-  afterAction: 0.35
-  specialWindup: 0.5
-  waveDelay: 0.6
-  spawnInterval: 0.18
-  afterSpawn: 0.8
-  selectedRing: {r: 1, g: 0.85, b: 0.2, a: 1}
-  enemyRing: {r: 1, g: 0.3, b: 0.25, a: 0.75}
-  allyRing: {r: 0.35, g: 1, b: 0.5, a: 0.7}
-  tapTolerance: 0.12
+  heroSlotCount: 3
+  enemySlotCount: 3

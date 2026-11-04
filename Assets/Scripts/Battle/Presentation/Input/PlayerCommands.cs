@@ -1,0 +1,146 @@
+using System.Collections.Generic;
+using System.Linq;
+using Featherguard.Feel;
+
+namespace Featherguard.Battle.Presentation
+{
+    public interface IPlayerCommands
+    {
+        BattleUnit Selected { get; }
+        bool SpecialArmed { get; }
+        bool AcceptingInput { get; }
+        void Select(BattleUnit hero);
+        void ToggleSpecial();
+    }
+
+    public sealed class PlayerCommands : IPlayerCommands
+    {
+        const string TauntText = "Prowokacja!";
+
+        readonly BattleModel model;
+        readonly BattlePresenter presenter;
+        readonly IUnitPicker picker;
+        readonly BattlePresentationConfig config;
+        readonly ICombatFeedback feedback;
+        readonly IBattleView view;
+
+        public BattleUnit Selected { get; private set; }
+        public bool SpecialArmed { get; private set; }
+        public bool AcceptingInput { get; private set; }
+        public IReadOnlyList<BattleEvent> Submitted { get; private set; }
+
+        public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, BattlePresentationConfig config, ICombatFeedback feedback, IBattleView view)
+        {
+            this.model = model;
+            this.presenter = presenter;
+            this.picker = picker;
+            this.config = config;
+            this.feedback = feedback;
+            this.view = view;
+        }
+
+        public void Open()
+        {
+            AcceptingInput = model.AwaitingInput;
+            SetSelection(AcceptingInput ? model.Heroes.FirstOrDefault(model.CanCommand) : null);
+        }
+
+        public void Close()
+        {
+            AcceptingInput = false;
+            SetSelection(null);
+        }
+
+        public IReadOnlyList<BattleEvent> TakeSubmitted()
+        {
+            var events = Submitted;
+            Submitted = null;
+            AcceptingInput = false;
+            RefreshHighlights();
+            return events;
+        }
+
+        public void Tick()
+        {
+            if (!CanCommand || GameClock.Paused) return;
+            if (picker.TryPick(out var unit))
+                Tap(unit.Unit);
+        }
+
+        public void Select(BattleUnit hero)
+        {
+            if (!CanCommand || !model.CanCommand(hero)) return;
+            feedback.Play(SfxId.Click);
+            SetSelection(hero);
+        }
+
+        public void ToggleSpecial()
+        {
+            if (!CanCommand || !model.Rage.Ready || Selected == null) return;
+            var special = Selected.Definition.special;
+            if (special == null) return;
+            if (special.TargetsAll)
+            {
+                Submit(special, null);
+                return;
+            }
+            SpecialArmed = !SpecialArmed;
+            feedback.Play(SfxId.Click);
+            RefreshHighlights();
+        }
+
+        public void Tap(BattleUnit unit)
+        {
+            if (!CanCommand || unit == null) return;
+            if (Selected == null)
+            {
+                if (model.CanCommand(unit))
+                    SetSelection(unit);
+                return;
+            }
+
+            var definition = Selected.Definition;
+            bool enemy = unit.Team == Team.Enemies;
+            var ability = SpecialArmed ? definition.special : enemy ? definition.attack : definition.support;
+            if (ability == null || ability.TargetsEnemies != enemy) return;
+            if (!model.CanUse(Selected, ability, unit))
+            {
+                var target = presenter.ViewOf(unit);
+                if (target != null && unit.IsAlive) view.Popup(target.Top, TauntText, PopupKind.Buff);
+                return;
+            }
+            Submit(ability, unit);
+        }
+
+        bool CanCommand => AcceptingInput && Submitted == null;
+
+        void Submit(AbilityDefinition ability, BattleUnit target)
+        {
+            var events = model.Act(Selected, ability, target);
+            if (events.Count == 0) return;
+            SpecialArmed = false;
+            Submitted = events;
+        }
+
+        void SetSelection(BattleUnit hero)
+        {
+            Selected = hero;
+            SpecialArmed = false;
+            RefreshHighlights();
+        }
+
+        void RefreshHighlights()
+        {
+            foreach (var unit in presenter.Views)
+                unit.Ring.Show(null);
+            if (Selected == null || !CanCommand) return;
+
+            var definition = Selected.Definition;
+            var abilities = SpecialArmed ? new[] { definition.special } : new[] { definition.attack, definition.support };
+            foreach (var ability in abilities.Where(a => a != null))
+                foreach (var target in model.Candidates(Selected, ability))
+                    presenter.ViewOf(target)?.Ring.Show(ability.TargetsEnemies ? config.enemyRing : config.allyRing);
+            presenter.ViewOf(Selected)?.Ring.Show(config.selectedRing);
+        }
+    }
+}

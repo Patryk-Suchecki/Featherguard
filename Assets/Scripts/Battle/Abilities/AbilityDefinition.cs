@@ -1,4 +1,5 @@
 using System.Linq;
+using Featherguard.Battle.Presentation;
 using Featherguard.Core;
 using Featherguard.Feel;
 using UnityEngine;
@@ -12,14 +13,16 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public AbilityTarget target;
-        public string animationState = "Attack";
         [Min(1)] public int hits = 1;
+        [SerializeReference, SubclassSelector] public AbilityEffect[] effects = new AbilityEffect[0];
+
+        [Header("Presentation")]
+        public string animationState = "Attack";
         public bool heavy;
         public Color fxColor = Color.white;
         public SfxId castSound;
         public SfxId impactSound;
         [SerializeReference, SubclassSelector] public AbilityDelivery delivery = new InstantDelivery();
-        [SerializeReference, SubclassSelector] public AbilityEffect[] effects = new AbilityEffect[0];
 
         public bool TargetsEnemies => target is AbilityTarget.Enemy or AbilityTarget.AllEnemies;
         public bool TargetsAll => target is AbilityTarget.AllEnemies or AbilityTarget.AllAllies;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using Featherguard.Run;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,7 +30,7 @@ namespace Featherguard.UI
         float calloutStart = -10f;
         IPlayerCommands commands;
         RageMeter rage;
-        readonly Dictionary<BattleUnit, UnitBar> bars = new();
+        readonly Dictionary<UnitView, UnitBar> bars = new();
         readonly List<HeroCardView> cards = new();
 
         public RectTransform Canvas => canvas;
@@ -113,22 +114,18 @@ namespace Featherguard.UI
 
         public void SetProgress(int encounter, int encounters, int wave, int waves) => topBar.SetProgress(encounter, encounters, wave, waves);
 
-        public void UnitAdded(BattleUnit unit)
+        public void UnitAdded(UnitView unit)
         {
             if (unit.Team == Team.Enemies)
                 bars[unit] = UnitBar.Create(unit, barLayer, view);
+            else
+                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero)));
         }
 
-        public void UnitRemoved(BattleUnit unit)
+        public void UnitRemoved(UnitView unit)
         {
             if (bars.Remove(unit, out var bar) && bar != null)
                 Destroy(bar.gameObject);
-        }
-
-        public void HeroesReady(IReadOnlyList<BattleUnit> heroes)
-        {
-            for (int i = 0; i < heroes.Count; i++)
-                cards.Add(new HeroCardView(safe, heroes[i], i, hero => commands?.Select(hero)));
         }
 
         void OnDestroy()

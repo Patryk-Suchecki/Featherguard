@@ -1,4 +1,5 @@
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ namespace Featherguard.UI
         static readonly Color Selected = new(0.45f, 0.3f, 0.06f, 0.96f);
         static readonly Color HealthFill = new(0.38f, 0.86f, 0.36f);
 
-        readonly BattleUnit unit;
+        readonly UnitView unit;
         readonly RectTransform rect;
         readonly Image background;
         readonly Image frame;
@@ -25,11 +26,11 @@ namespace Featherguard.UI
         readonly RectTransform fill;
         readonly RectTransform statuses;
 
-        public HeroCardView(RectTransform parent, BattleUnit hero, int index, System.Action<BattleUnit> onTap)
+        public HeroCardView(RectTransform parent, UnitView hero, int index, System.Action<BattleUnit> onTap)
         {
             unit = hero;
             rect = Ui.Rect(hero.Definition.displayName + "Card", parent, Vector2.zero, Vector2.zero, new Vector2(24f + index * (Width + Spacing), RestY), new Vector2(Width, 156f));
-            background = (Image)Ui.Button(rect, Idle, () => onTap(hero)).targetGraphic;
+            background = (Image)Ui.Button(rect, Idle, () => onTap(hero.Unit)).targetGraphic;
             group = rect.gameObject.AddComponent<CanvasGroup>();
             frame = Ui.Sliced(Ui.Stretch("Frame", rect, -4f), "Frame", Ui.GoldColor);
 
@@ -55,13 +56,13 @@ namespace Featherguard.UI
             if (rect == null) return;
             Ui.SetFill(fill, unit.HealthFraction);
             health.text = $"{unit.Health}/{unit.MaxHealth}";
-            StatusIconRow.Build(statuses, unit.ActiveStatuses, 46f, false);
+            StatusIconRow.Build(statuses, unit.Statuses, 46f, false);
         }
 
         public void Animate(IPlayerCommands commands)
         {
-            bool isSelected = unit == commands.Selected;
-            bool ready = unit.IsAlive && !unit.HasActed;
+            bool isSelected = unit.Unit == commands.Selected;
+            bool ready = unit.IsAlive && !unit.Unit.HasActed;
             background.color = isSelected ? Selected : Idle;
             frame.enabled = isSelected;
             group.alpha = !unit.IsAlive ? 0.35f : ready || !commands.AcceptingInput ? 1f : 0.5f;

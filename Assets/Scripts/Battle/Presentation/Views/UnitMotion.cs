@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Featherguard.Battle
+namespace Featherguard.Battle.Presentation
 {
     public static class UnitMotion
     {

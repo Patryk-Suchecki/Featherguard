@@ -1,40 +1,42 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Featherguard.Feel;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
-namespace Featherguard.Battle
+namespace Featherguard.Battle.Presentation
 {
     public sealed class DeliveryContext
     {
-        public BattleUnit Actor;
-        public IReadOnlyList<BattleUnit> Targets;
+        public UnitView Actor;
+        public IReadOnlyList<UnitView> Targets;
         public AbilityDefinition Ability;
-        public Combat Combat;
-        public Action<BattleUnit> Resolve;
+        public ICombatFeedback Feedback;
+        public MonoBehaviour Host;
+        public Action<int, UnitView> Impact;
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
     public abstract class AbilityDelivery
     {
         public abstract IEnumerator Deliver(DeliveryContext context);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
     public sealed class InstantDelivery : AbilityDelivery
     {
         public override IEnumerator Deliver(DeliveryContext context)
         {
             yield return context.Actor.Animator.PlayUntilHitFrame(context.Ability.animationState);
-            context.Combat.Feedback.Play(context.Ability.castSound);
-            foreach (var target in context.Targets)
-                context.Resolve(target);
+            context.Feedback.Play(context.Ability.castSound);
+            for (int hit = 0; hit < context.Ability.hits; hit++)
+                foreach (var target in context.Targets)
+                    context.Impact(hit, target);
         }
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
     public sealed class MeleeDelivery : AbilityDelivery
     {
         public float approachTime = 0.3f;
@@ -50,14 +52,14 @@ namespace Featherguard.Battle
             var actor = context.Actor;
             var victim = context.Targets[0];
             var strike = victim.transform.position - actor.Facing * (victim.Radius + actor.Radius + reach);
-            context.Combat.Feedback.Play(SfxId.Whoosh, 0.6f);
+            context.Feedback.Play(SfxId.Whoosh, 0.6f);
             yield return UnitMotion.HopTo(actor.transform, strike, approachTime, approachHop);
             yield return actor.Animator.PlayUntilHitFrame(context.Ability.animationState);
-            context.Combat.Feedback.Play(context.Ability.castSound);
+            context.Feedback.Play(context.Ability.castSound);
             for (int i = 0; i < context.Ability.hits; i++)
             {
-                foreach (var target in context.Targets.Where(t => t.IsAlive))
-                    context.Resolve(target);
+                foreach (var target in context.Targets)
+                    context.Impact(i, target);
                 if (i < context.Ability.hits - 1)
                     yield return new WaitForSeconds(hitInterval);
             }
@@ -66,7 +68,7 @@ namespace Featherguard.Battle
         }
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
     public sealed class ProjectileDelivery : AbilityDelivery
     {
         [Tooltip("Model to fly. When empty, a particle trail is used.")]
@@ -83,16 +85,16 @@ namespace Featherguard.Battle
             var flights = new List<Coroutine>();
             for (int i = 0; i < context.Ability.hits; i++)
             {
-                context.Combat.Feedback.Play(context.Ability.castSound);
+                context.Feedback.Play(context.Ability.castSound);
                 foreach (var target in context.Targets)
-                    flights.Add(context.Combat.Host.StartCoroutine(Fly(context, target)));
+                    flights.Add(context.Host.StartCoroutine(Fly(context, target, i)));
                 yield return new WaitForSeconds(volleyInterval);
             }
             foreach (var flight in flights)
                 yield return flight;
         }
 
-        IEnumerator Fly(DeliveryContext context, BattleUnit target)
+        IEnumerator Fly(DeliveryContext context, UnitView target, int hit)
         {
             var actor = context.Actor;
             Vector3 from = actor.Center + actor.Facing * 0.45f;
@@ -107,7 +109,7 @@ namespace Featherguard.Battle
             else
             {
                 projectile = new GameObject("Projectile").transform;
-                trail = context.Combat.Feedback.Trail(projectile, context.Ability.fxColor);
+                trail = context.Feedback.Trail(projectile, context.Ability.fxColor);
             }
             projectile.position = from;
 
@@ -126,10 +128,9 @@ namespace Featherguard.Battle
             }
 
             if (trail != null)
-                context.Combat.Feedback.Release(trail);
+                context.Feedback.Release(trail);
             UnityEngine.Object.Destroy(projectile.gameObject);
-            if (target.IsAlive)
-                context.Resolve(target);
+            context.Impact(hit, target);
         }
     }
 }

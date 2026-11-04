@@ -1,5 +1,5 @@
 using Featherguard.Core;
-using UnityEngine;
+using System;
 
 namespace Featherguard.Battle
 {
@@ -22,9 +22,9 @@ namespace Featherguard.Battle
             bool critical = random.Value < critChance;
             float amount = power * damageMultiplier * random.Range(1f - variance, 1f + variance);
             if (critical) amount *= critDamage;
-            return new DamageRoll(Mathf.RoundToInt(amount), critical);
+            return new DamageRoll((int)Math.Round(amount), critical);
         }
 
-        public static int Heal(int power, float healingMultiplier) => Mathf.RoundToInt(power * healingMultiplier);
+        public static int Heal(int power, float healingMultiplier) => (int)Math.Round(power * healingMultiplier);
     }
 }

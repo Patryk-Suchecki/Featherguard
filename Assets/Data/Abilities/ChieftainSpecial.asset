@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Trz\u0119sienie ziemi"
   target: 1
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940127
+  - rid: 4550530190041940128
+  animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.45, b: 0.15, a: 1}
   castSound: 2
   impactSound: 2
   delivery:
     rid: 4550530190041940126
-  effects:
-  - rid: 4550530190041940127
-  - rid: 4550530190041940128
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940126
-      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data: 
     - rid: 4550530190041940127
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}

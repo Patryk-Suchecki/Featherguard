@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Pchni\u0119cie w\u0142\xF3czni\u0105"
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940089
+  animationState: Attack
   heavy: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3
   delivery:
     rid: 4550530190041940088
-  effects:
-  - rid: 4550530190041940089
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940088
-      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
         approachHop: 0.55

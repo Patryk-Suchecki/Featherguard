@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Mia\u017Cd\u017Cenie"
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940119
+  - rid: 4550530190041940120
+  animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 2
   delivery:
     rid: 4550530190041940118
-  effects:
-  - rid: 4550530190041940119
-  - rid: 4550530190041940120
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940118
-      type: {class: MeleeDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
         approachHop: 0.55

@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Odrodzenie lasu
   target: 3
-  animationState: Cast
   hits: 1
+  effects:
+  - rid: 4550530190041940125
+  animationState: Cast
   heavy: 1
   fxColor: {r: 0.5, g: 1, b: 0.6, a: 1}
   castSound: 0
   impactSound: 6
   delivery:
     rid: 4550530190041940124
-  effects:
-  - rid: 4550530190041940125
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940124
-      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data: 
     - rid: 4550530190041940125
       type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}

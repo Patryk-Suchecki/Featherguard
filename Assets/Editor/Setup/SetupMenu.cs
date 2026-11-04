@@ -1,4 +1,5 @@
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using Featherguard.Game;
 using UnityEditor;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Featherguard.EditorTools
             var abilities = AbilityCatalog.Build(seeder, statuses);
             var units = UnitCatalog.Build(seeder, abilities, art);
             var rules = seeder.Seed<BattleRules>($"{ContentPaths.Data}/BattleRules.asset", null);
+            var presentation = seeder.Seed<BattlePresentationConfig>($"{ContentPaths.Data}/BattlePresentation.asset", null);
             var run = RunCatalog.Build(seeder, units, art);
             var meta = MetaCatalog.Build(seeder, art);
 
@@ -38,6 +40,7 @@ namespace Featherguard.EditorTools
             }, c =>
             {
                 c.rules = rules;
+                c.presentation = presentation;
                 c.run = run;
                 c.meta = meta;
                 c.flashMaterial = art.Flash;

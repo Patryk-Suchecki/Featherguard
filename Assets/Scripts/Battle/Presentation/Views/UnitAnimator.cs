@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Featherguard.Battle
+namespace Featherguard.Battle.Presentation
 {
     [RequireComponent(typeof(Animator))]
     public class UnitAnimator : MonoBehaviour

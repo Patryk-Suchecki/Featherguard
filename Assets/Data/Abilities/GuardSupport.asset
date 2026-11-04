@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: Mur tarcz
   target: 2
-  animationState: Cast
   hits: 1
+  effects:
+  - rid: 4550530190041940112
+  - rid: 4550530190041940113
+  animationState: Cast
   heavy: 0
   fxColor: {r: 0.45, g: 0.7, b: 1, a: 1}
   castSound: 0
   impactSound: 7
   delivery:
     rid: 4550530190041940111
-  effects:
-  - rid: 4550530190041940112
-  - rid: 4550530190041940113
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940111
-      type: {class: InstantDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data: 
     - rid: 4550530190041940112
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}

@@ -25,5 +25,7 @@ namespace Featherguard.Battle
         }
 
         public void Consume() => Value = 0f;
+
+        public void Set(float value) => Value = Math.Clamp(value, 0f, Max);
     }
 }

@@ -1,4 +1,5 @@
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using Featherguard.Feel;
 using Featherguard.Meta;
 using Featherguard.Run;
@@ -17,6 +18,7 @@ namespace Featherguard.Game
         public MetaConfig meta;
 
         [Header("Presentation")]
+        public BattlePresentationConfig presentation;
         public Material flashMaterial;
         public Material particleMaterial;
         public Material ringMaterial;

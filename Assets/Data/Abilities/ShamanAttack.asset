@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
   displayName: "Kl\u0105twa"
   target: 0
-  animationState: Attack
   hits: 1
+  effects:
+  - rid: 4550530190041940122
+  - rid: 4550530190041940123
+  animationState: Attack
   heavy: 0
   fxColor: {r: 0.8, g: 0.4, b: 1, a: 1}
   castSound: 5
   impactSound: 3
   delivery:
     rid: 4550530190041940121
-  effects:
-  - rid: 4550530190041940122
-  - rid: 4550530190041940123
   references:
     version: 2
     RefIds:
     - rid: 4550530190041940121
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         prefab: {fileID: 0}
         speed: 10

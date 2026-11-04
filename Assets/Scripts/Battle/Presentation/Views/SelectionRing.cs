@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Featherguard.Battle
+namespace Featherguard.Battle.Presentation
 {
     public class SelectionRing : MonoBehaviour
     {
