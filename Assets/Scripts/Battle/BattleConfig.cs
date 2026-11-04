@@ -12,5 +12,6 @@ namespace Featherguard.Battle
         public Material particleMaterial;
         public Material ringMaterial;
         public AudioClip[] sounds;
+        public UI.UiSprites ui;
     }
 }

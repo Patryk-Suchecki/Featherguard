@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Featherguard.Battle;
 using Featherguard.Feel;
+using Featherguard.UI;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
@@ -24,6 +25,8 @@ namespace Featherguard.EditorTools
         const string UnitDir = "Assets/Data/Units";
         const string EncounterDir = "Assets/Data/Encounters";
         const string UpgradeDir = "Assets/Data/Upgrades";
+        const string IconDir = "Assets/Art/UI/Icons";
+        const string PortraitDir = "Assets/Art/UI/Portraits";
         const string SceneDir = "Assets/Scenes";
         const string ScenePath = "Assets/Scenes/Battle.unity";
 
@@ -44,6 +47,7 @@ namespace Featherguard.EditorTools
             var particle = CreateMaterial("Particle", "Sprites/Default", Color.white, dot);
             var ringMaterial = CreateMaterial("Ring", "Sprites/Default", Color.white, ring);
             var sounds = SfxSynth.CreateAll("Assets/Audio/Sfx");
+            var ui = CreateUiSprites();
 
             var abilities = CreateAbilities();
             var units = CreateUnits(abilities);
@@ -56,11 +60,63 @@ namespace Featherguard.EditorTools
             config.particleMaterial = particle;
             config.ringMaterial = ringMaterial;
             config.sounds = sounds;
+            config.ui = ui;
             EditorUtility.SetDirty(config);
             AssetDatabase.SaveAssets();
 
             BuildScene();
+            ConfigureMobile();
             Debug.Log("Featherguard: battle scene rebuilt.");
+        }
+
+        static UiSprites CreateUiSprites()
+        {
+            var sprites = IconFactory.CreateAll(IconDir).Values.ToList();
+            foreach (var path in Directory.GetFiles(PortraitDir, "*.png"))
+                sprites.Add(IconFactory.ImportSprite(path.Replace('\\', '/'), Vector4.zero));
+            var ui = LoadOrCreate<UiSprites>($"{DataDir}/UiSprites.asset");
+            ui.sprites = sprites.ToArray();
+            EditorUtility.SetDirty(ui);
+            return ui;
+        }
+
+        static void ConfigureMobile()
+        {
+            PlayerSettings.companyName = "Patryk";
+            PlayerSettings.productName = "Featherguard";
+            PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+            PlayerSettings.allowedAutorotateToLandscapeLeft = true;
+            PlayerSettings.allowedAutorotateToLandscapeRight = true;
+            PlayerSettings.allowedAutorotateToPortrait = false;
+            PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
+            PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Android, "com.patryk.featherguard");
+            PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.iOS, "com.patryk.featherguard");
+            PlayerSettings.runInBackground = false;
+
+            const string iconPath = "Assets/Art/UI/AppIcon.png";
+            const int size = 512;
+            var portrait = new Texture2D(2, 2);
+            portrait.LoadImage(File.ReadAllBytes($"{PortraitDir}/Knight.png"));
+            var icon = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float u = (x + 0.5f) / size, v = (y + 0.5f) / size;
+                var background = Color.Lerp(new Color(0.95f, 0.45f, 0.12f), new Color(1f, 0.82f, 0.25f), v);
+                float vignette = Mathf.Clamp01(1f - Vector2.Distance(new Vector2(u, v), new Vector2(0.5f, 0.55f)) * 0.9f);
+                background = Color.Lerp(background * 0.7f, background, vignette);
+                var p = portrait.GetPixelBilinear(u, v);
+                var c = Color.Lerp(background, p, p.a);
+                c.a = 1f;
+                icon.SetPixel(x, y, c);
+            }
+            File.WriteAllBytes(iconPath, icon.EncodeToPNG());
+            Object.DestroyImmediate(icon);
+            Object.DestroyImmediate(portrait);
+            AssetDatabase.ImportAsset(iconPath, ImportAssetOptions.ForceUpdate);
+            var iconAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(iconPath);
+            PlayerSettings.SetIcons(UnityEditor.Build.NamedBuildTarget.Unknown, new[] { iconAsset }, IconKind.Any);
+            AssetDatabase.SaveAssets();
         }
 
         static RunDefinition CreateRun(Dictionary<string, UnitDefinition> u)
@@ -213,6 +269,7 @@ namespace Featherguard.EditorTools
                 u.displayName = name;
                 u.team = team;
                 u.model = AssetDatabase.LoadAssetAtPath<GameObject>(fbx);
+                u.portrait = AssetDatabase.LoadAssetAtPath<Sprite>($"{PortraitDir}/{model}.png");
                 u.animator = CreateController(model, fbx);
                 u.maxHealth = health;
                 u.height = height;

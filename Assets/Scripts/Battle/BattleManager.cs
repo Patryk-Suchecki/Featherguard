@@ -48,6 +48,7 @@ namespace Featherguard.Battle
             gameObject.AddComponent<HitFeedback>().Init(config.sounds, cameraShake);
             gameObject.AddComponent<Vfx>().Init(config.particleMaterial);
             hud = gameObject.AddComponent<BattleHud>();
+            Ui.Sprites = config.ui;
             hud.Init(this, battleCamera);
             if (!RunState.Active)
             {
@@ -75,16 +76,50 @@ namespace Featherguard.Battle
 
         void Update()
         {
-            if (!AcceptingInput || pendingAction != null) return;
+            if (!AcceptingInput || pendingAction != null || GameClock.Paused) return;
             var pointer = Pointer.current;
             if (pointer == null || !pointer.press.wasPressedThisFrame) return;
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+            var position = pointer.position.ReadValue();
+            if (OverUi(position)) return;
 
-            var ray = battleCamera.ScreenPointToRay(pointer.position.ReadValue());
-            if (!Physics.Raycast(ray, out var hit, 100f)) return;
-            var unit = hit.collider.GetComponentInParent<BattleUnit>();
-            if (unit != null && unit.IsAlive)
+            var unit = PickUnit(position);
+            if (unit != null)
                 OnUnitClicked(unit);
+        }
+
+        static bool OverUi(Vector2 position)
+        {
+            if (EventSystem.current == null) return false;
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = position }, results);
+            return results.Count > 0;
+        }
+
+        BattleUnit PickUnit(Vector2 position)
+        {
+            var ray = battleCamera.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out var hit, 100f))
+            {
+                var direct = hit.collider.GetComponentInParent<BattleUnit>();
+                if (direct != null && direct.IsAlive) return direct;
+            }
+            float tolerance = Screen.height * 0.12f;
+            BattleUnit best = null;
+            float bestDistance = tolerance;
+            foreach (var unit in heroes.Concat(enemies).Where(u => u.IsAlive))
+            {
+                Vector2 bottom = battleCamera.WorldToScreenPoint(unit.transform.position);
+                Vector2 top = battleCamera.WorldToScreenPoint(unit.Top);
+                var closest = bottom + Vector2.ClampMagnitude(Vector2.Dot(position - bottom, (top - bottom).normalized) * (top - bottom).normalized, (top - bottom).magnitude);
+                if (Vector2.Dot(position - bottom, top - bottom) < 0f) closest = bottom;
+                float distance = Vector2.Distance(position, closest);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    best = unit;
+                }
+            }
+            return best;
         }
 
         public void SelectFromCard(BattleUnit hero)
@@ -113,6 +148,13 @@ namespace Featherguard.Battle
         {
             RunState.Advance();
             Reload();
+        }
+
+        public void AbandonRun()
+        {
+            if (RunState.Active)
+                MetaProgress.RecordRun(false);
+            NewRun();
         }
 
         public void NewRun()

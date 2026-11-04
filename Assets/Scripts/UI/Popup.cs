@@ -22,13 +22,13 @@ namespace Featherguard.UI
         {
             var (size, color) = style switch
             {
-                PopupStyle.Crit => (64, new Color(1f, 0.85f, 0.15f)),
-                PopupStyle.Heal => (44, new Color(0.45f, 1f, 0.45f)),
-                PopupStyle.Buff => (36, new Color(0.55f, 0.85f, 1f)),
-                PopupStyle.Gold => (38, new Color(1f, 0.82f, 0.2f)),
-                _ => (46, Color.white),
+                PopupStyle.Crit => (84, new Color(1f, 0.85f, 0.15f)),
+                PopupStyle.Heal => (58, new Color(0.45f, 1f, 0.45f)),
+                PopupStyle.Buff => (44, new Color(0.55f, 0.85f, 1f)),
+                PopupStyle.Gold => (48, new Color(1f, 0.82f, 0.2f)),
+                _ => (60, Color.white),
             };
-            var rect = Ui.Rect("Popup", parent, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(240f, 80f));
+            var rect = Ui.Rect("Popup", parent, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(320f, 100f));
             var popup = rect.gameObject.AddComponent<Popup>();
             popup.anchor = anchor;
             popup.jitter = new Vector3(Random.Range(-28f, 28f), 0f, 0f);

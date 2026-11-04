@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Rudzik
   team: 0
   model: {fileID: 919132149155446097, guid: 239e222d431a4824581a9144f99934b7, type: 3}
+  portrait: {fileID: 21300000, guid: 8a01ba47bb8b0b04d8e5b4bd8ddf7a53, type: 3}
   animator: {fileID: 9100000, guid: f886f18b6fe038645a0716d4339a621e, type: 2}
   modelScale: 1
   height: 1.4

@@ -42,14 +42,16 @@ namespace Featherguard.UI
         public static SlotMachine Create(RectTransform parent, Vector2 position)
         {
             var root = Ui.Rect("SlotMachine", parent, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), position, new Vector2(ReelWidth * 3f + 100f, CellHeight * 3f + 60f));
-            Ui.Image(root, new Color(0.35f, 0.12f, 0.08f, 1f));
+            Ui.Panel(root, new Color(0.55f, 0.16f, 0.1f, 1f));
             var inner = Ui.Stretch("Inner", root, 12f);
-            Ui.Image(inner, new Color(0.08f, 0.05f, 0.06f, 1f));
+            Ui.Panel(inner, new Color(0.08f, 0.05f, 0.06f, 1f));
             var machine = root.gameObject.AddComponent<SlotMachine>();
             for (int i = 0; i < 3; i++)
             {
                 var window = Ui.Rect($"Reel{i}", root, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2((i - 1) * (ReelWidth + 20f), 0f), new Vector2(ReelWidth, CellHeight * 3f));
-                machine.frames.Add(Ui.Image(window, new Color(0.95f, 0.92f, 0.85f, 1f)));
+                machine.frames.Add(Ui.Image(window, new Color(0.2f, 0.17f, 0.2f, 1f)));
+                machine.frames[i].sprite = Ui.Sprite("RoundRect");
+                machine.frames[i].type = Image.Type.Sliced;
                 window.gameObject.AddComponent<RectMask2D>();
                 var strip = Ui.Rect("Strip", window, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(ReelWidth, CellHeight));
                 machine.strips.Add(strip);
@@ -71,9 +73,12 @@ namespace Featherguard.UI
             strip.DetachChildren();
             for (int i = 0; i < symbols.Length; i++)
             {
-                var cell = Ui.Rect($"Cell{i}", strip, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -i * CellHeight), new Vector2(ReelWidth - 16f, CellHeight - 14f));
-                Ui.Image(cell, Tint(symbols[i]));
-                Ui.Label(Ui.Stretch("Label", cell), Name(symbols[i]), symbols[i] == SlotSymbol.Gem ? 34 : 40, TextAnchor.MiddleCenter, Color.white);
+                var cell = Ui.Rect(symbols[i].ToString(), strip, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -i * CellHeight), new Vector2(ReelWidth - 20f, CellHeight - 14f));
+                var tint = Tint(symbols[i]);
+                Ui.Panel(cell, new Color(tint.r * 0.35f + 0.08f, tint.g * 0.35f + 0.08f, tint.b * 0.35f + 0.1f, 1f));
+                Ui.Icon(cell, symbols[i].ToString(), new Vector2(0f, 12f), 96f);
+                Ui.Label(Ui.Rect("Label", cell, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 4f), new Vector2(ReelWidth - 20f, 26f)),
+                    Name(symbols[i]), 22, TextAnchor.LowerCenter, Color.white);
             }
         }
 
@@ -136,8 +141,7 @@ namespace Featherguard.UI
         SlotSymbol CurrentSymbol(RectTransform strip)
         {
             int index = Mathf.Clamp(Mathf.RoundToInt(strip.anchoredPosition.y / CellHeight), 0, strip.childCount - 1);
-            var label = strip.GetChild(index).GetComponentInChildren<Text>().text;
-            return ((SlotSymbol[])System.Enum.GetValues(typeof(SlotSymbol))).First(s => Name(s) == label);
+            return System.Enum.Parse<SlotSymbol>(strip.GetChild(index).name);
         }
 
         IEnumerator SpinReel(int index, int target, float duration, bool tension)
@@ -158,7 +162,7 @@ namespace Featherguard.UI
                     HitFeedback.Instance.Play(SfxId.Tick, tension && t > 0.6f ? 0.9f : 0.45f, 0.15f);
                 }
                 if (tension)
-                    frames[index].color = Color.Lerp(new Color(0.95f, 0.92f, 0.85f), new Color(1f, 0.55f, 0.2f), Mathf.PingPong(Time.unscaledTime * 6f, 1f));
+                    frames[index].color = Color.Lerp(new Color(0.2f, 0.17f, 0.2f), new Color(1f, 0.55f, 0.2f), Mathf.PingPong(Time.unscaledTime * 6f, 1f));
                 yield return null;
             }
             for (float t = 0f; t < 1f; t += Time.unscaledDeltaTime / 0.14f)
@@ -167,7 +171,7 @@ namespace Featherguard.UI
                 yield return null;
             }
             SetOffset(strip, target);
-            frames[index].color = new Color(0.95f, 0.92f, 0.85f);
+            frames[index].color = new Color(0.2f, 0.17f, 0.2f);
             HitFeedback.Instance.Play(SfxId.Click, 1f, 0.05f);
             StartCoroutine(Punch(strip.parent as RectTransform));
         }

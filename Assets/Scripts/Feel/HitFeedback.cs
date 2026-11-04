@@ -60,7 +60,7 @@ namespace Featherguard.Feel
             Time.timeScale = 0f;
             while (Time.unscaledTime < hitstopUntil)
                 yield return null;
-            Time.timeScale = 1f;
+            Time.timeScale = GameClock.Scale;
             inHitstop = false;
         }
     }

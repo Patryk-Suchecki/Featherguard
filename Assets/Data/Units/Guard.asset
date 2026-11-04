@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Tarczownik
   team: 1
   model: {fileID: 919132149155446097, guid: 62243b94c70eb184c97c69aec60f2505, type: 3}
+  portrait: {fileID: 21300000, guid: ae44672d0370f0c4e802a75f7efbf247, type: 3}
   animator: {fileID: 9100000, guid: e6f1c4a10df6f6b4db5e275cd60b3eae, type: 2}
   modelScale: 1.1
   height: 1.5

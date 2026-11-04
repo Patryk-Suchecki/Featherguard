@@ -10,6 +10,7 @@ namespace Featherguard.Battle
         public string displayName;
         public Team team;
         public GameObject model;
+        public Sprite portrait;
         public RuntimeAnimatorController animator;
         public float modelScale = 1f;
         public float height = 1.4f;

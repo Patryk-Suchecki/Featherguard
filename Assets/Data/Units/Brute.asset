@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: "Osi\u0142ek"
   team: 1
   model: {fileID: 919132149155446097, guid: 06010ed07d1efb044b0af00003c6a643, type: 3}
+  portrait: {fileID: 21300000, guid: e3bcb1b4782221f4ea467a2c23d314bc, type: 3}
   animator: {fileID: 9100000, guid: 70cf1467121688b4fa6563e82af9dc8d, type: 2}
   modelScale: 1.4
   height: 1.5

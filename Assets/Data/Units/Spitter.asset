@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Plujka
   team: 1
   model: {fileID: 919132149155446097, guid: 60ab8668bcb332245a2f94edef6427cf, type: 3}
+  portrait: {fileID: 21300000, guid: 0acf7c4e883bf484685189bbe2522a7f, type: 3}
   animator: {fileID: 9100000, guid: 07bf4df16306bf6468b6eceec0e58974, type: 2}
   modelScale: 1
   height: 1.5

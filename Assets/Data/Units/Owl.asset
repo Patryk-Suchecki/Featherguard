@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Puszczyk
   team: 0
   model: {fileID: 919132149155446097, guid: 55e87f930fea96544955db0d4ed35ae8, type: 3}
+  portrait: {fileID: 21300000, guid: 4519f63eb1662af44b933d7e2555139c, type: 3}
   animator: {fileID: 9100000, guid: a0dabb614e6b00e4ea9516d859f54780, type: 2}
   modelScale: 1
   height: 1.4
