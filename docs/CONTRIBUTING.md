@@ -9,14 +9,23 @@ How the two of us work on this repo. The rules for Claude are in [`CLAUDE.md`](.
    ```bash
    git lfs install
    ```
-3. **Repository:** accept the GitHub invitation and clone the repo:
+3. **GitHub CLI:** install it and log in once, so you and your Claude can create issues and pull requests from the terminal:
+   ```bash
+   winget install --id GitHub.cli
+   ```
+   Open a new terminal window, then:
+   ```bash
+   gh auth login --web --git-protocol https
+   ```
+   Copy the 8-character code, paste it in the browser and click **Authorize GitHub CLI**.
+4. **Repository:** accept the GitHub invitation and clone the repo:
    ```bash
    git clone https://github.com/Patryk-Suchecki/Featherguard.git
    ```
    ```bash
    cd Featherguard
    ```
-4. **Unity Smart Merge:** set it up once in this clone. Replace the path with your own editor location (in Unity Hub: Installs → ⋮ → Show in Explorer):
+5. **Unity Smart Merge:** set it up once in this clone. Replace the path with your own editor location (in Unity Hub: Installs → ⋮ → Show in Explorer):
    ```bash
    git config merge.unityyamlmerge.name "Unity SmartMerge (UnityYAMLMerge)"
    ```
@@ -30,10 +39,14 @@ How the two of us work on this repo. The rules for Claude are in [`CLAUDE.md`](.
    git config lfs.https://github.com/Patryk-Suchecki/Featherguard.git/info/lfs.locksverify true
    ```
    Patryk's editor lives in `E:/6000.6.2f1/Editor`, so his path is `E:/6000.6.2f1/Editor/Data/Tools/UnityYAMLMerge.exe`.
-5. **Project:** add the folder in Unity Hub (Add → Add project from disk), pick editor 6000.6.2f1 and wait for the first import (a few minutes).
-6. **Scene:** open `Assets/Scenes/Battle.unity` and press Play.
-7. **Tests:** Window → General → Test Runner → EditMode → Run All. Everything must be green.
-8. **Claude Code:** if you use it, start it in the repo folder. It loads `CLAUDE.md` and `.claude/settings.json` automatically.
+6. **Project:** add the folder in Unity Hub (Add → Add project from disk), pick editor 6000.6.2f1 and wait for the first import (a few minutes).
+7. **Scene:** open `Assets/Scenes/Battle.unity` and press Play.
+8. **Tests:** Window → General → Test Runner → EditMode → Run All. Everything must be green.
+9. **Claude Code:** install it from https://claude.com/claude-code (desktop app or CLI) and open it in the repo folder. It loads `CLAUDE.md` and `.claude/settings.json` automatically, so it already knows the architecture, code style and workflow. Your own Claude memory is not shared with the other developer: anything you both need goes into `CLAUDE.md` through a PR.
+10. **Optional tools:**
+    - **Blender 5.x** – only needed to regenerate characters and environment from `Art/Blender`.
+    - **Unity CLI (`unity`)** – lets Claude run tests and drive an open editor from the terminal. Without it, run tests in the Test Runner when Claude asks.
+    - Your IDE (Rider or Visual Studio) picks up `.editorconfig`, which keeps formatting and naming the same for both of us.
 
 ## 2. Daily workflow
 
@@ -60,7 +73,7 @@ How the two of us work on this repo. The rules for Claude are in [`CLAUDE.md`](.
    git push -u origin feature/12-slot-machine-sounds
    ```
    Open a Pull Request on GitHub titled `#12 Slot machine sounds`. The template starts with `Closes #12`. Move the issue to *Review*.
-6. **Merge:** the other person reviews and approves the PR, then use *Squash and merge*. The issue moves to *Done*.
+6. **Merge:** the other person reviews and approves the PR (one approval is required), then use *Squash and merge*. The issue closes and moves to *Done*. Claude never approves or merges a PR unless you tell it to.
 
 ### Things to avoid
 

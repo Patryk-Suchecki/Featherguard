@@ -35,3 +35,4 @@ sysinfo.txt
 crashlytics-build.properties
 *.blend1
 __pycache__/
+/ProjectSettings/Packages/com.unity.pipeline/
