@@ -11,26 +11,30 @@ Source of truth for what is in the game **now**. The numbers come from the data 
 
 ## Battle
 
-- **Turns:** the player's turn, then the enemy turn. On their turn the player can act with every hero once, in any order:
-  - tap a hero, then tap an enemy to attack or an ally to use the support ability;
-  - when the shared **Rage** meter is full, use that hero's special.
+- **Turns:** every battle starts with the player's turn, then the enemy turn, and so on.
+  - On the player's turn every living, non-stunned hero acts once, in any order: tap a hero, then tap an enemy to attack or an ally to use the support ability.
+  - When the **Rage** meter is full, the selected hero can use its special instead.
+  - The turn ends when every hero has acted. Enemies then act one by one in the order they entered the battle (summons last); stunned enemies skip.
 - **Rage (`BattleRules`):**
-  - max 100;
-  - heroes gain 0.45 rage per point of damage dealt, multiplied by the hero's RageGain;
-  - enemies feed 0.25 rage per point of damage they deal;
-  - a special consumes the whole meter.
-- **Damage:** power × Damage stat × random 90–110%. Crit chance 15%, crit damage ×1.5. The target's DamageTaken stat multiplies the result. Lifesteal heals the attacker by that share of damage dealt.
+  - one meter shared by the party, max 100;
+  - it starts every battle at 0, unless a Rage slot reward set a starting value;
+  - it fills by 0.45 per point of damage a hero deals (× that hero's RageGain) and by 0.25 per point of damage the enemies deal to the party;
+  - a hero special consumes the whole meter. Enemy specials do not use the meter.
+- **Damage:** power × attacker's Damage stat × random 90–110%, then crit (15% base chance, ×1.5 base damage), then × the target's DamageTaken stat. Lifesteal heals the attacker by that share of the damage actually dealt.
+- **Healing:** power × the healer's Healing stat. No randomness and no crits; it cannot exceed max HP or revive a fallen unit.
 - **Statuses:**
-  - applied by the owner's side during the owner's turn, they last through the next own turn;
-  - applied by the opponent, they tick down at the end of the owner's turn;
-  - reapplying keeps the stronger duration and potency.
-- **Waves:** an encounter can have several waves. Clearing a wave on the player's turn starts the next wave and a new player turn.
+  - damage over time and stuns resolve at the start of the owner's turn, so poison can kill a unit before it acts;
+  - a status applied by the owner's own side lasts through the owner's next turn; one applied by the opponent ticks down at the end of the owner's turn;
+  - reapplying keeps the stronger duration and potency;
+  - Poison damage is also multiplied by DamageTaken, so Shield halves it.
+- **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
+- **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
 - **Enemy AI:**
-  - uses its special every N turns;
-  - heals wounded allies below 60% HP (75% chance) or buffs allies (45% chance);
+  - uses its special on its first turn and then every N turns (Chieftain: N = 3);
+  - heals the most wounded ally below 60% HP (75% chance) or buffs an ally that lacks the buff (45% chance);
   - otherwise attacks, preferring wounded heroes and heroes it can finish;
   - must attack a taunting hero.
-- **Rewards in battle:** 3 gold per kill.
+- **Gold in battle:** 3 gold per kill, multiplied by the run's gold bonus.
 
 ### Heroes
 
@@ -57,7 +61,7 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 - 460 HP.
 - Chieftain's Wrath: melee 34, heavy, 35% Stun.
 - On its first turn and every 3rd turn after, Earthquake: hits all heroes for 22, 50% Weaken.
-- At 50% HP it enrages: +40% damage and summons two Thugs into free slots.
+- At 50% HP it enrages once: +40% damage and summons two Thugs into free slots (a slot is free when no living enemy stands in it). If all slots are taken, fewer or no Thugs appear.
 
 ### Statuses
 
@@ -88,12 +92,14 @@ Nine encounters (`Run.asset`):
 | 8 | Lizard Camp | Shieldbearer, Shaman, Brute → Spitter, Brute, Thug | 1.3 / 1.15 | 25 |
 | 9 | Chieftain (boss) | Thug, Shieldbearer, Thug → Spitter, Chieftain, Shaman | 1.3 / 1.15 | 40 |
 
+- **Start:** every run starts at the camp screen, where feathers are spent on perks, then "Set out!".
 - **Hero HP between battles:** heroes keep their HP from battle to battle. After a win, survivors heal 20% of max HP and fallen heroes return with 30%.
-- **Losing:** a lost battle ends the run.
+- **Gold bonus:** kill gold, encounter gold and gold from the slot machine are multiplied by the run's gold bonus (Lucky Penny, Treasurer, Leaky Purse). Losses, purchases and double-or-nothing are not.
+- **Losing:** a lost battle ends the run. Abandoning the run from the pause menu counts as a loss.
 
 ### Reward sequence after a win
 
-1. **Encounter gold:** ×2 after an elite battle.
+1. **Encounter gold:** the value from the table, ×2 after an elite battle, × the gold bonus.
 2. **Slot machine:**
    - three reels; each reel copies the previous one with a 30% chance, +4% per luck, max 60%;
    - a pair or triple of a symbol grants its reward, otherwise "Nothing... +5 gold";
@@ -107,21 +113,21 @@ Nine encounters (`Run.asset`):
    | Rage | 14 | +40 rage at next battle start | full rage |
    | Bad luck (skull) | 13 (−2/luck, min 3) | −10 gold | −15% HP, −20 gold |
    | Gem (needs the Gems perk) | 6 (+1/luck) | +50 gold | MEGA JACKPOT +150 gold |
-3. **Double or nothing:** risk the encounter gold at a 50% win chance, +3% per luck, max 65%.
+3. **Double or nothing:** the stake is the encounter gold (before the gold bonus). It is only offered when the wallet holds at least the stake. Win chance 50%, +3% per luck, max 65%: a win adds the stake again, a loss removes it.
 4. **Card pick:**
    - three upgrade cards; pick one;
    - reroll costs 10 gold, +5 for each further reroll in the same reward phase;
-   - after an elite battle the cards are Rare or better;
-   - extra cards won on the slot machine follow.
+   - after an elite battle this pick is Rare or better;
+   - extra cards won on the slot machine follow, each with its own minimum rarity (Common for a pair, Epic for a triple).
 5. **Path choice:** two of Path (normal battle), Elite, Shop, Chest, Campfire. Before the boss the choice is always Shop or Campfire.
    - **Elite:** the next battle has enemies ×1.35 stronger, gives double gold and a Rare+ card.
-   - **Shop:** 3 cards, each bought with gold (Common 25, Rare 45, Epic 80, Legendary 130) or blood (−10/18/28/40% current HP for the whole party); healing 30% for 20 gold.
-   - **Chest:** one Epic+ card plus a random curse.
+   - **Shop:** 3 cards, each bought once with gold (Common 25, Rare 45, Epic 80, Legendary 130) or with blood (−10/18/28/40% of current HP for the whole party; blood never drops a hero below 1 HP); healing 30% of max HP for 20 gold, repeatable.
+   - **Chest:** one Epic+ card (Legendary only with the Legends perk) plus a random curse, both applied immediately.
    - **Campfire:** the party heals 35%.
 
 ### Upgrade cards
 
-Each card targets one hero (Hero), the whole party (Party) or the run (Run).
+Each card targets one hero (Hero), the whole party (Party) or the run (Run). A Hero card names its hero when it is drawn, at random. A max HP increase also heals the hero by the HP gained.
 
 **Rarity roll:** base weights Common 60, Rare 28, Epic 10, Legendary 2. Each luck point moves them by −6 / +3 / +2 / +1, and Common never drops below 10. Legendary cards only appear with the Legends perk.
 
@@ -137,7 +143,7 @@ Each card targets one hero (Hero), the whole party (Party) or the run (Run).
 
 ## Meta progression (Camp)
 
-- **Feathers per run:** 1 per battle won, plus 1 per 50 gold earned, plus 10 for completing the run.
+- **Feathers per run:** 1 per battle won, plus 1 per 50 gold earned, plus 10 for completing the run. Earned gold counts kills, encounters and slot machine gold; double-or-nothing winnings and starting gold from Purse do not count. Feathers are awarded for losses and abandoned runs too.
 - **Perk costs:** a perk costs its base cost × (current level + 1).
 - **Save file:** `featherguard_save.json` in the persistent data path.
 
