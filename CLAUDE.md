@@ -55,10 +55,42 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 ## Tests
 
 - **EditMode tests** live in `Assets/Tests/EditMode/{Battle,Run,Meta,Support}`. They cover the battle model (full headless simulations), economy, rewards and meta.
-- **Running them:**
-  - With the editor open and the Unity CLI pipeline connected: `unity command test run --mode EditMode --filter Featherguard`.
-  - Without an open editor: `"<Unity.exe>" -batchmode -projectPath . -runTests -testPlatform EditMode -testResults Temp/results.xml`.
+- **Running them** (use whichever is available):
+  - In the editor: Window → General → Test Runner → EditMode → Run All.
+  - With the optional Unity CLI connected to an open editor: `unity command test run --mode EditMode --filter Featherguard`.
+  - Without an open editor (the project must be closed in Unity): `"<Unity.exe>" -batchmode -projectPath . -runTests -testPlatform EditMode -testResults Temp/results.xml`.
 - **Before every push:** run the tests. Add or update tests for any rule or economy change. Prefer testing the model directly with `FakeRandom`.
+- If you cannot run the tests or the game yourself, ask the person you work with to run them and report back. Never claim tests passed or something works without seeing it.
+
+## Code style
+
+`.editorconfig` enforces formatting; follow the existing code when in doubt.
+
+- C# 9 as supported by Unity 6. Block-scoped `namespace Featherguard.<Module>` (not file-scoped), 4-space indent, braces on their own lines.
+- `using` directives at the top, `System` first, then `Featherguard`, then `UnityEngine`/`UnityEditor`.
+- One main type per file, file named after it. Small closely related types may share a file (event classes, strategy variants such as `DamageEffect`/`HealEffect`, small data structs).
+- Naming: types, methods, properties, events, constants and `static readonly` fields in `PascalCase`; other fields, locals and parameters in `camelCase`; interfaces start with `I`. No `_` prefix and no Hungarian notation.
+- Omit the default `private` modifier on fields and methods. Mark fields `readonly` when possible.
+- Plain C# classes are `sealed` unless designed for inheritance. Strategies (`AbilityEffect`, `SlotReward`, ...) are `[Serializable]` abstract base classes with `sealed` implementations.
+- ScriptableObject data uses public `camelCase` fields with `[Tooltip]`, `[Range]`, `[Min]` and `[Header]` where they help the inspector.
+- MonoBehaviours use `[SerializeField]` private fields, never public fields, for scene references.
+- Use `var` when the type is obvious, expression-bodied members for one-liners, target-typed `new()`.
+- No `#region`, no XML doc comments, no commented-out code, no `Debug.Log` left in gameplay code.
+- Logic is synchronous and testable; coroutines and `WaitForSeconds` live only in presentation and UI.
+- Randomness always goes through `IRandomSource` so tests can control it.
+
+## Working as Claude in this repo
+
+- Each developer has their own Claude session; `CLAUDE.md` and `.claude/settings.json` are the only shared instructions. Personal memory is not shared, so anything both sessions must follow belongs here.
+- Start every change from an issue. If there is none, propose one and create it with `gh issue create` using the matching template once your developer agrees.
+- Branch from an up-to-date `main`, keep the PR small, run the tests, push, and open the PR with `gh pr create` following `.github/pull_request_template.md`.
+- Never do these without your developer explicitly asking in this conversation:
+  - approve or merge a pull request, or close someone else's issue or PR;
+  - push to `main`, force-push, rewrite history or delete branches you did not create;
+  - change GitHub repository settings, rulesets, collaborators or labels;
+  - run **Reset Data To Defaults**, regenerate art or audio, or change `ProjectSettings`, `Packages/manifest.json` or the Unity version.
+- Before ending a task, check `git status`: commit only files that belong to the task and discard Rebuild noise.
+- Write in English in the repo; reply to your developer in whatever language they use.
 
 ## Conventions
 
@@ -68,7 +100,8 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
 - Branch names: `<type>/<issue>-<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/12-slot-machine-sounds` or `fix/15-double-kill-gold`.
 - Commit messages: `#<issue> <what this commit does>`, one short imperative line (max ~60 characters) naming the exact task, for example `#12 Add jackpot sound to slot machine`. No body unless something is surprising.
-- PR title: `#<issue> <task>`; the description starts with `Closes #<issue>`.
+- PR title: `#<issue> <task>`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
+- Issue labels: `gameplay`, `art`, `audio`, `UI`, `bug`, `balance`. Docs and tooling work (`chore/` branches) needs no label.
 - Never add AI attribution: no `Co-Authored-By` trailers, no "Generated with Claude Code" lines, no mention of AI tools in commits, branches or PRs. `.claude/settings.json` disables it; keep it that way.
 
 ## Unity pitfalls
