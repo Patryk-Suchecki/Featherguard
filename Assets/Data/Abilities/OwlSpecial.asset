@@ -12,25 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: OwlSpecial
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: Odrodzenie lasu
+  displayName: Forest Renewal
   target: 3
   hits: 1
   effects:
-  - rid: 4550530190041940125
+  - rid: 4550530214315163774
   animationState: Cast
   heavy: 1
   fxColor: {r: 0.5, g: 1, b: 0.6, a: 1}
   castSound: 0
   impactSound: 6
   delivery:
-    rid: 4550530190041940124
+    rid: 4550530214315163775
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940124
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
-    - rid: 4550530190041940125
+    - rid: 4550530214315163774
       type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 60
+    - rid: 4550530214315163775
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data: 

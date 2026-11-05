@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: ThickFeathers
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: "G\u0119ste pi\xF3ra"
+  displayName: Thick Plumage
   description: +15% max HP
   icon: {fileID: 21300000, guid: 9dab46fb67a02474d920d5af4651a259, type: 3}
   rarity: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Shaman
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: Szaman
+  displayName: Shaman
   team: 1
   model: {fileID: 919132149155446097, guid: 7485be7cc66bef048b8c49317897aa7d, type: 3}
   portrait: {fileID: 21300000, guid: f43e1557f15022f47b8ab795057545f0, type: 3}

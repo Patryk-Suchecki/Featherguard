@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: Clover
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: Czterolistna koniczyna
-  description: "+2 szcz\u0119\u015Bcia"
+  displayName: Four-Leaf Clover
+  description: +2 luck
   icon: {fileID: 21300000, guid: 6771cc63622e36d40a642a948dbcd1ee, type: 3}
   rarity: 1
   scope: 2

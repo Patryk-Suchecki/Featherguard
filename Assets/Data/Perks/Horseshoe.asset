@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: Horseshoe
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: Podkowa
-  description: "+1 szcz\u0119\u015Bcia na start"
+  displayName: Horseshoe
+  description: +1 starting luck
   icon: {fileID: 21300000, guid: 6771cc63622e36d40a642a948dbcd1ee, type: 3}
   maxLevel: 3
   baseCost: 5
   effect:
-    rid: 4550530190041940106
+    rid: 4550530214315163740
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940106
+    - rid: 4550530214315163740
       type: {class: LuckPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         perLevel: 1

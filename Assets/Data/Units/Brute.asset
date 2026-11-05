@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Brute
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: "Osi\u0142ek"
+  displayName: Brute
   team: 1
   model: {fileID: 919132149155446097, guid: 06010ed07d1efb044b0af00003c6a643, type: 3}
   portrait: {fileID: 21300000, guid: e3bcb1b4782221f4ea467a2c23d314bc, type: 3}

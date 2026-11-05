@@ -12,36 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: ArcherAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Podw\xF3jny strza\u0142"
+  displayName: Double Shot
   target: 0
   hits: 2
   effects:
-  - rid: 4550530190041940083
-  - rid: 4550530190041940084
+  - rid: 4550530214315163765
+  - rid: 4550530214315163766
   animationState: Attack
   heavy: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 4
   impactSound: 3
   delivery:
-    rid: 4550530190041940082
+    rid: 4550530214315163767
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940082
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        prefab: {fileID: 919132149155446097, guid: 7bc1e472640de264da446c3e650ff5cf, type: 3}
-        speed: 16
-        arc: 0.12
-        orientAlongPath: 1
-        volleyInterval: 0.12
-        spread: 0.12
-    - rid: 4550530190041940083
+    - rid: 4550530214315163765
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 14
-    - rid: 4550530190041940084
+    - rid: 4550530214315163766
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -50,3 +41,12 @@ MonoBehaviour:
           potency: 5
           chance: 0.3
           onSelf: 0
+    - rid: 4550530214315163767
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data:
+        prefab: {fileID: 919132149155446097, guid: 7bc1e472640de264da446c3e650ff5cf, type: 3}
+        speed: 16
+        arc: 0.12
+        orientAlongPath: 1
+        volleyInterval: 0.12
+        spread: 0.12

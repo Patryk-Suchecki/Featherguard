@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: Rudzik
+  displayName: Robin
   team: 0
   model: {fileID: 919132149155446097, guid: 239e222d431a4824581a9144f99934b7, type: 3}
   portrait: {fileID: 21300000, guid: 8a01ba47bb8b0b04d8e5b4bd8ddf7a53, type: 3}

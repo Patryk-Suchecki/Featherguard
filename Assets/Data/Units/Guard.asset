@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Guard
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: Tarczownik
+  displayName: Shieldbearer
   team: 1
   model: {fileID: 919132149155446097, guid: 62243b94c70eb184c97c69aec60f2505, type: 3}
   portrait: {fileID: 21300000, guid: ae44672d0370f0c4e802a75f7efbf247, type: 3}

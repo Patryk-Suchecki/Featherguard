@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Run.SlotConfig
   symbols:
   - id: Coin
-    label: "Z\u0141OTO"
+    label: GOLD
     icon: {fileID: 21300000, guid: 93005cc220afe274f96d95c9afab8426, type: 3}
     tint: {r: 1, g: 0.78, b: 0.15, a: 1}
     weight: 30
@@ -23,11 +23,11 @@ MonoBehaviour:
     requires: 0
     megaJackpot: 0
     pair:
-      rid: 4550530190041940093
+      rid: 4550530214315163726
     triple:
-      rid: 4550530190041940094
+      rid: 4550530214315163727
   - id: Heart
-    label: SERCE
+    label: HEART
     icon: {fileID: 21300000, guid: 9dab46fb67a02474d920d5af4651a259, type: 3}
     tint: {r: 0.95, g: 0.3, b: 0.35, a: 1}
     weight: 20
@@ -36,11 +36,11 @@ MonoBehaviour:
     requires: 0
     megaJackpot: 0
     pair:
-      rid: 4550530190041940095
+      rid: 4550530214315163728
     triple:
-      rid: 4550530190041940096
+      rid: 4550530214315163729
   - id: Card
-    label: KARTA
+    label: CARD
     icon: {fileID: 21300000, guid: f4054f8b8991e8f4ba67192cc46acc64, type: 3}
     tint: {r: 0.3, g: 0.55, b: 1, a: 1}
     weight: 18
@@ -49,11 +49,11 @@ MonoBehaviour:
     requires: 0
     megaJackpot: 0
     pair:
-      rid: 4550530190041940097
+      rid: 4550530214315163730
     triple:
-      rid: 4550530190041940098
+      rid: 4550530214315163731
   - id: Rage
-    label: FURIA
+    label: RAGE
     icon: {fileID: 21300000, guid: 4b81d83c52ab98d4bae9ccfe07932f30, type: 3}
     tint: {r: 1, g: 0.45, b: 0.12, a: 1}
     weight: 14
@@ -62,11 +62,11 @@ MonoBehaviour:
     requires: 0
     megaJackpot: 0
     pair:
-      rid: 4550530190041940099
+      rid: 4550530214315163732
     triple:
-      rid: 4550530190041940100
+      rid: 4550530214315163733
   - id: Skull
-    label: PECH
+    label: BAD LUCK
     icon: {fileID: 21300000, guid: 37eb5c9c20b956e468d42ba010dbf048, type: 3}
     tint: {r: 0.35, g: 0.3, b: 0.4, a: 1}
     weight: 13
@@ -75,11 +75,11 @@ MonoBehaviour:
     requires: 0
     megaJackpot: 0
     pair:
-      rid: 4550530190041940101
+      rid: 4550530214315163734
     triple:
-      rid: 4550530190041940102
+      rid: 4550530214315163735
   - id: Gem
-    label: KLEJNOT
+    label: GEM
     icon: {fileID: 21300000, guid: 7021e3da941e0944eb9638f9d48365a4, type: 3}
     tint: {r: 0.3, g: 0.95, b: 0.95, a: 1}
     weight: 6
@@ -88,83 +88,83 @@ MonoBehaviour:
     requires: 1
     megaJackpot: 1
     pair:
-      rid: 4550530190041940103
+      rid: 4550530214315163736
     triple:
-      rid: 4550530190041940104
+      rid: 4550530214315163737
   matchChance: 0.3
   matchChancePerLuck: 0.04
   maxMatchChance: 0.6
   noMatch:
-    rid: 4550530190041940105
+    rid: 4550530214315163738
   jackpotPrefix: 'JACKPOT! '
   megaJackpotPrefix: 'MEGA JACKPOT! '
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940093
+    - rid: 4550530214315163726
       type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "+20 z\u0142"
+        text: +20 gold
         amount: 20
-    - rid: 4550530190041940094
+    - rid: 4550530214315163727
       type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "+60 z\u0142"
+        text: +60 gold
         amount: 60
-    - rid: 4550530190041940095
+    - rid: 4550530214315163728
       type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: Leczenie +25%
+        text: Heal +25%
         fraction: 0.25
-    - rid: 4550530190041940096
+    - rid: 4550530214315163729
       type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "Pe\u0142ne leczenie"
+        text: Full heal
         fraction: 1
-    - rid: 4550530190041940097
+    - rid: 4550530214315163730
       type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: Dodatkowa karta
+        text: Extra card
         minimum: 0
-    - rid: 4550530190041940098
+    - rid: 4550530214315163731
       type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: Epicka karta
+        text: Epic card
         minimum: 2
-    - rid: 4550530190041940099
+    - rid: 4550530214315163732
       type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: Furia +40 na start
+        text: +40 rage next battle
         amount: 40
-    - rid: 4550530190041940100
+    - rid: 4550530214315163733
       type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "Pe\u0142na Furia"
+        text: Full rage
         amount: 100
-    - rid: 4550530190041940101
+    - rid: 4550530214315163734
       type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "Pech... -10 z\u0142"
+        text: Bad luck... -10 gold
         healthLoss: 0
         goldLoss: 10
-    - rid: 4550530190041940102
+    - rid: 4550530214315163735
       type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "PECH! -15% HP, -20 z\u0142"
+        text: BAD LUCK! -15% HP, -20 gold
         healthLoss: 0.15
         goldLoss: 20
-    - rid: 4550530190041940103
+    - rid: 4550530214315163736
       type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "+50 z\u0142"
+        text: +50 gold
         amount: 50
-    - rid: 4550530190041940104
+    - rid: 4550530214315163737
       type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "+150 z\u0142"
+        text: +150 gold
         amount: 150
-    - rid: 4550530190041940105
+    - rid: 4550530214315163738
       type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
       data:
-        text: "Nic... +5 z\u0142"
+        text: Nothing... +5 gold
         amount: 5

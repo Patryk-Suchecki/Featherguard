@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Jackpot
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
   displayName: Jackpot
-  description: "+4 szcz\u0119\u015Bcia"
+  description: +4 luck
   icon: {fileID: 21300000, guid: 6771cc63622e36d40a642a948dbcd1ee, type: 3}
   rarity: 3
   scope: 2

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: SharpBeaks
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: Ostre dzioby
-  description: "+5% obra\u017Ce\u0144 dru\u017Cyny"
+  displayName: Sharp Beaks
+  description: +5% party damage
   icon: {fileID: 21300000, guid: aafe09ecd34a77e45a39b02e2e346fe4, type: 3}
   maxLevel: 5
   baseCost: 3
   effect:
-    rid: 4550530190041940068
+    rid: 4550530214315163739
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940068
+    - rid: 4550530214315163739
       type: {class: PartyStatPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         stat: 0

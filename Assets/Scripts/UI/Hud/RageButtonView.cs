@@ -43,10 +43,10 @@ namespace Featherguard.UI
             core.color = usable ? Active : Dormant;
             root.localScale = Vector3.one * (rage.Ready ? 1f + Mathf.Sin(Time.unscaledTime * 7f) * 0.05f : 1f);
             ring.color = new Color(1f, 0.95f, 0.7f, commands.SpecialArmed ? 0.6f + Mathf.Sin(Time.unscaledTime * 10f) * 0.4f : 0f);
-            label.text = commands.SpecialArmed ? "Wybierz cel!"
+            label.text = commands.SpecialArmed ? "Pick a target!"
                 : usable ? commands.Selected.Definition.special.displayName
-                : rage.Ready ? "FURIA gotowa"
-                : $"Furia {Mathf.FloorToInt(rage.Fraction * 100f)}%";
+                : rage.Ready ? "RAGE ready"
+                : $"Rage {Mathf.FloorToInt(rage.Fraction * 100f)}%";
             label.color = rage.Ready ? RageColor : Color.white;
         }
     }

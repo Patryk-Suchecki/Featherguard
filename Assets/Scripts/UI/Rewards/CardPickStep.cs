@@ -27,10 +27,10 @@ namespace Featherguard.UI
             var draft = new CardDraft(context.Round, minimum);
             while (!draft.IsEmpty)
             {
-                screen.Open(title, "Dotknij karty, aby ją zabrać");
+                screen.Open(title, "Tap a card to take it");
                 yield return Reveal(screen, draft.Offers, _ => "", 0f, true);
                 bool affordable = draft.CanReroll;
-                var reroll = screen.Button($"Losuj ({draft.RerollCost} zł)", new Vector2(0f, -400f), affordable ? Ui.RiskColor : Ui.NeutralColor, RerollChoice, "Dice");
+                var reroll = screen.Button($"Reroll ({draft.RerollCost} gold)", new Vector2(0f, -400f), affordable ? Ui.RiskColor : Ui.NeutralColor, RerollChoice, "Dice");
                 reroll.GetComponent<Button>().interactable = affordable;
                 yield return screen.WaitChoice();
 

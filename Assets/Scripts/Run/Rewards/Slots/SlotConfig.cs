@@ -31,7 +31,7 @@ namespace Featherguard.Run
         [Range(0f, 1f)] public float matchChance = 0.3f;
         public float matchChancePerLuck = 0.04f;
         [Range(0f, 1f)] public float maxMatchChance = 0.6f;
-        [SerializeReference, SubclassSelector] public SlotReward noMatch = new GoldReward { amount = 5, text = "Nic... +5 zł" };
+        [SerializeReference, SubclassSelector] public SlotReward noMatch = new GoldReward { amount = 5, text = "Nothing... +5 gold" };
         public string jackpotPrefix = "JACKPOT! ";
         public string megaJackpotPrefix = "MEGA JACKPOT! ";
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4eb1e727738c647911acd0f388a217, type: 3}
   m_Name: Battle05
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.EncounterDefinition
-  displayName: Mglisty jar
+  displayName: Misty Ravine
   boss: 0
   enemyHealth: 1.1
   enemyDamage: 1.05

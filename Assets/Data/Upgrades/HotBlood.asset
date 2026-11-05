@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: HotBlood
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: "Gor\u0105ca krew"
-  description: +30% przyrostu Furii
+  displayName: Hot Blood
+  description: +30% rage gain
   icon: {fileID: 21300000, guid: 4b81d83c52ab98d4bae9ccfe07932f30, type: 3}
   rarity: 1
   scope: 0

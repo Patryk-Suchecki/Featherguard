@@ -12,25 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: OwlSupport
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: Leczenie
+  displayName: Mend
   target: 2
   hits: 1
   effects:
-  - rid: 4550530190041940070
+  - rid: 4550530214315163741
   animationState: Cast
   heavy: 0
   fxColor: {r: 0.45, g: 1, b: 0.5, a: 1}
   castSound: 0
   impactSound: 6
   delivery:
-    rid: 4550530190041940069
+    rid: 4550530214315163742
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940069
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
-    - rid: 4550530190041940070
+    - rid: 4550530214315163741
       type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 40
+    - rid: 4550530214315163742
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data: 

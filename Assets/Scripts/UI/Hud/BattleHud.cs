@@ -156,11 +156,11 @@ namespace Featherguard.UI
         {
             if (!commands.AcceptingInput) return "";
             var selected = commands.Selected;
-            if (selected == null) return "Dotknij bohatera";
+            if (selected == null) return "Tap a hero";
             var definition = selected.Definition;
             if (commands.SpecialArmed)
-                return $"{definition.special.displayName}: dotknij celu";
-            return $"Wróg: {definition.attack.displayName}  ·  Sojusznik: {definition.support.displayName}";
+                return $"{definition.special.displayName}: tap a target";
+            return $"Enemy: {definition.attack.displayName}  ·  Ally: {definition.support.displayName}";
         }
 
         static Color WithAlpha(Color color, float alpha) => new(color.r, color.g, color.b, alpha);

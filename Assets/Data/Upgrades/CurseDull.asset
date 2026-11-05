@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: CurseDull
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: "T\u0119pe dzioby"
-  description: "-10% obra\u017Ce\u0144 dla wszystkich"
+  displayName: Dull Beaks
+  description: -10% damage for the whole party
   icon: {fileID: 21300000, guid: 37eb5c9c20b956e468d42ba010dbf048, type: 3}
   rarity: 0
   scope: 1

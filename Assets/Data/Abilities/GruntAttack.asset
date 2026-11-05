@@ -12,22 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: GruntAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Pa\u0142ka"
+  displayName: Club
   target: 0
   hits: 1
   effects:
-  - rid: 4550530190041940108
+  - rid: 4550530214315163753
   animationState: Attack
   heavy: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3
   delivery:
-    rid: 4550530190041940107
+    rid: 4550530214315163754
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940107
+    - rid: 4550530214315163753
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 15
+    - rid: 4550530214315163754
       type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
@@ -37,7 +41,3 @@ MonoBehaviour:
         hitInterval: 0.15
         recovery: 0.4
         reach: 0.3
-    - rid: 4550530190041940108
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
-      data:
-        power: 15

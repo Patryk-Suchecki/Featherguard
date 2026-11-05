@@ -28,7 +28,7 @@ namespace Featherguard.UI
 
             var stats = Ui.Rect("Stats", parent, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-134f, -20f), new Vector2(250f, 160f));
             TopBar.Pill(stats, "Gold", "Coin", Vector2.zero, Ui.GoldColor, 36).text = session.Wallet.Gold.ToString();
-            TopBar.Pill(stats, "Luck", "Clover", new Vector2(0f, -84f), LuckColor, 28).text = $"Szczęście {session.Luck}";
+            TopBar.Pill(stats, "Luck", "Clover", new Vector2(0f, -84f), LuckColor, 28).text = $"Luck {session.Luck}";
         }
     }
 }

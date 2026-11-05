@@ -12,30 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: ChieftainSpecial
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Trz\u0119sienie ziemi"
+  displayName: Earthquake
   target: 1
   hits: 1
   effects:
-  - rid: 4550530190041940127
-  - rid: 4550530190041940128
+  - rid: 4550530214315163779
+  - rid: 4550530214315163780
   animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.45, b: 0.15, a: 1}
   castSound: 2
   impactSound: 2
   delivery:
-    rid: 4550530190041940126
+    rid: 4550530214315163781
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940126
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
-    - rid: 4550530190041940127
+    - rid: 4550530214315163779
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 22
-    - rid: 4550530190041940128
+    - rid: 4550530214315163780
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -44,3 +41,6 @@ MonoBehaviour:
           potency: 0
           chance: 0.5
           onSelf: 0
+    - rid: 4550530214315163781
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data: 

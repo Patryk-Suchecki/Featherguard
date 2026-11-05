@@ -33,7 +33,7 @@ namespace Featherguard.UI
             foreach (var step in Steps(context.Round))
                 yield return step.Run(context);
             while (context.Round.TryTakeCard(out var minimum))
-                yield return new CardPickStep(minimum, "DODATKOWA KARTA!").Run(context);
+                yield return new CardPickStep(minimum, "EXTRA CARD!").Run(context);
             yield return new PathStep().Run(context);
             context.Screen.Close();
         }
@@ -42,7 +42,7 @@ namespace Featherguard.UI
         {
             yield return new SlotStep();
             yield return new GambleStep();
-            yield return new CardPickStep(round.FirstCardRarity, "WYBIERZ KARTĘ");
+            yield return new CardPickStep(round.FirstCardRarity, "PICK A CARD");
         }
     }
 }

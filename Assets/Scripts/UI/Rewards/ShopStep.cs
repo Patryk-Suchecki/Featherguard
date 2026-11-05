@@ -12,7 +12,7 @@ namespace Featherguard.UI
         const int ExitChoice = 99;
         const int BloodOffset = 10;
         const float Spacing = 420f;
-        const string SoldLabel = "SPRZEDANE";
+        const string SoldLabel = "SOLD";
 
         public IEnumerator Run(RewardContext context)
         {
@@ -21,7 +21,7 @@ namespace Featherguard.UI
 
             while (true)
             {
-                screen.Open("SKLEP", "Złoto albo krew — wybór należy do ciebie");
+                screen.Open("SHOP", "Gold or blood — your choice");
                 float start = -(shop.Offers.Count - 1) * Spacing * 0.5f;
                 for (int i = 0; i < shop.Offers.Count; i++)
                 {
@@ -38,9 +38,9 @@ namespace Featherguard.UI
                     gold.GetComponent<Button>().interactable = affordable;
                     screen.Button($"-{Mathf.RoundToInt(shop.BloodPrice(i) * 100f)}%", new Vector2(x + 98f, -272f), Ui.RiskColor, BloodOffset + i, "Lifesteal", new Vector2(186f, 110f));
                 }
-                var heal = screen.Button($"Leczenie ({shop.HealCost})", new Vector2(-260f, -410f), shop.CanAffordHeal ? Ui.GoColor : Ui.NeutralColor, HealChoice, "Heal");
+                var heal = screen.Button($"Heal ({shop.HealCost})", new Vector2(-260f, -410f), shop.CanAffordHeal ? Ui.GoColor : Ui.NeutralColor, HealChoice, "Heal");
                 heal.GetComponent<Button>().interactable = shop.CanAffordHeal;
-                screen.Button("Wyjdź", new Vector2(260f, -410f), Ui.NeutralColor, ExitChoice, "Flag");
+                screen.Button("Leave", new Vector2(260f, -410f), Ui.NeutralColor, ExitChoice, "Flag");
                 yield return screen.WaitChoice();
 
                 int choice = screen.Choice;

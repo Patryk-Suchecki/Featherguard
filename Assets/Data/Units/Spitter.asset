@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Spitter
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: Plujka
+  displayName: Spitter
   team: 1
   model: {fileID: 919132149155446097, guid: 60ab8668bcb332245a2f94edef6427cf, type: 3}
   portrait: {fileID: 21300000, guid: 0acf7c4e883bf484685189bbe2522a7f, type: 3}

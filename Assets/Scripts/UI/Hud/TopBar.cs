@@ -32,7 +32,7 @@ namespace Featherguard.UI
         }
 
         public void SetProgress(int encounter, int encounters, int wave, int waves) =>
-            progress.text = waves > 1 ? $"Walka {encounter}/{encounters} · Fala {wave}/{waves}" : $"Walka {encounter}/{encounters}";
+            progress.text = waves > 1 ? $"Battle {encounter}/{encounters} · Wave {wave}/{waves}" : $"Battle {encounter}/{encounters}";
 
         public void Bind(Wallet target)
         {

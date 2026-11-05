@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: Treasurer
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: Skarbnik
-  description: "+40% zdobywanego z\u0142ota"
+  displayName: Treasurer
+  description: +40% gold gained
   icon: {fileID: 21300000, guid: 93005cc220afe274f96d95c9afab8426, type: 3}
   rarity: 2
   scope: 2

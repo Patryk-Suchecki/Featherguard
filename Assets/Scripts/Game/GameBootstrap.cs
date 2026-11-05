@@ -72,7 +72,7 @@ namespace Featherguard.Game
         void OnUnitDefeated(UnitView unit)
         {
             if (killRewards.Remove(unit.Unit, out int gold))
-                hud.Popup(unit.Top + Vector3.up * 0.6f, $"+{gold} zł", PopupKind.Gold);
+                hud.Popup(unit.Top + Vector3.up * 0.6f, $"+{gold} gold", PopupKind.Gold);
         }
 
         IEnumerator Conclude(BattleResult result)

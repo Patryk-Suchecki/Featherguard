@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: VampireBeak
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: "Wampirzy dzi\xF3b"
-  description: "15% zadanych obra\u017Ce\u0144 wraca jako HP"
+  displayName: Vampire Beak
+  description: 15% of damage dealt returns as HP
   icon: {fileID: 21300000, guid: fb28c130b06813b419f1034f21d32751, type: 3}
   rarity: 1
   scope: 0

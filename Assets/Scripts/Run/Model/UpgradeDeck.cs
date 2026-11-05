@@ -21,8 +21,8 @@ namespace Featherguard.Run
         public string Target => Upgrade.scope switch
         {
             UpgradeScope.Hero => Hero.displayName,
-            UpgradeScope.Party => "Cała drużyna",
-            _ => "Wyprawa",
+            UpgradeScope.Party => "Whole party",
+            _ => "Run",
         };
     }
 

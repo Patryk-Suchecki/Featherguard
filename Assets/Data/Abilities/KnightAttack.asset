@@ -12,22 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: KnightAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Ci\u0119cie"
+  displayName: Slash
   target: 0
   hits: 1
   effects:
-  - rid: 4550530190041940110
+  - rid: 4550530214315163755
   animationState: Attack
   heavy: 0
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 3
   delivery:
-    rid: 4550530190041940109
+    rid: 4550530214315163756
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940109
+    - rid: 4550530214315163755
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 30
+    - rid: 4550530214315163756
       type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
@@ -37,7 +41,3 @@ MonoBehaviour:
         hitInterval: 0.15
         recovery: 0.4
         reach: 0.3
-    - rid: 4550530190041940110
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
-      data:
-        power: 30

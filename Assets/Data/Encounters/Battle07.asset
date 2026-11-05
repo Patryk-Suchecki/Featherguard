@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4eb1e727738c647911acd0f388a217, type: 3}
   m_Name: Battle07
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.EncounterDefinition
-  displayName: "Kamienny br\xF3d"
+  displayName: Stone Ford
   boss: 0
   enemyHealth: 1.2
   enemyDamage: 1.1

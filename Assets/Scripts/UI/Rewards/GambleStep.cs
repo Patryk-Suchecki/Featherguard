@@ -20,13 +20,13 @@ namespace Featherguard.UI
             int stake = gamble.Stake;
             float chance = gamble.Chance;
             var screen = context.Screen;
-            screen.Open("PODWÓJNIE ALBO NIC?", $"Stawka: {stake} zł  ·  Szansa: {Mathf.RoundToInt(chance * 100f)}%");
+            screen.Open("DOUBLE OR NOTHING?", $"Stake: {stake} gold  ·  Chance: {Mathf.RoundToInt(chance * 100f)}%");
             var box = Ui.Centered("Wheel", screen.Root, new Vector2(0f, 40f), new Vector2(760f, 380f));
             Ui.Panel(box, Ui.PanelColor);
             Ui.Icon(box, "Dice", new Vector2(0f, 90f), 150f);
-            var wheel = Ui.Label(Ui.Centered("Label", box, new Vector2(0f, -80f), new Vector2(740f, 160f)), $"{stake} zł", 120, TextAnchor.MiddleCenter, Color.white);
-            var risk = screen.Button("Ryzykuję!", new Vector2(-260f, -330f), Ui.RiskColor, Risk, "Dice");
-            var keep = screen.Button("Zabieram", new Vector2(260f, -330f), Ui.NeutralColor, Keep, "Coin");
+            var wheel = Ui.Label(Ui.Centered("Label", box, new Vector2(0f, -80f), new Vector2(740f, 160f)), $"{stake} gold", 120, TextAnchor.MiddleCenter, Color.white);
+            var risk = screen.Button("Risk it!", new Vector2(-260f, -330f), Ui.RiskColor, Risk, "Dice");
+            var keep = screen.Button("Take it", new Vector2(260f, -330f), Ui.NeutralColor, Keep, "Coin");
             yield return screen.WaitChoice();
             Object.Destroy(risk.gameObject);
             Object.Destroy(keep.gameObject);
@@ -36,15 +36,15 @@ namespace Featherguard.UI
             yield return SpinWheel(wheel, stake, win);
             if (win)
             {
-                screen.RefreshHeader("PODWOJONE!", "");
-                yield return screen.Jackpot($"+{stake} zł", false, -260f);
+                screen.RefreshHeader("DOUBLED!", "");
+                yield return screen.Jackpot($"+{stake} gold", false, -260f);
             }
             else
             {
-                screen.RefreshHeader("PRZEPADŁO", "");
+                screen.RefreshHeader("LOST", "");
                 FeedbackHub.Ui(SfxId.Lose);
                 FeedbackHub.Instance.Shake(0.15f, 0.35f);
-                screen.BigText($"-{stake} zł", Loss, -260f);
+                screen.BigText($"-{stake} gold", Loss, -260f);
             }
             yield return screen.Continue();
         }
@@ -56,7 +56,7 @@ namespace Featherguard.UI
             for (int i = 0; i < flips; i++)
             {
                 bool showWin = i % 2 == 0;
-                wheel.text = showWin ? $"x2 = {stake * 2}" : "0 zł";
+                wheel.text = showWin ? $"x2 = {stake * 2}" : "0 gold";
                 wheel.color = showWin ? Win : Loss;
                 FeedbackHub.Ui(SfxId.Tick, 0.8f);
                 yield return new WaitForSecondsRealtime(0.04f + Mathf.Pow(i / (float)flips, 3f) * 0.35f);

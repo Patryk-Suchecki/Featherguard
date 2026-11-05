@@ -12,36 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: SpitterAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: Jad
+  displayName: Venom
   target: 0
   hits: 1
   effects:
-  - rid: 4550530190041940086
-  - rid: 4550530190041940087
+  - rid: 4550530214315163776
+  - rid: 4550530214315163777
   animationState: Attack
   heavy: 0
   fxColor: {r: 0.5, g: 1, b: 0.2, a: 1}
   castSound: 5
   impactSound: 3
   delivery:
-    rid: 4550530190041940085
+    rid: 4550530214315163778
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940085
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        prefab: {fileID: 0}
-        speed: 10
-        arc: 0.05
-        orientAlongPath: 0
-        volleyInterval: 0.12
-        spread: 0.12
-    - rid: 4550530190041940086
+    - rid: 4550530214315163776
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 9
-    - rid: 4550530190041940087
+    - rid: 4550530214315163777
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -50,3 +41,12 @@ MonoBehaviour:
           potency: 6
           chance: 0.7
           onSelf: 0
+    - rid: 4550530214315163778
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data:
+        prefab: {fileID: 0}
+        speed: 10
+        arc: 0.05
+        orientAlongPath: 0
+        volleyInterval: 0.12
+        spread: 0.12

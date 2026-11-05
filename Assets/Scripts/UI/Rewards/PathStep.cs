@@ -22,7 +22,7 @@ namespace Featherguard.UI
             if (nodes.Count == 0) yield break;
 
             var screen = context.Screen;
-            screen.Open(session.NextIsFinal ? "PRZED BOSSEM" : "WYBIERZ ŚCIEŻKĘ", session.NextIsFinal ? "Herszt czeka. Przygotuj się." : "Dokąd teraz?");
+            screen.Open(session.NextIsFinal ? "BEFORE THE BOSS" : "CHOOSE YOUR PATH", session.NextIsFinal ? "The Chieftain awaits. Get ready." : "Where to next?");
             float spacing = 580f;
             float start = -(nodes.Count - 1) * spacing * 0.5f;
             for (int i = 0; i < nodes.Count; i++)

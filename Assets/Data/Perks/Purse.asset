@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: Purse
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: Sakiewka
-  description: "+15 z\u0142 na start"
+  displayName: Purse
+  description: +15 starting gold
   icon: {fileID: 21300000, guid: 93005cc220afe274f96d95c9afab8426, type: 3}
   maxLevel: 4
   baseCost: 2
   effect:
-    rid: 4550530190041940071
+    rid: 4550530214315163743
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940071
+    - rid: 4550530214315163743
       type: {class: StartingGoldPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         perLevel: 15

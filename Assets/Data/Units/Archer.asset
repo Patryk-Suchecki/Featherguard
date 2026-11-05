@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Archer
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: "S\xF3jka"
+  displayName: Jay
   team: 0
   model: {fileID: 919132149155446097, guid: 609f083881758854da3636b5cb632ae3, type: 3}
   portrait: {fileID: 21300000, guid: fe4708a85f29b7e46bbbb7b905e8514a, type: 3}

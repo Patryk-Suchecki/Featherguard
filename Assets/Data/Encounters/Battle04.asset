@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f4eb1e727738c647911acd0f388a217, type: 3}
   m_Name: Battle04
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.EncounterDefinition
-  displayName: Wykrot
+  displayName: Windfall
   boss: 0
   enemyHealth: 1.05
   enemyDamage: 1

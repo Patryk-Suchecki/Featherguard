@@ -12,23 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: BruteAttack
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Mia\u017Cd\u017Cenie"
+  displayName: Crush
   target: 0
   hits: 1
   effects:
-  - rid: 4550530190041940119
-  - rid: 4550530190041940120
+  - rid: 4550530214315163768
+  - rid: 4550530214315163769
   animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 1
   impactSound: 2
   delivery:
-    rid: 4550530190041940118
+    rid: 4550530214315163770
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940118
+    - rid: 4550530214315163768
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        power: 26
+    - rid: 4550530214315163769
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 9ed2d30f57628cf47a79c05b0c8892b2, type: 2}
+          turns: 1
+          potency: 0
+          chance: 0.25
+          onSelf: 0
+    - rid: 4550530214315163770
       type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
       data:
         approachTime: 0.3
@@ -38,16 +51,3 @@ MonoBehaviour:
         hitInterval: 0.15
         recovery: 0.4
         reach: 0.3
-    - rid: 4550530190041940119
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
-      data:
-        power: 26
-    - rid: 4550530190041940120
-      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
-      data:
-        application:
-          status: {fileID: 11400000, guid: 9ed2d30f57628cf47a79c05b0c8892b2, type: 2}
-          turns: 1
-          potency: 0
-          chance: 0.25
-          onSelf: 0

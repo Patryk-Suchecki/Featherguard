@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0862f1ccd19a3f4fbed10b95b74c2ad, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
-  displayName: Trucizna
-  announcement: Trucizna
+  displayName: Poison
+  announcement: Poisoned
   icon: {fileID: 21300000, guid: d97552112252ed14e9f6a181b48db626, type: 3}
   tint: {r: 0.4, g: 0.85, b: 0.25, a: 1}
   modifiers: []

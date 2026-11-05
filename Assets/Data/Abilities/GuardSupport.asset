@@ -12,26 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: GuardSupport
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: Mur tarcz
+  displayName: Shield Wall
   target: 2
   hits: 1
   effects:
-  - rid: 4550530190041940112
-  - rid: 4550530190041940113
+  - rid: 4550530214315163762
+  - rid: 4550530214315163763
   animationState: Cast
   heavy: 0
   fxColor: {r: 0.45, g: 0.7, b: 1, a: 1}
   castSound: 0
   impactSound: 7
   delivery:
-    rid: 4550530190041940111
+    rid: 4550530214315163764
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940111
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
-    - rid: 4550530190041940112
+    - rid: 4550530214315163762
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -40,7 +37,7 @@ MonoBehaviour:
           potency: 0
           chance: 1
           onSelf: 0
-    - rid: 4550530190041940113
+    - rid: 4550530214315163763
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -49,3 +46,6 @@ MonoBehaviour:
           potency: 0
           chance: 1
           onSelf: 1
+    - rid: 4550530214315163764
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data: 

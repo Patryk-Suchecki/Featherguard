@@ -9,7 +9,7 @@ namespace Featherguard.UI
     {
         public static readonly Vector2 Size = new(390f, 520f);
         static readonly Color CurseColor = new(0.6f, 0.12f, 0.18f);
-        const string CurseLabel = "KLĄTWA";
+        const string CurseLabel = "CURSE";
 
         public static RectTransform Create(RectTransform parent, UpgradeOffer offer, RarityTable rarity, Vector2 position, string footer, System.Action onTap)
         {

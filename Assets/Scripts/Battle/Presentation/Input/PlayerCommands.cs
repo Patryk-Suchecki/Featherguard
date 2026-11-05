@@ -15,7 +15,7 @@ namespace Featherguard.Battle.Presentation
 
     public sealed class PlayerCommands : IPlayerCommands
     {
-        const string TauntText = "Prowokacja!";
+        const string TauntText = "Taunted!";
 
         readonly BattleModel model;
         readonly BattlePresenter presenter;

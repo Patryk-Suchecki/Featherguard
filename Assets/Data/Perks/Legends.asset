@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: Legends
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: Legendy
-  description: Legendarne karty w puli
+  displayName: Legends
+  description: Adds Legendary cards to the pool
   icon: {fileID: 21300000, guid: ab0b56b337aff634ea275ecc9e699dfe, type: 3}
   maxLevel: 1
   baseCost: 10
   effect:
-    rid: 4550530190041940115
+    rid: 4550530214315163761
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940115
+    - rid: 4550530214315163761
       type: {class: UnlockPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         unlock: 2

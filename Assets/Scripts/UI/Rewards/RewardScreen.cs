@@ -109,7 +109,7 @@ namespace Featherguard.UI
         public IEnumerator Continue(float y = -400f)
         {
             yield return new WaitForSecondsRealtime(0.6f);
-            Button("Dalej", new Vector2(0f, y), Ui.GoColor, 0, "Flag");
+            Button("Continue", new Vector2(0f, y), Ui.GoColor, 0, "Flag");
             yield return WaitChoice();
         }
     }

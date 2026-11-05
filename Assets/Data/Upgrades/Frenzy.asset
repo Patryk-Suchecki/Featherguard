@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8874a3346ec46e041af3cd7063e686db, type: 3}
   m_Name: Frenzy
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UpgradeDefinition
-  displayName: "Sza\u0142"
-  description: "+20% obra\u017Ce\u0144 i +12% szansy na kryt"
+  displayName: Frenzy
+  description: +20% damage and +12% crit chance
   icon: {fileID: 21300000, guid: aafe09ecd34a77e45a39b02e2e346fe4, type: 3}
   rarity: 2
   scope: 0

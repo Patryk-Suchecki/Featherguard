@@ -35,15 +35,15 @@ namespace Featherguard.EditorTools
                 });
             }
 
-            Add("Knight", "Rudzik", Team.Heroes, 150, 1.4f, 1f, "KnightAttack", "KnightSupport", "KnightSpecial");
-            Add("Archer", "Sójka", Team.Heroes, 105, 1.4f, 1f, "ArcherAttack", "ArcherSupport", "ArcherSpecial");
-            Add("Owl", "Puszczyk", Team.Heroes, 115, 1.4f, 1f, "OwlAttack", "OwlSupport", "OwlSpecial");
-            Add("Grunt", "Zbir", Team.Enemies, 80, 1.5f, 1f, "GruntAttack", null, null);
-            Add("Shaman", "Szaman", Team.Enemies, 70, 1.5f, 1f, "ShamanAttack", "ShamanSupport", null);
-            Add("Brute", "Osiłek", Team.Enemies, 170, 1.5f, 1.4f, "BruteAttack", null, null);
-            Add("Spitter", "Plujka", Team.Enemies, 65, 1.5f, 1f, "SpitterAttack", null, null);
-            Add("Guard", "Tarczownik", Team.Enemies, 110, 1.5f, 1.1f, "GuardAttack", "GuardSupport", null);
-            Add("Chieftain", "Herszt", Team.Enemies, 460, 1.5f, 1.6f, "ChieftainAttack", null, "ChieftainSpecial", u =>
+            Add("Knight", "Robin", Team.Heroes, 150, 1.4f, 1f, "KnightAttack", "KnightSupport", "KnightSpecial");
+            Add("Archer", "Jay", Team.Heroes, 105, 1.4f, 1f, "ArcherAttack", "ArcherSupport", "ArcherSpecial");
+            Add("Owl", "Owl", Team.Heroes, 115, 1.4f, 1f, "OwlAttack", "OwlSupport", "OwlSpecial");
+            Add("Grunt", "Thug", Team.Enemies, 80, 1.5f, 1f, "GruntAttack", null, null);
+            Add("Shaman", "Shaman", Team.Enemies, 70, 1.5f, 1f, "ShamanAttack", "ShamanSupport", null);
+            Add("Brute", "Brute", Team.Enemies, 170, 1.5f, 1.4f, "BruteAttack", null, null);
+            Add("Spitter", "Spitter", Team.Enemies, 65, 1.5f, 1f, "SpitterAttack", null, null);
+            Add("Guard", "Shieldbearer", Team.Enemies, 110, 1.5f, 1.1f, "GuardAttack", "GuardSupport", null);
+            Add("Chieftain", "Chieftain", Team.Enemies, 460, 1.5f, 1.6f, "ChieftainAttack", null, "ChieftainSpecial", u =>
             {
                 u.ai.specialEvery = 3;
                 u.boss.enrageAt = 0.5f;

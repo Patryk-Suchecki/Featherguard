@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: Gems
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: Klejnoty
-  description: "Klejnot na b\u0119bnach automatu"
+  displayName: Gems
+  description: Adds the Gem to the slot reels
   icon: {fileID: 21300000, guid: 7021e3da941e0944eb9638f9d48365a4, type: 3}
   maxLevel: 1
   baseCost: 8
   effect:
-    rid: 4550530190041940114
+    rid: 4550530214315163760
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940114
+    - rid: 4550530214315163760
       type: {class: UnlockPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         unlock: 1

@@ -17,11 +17,11 @@ namespace Featherguard.UI
             var session = context.Session;
             var config = session.Definition.slots;
             var screen = context.Screen;
-            string reward = $"+{session.CurrentGoldReward} zł{(session.CurrentElite ? " (elita x2)" : "")}";
+            string reward = $"+{session.CurrentGoldReward} gold{(session.CurrentElite ? " (elite x2)" : "")}";
 
-            screen.Open("WYGRANA!", $"{reward}  ·  Zakręć automatem!");
+            screen.Open("VICTORY!", $"{reward}  ·  Spin the slots!");
             var machine = SlotMachineView.Create(screen.Root, new Vector2(0f, 30f), SlotRules.Available(config, session));
-            var spin = screen.Button("ZAKRĘĆ!", new Vector2(0f, -370f), Ui.RiskColor, 0, "Dice", new Vector2(520f, 130f));
+            var spin = screen.Button("SPIN!", new Vector2(0f, -370f), Ui.RiskColor, 0, "Dice", new Vector2(520f, 130f));
             Pulser.Attach(spin);
             yield return screen.WaitChoice();
             Object.Destroy(spin.gameObject);
@@ -34,7 +34,7 @@ namespace Featherguard.UI
                     if (reels[i] == outcome.Symbol)
                         machine.Highlight(i, outcome.Matches >= 3 ? JackpotFrame : PairFrame);
 
-            screen.RefreshHeader("WYGRANA!", reward);
+            screen.RefreshHeader("VICTORY!", reward);
             string text = outcome.Reward?.text ?? "";
             if (outcome.IsJackpot)
             {

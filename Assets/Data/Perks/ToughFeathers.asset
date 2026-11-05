@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b2a3decf7d5248b20dd0e18bb7328, type: 3}
   m_Name: ToughFeathers
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.PerkDefinition
-  displayName: "Twarde pi\xF3ra"
-  description: "+6% max HP dru\u017Cyny"
+  displayName: Tough Feathers
+  description: +6% party max HP
   icon: {fileID: 21300000, guid: 9dab46fb67a02474d920d5af4651a259, type: 3}
   maxLevel: 5
   baseCost: 3
   effect:
-    rid: 4550530190041940081
+    rid: 4550530214315163757
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940081
+    - rid: 4550530214315163757
       type: {class: PartyStatPerk, ns: Featherguard.Meta, asm: Featherguard}
       data:
         stat: 3

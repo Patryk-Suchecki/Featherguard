@@ -9,9 +9,9 @@ namespace Featherguard.Battle.Presentation
 {
     public sealed class BattlePresenter
     {
-        const string PlayerTurnText = "Twoja tura";
-        const string EnemyTurnText = "Tura wroga";
-        const string StunnedText = "Ogłuszony";
+        const string PlayerTurnText = "Your turn";
+        const string EnemyTurnText = "Enemy turn";
+        const string StunnedText = "Stunned";
         static readonly Color EnrageColor = new(1f, 0.3f, 0.1f);
 
         readonly BattlePresentationConfig config;
@@ -118,9 +118,9 @@ namespace Featherguard.Battle.Presentation
         static string WaveBanner(WaveStarted e)
         {
             if (e.Wave > 0)
-                return e.Wave == e.Waves - 1 ? "Ostatnia fala!" : $"Fala {e.Wave + 1}";
+                return e.Wave == e.Waves - 1 ? "Final wave!" : $"Wave {e.Wave + 1}";
             if (e.Encounter.boss) return $"BOSS: {e.Encounter.displayName}";
-            return e.Elite ? $"ELITA: {e.Encounter.displayName}" : e.Encounter.displayName;
+            return e.Elite ? $"ELITE: {e.Encounter.displayName}" : e.Encounter.displayName;
         }
 
         IEnumerator StartTurn(TurnStarted e)
@@ -249,7 +249,7 @@ namespace Featherguard.Battle.Presentation
         IEnumerator Enrage(Enraged e)
         {
             var boss = ViewOf(e.Boss);
-            view.Callout($"{e.Boss.Definition.displayName} wpada w szał!");
+            view.Callout($"{e.Boss.Definition.displayName} goes berserk!");
             feedback.Play(SfxId.Rage, 1f, 0f);
             feedback.Shake(0.25f, 0.6f);
             if (boss != null)

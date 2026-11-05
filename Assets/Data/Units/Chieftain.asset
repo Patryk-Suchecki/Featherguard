@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
   m_Name: Chieftain
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
-  displayName: Herszt
+  displayName: Chieftain
   team: 1
   model: {fileID: 919132149155446097, guid: 7a0b4341ba4a894488697ea1c4e7ac73, type: 3}
   portrait: {fileID: 21300000, guid: 7eb2fbb19592003458e9ce97c4867628, type: 3}

@@ -43,13 +43,13 @@ namespace Featherguard.UI
             Ui.Label(Ui.Rect("Title", root, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(1200f, 120f)),
                 "FEATHERGUARD", 104, TextAnchor.MiddleCenter, Ui.GoldColor);
             Ui.Label(Ui.Rect("Stats", root, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -130f), new Vector2(1200f, 44f)),
-                $"Wyprawy: {data.runs}   ·   Zwycięstwa: {data.wins}   ·   Rekord: {data.bestBattles} walk", 30, TextAnchor.MiddleCenter, Color.white);
+                $"Runs: {data.runs}   ·   Wins: {data.wins}   ·   Best: {data.bestBattles} battles", 30, TextAnchor.MiddleCenter, Color.white);
             TopBar.Pill(root, "Feathers", "Feather", new Vector2(-134f, -20f), Ui.GoldColor).text = data.feathers.ToString();
 
             for (int i = 0; i < meta.Perks.Count; i++)
                 PerkCard(root, meta.Perks[i], new Vector2((i % 3 - 1) * 560f, 150f - (i / 3) * 250f));
 
-            var go = Ui.TextButton(root, "Wyrusz!", new Vector2(0f, -400f), new Vector2(560f, 140f), Ui.RiskColor, () =>
+            var go = Ui.TextButton(root, "Set out!", new Vector2(0f, -400f), new Vector2(560f, 140f), Ui.RiskColor, () =>
             {
                 FeedbackHub.Ui(SfxId.Rage);
                 started = true;
@@ -83,10 +83,10 @@ namespace Featherguard.UI
             var footer = Ui.Rect("Level", rect, Vector2.zero, Vector2.zero, new Vector2(160f, 16f), new Vector2(350f, 44f));
             if (maxed)
             {
-                Ui.Label(footer, $"Poziom {level}/{perk.maxLevel} · MAX", 28, TextAnchor.MiddleLeft, new Color(0.6f, 1f, 0.5f));
+                Ui.Label(footer, $"Level {level}/{perk.maxLevel} · MAX", 28, TextAnchor.MiddleLeft, new Color(0.6f, 1f, 0.5f));
                 return;
             }
-            Ui.Label(footer, $"Poz. {level}/{perk.maxLevel}", 28, TextAnchor.MiddleLeft, Color.white);
+            Ui.Label(footer, $"Lv. {level}/{perk.maxLevel}", 28, TextAnchor.MiddleLeft, Color.white);
             var cost = Ui.Rect("Cost", rect, new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-16f, 14f), new Vector2(150f, 48f));
             Ui.Sliced(cost, "Pill", affordable ? Affordable : Locked);
             Ui.Icon(cost, "Feather", new Vector2(28f, 0f), 38f, anchor: new Vector2(0f, 0.5f));

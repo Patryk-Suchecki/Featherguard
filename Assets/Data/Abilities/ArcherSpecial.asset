@@ -12,36 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: ArcherSpecial
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: "Deszcz strza\u0142"
+  displayName: Arrow Rain
   target: 1
   hits: 2
   effects:
-  - rid: 4550530190041940066
-  - rid: 4550530190041940067
+  - rid: 4550530214315163723
+  - rid: 4550530214315163724
   animationState: Attack
   heavy: 1
   fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
   castSound: 4
   impactSound: 3
   delivery:
-    rid: 4550530190041940065
+    rid: 4550530214315163725
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940065
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        prefab: {fileID: 919132149155446097, guid: 7bc1e472640de264da446c3e650ff5cf, type: 3}
-        speed: 16
-        arc: 0.12
-        orientAlongPath: 1
-        volleyInterval: 0.12
-        spread: 0.12
-    - rid: 4550530190041940066
+    - rid: 4550530214315163723
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         power: 24
-    - rid: 4550530190041940067
+    - rid: 4550530214315163724
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -50,3 +41,12 @@ MonoBehaviour:
           potency: 6
           chance: 1
           onSelf: 0
+    - rid: 4550530214315163725
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data:
+        prefab: {fileID: 919132149155446097, guid: 7bc1e472640de264da446c3e650ff5cf, type: 3}
+        speed: 16
+        arc: 0.12
+        orientAlongPath: 1
+        volleyInterval: 0.12
+        spread: 0.12

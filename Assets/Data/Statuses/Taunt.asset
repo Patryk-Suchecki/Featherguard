@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0862f1ccd19a3f4fbed10b95b74c2ad, type: 3}
   m_Name: Taunt
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
-  displayName: Prowokacja
-  announcement: Prowokacja
+  displayName: Taunt
+  announcement: Taunting
   icon: {fileID: 21300000, guid: 544a7a5e70900f64ca4c3cbff6b567e6, type: 3}
   tint: {r: 0.95, g: 0.3, b: 0.3, a: 1}
   modifiers: []

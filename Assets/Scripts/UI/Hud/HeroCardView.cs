@@ -69,7 +69,7 @@ namespace Featherguard.UI
             var position = rect.anchoredPosition;
             position.y = Mathf.Lerp(position.y, isSelected ? SelectedY : RestY, Time.unscaledDeltaTime * 14f);
             rect.anchoredPosition = position;
-            title.text = unit.IsAlive ? unit.Definition.displayName : "Pokonany";
+            title.text = unit.IsAlive ? unit.Definition.displayName : "Fallen";
         }
     }
 }

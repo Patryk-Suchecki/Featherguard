@@ -12,25 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
   m_Name: ArcherSupport
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.AbilityDefinition
-  displayName: Okrzyk bojowy
+  displayName: Battle Cry
   target: 2
   hits: 1
   effects:
-  - rid: 4550530190041940117
+  - rid: 4550530214315163758
   animationState: Cast
   heavy: 0
   fxColor: {r: 1, g: 0.6, b: 0.2, a: 1}
   castSound: 0
   impactSound: 8
   delivery:
-    rid: 4550530190041940116
+    rid: 4550530214315163759
   references:
     version: 2
     RefIds:
-    - rid: 4550530190041940116
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
-    - rid: 4550530190041940117
+    - rid: 4550530214315163758
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
         application:
@@ -39,3 +36,6 @@ MonoBehaviour:
           potency: 0
           chance: 1
           onSelf: 0
+    - rid: 4550530214315163759
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
+      data: 
