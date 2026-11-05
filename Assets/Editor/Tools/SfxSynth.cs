@@ -21,8 +21,8 @@ namespace Featherguard.EditorTools
             {
                 if (id == SfxId.None) continue;
                 string path = $"{folder}/{id}.wav";
-                WriteWav(path, Generate(id));
-                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+                if (GeneratedFiles.Write(path, EncodeWav(Generate(id))))
+                    AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
                 clips[(int)id] = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
             }
             return clips;
@@ -190,10 +190,16 @@ namespace Featherguard.EditorTools
             for (int i = 0; i < buffer.Length; i++) buffer[i] *= peak / max;
         }
 
-        static void WriteWav(string path, float[] samples)
+        static byte[] EncodeWav(float[] samples)
         {
-            using var stream = new FileStream(path, FileMode.Create);
-            using var writer = new BinaryWriter(stream);
+            using var stream = new MemoryStream();
+            using (var writer = new BinaryWriter(stream))
+                WriteWav(writer, samples);
+            return stream.ToArray();
+        }
+
+        static void WriteWav(BinaryWriter writer, float[] samples)
+        {
             int dataSize = samples.Length * 2;
             writer.Write("RIFF".ToCharArray());
             writer.Write(36 + dataSize);

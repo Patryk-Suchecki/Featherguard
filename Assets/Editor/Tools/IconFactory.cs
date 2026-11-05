@@ -327,9 +327,9 @@ namespace Featherguard.EditorTools
         {
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
             texture.SetPixels(pixels);
-            File.WriteAllBytes(path, texture.EncodeToPNG());
+            bool changed = GeneratedFiles.Write(path, texture.EncodeToPNG());
             UnityEngine.Object.DestroyImmediate(texture);
-            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            if (changed) AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             return ImportSprite(path, border);
         }
 

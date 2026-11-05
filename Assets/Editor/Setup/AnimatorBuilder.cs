@@ -16,15 +16,17 @@ namespace Featherguard.EditorTools
             Seeder.EnsureFolder(ContentPaths.Animation);
             string fbx = $"{ContentPaths.Characters}/{model}.fbx";
             string path = $"{ContentPaths.Animation}/{model}.controller";
-            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path) ?? AnimatorController.CreateAnimatorControllerAtPath(path);
-            var machine = controller.layers[0].stateMachine;
-            foreach (var child in machine.states.ToArray())
-                machine.RemoveState(child.state);
-
             var clips = AssetDatabase.LoadAllAssetsAtPath(fbx)
                 .OfType<AnimationClip>()
                 .Where(c => !c.name.StartsWith("__preview__"))
                 .ToDictionary(c => c.name);
+            var existing = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            if (existing != null && IsUpToDate(existing, clips)) return existing;
+
+            var controller = existing ?? AnimatorController.CreateAnimatorControllerAtPath(path);
+            var machine = controller.layers[0].stateMachine;
+            foreach (var child in machine.states.ToArray())
+                machine.RemoveState(child.state);
 
             var states = new Dictionary<string, AnimatorState>();
             for (int i = 0; i < States.Length; i++)
@@ -45,6 +47,13 @@ namespace Featherguard.EditorTools
             }
             EditorUtility.SetDirty(controller);
             return controller;
+        }
+
+        static bool IsUpToDate(AnimatorController controller, IReadOnlyDictionary<string, AnimationClip> clips)
+        {
+            var states = controller.layers[0].stateMachine.states.Select(s => s.state).ToList();
+            return states.Count == States.Length && States.All(name =>
+                states.Any(s => s.name == name && clips.TryGetValue(name, out var clip) && s.motion == clip));
         }
     }
 }

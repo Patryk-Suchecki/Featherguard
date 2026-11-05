@@ -57,9 +57,9 @@ namespace Featherguard.EditorTools
                 float r = Mathf.Sqrt(dx * dx + dy * dy);
                 texture.SetPixel(x, y, new Color(1f, 1f, 1f, r >= 1f ? 0f : Mathf.Clamp01(alpha(r))));
             }
-            File.WriteAllBytes(path, texture.EncodeToPNG());
+            bool changed = GeneratedFiles.Write(path, texture.EncodeToPNG());
             Object.DestroyImmediate(texture);
-            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            if (changed) AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             var importer = (TextureImporter)AssetImporter.GetAtPath(path);
             importer.alphaIsTransparency = true;
             importer.wrapMode = TextureWrapMode.Clamp;
