@@ -1,6 +1,6 @@
 # Featherguard – Game Design
 
-Source of truth for what is in the game **now**. The numbers come from the data assets in `Assets/Data` (seeded by `Assets/Editor/Setup/*Catalog.cs`). Whenever a PR changes content or rules, update this file in the same PR.
+Source of truth for what is in the game **now**. The agreed target design is [`GDD.md`](GDD.md). The numbers come from the data assets in `Assets/Data` (seeded by `Assets/Editor/Setup/*Catalog.cs`). Whenever a PR changes content or rules, update this file in the same PR.
 
 ## Pillars
 
@@ -170,3 +170,4 @@ Record decisions here with the date and who agreed, so both people's AIs follow 
 - 2026-11: Gambling is a reward layer between battles; in-game currency only, never real money.
 - 2026-11: Battle logic stays a pure model emitting events; presentation only replays them.
 - 2026-11: The whole project is in English, including in-game text, data and docs.
+- 2026-11-07 (Aurel and Patryk): The game is heading towards the turn-based Slavic folklore RPG described in [`GDD.md`](GDD.md). Where `GDD.md` and the current build differ, `GDD.md` is the target; this file keeps describing the build as it is until each part is reworked.

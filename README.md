@@ -5,5 +5,6 @@ An original turn-based mobile game: a party of three birds fights waves of lizar
 Built with Unity 6000.6.2f1 (URP, landscape mobile).
 
 - [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) – setup and daily workflow
-- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) – what is in the game and agreed decisions
+- [docs/GDD.md](docs/GDD.md) – agreed target design: a turn-based RPG in a Slavic folklore setting
+- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) – what is in the current build and agreed decisions
 - [CLAUDE.md](CLAUDE.md) – architecture, code style and rules for working with Claude Code
