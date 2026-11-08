@@ -2,7 +2,7 @@
 
 How we get from the current build to a finished game. The target design is [`GDD.md`](GDD.md); [`GAME_DESIGN.md`](GAME_DESIGN.md) describes the current build. This file covers the whole production, not only code: design, programming, UI/UX, art, animation, VFX, audio, narrative, QA and release.
 
-Change this file through a PR both developers agree on. Decisions are recorded in [`DECISIONS.md`](DECISIONS.md).
+Change this file through a PR both developers agree on.
 
 Milestones, epics and tasks are tracked as [`CONTRIBUTING.md`](CONTRIBUTING.md) describes.
 

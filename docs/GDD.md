@@ -195,7 +195,7 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 
 **Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System. The first release is narrower: see the scope in [`ROADMAP.md`](ROADMAP.md).
 
-**Business model:** the first release is free, with no ads or purchases (see [`DECISIONS.md`](DECISIONS.md)); free-to-play is the recommendation for later, to be decided after testing.
+**Business model:** the first release is free, with no ads or purchases (see [`ROADMAP.md`](ROADMAP.md)); free-to-play is the recommendation for later, to be decided after testing.
 
 ## Open questions
 
