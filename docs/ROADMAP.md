@@ -25,7 +25,7 @@ Change this file through a PR both developers agree on. Record scope decisions i
 - **Business model:** free, with no ads and no in-app purchases.
 - **Language:** English only.
 - **MVP content:** the 6 heroes of the GDD starting roster, 3 lands and 3 bosses. Which lands is decided later; the vertical slice uses the Rye Fields.
-- **Between-battle rewards:** the gambling layer stays as it works in the current build ([`GAME_DESIGN.md`](GAME_DESIGN.md)), in-game currency only.
+- **No gambling.** The target design has no gambling. The bird prototype and its gambling rewards ([`GAME_DESIGN.md`](GAME_DESIGN.md)) stay in the build only until the run is reworked in M1.
 - **Title:** stays `Featherguard` for now; the final title is decided before release.
 
 ## Phases and schedule
@@ -35,7 +35,7 @@ Capacity: about 10 hours a week each, 20 hours a week together. Dates are target
 | Milestone | Target | Goal | Done when |
 |---|---|---|---|
 | **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test hero goes through the full art pipeline (model, painted texture, rig, animations, toon shader, in Unity); one music track and the perfect-timing sound are made with our audio workflow; the timing combat prototype feels good; all MVP screens are wireframed |
-| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → land map → four Rye Fields circles → Lady Midday is playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
+| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → land map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
 | **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, forge, potions, saving, rumours and settings work; tutorial exists |
 | **M3 Beta** | 2027-09-26 | Content complete | All MVP art, animation, VFX, music, SFX and texts are in; balance pass done; final title decided; only bug fixes and polish after this |
 | **M4 Release** | 2027-11-07 | Ship it on Google Play | Runs smoothly on a mid-range Android phone; signed release build; store page, content rating and privacy policy done |
@@ -49,7 +49,7 @@ Everything is 3D, rendered so it reads like a hand-drawn illustrated card game. 
 - **Painted, not realistic.** Low-to-mid poly models with hand-painted textures: visible brush strokes, colour shifts instead of fine detail, no photo textures and no PBR shine.
 - **Simple banded shading.** Toon shading with two or three flat bands, cool dark shadows and a single warm key light; no soft realistic gradients.
 - **Colour.** Dark, muted, desaturated backgrounds; characters in a few saturated colours so they pop. Each land has its own limited palette, enemies lean colder and stranger than heroes.
-- **Backdrops like paintings.** Battle environments are a shallow stage seen from the side: a few layered, painted 3D planes and props with depth fog, not a full explorable world.
+- **Backdrops like paintings.** Battle environments are a shallow stage seen from the side at a slight angle: a few layered, painted 3D planes and props with depth fog, not a full explorable world.
 - **Grim but playful.** Folklore horror with a storybook, slightly comic edge: creepy monsters, readable expressions, nothing gory.
 - **Animation.** Skeletal 3D animation, snappy and pose-to-pose: strong anticipation, fast hits, short holds on key poses, squash and stretch on impacts.
 - **UI and VFX match.** UI frames, icons and effects use the same outlines, flat colour and painted texture; VFX are bold shapes (stylised flames, shards, swirls) rather than realistic particles.
@@ -62,14 +62,14 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 ### Design and balance
 - Combat rules: timing, Rage, statuses, archetypes (M0 prototype, M1 final).
-- Difficulty curve, threat levels and circle structure (M1 for the Rye Fields, M2 for all).
-- Economy: gold, materials, forge costs, rewards, Daring bonus, how the gambling layer fits (M2).
-- Mission scripts and encounters per circle; challenge rules (M1 for the Rye Fields, M3 for all).
+- Difficulty curve, threat levels, the order of story missions across lands and land unlocks (M1 for the Rye Fields, M2 for all).
+- Economy: gold, materials, forge costs, rewards of missions and side activities, Daring bonus (M2).
+- Story mission scripts and encounters; side activity pools per land (battle, wave battle, riddle, miniboss) (M1 for the Rye Fields, M3 for all).
 - Balance passes with simulations in EditMode tests (every phase).
 
 ### Programming
 - Battle model: timing results, party Rage, new statuses, enemy brains per archetype, boss mechanics (M0 prototype, M1).
-- Run and progression: Stronghold, land map, circles, chapters, unlocks, character levels (M1–M2).
+- Progression: Stronghold, land map, story missions, side activities, land unlocks, character levels; replaces the bird run and its gambling rewards (M1–M2).
 - Roster and party pick, equipment, sets, forge, potions (M2).
 - Rumours from the Road, Laws of the lands (M2).
 - Save system and data migration between versions (M2).
@@ -111,8 +111,8 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Mixer setup, volume settings, ducking (M1).
 
 ### Narrative and text
-- Story outline for the chapters and the Koschei legend (M1).
-- Priest's chapter texts, tavern rumours, mission briefings (M1 for the Rye Fields, M3 for all).
+- Main story outline and ending, once the GDD open questions are answered (M1).
+- Priest's story mission texts, tavern rumours, riddles, mission briefings (M1 for the Rye Fields, M3 for all).
 - Bestiary entries, hero bios, item and set names and descriptions (M2–M3).
 
 ### QA
@@ -135,11 +135,11 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 | Character animations (≈ 8 each) | ≈ 320 | ≈ 170 |
 | Abilities with VFX and SFX (3 per hero, 1–2 per enemy) | ≈ 80 | ≈ 40 |
 | Music tracks | ≈ 14 | ≈ 10 |
-| Story missions | 20 circles | 12 circles |
+| Story missions | 25 (5 per land) | 15 |
 
 ## Later
 
-Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night, Veles' Well, Buyan Island), the open GDD questions (land unlock order, exact Mark and Freeze rules, sources of Bleed and Curse).
+Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night, Veles' Well, Buyan Island). The open design questions are listed at the end of [`GDD.md`](GDD.md).
 
 ## Decisions
 
@@ -147,7 +147,7 @@ Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ad
 |---|---|---|
 | 2026-11-08 | Characters, environments and animation are 3D, in the illustrated card-game look described in Art style | Aurel and Patryk |
 | 2026-11-08 | We make all art, animation, VFX, music and sound ourselves, planned as tasks | Patryk; Aurel by approving #9 |
-| 2026-11-08 | The gambling layer stays as in the current build for now | Patryk; Aurel by approving #9 |
+| 2026-11-08 | No gambling in the target design; the bird prototype keeps it until the run is reworked | Aurel and Patryk |
 | 2026-11-08 | MVP: 6 heroes, 3 lands, 3 bosses; lands chosen later | Patryk; Aurel by approving #9 |
 | 2026-11-08 | Free on Android only, no ads or purchases, English only | Patryk; Aurel by approving #9 |
 | 2026-11-08 | The title stays `Featherguard` until decided before release | Patryk; Aurel by approving #9 |
