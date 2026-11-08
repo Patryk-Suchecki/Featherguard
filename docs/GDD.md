@@ -176,17 +176,26 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 
 ## Art direction and platform
 
-The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy.
+The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy. Rendered in 3D so it reads like a hand-drawn illustrated card game, and always our own: never copy another game's characters, shapes or art. The style guide turns this into references, palettes and shader settings.
+
+- **Silhouettes first:** chunky, exaggerated shapes (big heads, hands and weapons, thin limbs, strong poses); every hero and enemy is recognisable as a black silhouette at phone size.
+- **Bold dark outlines:** thick, slightly uneven outlines around every character and prop, thinner lines inside for folds and details.
+- **Painted, not realistic:** low-to-mid poly models with hand-painted textures; visible brush strokes, colour shifts instead of fine detail, no photo textures and no PBR shine.
+- **Banded shading:** toon shading with two or three flat bands, cool dark shadows and a single warm key light.
+- **Colour:** dark, muted backgrounds; characters in a few saturated colours so they pop. Each land has its own limited palette; enemies lean colder and stranger than heroes.
+- **Backdrops like paintings:** a battle is a shallow stage of layered, painted 3D planes and props with depth fog, not an explorable world.
+- **Grim but playful:** folklore horror with a storybook, slightly comic edge; creepy monsters, readable expressions, nothing gory.
+- **UI and VFX match:** the same outlines, flat colour and painted texture; VFX are bold shapes (stylised flames, shards, swirls) rather than realistic particles.
 
 - **3D:** the whole game is 3D and everything is modelled; there are no 2D sprites.
 - **Perspective:** the camp and the land map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
-- **Animation:** skeletal animation of the 3D models.
+- **Animation:** skeletal animation of the 3D models; snappy and pose-to-pose, with strong anticipation, fast hits, short holds on key poses and squash and stretch on impacts.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
 - **Interface:** shape and sound, not only colour (accessible for colour-blind players); fast-forward of animations ×2 and ×3.
 
-**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System.
+**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System. The first release is narrower: see the scope in [`ROADMAP.md`](ROADMAP.md).
 
-**Business model** (recommendation, to be decided after testing): free-to-play.
+**Business model:** the first release is free, with no ads or purchases (see [`DECISIONS.md`](DECISIONS.md)); free-to-play is the recommendation for later, to be decided after testing.
 
 ## Open questions
 

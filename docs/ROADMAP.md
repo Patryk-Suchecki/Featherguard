@@ -2,31 +2,22 @@
 
 How we get from the current build to a finished game. The target design is [`GDD.md`](GDD.md); [`GAME_DESIGN.md`](GAME_DESIGN.md) describes the current build. This file covers the whole production, not only code: design, programming, UI/UX, art, animation, VFX, audio, narrative, QA and release.
 
-Change this file through a PR both developers agree on. Record scope decisions in the decisions table at the end.
+Change this file through a PR both developers agree on. Decisions are recorded in [`DECISIONS.md`](DECISIONS.md).
 
-## How we track work
+Milestones, epics and tasks are tracked as [`CONTRIBUTING.md`](CONTRIBUTING.md) describes.
 
-| Level | On GitHub | What it is | Example |
-|---|---|---|---|
-| Milestone | Milestone | a production phase with exit criteria below | `M1 Vertical slice` |
-| Epic | an issue titled `Epic: <name>` with sub-issues | one feature or one content package | `Epic: Timing combat prototype`, `Epic: Rye Fields content` |
-| Task | an issue from the Task template | one issue → one branch → one small PR | `Add attack timing to the battle model` |
+## Scope of the first release
 
-- Every task belongs to an epic (as a sub-issue) and to a milestone.
-- Epics are of two kinds: **feature epics** (a system across code, UI, VFX and audio) and **content epics** (a land, a hero batch, a music set).
-- The discipline is shown by labels: `gameplay`, `UI`, `art`, `audio`, `balance`, `bug`.
-- We make all art, animation, VFX, music and sound ourselves. Art and audio work is planned as tasks like code.
-- Work is split by assigning tasks. Pick tasks by workstream (for example combat and UI vs. art and content), not by layer, so we rarely touch the same files or `Battle.unity`.
-- Epics of the next milestone are broken into tasks at the end of the current one. Big content is produced in batches, after the vertical slice has measured how long one unit really takes.
+[`GDD.md`](GDD.md) describes the full game. The first release is narrower:
 
-## Scope
-
-- **Platform:** Android only, landscape.
+- **Platform:** Android only, landscape. No iOS or Steam yet.
 - **Business model:** free, with no ads and no in-app purchases.
 - **Language:** English only.
-- **MVP content:** the 6 heroes of the GDD starting roster, 3 lands and 3 bosses. Which lands is decided later; the vertical slice uses the Rye Fields.
-- **No gambling.** The target design has no gambling. The bird prototype and its gambling rewards ([`GAME_DESIGN.md`](GAME_DESIGN.md)) stay in the build only until the run is reworked in M1.
-- **Title:** stays `Featherguard` for now; the final title is decided before release.
+- **Content:** the 6 heroes of the GDD starting roster, 3 lands and 3 bosses. Which lands is decided later; the vertical slice uses the Rye Fields.
+- **Production:** we make all art, animation, VFX, music and sound ourselves.
+- **Title:** stays `Featherguard` until it is decided before release.
+
+The bird prototype and its gambling rewards ([`GAME_DESIGN.md`](GAME_DESIGN.md)) stay in the build only until the run is reworked in M1.
 
 ## Phases and schedule
 
@@ -39,22 +30,6 @@ Capacity: about 10 hours a week each, 20 hours a week together. Dates are target
 | **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, forge, potions, saving, rumours and settings work; tutorial exists |
 | **M3 Beta** | 2027-09-26 | Content complete | All MVP art, animation, VFX, music, SFX and texts are in; balance pass done; final title decided; only bug fixes and polish after this |
 | **M4 Release** | 2027-11-07 | Ship it on Google Play | Runs smoothly on a mid-range Android phone; signed release build; store page, content rating and privacy policy done |
-
-## Art style
-
-Everything is 3D, rendered so it reads like a hand-drawn illustrated card game. The style must stay our own: never copy another game's characters, shapes or art.
-
-- **Silhouettes first.** Chunky, exaggerated shapes: big heads, hands and weapons, thin limbs, strong poses. Every hero and enemy is recognisable as a black silhouette at phone size.
-- **Bold dark outlines.** Thick, slightly uneven outlines around every character and prop (inverted hull or a post-process edge pass), thinner lines inside for folds and details.
-- **Painted, not realistic.** Low-to-mid poly models with hand-painted textures: visible brush strokes, colour shifts instead of fine detail, no photo textures and no PBR shine.
-- **Simple banded shading.** Toon shading with two or three flat bands, cool dark shadows and a single warm key light; no soft realistic gradients.
-- **Colour.** Dark, muted, desaturated backgrounds; characters in a few saturated colours so they pop. Each land has its own limited palette, enemies lean colder and stranger than heroes.
-- **Backdrops like paintings.** Battle environments are a shallow stage seen from the side at a slight angle: a few layered, painted 3D planes and props with depth fog, not a full explorable world.
-- **Grim but playful.** Folklore horror with a storybook, slightly comic edge: creepy monsters, readable expressions, nothing gory.
-- **Animation.** Skeletal 3D animation, snappy and pose-to-pose: strong anticipation, fast hits, short holds on key poses, squash and stretch on impacts.
-- **UI and VFX match.** UI frames, icons and effects use the same outlines, flat colour and painted texture; VFX are bold shapes (stylised flames, shards, swirls) rather than realistic particles.
-
-The style guide in M0 turns this into concrete references, palettes and shader settings. The current low-poly Blender pipeline is the starting point and is reworked towards this look in M0.
 
 ## Workstreams
 
@@ -85,7 +60,7 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Touch input and safe areas on notched phones (M1).
 
 ### Art
-- Style guide: references, palettes per land, outline and shading rules, character proportions (M0).
+- Style guide: turns the GDD art direction into references, palettes per land, outline and shading rules, character proportions (M0).
 - Shader and rendering: outline, banded toon shading, painted texture look, lighting and post-processing per land (M0 test, M1 final).
 - Heroes: model, painted texture, rig, portrait (M0: 1 test hero; M1: 3 heroes; M3: all 6).
 - Enemies and bosses: same as heroes (M1: Rye Fields; M3: all MVP lands).
@@ -128,11 +103,11 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 | Content | Full GDD | MVP |
 |---|---|---|
-| Heroes | 15 | 6 |
+| Heroes | 12–15 | 6 |
 | Enemies | 20 | 12 |
 | Bosses | 5 | 3 |
 | Battle environments | 5 lands + Stronghold + map | 3 lands + Stronghold + map |
-| Character animations (≈ 8 each) | ≈ 320 | ≈ 170 |
+| Character animations (≈ 8 each) | ≈ 300 | ≈ 170 |
 | Abilities with VFX and SFX (3 per hero, 1–2 per enemy) | ≈ 80 | ≈ 40 |
 | Music tracks | ≈ 14 | ≈ 10 |
 | Story missions | 25 (5 per land) | 15 |
@@ -141,15 +116,3 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night, Veles' Well, Buyan Island). The open design questions are listed at the end of [`GDD.md`](GDD.md).
 
-## Decisions
-
-| Date | Decision | Agreed by |
-|---|---|---|
-| 2026-11-08 | Characters, environments and animation are 3D, in the illustrated card-game look described in Art style | Aurel and Patryk |
-| 2026-11-08 | We make all art, animation, VFX, music and sound ourselves, planned as tasks | Patryk; Aurel by approving #9 |
-| 2026-11-08 | No gambling in the target design; the bird prototype keeps it until the run is reworked | Aurel and Patryk |
-| 2026-11-08 | MVP: 6 heroes, 3 lands, 3 bosses; lands chosen later | Patryk; Aurel by approving #9 |
-| 2026-11-08 | Free on Android only, no ads or purchases, English only | Patryk; Aurel by approving #9 |
-| 2026-11-08 | The title stays `Featherguard` until decided before release | Patryk; Aurel by approving #9 |
-| 2026-11-08 | The roster size stays as in the GDD for now | Patryk; Aurel by approving #9 |
-| 2026-11-08 | Phases and target dates as in Phases and schedule, at about 10 hours a week each | Patryk; Aurel by approving #9 |
