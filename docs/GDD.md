@@ -196,6 +196,7 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 ## Art direction and platform
 
 The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy.
+
 - **Perspective:** the camp and the land map in a light top-down view (3/4); combat in side view; heroes face right, enemies face left.
 - **Animation:** skeletal (Unity 3D Animation); characters are split into layers instead of drawing frames.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
