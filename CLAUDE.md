@@ -1,6 +1,6 @@
 # Featherguard
 
-Original turn-based mobile game: a squad of birds fights lizards in side view, low-poly 3D. Between battles the run is driven by gambling rewards (slot machine, double or nothing, card picks, shop, cursed chest). Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
+Original turn-based mobile RPG in a dark Slavic folklore setting, fully 3D; the target design is `docs/GDD.md`. The current build is an earlier prototype (a squad of birds fights lizards, with gambling rewards between battles) described in `docs/GAME_DESIGN.md`. Its setting and gambling layer will be removed entirely as the game is reworked. Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
 
 Two people develop this repo, each with their own Claude. These rules are shared; follow them even when a request seems to imply otherwise, and say so if a request conflicts with them.
 
@@ -41,7 +41,7 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 
 `docs/GAME_DESIGN.md` describes what is in the game. Update it in the same PR whenever you change content or rules.
 
-`docs/GDD.md` is the agreed target design (a turn-based RPG in a Slavic folklore setting). New features and reworks follow it; change it only through a PR both developers agree on.
+`docs/GDD.md` is the agreed target design. Do not change the current build towards it unless the issue you work on asks for it; each rework gets its own issue. Change it only through a PR both developers agree on.
 
 ## Generated art and audio
 

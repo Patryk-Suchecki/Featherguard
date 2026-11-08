@@ -23,26 +23,26 @@ Not in the game: gambling. The between-battle gambling layer of the current prot
 
 ## World and tone
 
-The world is a Slavic fairy tale in a dark tone. The story is driven by the legend of Koschei the Deathless: his death is hidden in a needle, the needle in an egg, the egg in a duck, the duck in a hare and the hare in a chest. Each land's boss guards one part, and in the finale Koschei is immortal until the party destroys his death.
+The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 
-| Place | Role | Boss | Guards |
-|---|---|---|---|
-| Sacred Oak Stronghold | camp and main screen | – | – |
-| Rye Fields | Act I | Lady Midday | the chest |
-| Marshes | Act II | Water Maiden | the hare |
-| Old Forest | Act III | Lady Leshy | the duck |
-| Bald Mountain | Act IV | Dragoness | the egg |
-| Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | Act V | Koschei / Koscheia | the needle |
+| Place | Role | Boss |
+|---|---|---|
+| Sacred Oak Stronghold | camp and main screen | – |
+| Rye Fields | land 1, open from the start | Lady Midday |
+| Marshes | land 2 | Water Maiden |
+| Old Forest | land 3 | Lady Leshy |
+| Bald Mountain | land 4 | Dragoness |
+| Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | land 5 | to be decided |
 
-The Stronghold grows with the player. It has a forge, the Wise Woman's hut (potions and bestiary), a tavern (rumours and recruitment), the Priest at the Sacred Oak (story chapters) and the gate the party sets out through.
+The Stronghold grows with the player. It has a forge, the Wise Woman's hut (potions and bestiary), a tavern (rumours and recruitment), the Priest at the Sacred Oak (story missions) and the gate the party sets out through.
 
-Extra modes: Kupala Night (arena), Veles' Well (endless mode, the equivalent of the tower from the first version of the GDD), Buyan Island (bonus act).
+Extra modes: Kupala Night (arena), Veles' Well (endless mode), Buyan Island (bonus act).
 
 ## Loop and screen flow
 
 The Stronghold is the main screen with a single **Set out** button. The land and level are chosen on the land map, and after a battle the player returns to the map.
 
-Long-term loop: a level on the map → rewards and materials → the forge in the Stronghold → new equipment and characters → a harder circle.
+Long-term loop: a level on the map → rewards and materials → the forge in the Stronghold → new equipment and characters → harder story missions.
 
 ## Characters and party
 
@@ -59,7 +59,7 @@ Starting roster (prototype):
 | Forest Archer | DPS | Piercing Shot | Target Lock: the next attack applies Mark | Arrow Hail + Mark on all enemies |
 | Minstrel (Bard) | support | Dissonance, chance to Stun | Song of Courage: +25% party damage | Hymn: Empower, heal and cleanse |
 
-The remaining classes from the first version of the GDD (Paladin, Berserker, Druid, Alchemist, Necromancer, Rogue, Monk, Engineer, Oracle) are waiting for their Slavic versions.
+Further classes (Paladin, Berserker, Druid, Alchemist, Necromancer, Rogue, Monk, Engineer, Oracle) are planned and are waiting for their Slavic versions.
 
 Character progression: every character has its own level (cap 10).
 
@@ -91,14 +91,14 @@ A shared meter filled by hits dealt and taken and by perfect timings. A full met
 
 | Status | Effect |
 |---|---|
-| Bleed | damage every turn for 3 turns |
+| Bleed | damage every turn for 3 turns (no hero or enemy applies it yet) |
 | Burn | damage every turn, stacks up to 5 |
-| Freeze | +30% damage taken, the enemy acts last |
-| Curse | −30% damage dealt |
+| Freeze | +30% damage taken; a Frozen enemy also acts last in the enemy turn (on a hero only the damage part applies) |
+| Curse | −30% damage dealt (no hero or enemy applies it yet) |
 | Shield | absorbs damage up to its value |
 | Taunt | enemies must attack this character |
 | Stun | skips the turn |
-| Mark | +50% critical hit chance (×1.5) |
+| Mark | +50 percentage points of critical hit chance; a critical hit deals ×1.5 damage |
 | Empower | +25% damage dealt |
 
 ## Enemies and bosses
@@ -122,36 +122,17 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 | Marshes | Drowned Maiden, Will-o'-the-Wisp, Bog Hag, Drowned Girl | Water Maiden: drags a hero underwater for 2 turns |
 | Old Forest | Wild Woman, Mamuna, Spider Woman, Werewolf Mother | Lady Leshy: a girl spirit of the forest; summons roots and shuffles the party's formation |
 | Bald Mountain | Sabbath Witch, Storm Maiden, Giantess, Harpy | Dragoness: announces a great fire strike, teaches the perfect block |
-| Nav | Wraith, Strzyga, Nightmare, Death | Koschei / Koscheia the Deathless: revives until the needle is destroyed |
+| Nav | Wraith, Strzyga, Nightmare, Death | to be decided |
 
 ## World structure and progression
 
-> **To be rewritten.** This section is agreed as a draft and will be reworked.
+The game has 5 lands on a single map. At the start only the Rye Fields are open; the other lands unlock as the player completes story missions.
 
-Progression is pseudo-linear: every land must be completed, but the story interleaves them in different orders, and harder levels can be forced early. Each land has 4 circles with overlapping threat levels (1–10), so at any strength the player has 2–3 sensible places to choose from.
+**Story missions:** every land has 5 main story missions (25 in total). The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear.
 
-| Land | Circle I | Circle II | Circle III | Circle IV (boss) |
-|---|---|---|---|---|
-| Rye Fields | 1 | 2 | 3 | 4 |
-| Marshes | 2 | 3 | 5 | 6 |
-| Old Forest | 3 | 4 | 6 | 7 |
-| Bald Mountain | 5 | 6 | 8 | 9 |
-| Nav | 7 | 8 | 9 | 10 |
+**Side activities:** a land the player visits offers up to 3 activities drawn at random from its pool, for example a riddle, a battle, a wave battle or a miniboss. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage, and they are the main source of that land's materials.
 
-Every circle has a story mission (hand-made, with stars), a challenge with an imposed rule and a unique reward, and expeditions generated from the enemy pool (repeatable, the main source of materials). Circle IV also has the boss.
-
-Story chapters open circles in several lands; a chapter's missions can be done in any order.
-
-| Chapter | Threat | Missions | Reward |
-|---|---|---|---|
-| 1. Burnt Harvest | 1–2 | Fields I, Fields II | opens the Marshes |
-| 2. Mist over the Bog | 2–4 | Marshes I, Forest I, Fields III → Lady Midday | the chest |
-| 3. Whisper of the Forest | 3–6 | Marshes II, Forest II, Marshes III → Water Maiden | the hare |
-| 4. Wrath of the Woods | 5–7 | Bald Mountain I, Forest III, Bald Mountain II → Lady Leshy | the duck |
-| 5. Storm over the Peak | 7–9 | Nav I, Bald Mountain III, Nav II → Dragoness | the egg |
-| Finale: Beyond the Smorodina | 9–10 | Nav III → Koschei | the needle |
-
-A land's **Law** is a combat rule that is only hinted at in circle I and works in full in circle IV:
+A land's **Law** is a combat rule that applies to battles in that land:
 
 | Land | Law | Who shines | Materials |
 |---|---|---|---|
@@ -162,12 +143,12 @@ A land's **Law** is a combat rule that is only hinted at in circle I and works i
 | Nav | Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire | fast damage, fire | Nav essence |
 
 Progress and forcing:
-- Party strength = party level + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
-- Every open circle can be attempted right away. Winning above your strength grants **Daring**: +50% rewards.
+- Party strength = party level (the average level of the 3 picked heroes) + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
+- Every unlocked story mission and activity can be attempted right away. Winning above your strength grants **Daring**: +50% rewards.
 
 **Rumours from the Road** (a board in the tavern) encourage detours from the story:
 - 3 rumours are posted at a time; new ones appear after every story mission, with no time pressure.
-- A rumour points to a level in a neglected land, has a modifier (for example no healer) and a reward visible up front.
+- A rumour points to a neglected land, has a modifier (for example no healer) and a reward visible up front.
 - Most of the roster (for example 9 of 15 characters) joins only through rumours.
 - After the MVP: the Wise Woman's Book (a bestiary unlocked by fighting, with boss weaknesses) and Land Favour (a merchant and a blessing that weakens the Law).
 
@@ -197,11 +178,22 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 
 The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy.
 
-- **Perspective:** the camp and the land map in a light top-down view (3/4); combat in side view; heroes face right, enemies face left.
-- **Animation:** skeletal (Unity 3D Animation); characters are split into layers instead of drawing frames.
+- **3D:** the whole game is 3D and everything is modelled; there are no 2D sprites.
+- **Perspective:** the camp and the land map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
+- **Animation:** skeletal animation of the 3D models.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
 - **Interface:** shape and sound, not only colour (accessible for colour-blind players); fast-forward of animations ×2 and ×3.
 
 **Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System.
 
 **Business model** (recommendation, to be decided after testing): free-to-play.
+
+## Open questions
+
+- What drives the main story and how it ends.
+- The boss of Nav.
+- Where each land's boss sits among its 5 story missions, and which story mission unlocks which land.
+- Whether a land's Law grows stronger as the player progresses through that land.
+- How threat levels (1–10) are assigned to story missions and side activities.
+- How a riddle plays, as a side activity and as Lady Midday's mechanic.
+- Whether Rumours from the Road are their own system or a kind of side activity.
