@@ -39,7 +39,9 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - **Featherguard > Reset Data To Defaults** overwrites all data with catalog values. Only run it on purpose.
 - When you add content, add it to the catalog too, so a fresh checkout can rebuild it.
 
-`docs/GAME_DESIGN.md` describes what is in the game. Update it in the same PR whenever you change content or rules.
+`docs/GAME_DESIGN.md` describes the current build. Update it in the same PR whenever you change content or rules.
+
+Record every agreed decision only in `docs/DECISIONS.md` (date, decision, who agreed); other docs link to it instead of repeating it.
 
 `docs/GDD.md` is the agreed target design. Do not change the current build towards it unless the issue you work on asks for it; each rework gets its own issue. Change it only through a PR both developers agree on.
 
