@@ -6,7 +6,7 @@ Agreed by Aurel and Patryk on 2026-11-07. This is the **target design** the game
 
 A turn-based RPG set in a dark fairy-tale world of Slavic folklore. A party of heroes from the Sacred Oak Stronghold travels through five lands.
 
-Genre core: party-versus-party turn-based combat, a shared party Rage, and collecting and forging equipment (main hand adds damage, off hand adds HP).
+Genre core: party-versus-party turn-based combat, a shared party Rage, and collecting and forging equipment (a weapon adds damage, an artifact adds HP).
 
 What sets us apart:
 - **Every class is a separate character.** The player collects heroes and builds a party of 3 for each specific fight.
@@ -18,6 +18,8 @@ Pillars:
 - **Hero collection:** a large roster and party building for each fight; most characters are earned outside the main story.
 - **Equipment that changes play:** items change the play style, not only the numbers.
 - **Short sessions:** a level takes 10–15 minutes.
+
+Not in the game: gambling. The between-battle gambling layer of the current prototype is dropped; it may come back one day as a separate decision.
 
 ## World and tone
 
@@ -44,13 +46,13 @@ Long-term loop: a level on the map → rewards and materials → the forge in th
 
 ## Characters and party
 
-The player collects heroes into a roster (12 eventually, 6–8 in the MVP) and picks 3 before each battle. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
+The player collects heroes into a roster (6 for the first alpha and 12–15 in the full game; the roster is built to keep growing after that) and picks 3 before each battle. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
 
 Starting roster (prototype):
 
 | Character | Role | Attack | Support | Rage |
 |---|---|---|---|---|
-| Bogatyr (Knight) | tank | Sword Strike | Guard: an ally passes 50% of its damage to him, plus a Shield | Bastion: Shield for the party, Taunt |
+| Bogatyr (Knight) | tank | Sword Strike | Guard: an ally passes 50% of its damage to the Bogatyr, plus a Shield | Bastion: Shield for the party, Taunt |
 | Priestess | healer | Ray | Prayer: heal and cleanse | Grace: heal and cleanse the party |
 | Volkhv of Svarog (Fire Mage) | mage | Fireball + Burn | Flaming Weapon on an ally | Fire Rain on all enemies |
 | Witch of Marzanna (Ice Mage) | mage | Ice Bolt + Freeze | Ice Shield | Blizzard: Freeze all enemies |
@@ -173,7 +175,7 @@ Progress and forcing:
 
 Power grows mainly through equipment, while new heroes bring new tactical options rather than raw strength.
 
-**Equipment:** every character has 2 slots, a weapon (attack) and an artifact (health). Weapon types depend on the role; artifacts fit everyone. Items from the same set give a bonus (for example "Frost Set": attacks on Frozen enemies Stun); every land has 1–2 sets.
+**Equipment:** every character has 2 slots, a weapon (attack) and an artifact (health). Weapons are made for a specific role; artifacts are universal and fit everyone. Items from the same set give a bonus (for example "Frost Set": attacks on Frozen enemies Stun); every land has 1–2 sets.
 
 | Rarity | Special trait | Source |
 |---|---|---|
@@ -193,13 +195,12 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 
 ## Art direction and platform
 
-The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy. Details, land palettes and ready-made prompts are in a separate document, the Style Guide and AI Prompts.
-
+The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy.
 - **Perspective:** the camp and the land map in a light top-down view (3/4); combat in side view; heroes face right, enemies face left.
 - **Animation:** skeletal (Unity 3D Animation); characters are split into layers instead of drawing frames.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
 - **Interface:** shape and sound, not only colour (accessible for colour-blind players); fast-forward of animations ×2 and ×3.
 
-**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6.6, URP, Input System.
+**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System.
 
 **Business model** (recommendation, to be decided after testing): free-to-play.

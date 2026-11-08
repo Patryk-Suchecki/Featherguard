@@ -171,3 +171,4 @@ Record decisions here with the date and who agreed, so both people's AIs follow 
 - 2026-11: Battle logic stays a pure model emitting events; presentation only replays them.
 - 2026-11: The whole project is in English, including in-game text, data and docs.
 - 2026-11-07 (Aurel and Patryk): The game is heading towards the turn-based Slavic folklore RPG described in [`GDD.md`](GDD.md). Where `GDD.md` and the current build differ, `GDD.md` is the target; this file keeps describing the build as it is until each part is reworked.
+- 2026-11-08 (Aurel, answering the review of #7): The target design has no gambling. The gambling reward layer above stays in the current build until it is reworked, and may come back one day only as a separate decision.
