@@ -1,6 +1,6 @@
 # Featherguard – Game Design
 
-Source of truth for what is in the game **now**. The agreed target design is [`GDD.md`](GDD.md). The numbers come from the data assets in `Assets/Data` (seeded by `Assets/Editor/Setup/*Catalog.cs`). Whenever a PR changes content or rules, update this file in the same PR. Decisions are recorded in [`DECISIONS.md`](DECISIONS.md).
+Source of truth for what is in the game **now**. The agreed target design is [`GDD.md`](GDD.md). The numbers come from the data assets in `Assets/Data` (seeded by `Assets/Editor/Setup/*Catalog.cs`). Whenever a PR changes content or rules, update this file in the same PR.
 
 ## Pillars
 

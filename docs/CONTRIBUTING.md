@@ -1,6 +1,6 @@
 # Contributing to Featherguard
 
-How the two of us work on this repo, step by step. The rules themselves (architecture, code style, workflow, Unity pitfalls) are in [`CLAUDE.md`](../CLAUDE.md); this file does not repeat them. The game is described in [`GDD.md`](GDD.md), the plan in [`ROADMAP.md`](ROADMAP.md) and the decisions in [`DECISIONS.md`](DECISIONS.md).
+How the two of us work on this repo, step by step. The rules themselves (architecture, code style, workflow, Unity pitfalls) are in [`CLAUDE.md`](../CLAUDE.md); this file does not repeat them. The game is described in [`GDD.md`](GDD.md), and the plan in [`ROADMAP.md`](ROADMAP.md).
 
 ## 1. First-time setup
 

@@ -41,7 +41,7 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 
 `docs/GAME_DESIGN.md` describes the current build. Update it in the same PR whenever you change content or rules.
 
-Record every agreed decision only in `docs/DECISIONS.md` (date, decision, who agreed); other docs link to it instead of repeating it.
+There is no separate decision log. Apply an agreed decision directly in the one doc it belongs to (`docs/GDD.md` for the game, `docs/ROADMAP.md` for scope and plan, `CLAUDE.md` for rules); the PR approval records who agreed. Other docs link to that doc instead of repeating it.
 
 `docs/GDD.md` is the agreed target design. Do not change the current build towards it unless the issue you work on asks for it; each rework gets its own issue. Change it only through a PR both developers agree on.
 
