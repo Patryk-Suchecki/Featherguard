@@ -32,13 +32,29 @@ Change this file through a PR both developers agree on. Record scope decisions i
 
 These block production. Each gets an Idea issue in M0 and is recorded in the table at the end.
 
-1. **2D or 3D characters.** The GDD asks for a thick hand-drawn outline, painterly texture and characters "split into layers", which reads like 2D skeletal animation. The current pipeline is low-poly 3D from Blender scripts. The choice decides the whole art, animation and VFX pipeline.
+1. ~~**2D or 3D characters.**~~ Decided: 3D, in the art style described below.
 2. **Where art comes from.** Script-generated, bought asset packs, a freelancer, or a mix. Decide per asset type (characters, environments, icons, portraits).
 3. **Where music comes from.** `SfxSynth` covers simple SFX only. Music needs a composer, licensed tracks or another source, and its licence must allow commercial use.
 4. **The gambling layer.** Whether the current between-battle gambling stays. It affects the run structure, the age rating and how free-to-play monetisation may work (in-game currency only stays the rule while it exists).
 5. **MVP scope.** The GDD's full scope (15 heroes, 20 enemies, 5 bosses, 5 lands) is too big for a first release by two people. Proposed MVP: 6 heroes, 3 lands, 3 bosses, the rest in updates.
 6. **Monetisation and platforms.** Free-to-play or paid, ads or not, Android first or Android and iOS together, when Steam.
 7. **Working title** and whether the repo and namespaces keep `Featherguard`.
+
+## Art style
+
+Everything is 3D, rendered so it reads like a hand-drawn illustrated card game. The style must stay our own: never copy another game's characters, shapes or art.
+
+- **Silhouettes first.** Chunky, exaggerated shapes: big heads, hands and weapons, thin limbs, strong poses. Every hero and enemy is recognisable as a black silhouette at phone size.
+- **Bold dark outlines.** Thick, slightly uneven outlines around every character and prop (inverted hull or a post-process edge pass), thinner lines inside for folds and details.
+- **Painted, not realistic.** Low-to-mid poly models with hand-painted textures: visible brush strokes, colour shifts instead of fine detail, no photo textures and no PBR shine.
+- **Simple banded shading.** Toon shading with two or three flat bands, cool dark shadows and a single warm key light; no soft realistic gradients.
+- **Colour.** Dark, muted, desaturated backgrounds; characters in a few saturated colours so they pop. Each land has its own limited palette, enemies lean colder and stranger than heroes.
+- **Backdrops like paintings.** Battle environments are a shallow stage seen from the side: a few layered, painted 3D planes and props with depth fog, not a full explorable world.
+- **Grim but playful.** Folklore horror with a storybook, slightly comic edge: creepy monsters, readable expressions, nothing gory.
+- **Animation.** Snappy and pose-to-pose: strong anticipation, fast hits, short holds on key poses, squash and stretch on impacts. Skeletal 3D animation in Unity.
+- **UI and VFX match.** UI frames, icons and effects use the same outlines, flat colour and painted texture; VFX are bold shapes (stylised flames, shards, swirls) rather than realistic particles.
+
+The style guide in M0 turns this into concrete references, palettes and shader settings. The current low-poly Blender pipeline is the starting point and is reworked towards this look in M0.
 
 ## Workstreams
 
@@ -132,4 +148,4 @@ The full GDD implies roughly this much content. Use it to plan batches and to cu
 
 | Date | Decision | Agreed by |
 |---|---|---|
-| | | |
+| 2026-11-08 | Characters and environments are 3D, in the illustrated card-game look described in Art style | Aurel and Patryk |
