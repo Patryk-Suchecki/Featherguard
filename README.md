@@ -7,3 +7,4 @@ Built with Unity 6000.6.2f1 (URP, landscape mobile).
 - [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) – setup and daily workflow
 - [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) – what is in the game and agreed decisions
 - [CLAUDE.md](CLAUDE.md) – architecture, code style and rules for working with Claude Code
+- [docs/ROADMAP.md](docs/ROADMAP.md) – production phases, workstreams and how we plan milestones and epics
