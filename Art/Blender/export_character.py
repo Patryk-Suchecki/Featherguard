@@ -45,6 +45,15 @@ def check_transforms(objects, warnings):
             warnings.append(f"'{obj.name}' has unapplied rotation or scale; apply them (Ctrl+A) before export")
 
 
+def drop_preview_outlines(meshes, warnings):
+    for mesh in meshes:
+        for modifier in mesh.modifiers:
+            if modifier.type == "SOLIDIFY" and (modifier.use_flip_normals or "outline" in modifier.name.lower()):
+                modifier.show_render = False
+                modifier.show_viewport = False
+                warnings.append(f"preview outline '{modifier.name}' on '{mesh.name}' is left out; the toon shader draws the outline")
+
+
 def clip_actions(warnings):
     missing = [name for name in CLIPS if name not in bpy.data.actions]
     if missing:
@@ -107,6 +116,7 @@ def main():
     rig = find_rig()
     meshes = skinned_meshes(rig)
     check_transforms([rig] + meshes, warnings)
+    drop_preview_outlines(meshes, warnings)
     actions = clip_actions(warnings)
     meta = {"clips": [clip_meta(action) for action in actions]}
     triangles, bones, height = report(rig, meshes, warnings)

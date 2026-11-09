@@ -99,6 +99,7 @@ blender -b Art/Blender/Characters/Bies.blend -P Art/Blender/export_character.py
 `blender` is your Blender 5.x executable; use its full path if it is not on `PATH`. The script:
 - checks the rig, the mesh, the six clips and the `OnHitFrame` markers, and stops with a clear message if something is missing;
 - warns about unapplied transforms, a wrong frame rate, extra actions and budgets;
+- leaves out preview outlines (a Solidify modifier with flipped normals or named `Outline`), because the toon shader draws the outline in the game;
 - writes `<Name>.fbx` and `<Name>.clips.json` to `Assets/Art/Characters`, and refuses to overwrite a file that is not locked;
 - prints the triangle count, bone count and height (use the height for the unit's `height`).
 
