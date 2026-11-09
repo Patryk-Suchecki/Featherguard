@@ -113,3 +113,102 @@ Pass a folder after `--` to export somewhere else for a test, for example `-- Te
   ```
 - A character is added or changed in its own `art/` PR, with no gameplay code. Code that uses the character comes in its own PR.
 - Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
+
+## Character workflow
+
+What worked for the Bies, the first hand-made character. Follow it for every new character; the Wolf will add a quadruped section to the rig and animation steps.
+
+### 1. Concept and references
+
+- Make an orthographic sheet: front, side and back in one row, at one scale, on one ground line, in flat light and a neutral A-pose (arms about 45° from the body, hands open). A top view is optional and rarely consistent; use it only as a hint.
+- Check it before modelling: horns, shoulders, knees and feet must sit at the same height in every view. Where the views disagree, take widths and heights from the front and depth and posture from the side.
+- In Blender, crop the sheet into one image per view and add them as reference image empties in a `<Name>_Refs` collection: front on the XZ plane, side on the YZ plane, back facing +Y, scaled so the feet are at Z = 0 and the top matches the target height. Pack the images into the `.blend`.
+
+### 2. Blockout and high-res sculpt
+
+- Block out proportions with simple shapes (a skin-modifier skeleton works well) and compare them with the references in orthographic views before adding detail.
+- Draw the direction of fur, hair or cloth on the model first, so the sculpt and the texture follow one flow.
+- Sculpt one welded body mesh (voxel remesh, X symmetry on). Fur and hair are laid-down locks that follow the body, not separate spikes; keep jagged edges only where they build the silhouette.
+- Keep separate objects for parts that move or stay hard: lower jaw (origin at the hinge), teeth, eyes, claws or nails, horns and weapons.
+- Create vertex groups per region (for example fur, bare skin, silhouette tufts); they are masks for sculpting and for the texture.
+
+### 3. Retopology to the game mesh
+
+- Aim well under the budget: about 3,000–6,000 triangles for a regular character, 5,000–8,000 for an elite. The Bies uses 5,444.
+- Quads with clean edge loops around shoulders, elbows, wrists, hips, knees, ankles, the neck and the corners of the mouth. An even automatic quad remesh needs these loops added by hand before skinning.
+- Exactly symmetric: build one half with a Mirror modifier and apply it.
+- Silhouette features (horns, tufts, ears, claws) stay real geometry; small detail goes into the texture.
+- Join everything into one mesh named `<Name>`, including the jaw and horns, so the character is one skinned mesh with one material.
+
+### 4. UVs
+
+- One 0–1 atlas for the whole character, no overlaps (mirrored halves get their own islands).
+- Even texel density, about 500 px per metre on a 2048 texture; give the head 1.3× and hidden areas less.
+- Island margin at least 8 px on 2048 (4 px on 1024).
+- Hide seams from the battle camera: along the back of the spine, under the arms, on the inner side of arms and legs, under the jaw and under the mane or hair.
+
+### 5. Baking and texture
+
+- Bake from the sculpt onto the game mesh: ambient occlusion and a cavity mask, plus region masks from the vertex groups. They are guides for the paint, not separate maps in the game.
+- Start the base colour from flat colours per region and multiply the bakes in lightly.
+- Paint by hand on top: three tones per material (shadow, base, light), light from above and the front, darker towards the back and the ends of the limbs, accent colours on a few shapes only. No highlights that suggest a specular or metal look.
+- One albedo texture only, sRGB PNG, 1024 or 2048 as in the budget. Save it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`; no normal, roughness or metallic maps.
+
+### 6. Rig and skinning (biped)
+
+- Layout:
+  - `root` at the origin; it does not deform and is never animated.
+  - A centre-of-gravity control.
+  - `pelvis`, three spine bones, `chest`, two neck bones and `head`.
+  - `jaw`, with its head at the hinge.
+  - Ears, tail and hair or mane chains of one or two bones.
+  - `clavicle`, `upper_arm`, `forearm` and `hand` per side, and two bones per finger.
+  - `thigh`, `shin` and `foot` per side; digitigrade legs add a `metatarsal`.
+- The 60-bone limit counts every bone, including controls and helpers. Give each helper one job or merge it: a single helper per leg can be both the IK target (its head) and the aim point (its tail).
+- IK controls for the feet with knee poles. Arms need an FK/IK switch, FK for swings and IK only for planted hands (see Animation).
+- Elbows and knees are hinges: lock the other two axes in the IK settings and set IK limits there. Limit Rotation constraints alone do not affect the IK solver.
+- Skinning:
+  - Start from automatic weights.
+  - Put rigid parts (horns, teeth, eyes, claws) 100% on one bone, and the lower jaw 100% on `jaw`.
+  - Limit to 4 influences per vertex, remove weights under 0.01 and normalize.
+  - Test extreme poses (arms up, deep crouch, head turn, jaw open) before animating.
+- Quadrupeds such as the Wolf need their own section here.
+
+### 7. Animation
+
+- Block key poses first, then breakdowns: snappy pose-to-pose with clear anticipation, a fast action and a follow-through that settles.
+- Attack, Cast and Hit start and end exactly on Idle frame 1. Clips stay in place, with the feet planted through IK; the game moves the unit.
+- Check every clip from the battle camera's side. Enemies face left, so you see them from +X and their near arm is `.L`; heroes face right, you see them from −X and their near arm is `.R`. Attack and point with the near arm.
+- Attack:
+  - The wind-up is slower than the strike, at most half its speed. Load the weight into the legs and twist the torso, elbow first.
+  - Hold the wind-up as a moving hold; it is the block cue.
+  - Strike on an arc led by the hips, then the chest, then the arm.
+  - Put `OnHitFrame` on the contact frame, right after the fastest frame.
+  - Follow through past the target, then hold 2–3 frames for the hitstop.
+- Wrists and elbows:
+  - Keep wrists within about 60° and elbows between 30° and 165°.
+  - A hand that copies the rotation of an unanimated IK control breaks the wrist as soon as the arm moves. Animate arms in FK, or key the IK control's rotation too.
+  - Check that no hand or claw goes inside the body.
+
+### 8. What stays in the `.blend`
+
+- Keep:
+  - the sculpt and its parts,
+  - the bake source,
+  - the game mesh `<Name>` with `Rig`,
+  - the six clips,
+  - the references,
+  - the fur or hair flow guide.
+- Name temporary backups with a `_Pre` suffix (`Attack_PreRebuild`, `Body_PreRig`) and delete them when the step is done.
+- Purge orphan data (File → Clean Up) before committing.
+- The `Outline` Solidify preview modifier may stay; the export leaves it out.
+
+### 9. Unity import
+
+- After exporting, open the project in Unity (or run it in batch mode) so the `.meta` files for the FBX, the clip data and the texture exist.
+- Commit the `.meta` files together with the assets.
+
+### Open points
+
+- Portraits for hand-made characters are not covered yet (the generated ones come from `render_portraits.py`).
+- The quadruped rig and animation rules come with the Wolf.
