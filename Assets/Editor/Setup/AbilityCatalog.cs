@@ -11,6 +11,7 @@ namespace Featherguard.EditorTools
     public static class AbilityCatalog
     {
         static readonly Color Spark = new(1f, 0.62f, 0.15f);
+        static readonly Color Ember = new(1f, 0.45f, 0.1f);
 
         public static Dictionary<string, AbilityDefinition> Build(Seeder seeder, IReadOnlyDictionary<string, StatusDefinition> statuses)
         {
@@ -64,6 +65,8 @@ namespace Featherguard.EditorTools
             Add("GuardSupport", "Shield Wall", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.7f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield"), Status("Taunt", onSelf: true) });
             Add("ChieftainSpecial", "Earthquake", AbilityTarget.AllEnemies, Instant, "Attack", new Color(1f, 0.45f, 0.15f), SfxId.Smash, SfxId.Smash, heavy: true, effects: new[] { Damage(22), Status("Weaken", chance: 0.5f) });
             Add("ChieftainAttack", "Chieftain's Wrath", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(34), Status("Stun", chance: 0.35f) });
+            Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, effects: Damage(24));
+            Add("BiesSpecial", "Howl", AbilityTarget.AllEnemies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Magic, heavy: true, effects: Status("Weaken"));
             return abilities;
         }
     }

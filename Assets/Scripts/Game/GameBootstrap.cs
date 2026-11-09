@@ -49,7 +49,10 @@ namespace Featherguard.Game
             }
             hud.BindWallet(session.Wallet);
 
-            var model = new BattleModel(session.CreateBattleSetup(), config.rules);
+            var setup = session.CreateBattleSetup();
+            if (Application.isEditor && config.testEncounter != null)
+                UseTestEncounter(setup, config.testEncounter);
+            var model = new BattleModel(setup, config.rules);
             model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
             battle = new BattleController(model, new BattleServices
             {
@@ -68,6 +71,14 @@ namespace Featherguard.Game
         }
 
         void Update() => battle?.Tick();
+
+        static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
+        {
+            setup.Encounter = encounter;
+            setup.EnemyHealthScale = encounter.enemyHealth;
+            setup.EnemyDamageScale = encounter.enemyDamage;
+            setup.Elite = false;
+        }
 
         void OnUnitDefeated(UnitView unit)
         {

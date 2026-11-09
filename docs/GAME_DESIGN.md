@@ -56,6 +56,8 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 Each encounter also scales enemy HP and damage, as listed in the Run section.
 
+**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. Rending Claws – melee 24, heavy. On its first turn and every 3rd turn after, Howl: Weaken on all heroes. The abilities are placeholders until the target combat rules exist. It only appears in the `BiesTest` encounter; to fight it in the editor, set `GameConfig.testEncounter` to `BiesTest` (editor only, every battle then uses that encounter) and leave the field empty in commits.
+
 ### Boss: Chieftain
 
 - 460 HP.
