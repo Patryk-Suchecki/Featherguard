@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Featherguard.Feel;
 using UnityEngine;
 
@@ -8,12 +10,15 @@ namespace Featherguard.Battle.Presentation
         readonly BattlePresentationConfig config;
         readonly Material flashMaterial;
         readonly Material ringMaterial;
+        readonly Material toonMaterial;
+        readonly Dictionary<Material, Material> toonVariants = new();
 
-        public UnitViewFactory(BattlePresentationConfig config, Material flashMaterial, Material ringMaterial)
+        public UnitViewFactory(BattlePresentationConfig config, Material flashMaterial, Material ringMaterial, Material toonMaterial)
         {
             this.config = config;
             this.flashMaterial = flashMaterial;
             this.ringMaterial = ringMaterial;
+            this.toonMaterial = toonMaterial;
         }
 
         public UnitView Create(BattleUnit unit, UnitSnapshot state, Vector3 position)
@@ -33,6 +38,9 @@ namespace Featherguard.Battle.Presentation
             animator.runtimeAnimatorController = definition.animator;
             animator.applyRootMotion = false;
 
+            if (toonMaterial != null)
+                ApplyToon(model);
+
             var view = root.AddComponent<UnitView>();
             var reaction = root.AddComponent<HitReaction>();
             reaction.Init(flashMaterial, model.transform);
@@ -46,6 +54,24 @@ namespace Featherguard.Battle.Presentation
             collider.height = view.Height;
             collider.radius = view.Radius;
             return view;
+        }
+
+        void ApplyToon(GameObject model)
+        {
+            foreach (var renderer in model.GetComponentsInChildren<Renderer>())
+                renderer.sharedMaterials = renderer.sharedMaterials.Select(ToonVariant).ToArray();
+        }
+
+        Material ToonVariant(Material original)
+        {
+            if (original == null) return toonMaterial;
+            if (toonVariants.TryGetValue(original, out var variant)) return variant;
+
+            variant = new Material(toonMaterial) { name = $"{original.name} (Toon)" };
+            variant.SetTexture("_BaseMap", original.HasProperty("_BaseMap") ? original.GetTexture("_BaseMap") : original.mainTexture);
+            variant.SetColor("_BaseColor", original.HasProperty("_BaseColor") ? original.GetColor("_BaseColor") : original.color);
+            toonVariants[original] = variant;
+            return variant;
         }
     }
 }

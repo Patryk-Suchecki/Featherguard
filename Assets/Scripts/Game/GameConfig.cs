@@ -22,6 +22,8 @@ namespace Featherguard.Game
         public Material flashMaterial;
         public Material particleMaterial;
         public Material ringMaterial;
+        [Tooltip("Template for unit materials: toon bands, shadow colour and outline. Each unit keeps its own texture and colour.")]
+        public Material toonMaterial;
         public AudioClip[] sounds;
         public UiSprites ui;
         public FeedbackTuning feedback = new();

@@ -57,7 +57,7 @@ namespace Featherguard.Game
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
-                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial),
+                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, config.toonMaterial),
                 View = hud,
                 Feedback = feedback,
                 Host = this,
