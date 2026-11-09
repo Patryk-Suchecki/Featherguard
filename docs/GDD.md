@@ -176,16 +176,7 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 
 ## Art direction and platform
 
-The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy. Rendered in 3D so it reads like a hand-drawn illustrated card game, and always our own: never copy another game's characters, shapes or art. The style guide turns this into references, palettes and shader settings.
-
-- **Silhouettes first:** chunky, exaggerated shapes (big heads, hands and weapons, thin limbs, strong poses); every hero and enemy is recognisable as a black silhouette at phone size.
-- **Bold dark outlines:** thick, slightly uneven outlines around every character and prop, thinner lines inside for folds and details.
-- **Painted, not realistic:** low-to-mid poly models with hand-painted textures; visible brush strokes, colour shifts instead of fine detail, no photo textures and no PBR shine.
-- **Banded shading:** toon shading with two or three flat bands, cool dark shadows and a single warm key light.
-- **Colour:** dark, muted backgrounds; characters in a few saturated colours so they pop. Each land has its own limited palette; enemies lean colder and stranger than heroes.
-- **Backdrops like paintings:** a battle is a shallow stage of layered, painted 3D planes and props with depth fog, not an explorable world.
-- **Grim but playful:** folklore horror with a storybook, slightly comic edge; creepy monsters, readable expressions, nothing gory.
-- **UI and VFX match:** the same outlines, flat colour and painted texture; VFX are bold shapes (stylised flames, shards, swirls) rather than realistic particles.
+The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy. Rendered in 3D so it reads like a hand-drawn illustrated card game, always our own: never copy another game's characters, shapes or art. Chunky silhouettes that read at phone size, banded toon shading, dark muted backgrounds with saturated characters, a grim but playful storybook tone, and UI and VFX in the same flat, outlined look. The concrete rules, palettes and shader settings are in [`STYLE_GUIDE.md`](STYLE_GUIDE.md).
 
 - **3D:** the whole game is 3D and everything is modelled; there are no 2D sprites.
 - **Perspective:** the camp and the land map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
