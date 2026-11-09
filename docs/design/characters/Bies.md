@@ -1,168 +1,104 @@
 # Bies
 
-Character sheet for the first elite enemy. Abilities are a design proposal; numbers come later with balancing. Technical scale, naming and export rules belong to the art pipeline spec (issue #35), not to this sheet.
+The first elite enemy and the first character made with the art pipeline. Abilities describe the target design; numbers come with balancing. Technical rules are in [`ART_PIPELINE.md`](../../ART_PIPELINE.md), the look rules in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md).
 
-## Role and archetype
+## Role
 
+- **Side:** enemy, male.
 - **Land:** Rye Fields.
-- **Archetype:** Elite, 2 actions per turn. The counter is the perfect block.
-- **First encounter:** the Bies with two Wolves.
-- **Role in the fight:** master of the pack. He hits hard himself and drives his possessed Wolves onto one hero.
-- **Gender:** male.
-- **Facing in battle:** left, like every enemy.
+- **Archetype or role:** Elite, 2 actions per turn; the counter is the perfect block. Master of the pack: he hits hard himself and drives his possessed Wolves onto one hero.
+- **Encounters:** the Bies with two Wolves.
 
 ## Concept and tone
 
-In Slavic folklore a *bies* is an old, unnamed evil spirit of the wild, older than the later Christian devil. He brings frenzy and madness; the verb "to bies" still means to rage. He lurks at crossroads and on the edges of fields and possesses people and animals. Later beliefs give him horns, fur and hooves, but there is no single canonical look, so our design is our own.
+In Slavic folklore a *bies* is an old, unnamed evil spirit of the wild, older than the later Christian devil. He brings frenzy and madness, lurks at crossroads and on the edges of fields, and possesses people and animals. Later beliefs give him horns, fur and hooves, but there is no single canonical look, so our design is our own.
 
-Our Bies is a towering, hunched goat demon that has taken a wolf pack as his own. He looks purely frightening. His character shows in how he moves and sounds: he grins, mocks the heroes when they hit him and laughs when they fall. This is grim with a playful edge, in line with the dark storybook tone of the GDD.
+Our Bies is a towering, hunched goat demon that has taken a wolf pack as his own. He looks purely frightening; his character shows in how he moves and sounds: he grins, mocks the heroes when they hit him and laughs when they fall. Grim with a playful edge, in line with the dark storybook tone of the GDD.
 
 ## Look
 
-### Silhouette and size
-
-- A towering, hunched biped. The head sits forward of the shoulders.
-- About **1.5 times the height of a hero** to the top of the horns. The Wolves reach roughly to his waist.
-- Long arms hang to the knees.
-- A huge shaggy mane on the neck and shoulders and shaggy arms and thighs. The fur makes up about half of the silhouette, and the waist is slim by contrast.
-- Digitigrade goat legs bent backwards.
-- As a black silhouette at phone size, three shapes carry it: the ram horns, the mane hump and the long clawed arms.
-- Low-poly build: fur is a set of big, hard-edged clumps, not strands. Fine detail (hair, stripes, small teeth) goes into the painted texture.
-
-### Key features
-
-- **Head:** goat head with a long snout, an open jaw with big fangs, overhanging brows over deep eye sockets, leaf-shaped ears and a chin tuft.
-- **Horns:** big ram horns curling back and around towards the cheeks.
-- **Hands:** four fingers with long, curved, hooked claws.
-- **Legs:** cloven hooves with a fur tuft above them.
-- **Tail:** a short tufted tail.
-- **Clothing:** none, only fur.
-
-### Colours
-
-The ember palette:
+- **Silhouette and body:** a towering, hunched biped with the head forward of the shoulders, long arms hanging to the knees, digitigrade goat legs and a slim waist under a huge shaggy mane. The fur makes up about half of the silhouette.
+- **Size:** 2.26 m to the horn tips, about one and a half heroes. The Wolves reach roughly to his waist.
+- **Key features:** the three shapes that carry the silhouette are the ram horns, the mane hump and the long clawed arms. Also a goat head with a long snout and big fangs, overhanging brows, leaf-shaped ears, a chin tuft, four-fingered hands with hooked claws, cloven hooves with fur tufts and a short tufted tail. No clothing.
+- **Colours** (the ember palette):
 
 | Part | Colour |
 |---|---|
-| Fur | dark brown fading to black |
-| Mane tips | rusty orange |
-| Eyes, mouth | glowing amber |
-| Horns | bone with red stripes |
-| Hooves, claws | dark bone |
+| Fur | dark brown `#2B1C17` fading to black `#140D0B` |
+| Mane tips | rusty orange `#B5541F` |
+| Eyes, mouth | glowing amber `#FFB02E` |
+| Horns | bone `#C9B99A` with red stripes `#9C2A1F` |
+| Hooves, claws | dark bone `#5A4C3C` |
 
-The possessed Wolves share his amber eyes and glowing marks, so the player sees at a glance whom they serve.
-
-Proposed Rye Fields palette (not agreed for the land yet), all kept muted so the characters stand out:
-
-- muted olive-ochre rye;
-- grey-brown earth;
-- a hazy grey-green, bluish noon sky;
-- warm but faded light.
+  The possessed Wolves share his amber eyes and glowing marks, so the player sees at a glance whom they serve.
+- **Concept sheet:** `Art/Concepts/Bies.png`.
 
 ## Abilities
 
-Turn rhythm: he always attacks twice. Every 3rd turn **Sic the Pack** replaces his second attack.
+Turn rhythm: he attacks twice per turn; every 3rd turn **Sic the Pack** replaces his second attack.
 
-### Rending Claws (attack)
+| Ability | Kind | What it does | Clip | VFX | Sound |
+|---|---|---|---|---|---|
+| Rending Claws | Attack | A wide claw swipe at one hero that applies **Bleed**; he is the first unit to apply it. Melee: the game hops him to the target. | `Attack` | Wind-up: amber flash in the eyes, ember trail behind the claws. Hit: three ember claw slashes with sparks. Bleed: dark red drops. | Wind-up: low growl and an arm whoosh. Hit: a short wet tear with a dry crack. Bleed: a quiet drip. |
+| Sic the Pack | Special | Puts **Mark** on one hero; both Wolves get **Empower** and attack the Marked hero this turn. The threat is announced, so the player can answer with a Shield, Guard or Taunt. Instant, at his own position. | `Cast` | Howl: heat-haze wave with sparks, the mane glows brighter. Fists on the ground: dust and spark ring. A claw-shaped amber sigil over the Marked hero; the Wolves' eyes and marks ignite. | A long hoarse howl with a goat bleat underneath, a dull ground thud, a sharp "ting" for the sigil, a short answering howl from the Wolves. |
 
-- **Effect:** a wide claw swipe at one hero that applies **Bleed**. He is the first unit in the game to apply Bleed.
-- **Delivery:** melee. The game hops him to the target before the clip plays.
-- **Clip:** `Attack`.
-- **VFX:**
-  - Wind-up: an amber flash in the eyes and an ember trail behind the claws.
-  - Hit: three bright orange claw-shaped slash lines on the target with sparks.
-  - Bleed: dark red drops falling down.
-- **Sound:**
-  - Wind-up: a low growl and a whoosh of the arm.
-  - Hit: a short, sharp wet tear with a dry crack.
-  - Bleed: a quiet drip.
-
-### Sic the Pack (special)
-
-- **Effect:**
-  - He puts **Mark** on one hero.
-  - Both Wolves get **Empower** and attack the Marked hero this turn.
-- **Player response:** the threat is announced, so the player can answer with a Shield, Guard or Taunt.
-- **Delivery:** instant, at his own position.
-- **Clip:** `Cast`.
-- **VFX:**
-  - The howl: a heat-haze wave with sparks around the head, and the mane glows brighter.
-  - Fists hitting the ground: a dust and spark ring.
-  - A sharp, claw-shaped amber target sigil lights up over the Marked hero.
-  - The Wolves' eyes and possession marks ignite.
-- **Sound:**
-  - A long, hoarse howl with a goat bleat underneath.
-  - A dull ground thud.
-  - A sharp ringing "ting" when the sigil appears.
-  - A short howl from both Wolves in answer.
+**In the current build** the target rules (Bleed, Mark, two actions, the Wolves) do not exist yet, so the Bies uses placeholders that drive the same clips: Rending Claws deals melee 24 (heavy) with the claw slash effect, and Howl applies Weaken to all heroes. He is fought in the `BiesTest` encounter (see `GAME_DESIGN.md`).
 
 ## Animations
 
-The style is snappy and pose-to-pose. Every clip plays in place; battle movement is done by the game. Damage and effects show on the `OnHitFrame` animation event.
+Snappy and pose-to-pose; every clip plays in place and the game moves the unit. Frames at 30 fps, as exported.
 
-| Clip | Description | Length | `OnHitFrame` |
-|---|---|---|---|
-| `Idle` (loop) | Hunched, heavy breathing lifts the shoulders and mane. Clawed fingers slowly flex, an ear twitches, the tail flicks. Now and then he tilts his head like a curious goat and the jaw opens into a grin. | ~2–3 s | – |
-| `Attack` | Anticipation: he leans back and raises the right arm high above the head, a clear pose the player waits on to block. Strike: a fast diagonal downward slash through the target with a lunge. Follow-through: the arm swings past the body, a short hold, back to Idle. | ~1 s | When the claws cross the target's centre, about 45–50% in, right after the fastest frame of the slash. |
-| `Cast` | He straightens to full height, chest out, throws his head back and howls. Then he slams both fists into the ground and points a claw at the hero ("take him!"). | ~1.5 s | On the fists hitting the ground: Mark appears, the Wolves get Empower. |
-| `Hit` | A short jerk of the head and torso backwards, the mane bristles, a snarl, then a quick angry grin and back to pose. | ~0.4 s | – |
-| `Death` | He staggers, clutches his chest, falls to his knees, then face forward. The ember glow in the mane fades from the head down and the eyes go out last. The final frame holds; the body stays on the ground. | ~1.5–2 s | – |
-| `Victory` | He straightens, throws his head back and laughs mockingly, shoulders shaking. | ~2 s, may loop | – |
+| Clip | What happens | `OnHitFrame` |
+|---|---|---|
+| `Idle` (1–76, loops) | Hunched, heavy breathing lifts the shoulders and mane; the claws flex, an ear twitches, the tail flicks; now and then a curious goat head tilt and a grin. | – |
+| `Attack` (1–31) | He leans back and raises the near arm high above the shoulder, a clear pose to block on; a fast diagonal downward slash with a lunge; the arm swings past the body, a short hold, back to Idle. | 15, when the claws cross the target |
+| `Cast` (1–46) | He straightens, chest out, throws his head back and howls, slams both fists into the ground and points a claw at the hero. | 24, the fists hitting the ground |
+| `Hit` (1–13) | A short jerk backwards, the mane bristles, a snarl, then a quick angry grin. | – |
+| `Death` (1–55) | He staggers, clutches his chest, falls to his knees, then face forward; the last frame holds. | – |
+| `Victory` (1–61, loops) | He straightens, throws his head back and laughs mockingly, shoulders shaking. | – |
 
-Reaction effects:
+## Sounds
 
 | Moment | VFX | Sound |
 |---|---|---|
 | Hit | A puff of fur and a few sparks from the mane, a short flash on the model. | An angry snort or goat bleat, then a stifled chuckle. |
-| Death | The mane's glow dies out top to bottom, a wisp of smoke rises from the fur, the eyes go out last. | A rattle fading into a dying bleat, a dull fall, then a quiet hiss as the embers go out. |
+| Death | The mane's glow dies out from the head down, a wisp of smoke, the eyes go out last. | A rattle fading into a dying bleat, a dull fall, a quiet hiss as the embers go out. |
 | Victory | The mane flares brighter for a moment. | A hoarse, mocking laugh with a bleat underneath. |
 
 ## Asset checklist
 
-- [ ] Concept sheet: front, side, back and colour variant in the ember palette. An uncoloured reference turnaround exists outside the repo.
-- [ ] Model: low poly, about 4,000–6,000 triangles as a working target until #35 sets the budget (#13). A first low-poly draft (about 5,500 triangles, unwrapped) exists outside the repo and needs a manual pass.
-- [ ] Painted texture in the ember palette (#13).
-- [ ] Rig (#14).
-- [ ] Clip `Idle` (#14).
-- [ ] Clip `Attack` with `OnHitFrame` (#14).
-- [ ] Clip `Cast` with `OnHitFrame` (#14).
-- [ ] Clip `Hit` (#14).
-- [ ] Clip `Death` (#14).
-- [ ] Clip `Victory` (#14).
-- [ ] Portrait.
-- [ ] VFX (#43):
-  - [ ] ember claw trail;
-  - [ ] claw slash;
-  - [ ] Bleed drops;
-  - [ ] heat-haze howl;
-  - [ ] ground slam ring;
-  - [ ] Mark sigil;
-  - [ ] Wolf possession glow;
-  - [ ] hit fur puff;
-  - [ ] death glow fade and smoke.
-- [ ] SFX:
-  - [ ] growl;
-  - [ ] whoosh;
-  - [ ] claw tear;
-  - [ ] Bleed drip;
-  - [ ] howl;
-  - [ ] ground thud;
-  - [ ] Mark ting;
-  - [ ] Wolf answer howl;
-  - [ ] hit snort and chuckle;
-  - [ ] death rattle and fall;
-  - [ ] ember hiss;
-  - [ ] victory laugh.
-- [ ] Into battle (#15).
+- [x] Character sheet approved (this sheet, #47)
+- [x] Concept sheet (#53)
+- [x] Model (#48)
+- [ ] Painted texture (#51, M1; a baked placeholder is in place)
+- [x] Rig (#48)
+- [x] `Idle`
+- [x] `Attack`
+- [x] `Cast`
+- [x] `Hit`
+- [x] `Death`
+- [x] `Victory`
+- [x] Exported to `Assets/Art/Characters` (#48)
+- [ ] Portrait
+- [ ] VFX:
+  - [x] claw slash (#55)
+  - [ ] ember claw trail
+  - [ ] Bleed drops
+  - [ ] heat-haze howl
+  - [ ] ground slam ring
+  - [ ] Mark sigil
+  - [ ] Wolf possession glow
+  - [ ] hit fur puff
+  - [ ] death glow fade and smoke
+- [ ] Sounds: growl, whoosh, claw tear, Bleed drip, howl, ground thud, Mark ting, Wolf answer howl, hit snort and chuckle, death rattle and fall, ember hiss, victory laugh
+- [x] In the game (`UnitDefinition` and the `BiesTest` encounter, #49)
 
 ## Open questions
 
-- **Blood Call:** should he become Empowered when a Wolf dies? This is a possible passive that would make kill order matter more.
+- **Blood Call:** should he become Empowered when a Wolf dies? A possible passive that would make kill order matter more.
 - **Wolves after his death:** do they weaken or flee when the Bies dies?
 - **Mark target:** how does he choose whom to Mark: lowest HP, the healer, or at random?
-- **Wolf turn order:** do the Wolves always act after him in the enemy turn, so Sic the Pack pays off in the same turn?
+- **Wolf turn order:** do the Wolves always act after him, so Sic the Pack pays off in the same turn?
 - **Second attack:** can it target a different hero from the first?
 - **The body after death:** what happens to the corpse when the next wave arrives?
-- **Rye Fields palette:** to be agreed for the whole land.
-- **Technical limits:** final scale, triangle budget and naming come from the art pipeline spec (#35).
 - **Numbers:** HP, damage, Bleed strength.
