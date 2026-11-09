@@ -41,7 +41,7 @@ Combat is the core of the game and is specified first, in `combat/`.
 | 9 | Enemy behaviour | AI, archetypes, boss phases | – |
 | 10 | Sources outside combat | How equipment and sets, Laws of the lands, passives, potions and difficulty plug into combat | – |
 | 11 | Feedback | What the player sees and hears for every event; what the UI shows (for example enemy intents) | – |
-| 12 | Content | Heroes, enemies, bosses and encounters, built from the layers above | – |
+| 12 | Content | Heroes, enemies, bosses and encounters, built from the layers above. Each character has its own sheet in `characters/`, made from `characters/TEMPLATE.md` | – |
 | 13 | Balance | Target values (battle length, turns to defeat an enemy) and how we tune them | – |
 
 ## Other systems
