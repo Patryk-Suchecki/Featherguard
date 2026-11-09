@@ -1,6 +1,6 @@
 # Art Pipeline
 
-How a hand-made 3D character goes from an idea to the game. The look is described in the art direction of [`GDD.md`](GDD.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
+How a hand-made 3D character goes from an idea to the game. How it should look (proportions, heights by role, fur, texture painting, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
 
 ## Steps
 
@@ -39,15 +39,7 @@ Inside the `.blend`:
 - **Up and front:** Z is up, the character faces −Y (you see its face in Blender's front view, numpad 1). The battle code turns heroes and enemies towards each other; never model a character facing sideways.
 - **Origin:** the object origins and the root bone sit on the ground between the feet, at the world origin.
 - **Apply transforms:** rotation and scale of the rig and the mesh are applied (Ctrl+A) before export.
-
-Target heights, so characters read well next to each other:
-
-| Character | Height |
-|---|---|
-| Hero | ≈ 1.4 m |
-| Regular enemy | ≈ 1.5 m (a quadruped is judged by its length and head height instead) |
-| Elite | ≈ 2.0 m |
-| Boss | ≈ 2.4 m |
+- **Height:** the target height for each role is in the style guide.
 
 ## Budgets
 
@@ -55,12 +47,13 @@ Up to six characters are on screen on a phone at once.
 
 | | Regular | Elite and boss |
 |---|---|---|
-| Triangles | ≤ 8,000 | ≤ 12,000 |
+| Triangles: aim for | 3,000–6,000 | 5,000–8,000 (the Bies has 5,444) |
+| Triangles: never more than | 8,000 | 12,000 |
 | Texture | 1024 × 1024 | 2048 × 2048 |
 
 - Bones: up to 60, at most 4 bone weights per vertex.
 - One material per character (two at most, for example for a separate weapon).
-- One hand-painted albedo texture, PNG, sRGB. No normal, roughness or metallic maps: shading comes from the toon shader.
+- One albedo texture, PNG, sRGB. No normal, roughness or metallic maps: shading comes from the toon shader.
 
 ## Rig
 
@@ -108,10 +101,7 @@ Pass a folder after `--` to export somewhere else for a test, for example `-- Te
 
 ## Version control
 
-- Every binary (`.blend`, `.fbx`, `.png`, `.kra`) is in Git LFS and lockable. Lock each existing file before you change it, and unlock it after the PR is merged:
-  ```bash
-  git lfs lock Assets/Art/Characters/Bies.fbx
-  ```
+- Every binary (`.blend`, `.fbx`, `.png`, `.kra`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
 - A character is added or changed in its own `art/` PR, with no gameplay code. Code that uses the character comes in its own PR.
 - Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
 
@@ -129,13 +119,13 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 
 - Block out proportions with simple shapes (a skin-modifier skeleton works well) and compare them with the references in orthographic views before adding detail.
 - Draw the direction of fur, hair or cloth on the model first, so the sculpt and the texture follow one flow.
-- Sculpt one welded body mesh (voxel remesh, X symmetry on). Fur and hair are laid-down locks that follow the body, not separate spikes; keep jagged edges only where they build the silhouette.
+- Sculpt one welded body mesh (voxel remesh, X symmetry on). Shape fur, hair and cloth as the style guide describes.
 - Keep separate objects for parts that move or stay hard: lower jaw (origin at the hinge), teeth, eyes, claws or nails, horns and weapons.
 - Create vertex groups per region (for example fur, bare skin, silhouette tufts); they are masks for sculpting and for the texture.
 
 ### 3. Retopology to the game mesh
 
-- Aim well under the budget: about 3,000–6,000 triangles for a regular character, 5,000–8,000 for an elite. The Bies uses 5,444.
+- Aim for the triangle range in the budget table, well under the limit.
 - Quads with clean edge loops around shoulders, elbows, wrists, hips, knees, ankles, the neck and the corners of the mouth. An even automatic quad remesh needs these loops added by hand before skinning.
 - Exactly symmetric: build one half with a Mirror modifier and apply it.
 - Silhouette features (horns, tufts, ears, claws) stay real geometry; small detail goes into the texture.
@@ -152,8 +142,8 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 
 - Bake from the sculpt onto the game mesh: ambient occlusion and a cavity mask, plus region masks from the vertex groups. They are guides for the paint, not separate maps in the game.
 - Start the base colour from flat colours per region and multiply the bakes in lightly.
-- Paint by hand on top: three tones per material (shadow, base, light), light from above and the front, darker towards the back and the ends of the limbs, accent colours on a few shapes only. No highlights that suggest a specular or metal look.
-- One albedo texture only, sRGB PNG, 1024 or 2048 as in the budget. Connect it to the Base Color of the material's Principled BSDF; the export saves it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`. No normal, roughness or metallic maps.
+- Paint by hand on top, following the texture painting rules of the style guide.
+- Connect the albedo to the Base Color of the material's Principled BSDF; the export saves it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`.
 
 ### 6. Rig and skinning (biped)
 
