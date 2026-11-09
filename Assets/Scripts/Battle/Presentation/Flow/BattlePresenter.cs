@@ -190,6 +190,7 @@ namespace Featherguard.Battle.Presentation
             var facing = source != null ? source.Facing : -target.Facing;
             var contact = target.Center - facing * target.Radius * 0.7f + Vector3.back * target.Radius;
             feedback.Impact(contact, e.Ability.fxColor, heavy);
+            feedback.PlayImpactEffect(e.Ability.impactEffect, contact, facing, target.Radius);
             feedback.Play(e.Ability.impactSound);
             target.Reaction.Flash();
             target.Reaction.Knockback(facing, heavy ? config.heavyKnockback : config.lightKnockback);

@@ -73,6 +73,9 @@ namespace Featherguard.Feel
             vfx.Burst(point, color, heavy ? 34 : 18, heavy ? 8f : 5.5f, heavy ? 0.42f : 0.3f);
         }
 
+        public void PlayImpactEffect(ImpactEffect effect, Vector3 point, Vector3 facing, float targetRadius) =>
+            effect?.Play(new ImpactContext(point, facing, targetRadius, vfx.FlatMaterial));
+
         public void Shake(float strength, float seconds) => shake.Shake(strength, seconds);
         public void Burst(Vector3 position, Color color, int count, float speed, float size) => vfx.Burst(position, color, count, speed, size);
         public void Rise(Vector3 position, Color color, float radius) => vfx.Rise(position, color, radius);

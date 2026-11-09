@@ -30,7 +30,7 @@ namespace Featherguard.EditorTools
             var abilities = new Dictionary<string, AbilityDefinition>();
 
             void Add(string id, string name, AbilityTarget target, System.Func<AbilityDelivery> delivery, string state, Color color, SfxId cast, SfxId impact,
-                int hits = 1, bool heavy = false, params AbilityEffect[] effects)
+                int hits = 1, bool heavy = false, ImpactEffect impactEffect = null, params AbilityEffect[] effects)
             {
                 abilities[id] = seeder.Seed<AbilityDefinition>($"{ContentPaths.Abilities}/{id}.asset", a =>
                 {
@@ -44,6 +44,10 @@ namespace Featherguard.EditorTools
                     a.castSound = cast;
                     a.impactSound = impact;
                     a.effects = effects.ToArray();
+                }, a =>
+                {
+                    if (a.impactEffect == null && impactEffect != null)
+                        a.impactEffect = impactEffect;
                 });
             }
 
@@ -65,7 +69,7 @@ namespace Featherguard.EditorTools
             Add("GuardSupport", "Shield Wall", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.7f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield"), Status("Taunt", onSelf: true) });
             Add("ChieftainSpecial", "Earthquake", AbilityTarget.AllEnemies, Instant, "Attack", new Color(1f, 0.45f, 0.15f), SfxId.Smash, SfxId.Smash, heavy: true, effects: new[] { Damage(22), Status("Weaken", chance: 0.5f) });
             Add("ChieftainAttack", "Chieftain's Wrath", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(34), Status("Stun", chance: 0.35f) });
-            Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, effects: Damage(24));
+            Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, impactEffect: new ClawSlashEffect(), effects: Damage(24));
             Add("BiesSpecial", "Howl", AbilityTarget.AllEnemies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Magic, heavy: true, effects: Status("Weaken"));
             return abilities;
         }

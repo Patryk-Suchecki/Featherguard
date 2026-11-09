@@ -23,6 +23,8 @@ namespace Featherguard.Battle
         public SfxId castSound;
         public SfxId impactSound;
         [SerializeReference, SubclassSelector] public AbilityDelivery delivery = new InstantDelivery();
+        [Tooltip("Optional effect drawn on the target when a hit lands.")]
+        [SerializeReference, SubclassSelector] public ImpactEffect impactEffect;
 
         public bool TargetsEnemies => target is AbilityTarget.Enemy or AbilityTarget.AllEnemies;
         public bool TargetsAll => target is AbilityTarget.AllEnemies or AbilityTarget.AllAllies;

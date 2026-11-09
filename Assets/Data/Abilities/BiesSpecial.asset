@@ -24,9 +24,13 @@ MonoBehaviour:
   impactSound: 5
   delivery:
     rid: 4550530298483572741
+  impactEffect:
+    rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 4550530298483572740
       type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
       data:
