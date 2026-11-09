@@ -25,7 +25,7 @@ The character name is one English word or PascalCase phrase, the same everywhere
 | Texture source | `Art/Textures/<Name>.kra` |
 | Exported model | `Assets/Art/Characters/<Name>.fbx` |
 | Clip data | `Assets/Art/Characters/<Name>.clips.json` (written by the export script) |
-| Texture | `Assets/Art/Characters/Textures/<Name>_Albedo.png` |
+| Texture | `Assets/Art/Characters/Textures/<Name>_Albedo.png` (written by the export script) |
 | Portrait | `Assets/Art/UI/Portraits/<Name>.png` |
 
 Inside the `.blend`:
@@ -100,7 +100,8 @@ blender -b Art/Blender/Characters/Bies.blend -P Art/Blender/export_character.py
 - checks the rig, the mesh, the six clips and the `OnHitFrame` markers, and stops with a clear message if something is missing;
 - warns about unapplied transforms, a wrong frame rate, extra actions and budgets;
 - leaves out preview outlines (a Solidify modifier with flipped normals or named `Outline`), because the toon shader draws the outline in the game;
-- writes `<Name>.fbx` and `<Name>.clips.json` to `Assets/Art/Characters`, and refuses to overwrite a file that is not locked;
+- writes `<Name>.fbx` and `<Name>.clips.json` to `Assets/Art/Characters` and the material's image texture to `Textures/<Name>_Albedo.png`, linked from the FBX so Unity assigns it, and refuses to overwrite a file that is not locked;
+- exports the material through its Principled BSDF, so a preview node setup (toon ramp, mix shaders) may stay in the `.blend`;
 - prints the triangle count, bone count and height (use the height for the unit's `height`).
 
 Pass a folder after `--` to export somewhere else for a test, for example `-- Temp/ExportTest`.
@@ -152,7 +153,7 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 - Bake from the sculpt onto the game mesh: ambient occlusion and a cavity mask, plus region masks from the vertex groups. They are guides for the paint, not separate maps in the game.
 - Start the base colour from flat colours per region and multiply the bakes in lightly.
 - Paint by hand on top: three tones per material (shadow, base, light), light from above and the front, darker towards the back and the ends of the limbs, accent colours on a few shapes only. No highlights that suggest a specular or metal look.
-- One albedo texture only, sRGB PNG, 1024 or 2048 as in the budget. Save it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`; no normal, roughness or metallic maps.
+- One albedo texture only, sRGB PNG, 1024 or 2048 as in the budget. Connect it to the Base Color of the material's Principled BSDF; the export saves it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`. No normal, roughness or metallic maps.
 
 ### 6. Rig and skinning (biped)
 

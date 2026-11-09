@@ -101,6 +101,36 @@ def writable(path):
         raise ExportError(f"{rel} is read-only; lock it first: git lfs lock {rel}")
 
 
+def expose_principled(meshes):
+    for material in {slot.material for mesh in meshes for slot in mesh.material_slots if slot.material and slot.material.node_tree}:
+        nodes = material.node_tree.nodes
+        principled = next((n for n in nodes if n.type == "BSDF_PRINCIPLED"), None)
+        output = next((n for n in nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output), None)
+        if principled and output:
+            material.node_tree.links.new(principled.outputs["BSDF"], output.inputs["Surface"])
+
+
+def export_albedo(meshes, path, warnings):
+    images = {node.image
+              for mesh in meshes
+              for slot in mesh.material_slots
+              if slot.material and slot.material.node_tree
+              for node in slot.material.node_tree.nodes
+              if node.type == "TEX_IMAGE" and node.image}
+    if not images:
+        warnings.append("no image texture on the materials; the model is exported without one")
+        return
+    if len(images) > 1:
+        raise ExportError("the materials use more than one image; a character has one albedo texture")
+    image = images.pop()
+    writable(path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    image.save(filepath=path)
+    image.filepath = path
+    if image.packed_file:
+        image.unpack(method="REMOVE")
+
+
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     out_dir = os.path.abspath(argv[0]) if argv else OUT_DIR
@@ -125,6 +155,8 @@ def main():
     json_path = os.path.join(out_dir, f"{name}.clips.json")
     writable(fbx_path)
     writable(json_path)
+    export_albedo(meshes, os.path.join(out_dir, "Textures", f"{name}_Albedo.png"), warnings)
+    expose_principled(meshes)
 
     rig.animation_data_create()
     rig.animation_data.action = actions[0]
