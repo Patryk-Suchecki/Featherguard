@@ -25,16 +25,18 @@ namespace Featherguard.UI
         readonly Text health;
         readonly RectTransform fill;
         readonly RectTransform statuses;
+        readonly VisualsLibrary<StatusDefinition, StatusVisuals> statusVisuals;
 
-        public HeroCardView(RectTransform parent, UnitView hero, int index, System.Action<BattleUnit> onTap)
+        public HeroCardView(RectTransform parent, UnitView hero, int index, System.Action<BattleUnit> onTap, VisualsLibrary<StatusDefinition, StatusVisuals> statusVisuals)
         {
             unit = hero;
+            this.statusVisuals = statusVisuals;
             rect = Ui.Rect(hero.Definition.displayName + "Card", parent, Vector2.zero, Vector2.zero, new Vector2(24f + index * (Width + Spacing), RestY), new Vector2(Width, 156f));
             background = (Image)Ui.Button(rect, Idle, () => onTap(hero.Unit)).targetGraphic;
             group = rect.gameObject.AddComponent<CanvasGroup>();
             frame = Ui.Sliced(Ui.Stretch("Frame", rect, -4f), "Frame", Ui.GoldColor);
 
-            Portrait.Create(rect, hero.Definition.portrait, new Vector2(12f, 0f), 128f, new Vector2(0f, 0.5f));
+            Portrait.Create(rect, hero.Visuals.portrait, new Vector2(12f, 0f), 128f, new Vector2(0f, 0.5f));
             title = Ui.Label(Ui.Rect("Name", rect, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(152f, -12f), new Vector2(210f, 40f)),
                 hero.Definition.displayName, 34, TextAnchor.UpperLeft, Color.white);
             Ui.Bar(rect, Vector2.zero, new Vector2(200f, 30f), HealthFill, out fill);
@@ -56,7 +58,7 @@ namespace Featherguard.UI
             if (rect == null) return;
             Ui.SetFill(fill, unit.HealthFraction);
             health.text = $"{unit.Health}/{unit.MaxHealth}";
-            StatusIconRow.Build(statuses, unit.Statuses, 46f, false);
+            StatusIconRow.Build(statuses, unit.Statuses, statusVisuals, 46f, false);
         }
 
         public void Animate(IPlayerCommands commands)

@@ -8,6 +8,10 @@ namespace Featherguard.Battle.Presentation
         [Header("Abilities")]
         [Tooltip("How each ability looks and sounds; abilities without an entry use plain defaults.")]
         public AbilityVisuals[] abilities = new AbilityVisuals[0];
+        [Tooltip("Model, portrait and animator of each unit.")]
+        public UnitVisuals[] units = new UnitVisuals[0];
+        [Tooltip("Icon and colour of each status.")]
+        public StatusVisuals[] statuses = new StatusVisuals[0];
 
         [Header("Formation")]
         public Vector3[] heroSlots = { new(-2.3f, 0f, 0.45f), new(-3.7f, 0f, -0.55f), new(-5.0f, 0f, 0.6f) };

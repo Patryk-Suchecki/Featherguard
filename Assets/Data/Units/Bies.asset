@@ -14,11 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.UnitDefinition
   displayName: Bies
   team: 1
-  model: {fileID: 919132149155446097, guid: 1d35a82344430cd4ca46570ad8cc2e28, type: 3}
-  portrait: {fileID: 0}
-  animator: {fileID: 9100000, guid: 4f43b28e259a22440a4bf6da11b76125, type: 2}
-  modelScale: 1
-  height: 2.26
   maxHealth: 260
   attack: {fileID: 11400000, guid: 63179ce84f6c1654f9e8ca5a2f7b3ade, type: 2}
   support: {fileID: 0}
