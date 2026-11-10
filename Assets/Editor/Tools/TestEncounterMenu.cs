@@ -11,9 +11,9 @@ namespace Featherguard.EditorTools
         [MenuItem(Root + "Use Selected")]
         static void UseSelected()
         {
-            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
-            EditorPrefs.SetString(GameBootstrap.TestEncounterPref, path);
-            EditorUtility.DisplayDialog("Featherguard", $"Every battle in the editor now uses {Selection.activeObject.name}.", "OK");
+            var encounter = (EncounterDefinition)Selection.activeObject;
+            TestEncounterSetting.Set(encounter);
+            EditorUtility.DisplayDialog("Featherguard", $"Every battle in the editor now uses {encounter.name}.", "OK");
         }
 
         [MenuItem(Root + "Use Selected", true)]
@@ -22,15 +22,14 @@ namespace Featherguard.EditorTools
         [MenuItem(Root + "Clear")]
         static void Clear()
         {
-            EditorPrefs.DeleteKey(GameBootstrap.TestEncounterPref);
+            TestEncounterSetting.Clear();
             EditorUtility.DisplayDialog("Featherguard", "Battles in the editor use the run's encounters again.", "OK");
         }
 
         [MenuItem(Root + "Show Current")]
         static void ShowCurrent()
         {
-            string path = EditorPrefs.GetString(GameBootstrap.TestEncounterPref, "");
-            var encounter = path.Length > 0 ? AssetDatabase.LoadAssetAtPath<EncounterDefinition>(path) : null;
+            var encounter = TestEncounterSetting.Current;
             EditorUtility.DisplayDialog("Featherguard", encounter != null ? $"Test encounter: {encounter.name}." : "No test encounter: battles use the run.", "OK");
         }
     }
