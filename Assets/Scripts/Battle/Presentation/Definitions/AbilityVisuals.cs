@@ -1,5 +1,5 @@
 using Featherguard.Core;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using UnityEngine;
 
 namespace Featherguard.Battle.Presentation

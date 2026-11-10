@@ -36,7 +36,7 @@ MonoBehaviour:
         recovery: 0.4
         reach: 0.3
     - rid: 4550530299515895808
-      type: {class: ClawSlashEffect, ns: Featherguard.Feel, asm: Featherguard.Feel}
+      type: {class: ClawSlashEffect, ns: Featherguard.Feedback, asm: Featherguard.Feedback}
       data:
         claws: 3
         length: 2

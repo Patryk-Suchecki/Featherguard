@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using Featherguard.Core;
 using UnityEngine;
 
-namespace Featherguard.Feel
+namespace Featherguard.Feedback
 {
     [Serializable]
     public class FeedbackTuning

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Featherguard.Core;
 using UnityEngine;
 
-namespace Featherguard.Feel
+namespace Featherguard.Feedback
 {
     public readonly struct SlashShape
     {

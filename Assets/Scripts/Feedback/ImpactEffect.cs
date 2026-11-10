@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
-namespace Featherguard.Feel
+namespace Featherguard.Feedback
 {
     public readonly struct ImpactContext
     {
@@ -28,7 +28,7 @@ namespace Featherguard.Feel
         public abstract void Play(in ImpactContext context);
     }
 
-    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
+    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Feel", sourceAssembly: "Featherguard.Feel")]
     public sealed class ClawSlashEffect : ImpactEffect
     {
         [Min(1)] public int claws = 3;

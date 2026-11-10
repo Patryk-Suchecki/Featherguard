@@ -1,4 +1,4 @@
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using Featherguard.Game;
 using UnityEditor;
 using UnityEditor.SceneManagement;
