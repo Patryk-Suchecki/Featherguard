@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a7ddc079bad4bd89a644a5cf6d22335, type: 3}
+  m_Name: Empower
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.StatusVisuals
+  status: {fileID: 11400000, guid: 8b7cc26af3f808548b82f0675d710c98, type: 2}
+  icon: {fileID: 21300000, guid: 3280a8ddd226cf14089be96f3db27613, type: 3}
+  tint: {r: 1, g: 0.55, b: 0.15, a: 1}

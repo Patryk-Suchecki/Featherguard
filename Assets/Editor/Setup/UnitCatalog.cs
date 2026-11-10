@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Featherguard.Battle;
+using Featherguard.Battle.Presentation;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,32 +8,38 @@ namespace Featherguard.EditorTools
 {
     public static class UnitCatalog
     {
-        public static Dictionary<string, UnitDefinition> Build(Seeder seeder, IReadOnlyDictionary<string, AbilityDefinition> abilities, PresentationAssets art)
+        public static (Dictionary<string, UnitDefinition> Units, UnitVisuals[] Visuals) Build(Seeder seeder, IReadOnlyDictionary<string, AbilityDefinition> abilities, PresentationAssets art)
         {
             var units = new Dictionary<string, UnitDefinition>();
+            var visuals = new List<UnitVisuals>();
 
             void Add(string id, string name, Team team, int health, float height, float scale, string attack, string support, string special,
                 System.Action<UnitDefinition> extra = null)
             {
-                units[id] = seeder.Seed<UnitDefinition>($"{ContentPaths.Units}/{id}.asset", u =>
+                var unit = seeder.Seed<UnitDefinition>($"{ContentPaths.Units}/{id}.asset", u =>
                 {
                     u.displayName = name;
                     u.team = team;
                     u.maxHealth = health;
-                    u.height = height;
-                    u.modelScale = scale;
                     u.attack = abilities[attack];
                     u.support = support != null ? abilities[support] : null;
                     u.special = special != null ? abilities[special] : null;
                     u.ai = new EnemyAiProfile();
                     u.boss = new BossProfile();
                     extra?.Invoke(u);
-                }, u =>
-                {
-                    u.model = AssetDatabase.LoadAssetAtPath<GameObject>($"{ContentPaths.Characters}/{id}.fbx");
-                    u.portrait = art.Portrait(id);
-                    u.animator = AnimatorBuilder.Build(id);
                 });
+                units[id] = unit;
+                visuals.Add(seeder.Seed<UnitVisuals>($"{ContentPaths.UnitVisuals}/{id}.asset", v =>
+                {
+                    v.height = height;
+                    v.modelScale = scale;
+                }, v =>
+                {
+                    v.unit = unit;
+                    v.model = AssetDatabase.LoadAssetAtPath<GameObject>($"{ContentPaths.Characters}/{id}.fbx");
+                    v.portrait = art.Portrait(id);
+                    v.animator = AnimatorBuilder.Build(id);
+                }));
             }
 
             Add("Knight", "Robin", Team.Heroes, 150, 1.4f, 1f, "KnightAttack", "KnightSupport", "KnightSpecial");
@@ -49,7 +56,7 @@ namespace Featherguard.EditorTools
                 u.boss.enrageAt = 0.5f;
                 u.boss.enrageSummons = new[] { units["Grunt"], units["Grunt"] };
             });
-            return units;
+            return (units, visuals.ToArray());
         }
     }
 }

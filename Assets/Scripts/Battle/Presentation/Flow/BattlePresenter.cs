@@ -20,7 +20,7 @@ namespace Featherguard.Battle.Presentation
             remove => stage.UnitDefeated -= value;
         }
 
-        public BattlePresenter(BattlePresentationConfig config, UnitViewFactory factory, AbilityVisualsLibrary visuals, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, RageMeter rage)
+        public BattlePresenter(BattlePresentationConfig config, UnitViewFactory factory, BattleVisuals visuals, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, RageMeter rage)
         {
             Rage = new RageMeter(rage.Max, rage.Value);
             router = new BattleEventRouter(host);

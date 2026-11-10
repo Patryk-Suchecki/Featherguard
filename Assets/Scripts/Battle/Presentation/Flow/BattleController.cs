@@ -8,7 +8,7 @@ namespace Featherguard.Battle.Presentation
     {
         public BattlePresentationConfig Config;
         public UnitViewFactory Factory;
-        public AbilityVisualsLibrary Visuals;
+        public BattleVisuals Visuals;
         public IBattleView View;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;

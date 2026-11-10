@@ -16,6 +16,8 @@ namespace Featherguard.EditorTools
         public const string Abilities = "Assets/Data/Abilities";
         public const string AbilityVisuals = "Assets/Data/AbilityVisuals";
         public const string Units = "Assets/Data/Units";
+        public const string UnitVisuals = "Assets/Data/UnitVisuals";
+        public const string StatusVisuals = "Assets/Data/StatusVisuals";
         public const string Encounters = "Assets/Data/Encounters";
         public const string Upgrades = "Assets/Data/Upgrades";
         public const string Perks = "Assets/Data/Perks";

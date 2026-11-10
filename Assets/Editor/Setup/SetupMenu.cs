@@ -27,11 +27,16 @@ namespace Featherguard.EditorTools
 
             var seeder = new Seeder(resetToDefaults);
             var art = PresentationBuilder.Build(seeder);
-            var statuses = StatusCatalog.Build(seeder, art);
+            var (statuses, statusVisuals) = StatusCatalog.Build(seeder, art);
             var (abilities, visuals) = AbilityCatalog.Build(seeder, statuses);
-            var units = UnitCatalog.Build(seeder, abilities, art);
+            var (units, unitVisuals) = UnitCatalog.Build(seeder, abilities, art);
             var rules = seeder.Seed<BattleRules>($"{ContentPaths.Data}/BattleRules.asset", null);
-            var presentation = seeder.Seed<BattlePresentationConfig>($"{ContentPaths.Data}/BattlePresentationConfig.asset", null, p => p.abilities = visuals);
+            var presentation = seeder.Seed<BattlePresentationConfig>($"{ContentPaths.Data}/BattlePresentationConfig.asset", null, p =>
+            {
+                p.abilities = visuals;
+                p.units = unitVisuals;
+                p.statuses = statusVisuals;
+            });
             var run = RunCatalog.Build(seeder, units, art);
             var meta = MetaCatalog.Build(seeder, art);
 
