@@ -15,6 +15,11 @@ MonoBehaviour:
   maxRage: 100
   heroRagePerDamage: 0.45
   enemyRagePerDamage: 0.25
+  goodAttackBonus: 0.25
+  perfectAttackBonus: 0.5
+  goodBlockReduction: 0.3
+  perfectBlockReduction: 0.6
+  perfectTimingRage: 10
   baseCritChance: 0.15
   baseCritDamage: 1.5
   damageVariance: 0.1
