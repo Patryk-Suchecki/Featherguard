@@ -48,7 +48,7 @@ Hit, death and any idle or voice sounds besides the ability sounds above.
 - [ ] Character sheet approved
 - [ ] Concept sheet
 - [ ] Model
-- [ ] Painted texture
+- [ ] Texture
 - [ ] Rig
 - [ ] `Idle`
 - [ ] `Attack`

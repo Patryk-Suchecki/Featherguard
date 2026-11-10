@@ -45,7 +45,7 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 
 ## Art and audio
 
-- **Hand-made characters:** the target game's characters are modelled, painted, rigged and animated by hand in Blender, following `docs/ART_PIPELINE.md` (names, scale, budgets, clips, `OnHitFrame` markers) and the look in `docs/STYLE_GUIDE.md`. Each has a sheet in `docs/design/characters/`. Export one with:
+- **Hand-made characters:** the target game's characters are modelled, textured, rigged and animated by hand in Blender, following `docs/ART_PIPELINE.md` (names, scale, budgets, clips, `OnHitFrame` markers) and the look in `docs/STYLE_GUIDE.md`. Each has a sheet in `docs/design/characters/`. Export one with:
   - `blender -b Art/Blender/Characters/<Name>.blend -P Art/Blender/export_character.py`
 
   It writes `<Name>.fbx`, `<Name>.clips.json` and `Textures/<Name>_Albedo.png` to `Assets/Art/Characters`. Never overwrite a hand-made `.blend` from a script.
@@ -116,5 +116,5 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - Never hand-edit `.unity`, `.prefab` or `.asset` YAML while an editor has the project open; Unity overwrites it. Prefer editing through scripts or the inspector.
 - Only one person changes `Battle.unity` at a time. Rebuild regenerates it, so discard scene, post-FX and ProjectSettings noise from a Rebuild (`git restore`) unless the PR is about them.
 - Always commit `.meta` files together with their assets; moving a script or asset must move its `.meta` (use `git mv`) to keep GUIDs.
-- Binaries (`fbx`, `blend`, `png`, `kra`, `wav`, `ogg`) are in Git LFS and lockable: lock before editing and unlock after merging.
+- Binaries (`fbx`, `blend`, `png`, `wav`, `ogg`) are in Git LFS and lockable: lock before editing and unlock after merging.
 - Set up Unity Smart Merge once per clone (see `docs/CONTRIBUTING.md`).

@@ -1,13 +1,13 @@
 # Art Pipeline
 
-How a hand-made 3D character goes from an idea to the game. How it should look (proportions, heights by role, fur, texture painting, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
+How a hand-made 3D character goes from an idea to the game. How it should look (proportions, heights by role, fur, textures, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
 
 ## Steps
 
 1. **Character sheet:** copy [`design/characters/TEMPLATE.md`](design/characters/TEMPLATE.md) to `docs/design/characters/<Name>.md` and fill in role, look, abilities, animations, VFX and sounds.
 2. **Concept:** a concept sheet in `Art/Concepts/<Name>.png` (front and side silhouette, colours, key features, battle pose).
 3. **Model** in `Art/Blender/Characters/<Name>.blend`.
-4. **Texture:** paint the albedo texture; keep the paint source in `Art/Textures/<Name>.kra` (or `.blend` texture paint).
+4. **Texture:** bake the albedo texture from the sculpt in the same `.blend`.
 5. **Rig and animate** in the same `.blend`.
 6. **Export** with the export script (below) into `Assets/Art/Characters`.
 7. **In Unity:** the importer applies the clip settings automatically. Adding the character to the game (`UnitCatalog`, `UnitDefinition`, encounter) is a separate task.
@@ -22,7 +22,6 @@ The character name is one English word or PascalCase phrase, the same everywhere
 | Character sheet | `docs/design/characters/<Name>.md` |
 | Concept | `Art/Concepts/<Name>.png` |
 | Blender source | `Art/Blender/Characters/<Name>.blend` |
-| Texture source | `Art/Textures/<Name>.kra` |
 | Exported model | `Assets/Art/Characters/<Name>.fbx` |
 | Clip data | `Assets/Art/Characters/<Name>.clips.json` (written by the export script) |
 | Texture | `Assets/Art/Characters/Textures/<Name>_Albedo.png` (written by the export script) |
@@ -103,7 +102,7 @@ Pass a folder after `--` to export somewhere else for a test, for example `-- Te
 
 ## Version control
 
-- Every binary (`.blend`, `.fbx`, `.png`, `.kra`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
+- Every binary (`.blend`, `.fbx`, `.png`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
 - A character is added or changed in its own `art/` PR, with no gameplay rule changes. Code that puts the character into the game comes in its own PR.
 - Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
 
@@ -142,9 +141,8 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 
 ### 5. Baking and texture
 
-- Bake from the sculpt onto the game mesh: ambient occlusion and a cavity mask, plus region masks from the vertex groups. They are guides for the paint, not separate maps in the game.
-- Start the base colour from flat colours per region and multiply the bakes in lightly.
-- Paint by hand on top, following the texture painting rules of the style guide.
+- Bake from the sculpt onto the game mesh: ambient occlusion and a cavity mask, plus region masks from the vertex groups. They are folded into the albedo, not separate maps in the game.
+- Build the base colour from flat colours per region and multiply the bakes in lightly, following the texture rules of the style guide.
 - Connect the albedo to the Base Color of the material's Principled BSDF; the export saves it as `Assets/Art/Characters/Textures/<Name>_Albedo.png`.
 
 ### 6. Rig and skinning (biped)
