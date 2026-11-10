@@ -9,13 +9,15 @@ namespace Featherguard.Battle
         public readonly BattleUnit Actor;
         public readonly BattleUnit Target;
         public readonly AbilityDefinition Ability;
+        public readonly ActionTiming Timing;
 
-        public EffectContext(Combat combat, BattleUnit actor, BattleUnit target, AbilityDefinition ability)
+        public EffectContext(Combat combat, BattleUnit actor, BattleUnit target, AbilityDefinition ability, ActionTiming timing = default)
         {
             Combat = combat;
             Actor = actor;
             Target = target;
             Ability = ability;
+            Timing = timing;
         }
     }
 
@@ -31,7 +33,7 @@ namespace Featherguard.Battle
     {
         [Min(0)] public int power = 20;
 
-        public override void Apply(in EffectContext context) => context.Combat.DealDamage(context.Actor, context.Target, power, context.Ability);
+        public override void Apply(in EffectContext context) => context.Combat.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
     }
 
     [Serializable]

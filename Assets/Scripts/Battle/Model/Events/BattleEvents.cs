@@ -45,6 +45,7 @@ namespace Featherguard.Battle
         public AbilityDefinition Ability;
         public IReadOnlyList<BattleUnit> Targets;
         public bool Special;
+        public ActionTiming Timing;
         public readonly List<Impact> Impacts = new();
         public readonly List<BattleEvent> Aftermath = new();
     }

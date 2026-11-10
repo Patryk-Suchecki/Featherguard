@@ -167,6 +167,61 @@ namespace Featherguard.Tests
             Assert.IsFalse(model.CanUse(model.Heroes[0], hero.special, null));
         }
 
+        [TestCase(TimingResult.Miss, 460)]
+        [TestCase(TimingResult.Good, 450)]
+        [TestCase(TimingResult.Perfect, 440)]
+        public void AttackTiming_ScalesDamageOnEveryHit(TimingResult timing, int healthLeft)
+        {
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(20, hits: 2));
+            var enemy = Unit("Enemy", Team.Enemies, 500, Strike(0));
+            var model = Create(Encounter(new[] { enemy }), 0f, hero);
+            model.Start();
+
+            model.Act(model.Heroes[0], hero.attack, model.Enemies[0], timing);
+
+            Assert.AreEqual(healthLeft, model.Enemies[0].Health);
+        }
+
+        [Test]
+        public void AttackTiming_PerfectAddsRageOncePerAction()
+        {
+            float RageAfter(TimingResult timing)
+            {
+                var hero = Unit("Hero", Team.Heroes, 100, Strike(20, hits: 2));
+                var enemy = Unit("Enemy", Team.Enemies, 500, Strike(0));
+                var model = Create(Encounter(new[] { enemy }), 0f, hero);
+                model.Start();
+                model.Act(model.Heroes[0], hero.attack, model.Enemies[0], timing);
+                return model.Rage.Value;
+            }
+
+            var rules = ScriptableObject.CreateInstance<BattleRules>();
+            float damageRage = 60 * rules.heroRagePerDamage;
+            Assert.AreEqual(damageRage + rules.perfectTimingRage, RageAfter(TimingResult.Perfect), 0.001f);
+            Assert.AreEqual(50 * rules.heroRagePerDamage, RageAfter(TimingResult.Good), 0.001f);
+        }
+
+        [Test]
+        public void AttackTiming_IsIgnoredBySupportAndTheRageAction()
+        {
+            var heal = ScriptableObject.CreateInstance<AbilityDefinition>();
+            heal.target = AbilityTarget.Ally;
+            heal.effects = new AbilityEffect[] { new HealEffect { power = 10 } };
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(10), heal, Strike(30));
+            var enemy = Unit("Enemy", Team.Enemies, 500, Strike(0));
+            var model = Create(Encounter(new[] { enemy }), 100f, hero);
+            model.Start();
+
+            var events = model.Act(model.Heroes[0], hero.special, model.Enemies[0], TimingResult.Perfect);
+
+            Assert.AreEqual(470, model.Enemies[0].Health);
+            Assert.AreEqual(TimingResult.Miss, events.OfType<ActionPerformed>().First().Timing.Attack);
+
+            events = model.Act(model.Heroes[0], heal, model.Heroes[0], TimingResult.Perfect);
+
+            Assert.AreEqual(TimingResult.Miss, events.OfType<ActionPerformed>().First().Timing.Attack);
+        }
+
         [Test]
         public void Waves_AdvanceAfterClearAndBattleEndsInVictory()
         {

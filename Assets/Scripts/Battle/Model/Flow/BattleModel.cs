@@ -80,13 +80,14 @@ namespace Featherguard.Battle
         public IEnumerable<BattleUnit> Candidates(BattleUnit hero, AbilityDefinition ability) =>
             Targeting.Candidates(ability, Combat.AlliesOf(hero), Combat.OpponentsOf(hero));
 
-        public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target)
+        public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target, TimingResult timing = TimingResult.Miss)
         {
             if (!CanUse(hero, ability, target)) return Array.Empty<BattleEvent>();
-            if (ability == hero.Definition.special)
+            bool special = ability == hero.Definition.special;
+            if (special)
                 Combat.ConsumeRage();
             hero.HasActed = true;
-            resolver.Execute(hero, ability, target);
+            resolver.Execute(hero, ability, target, special ? ActionTiming.None : ActionTiming.ForAttack(timing));
             bosses.Check();
             Advance();
             return log.Flush();
