@@ -3,7 +3,7 @@
     "rootNamespace": "Featherguard.Battle.Presentation",
     "references": [
         "Featherguard.Battle",
-        "Featherguard.Feel",
+        "Featherguard.Feedback",
         "Featherguard.Core",
         "Unity.InputSystem",
         "UnityEngine.UI"

@@ -6,7 +6,7 @@
         "Featherguard.Run",
         "Featherguard.Meta",
         "Featherguard.Battle",
-        "Featherguard.Feel",
+        "Featherguard.Feedback",
         "Featherguard.Core",
         "Unity.InputSystem",
         "UnityEngine.UI"

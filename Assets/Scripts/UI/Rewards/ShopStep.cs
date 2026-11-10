@@ -1,5 +1,5 @@
 using System.Collections;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using Featherguard.Run;
 using UnityEngine;
 using UnityEngine.UI;
