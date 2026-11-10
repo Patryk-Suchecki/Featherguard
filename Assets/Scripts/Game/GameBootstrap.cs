@@ -14,8 +14,6 @@ namespace Featherguard.Game
 {
     public class GameBootstrap : MonoBehaviour
     {
-        public const string TestEncounterPref = "Featherguard.TestEncounter";
-
         [SerializeField] GameConfig config;
         [SerializeField] Camera battleCamera;
         [SerializeField] CameraShake cameraShake;
@@ -52,7 +50,7 @@ namespace Featherguard.Game
             hud.BindWallet(session.Wallet);
 
             var setup = session.CreateBattleSetup();
-            var testEncounter = TestEncounter();
+            var testEncounter = TestEncounterSetting.Current;
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
             var model = new BattleModel(setup, config.rules);
@@ -74,16 +72,6 @@ namespace Featherguard.Game
         }
 
         void Update() => battle?.Tick();
-
-#if UNITY_EDITOR
-        static EncounterDefinition TestEncounter()
-        {
-            string path = UnityEditor.EditorPrefs.GetString(TestEncounterPref, "");
-            return path.Length > 0 ? UnityEditor.AssetDatabase.LoadAssetAtPath<EncounterDefinition>(path) : null;
-        }
-#else
-        static EncounterDefinition TestEncounter() => null;
-#endif
 
         static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
         {
