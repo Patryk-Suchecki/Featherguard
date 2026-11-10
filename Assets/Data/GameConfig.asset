@@ -51,4 +51,3 @@ MonoBehaviour:
     lightShake: {x: 0.06, y: 0.18}
     heavyShake: {x: 0.16, y: 0.32}
     voices: 6
-  testEncounter: {fileID: 0}
