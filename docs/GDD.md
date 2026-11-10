@@ -91,7 +91,7 @@ A shared meter filled by hits dealt and taken and by perfect timings. A full met
 
 | Status | Effect |
 |---|---|
-| Bleed | damage every turn for 3 turns (no hero or enemy applies it yet) |
+| Bleed | damage every turn for 3 turns (applied by the Bies' Rending Claws) |
 | Burn | damage every turn, stacks up to 5 |
 | Freeze | +30% damage taken; a Frozen enemy also acts last in the enemy turn (on a hero only the damage part applies) |
 | Curse | −30% damage dealt (no hero or enemy applies it yet) |
