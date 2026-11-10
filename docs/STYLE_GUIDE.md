@@ -49,13 +49,15 @@ All units use the `Featherguard/Toon` shader; its settings live in `Assets/Art/M
 - **Shadows are a colour, not black:** the shadow band keeps the texture's hue and turns it cooler.
 - Characters and props use the toon shader. Backgrounds may be softer, but never sharper or more detailed than the characters.
 
-## Texture painting
+## Textures
 
-- **Three tones per material:** shadow, base and light. Paint the light from above and the front; darken towards the back, the underside and the ends of the limbs.
+Textures are baked from the sculpt, not painted by hand.
+
+- **Flat colours per region:** each part (fur, skin, horns, claws, eyes) gets one base colour from its palette; the baked ambient occlusion and cavity add the shading on top, lightly.
 - **Value before colour:** the face, hands and weapon are the lightest or most contrasting areas, so the eye goes there first.
 - **Accents on a few shapes only:** for example the Bies' amber eyes and mouth, rusty mane tips and red horn stripes.
-- **Visible brushwork:** colour shifts and broad strokes instead of fine detail. No photo textures, no painted specular highlights, no metal sheen.
-- **Glow** (eyes, embers, magic) is painted as the lightest, most saturated colour of the character; the toon shader does not add bloom on its own.
+- **Shape over detail:** detail comes from the sculpted forms, not from fine texture. No photo textures, no specular highlights, no metal sheen.
+- **Glow** (eyes, embers, magic) is the lightest, most saturated colour of the character; the toon shader does not add bloom on its own.
 
 ## Colour
 
@@ -117,7 +119,7 @@ The battle scene still uses the bright prototype lighting and sky; matching it t
 
 ## Interface
 
-- **Same look as the world:** frames and buttons use the outline colour, flat fills and painted texture; dark wood, bone and cloth instead of glossy panels.
+- **Same look as the world:** frames and buttons use the outline colour and flat fills; dark wood, bone and cloth instead of glossy panels.
 - **Readable first:** large, high-contrast text on flat dark or light panels, never over busy art.
 - **Never colour alone:** every state also has a shape, icon or sound (accessibility rule from the GDD).
 - **Icons:** one clear silhouette with an outline, the same light direction as the characters.
@@ -127,5 +129,5 @@ The battle scene still uses the bright prototype lighting and sky; matching it t
 - [ ] Silhouette reads at 64 px black; three carrying shapes named in its character sheet.
 - [ ] Height fits its role in the table above.
 - [ ] Base colours from its land's palette, accents on a few shapes only.
-- [ ] Three-tone painted texture, light from above and the front, no PBR look.
+- [ ] Baked texture with flat colours per region and accents on a few shapes, no PBR look.
 - [ ] Looks right with `Toon.mat` in battle next to the heroes.
