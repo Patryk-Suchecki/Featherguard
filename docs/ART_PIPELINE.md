@@ -52,8 +52,8 @@ Up to six characters are on screen on a phone at once.
 | Texture | 1024 × 1024 | 2048 × 2048 |
 
 - Bones: up to 60, at most 4 bone weights per vertex.
-- One material per character (two at most, for example for a separate weapon).
-- One albedo texture, PNG, sRGB. No normal, roughness or metallic maps: shading comes from the toon shader.
+- One material and one albedo texture per character (PNG, sRGB), so a character is one draw call; the export warns when more materials are used. No normal, roughness or metallic maps: shading comes from the toon shader.
+- Weapons and other equipment will be separate models with their own material, attached to a hand bone in the game; their rules come with the equipment work.
 
 ## Rig
 
@@ -70,7 +70,8 @@ Up to six characters are on screen on a phone at once.
 | Clip | Loops | Typical length | Notes |
 |---|---|---|---|
 | `Idle` | yes | 40–60 frames | first and last pose identical |
-| `Attack` | no | 20–30 frames | needs the `OnHitFrame` marker |
+| `AttackWindup` | yes | 8–16 frames | the held wind-up pose before the strike; the game loops it for a random time so the player cannot learn the block rhythm. Optional for now; required for enemies once blocking exists (#18, #19) |
+| `Attack` | no | 20–30 frames | starts from the `AttackWindup` pose when there is one; needs the `OnHitFrame` marker |
 | `Cast` | no | 25–35 frames | the special ability; needs the `OnHitFrame` marker |
 | `Hit` | no | 10–15 frames | returns to the idle pose |
 | `Death` | no | 25–40 frames | ends lying on the ground |
@@ -90,19 +91,20 @@ blender -b Art/Blender/Characters/Bies.blend -P Art/Blender/export_character.py
 ```
 
 `blender` is your Blender 5.x executable; use its full path if it is not on `PATH`. The script:
-- checks the rig, the mesh, the six clips and the `OnHitFrame` markers, and stops with a clear message if something is missing;
-- warns about unapplied transforms, a wrong frame rate, extra actions and budgets;
+- runs only from the command line with `-b`, because it changes the open file while it works (in an open Blender a later Ctrl+S would save those changes);
+- checks the rig, the mesh, the six clips and the `OnHitFrame` markers, and stops with a clear message if something is missing; `AttackWindup` is exported when it exists;
+- warns about unapplied transforms (in any rotation mode), more than one material, a wrong frame rate, extra actions and budgets;
 - leaves out preview outlines (a Solidify modifier with flipped normals or named `Outline`), because the toon shader draws the outline in the game;
 - writes `<Name>.fbx` and `<Name>.clips.json` to `Assets/Art/Characters` and the material's image texture to `Textures/<Name>_Albedo.png`, linked from the FBX so Unity assigns it, and refuses to overwrite a file that is not locked;
 - exports the material through its Principled BSDF, so a preview node setup (toon ramp, mix shaders) may stay in the `.blend`;
-- prints the triangle count, bone count and height (use the height for the unit's `height`).
+- prints the triangle count, bone count and height, measured on the first frame of `Idle`, the pose the unit stands in (use the height for the unit's `height`).
 
 Pass a folder after `--` to export somewhere else for a test, for example `-- Temp/ExportTest`.
 
 ## Version control
 
 - Every binary (`.blend`, `.fbx`, `.png`, `.kra`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
-- A character is added or changed in its own `art/` PR, with no gameplay code. Code that uses the character comes in its own PR.
+- A character is added or changed in its own `art/` PR, with no gameplay rule changes. Code that puts the character into the game comes in its own PR.
 - Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
 
 ## Character workflow
@@ -172,7 +174,7 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 - Check every clip from the battle camera's side. Enemies face left, so you see them from +X and their near arm is `.L`; heroes face right, you see them from −X and their near arm is `.R`. Attack and point with the near arm.
 - Attack:
   - The wind-up is slower than the strike, at most half its speed. Load the weight into the legs and twist the torso, elbow first.
-  - Hold the wind-up as a moving hold; it is the block cue.
+  - Hold the wind-up as a moving hold; it is the block cue. Make it its own looping `AttackWindup` clip, so the game can stretch it to a random length.
   - Strike on an arc led by the hips, then the chest, then the arm.
   - Put `OnHitFrame` on the contact frame, right after the fastest frame.
   - Follow through past the target, then hold 2–3 frames for the hitstop.

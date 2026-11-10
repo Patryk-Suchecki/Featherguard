@@ -10,7 +10,8 @@ from featherkit import PROJECT_ROOT, export_fbx
 
 OUT_DIR = os.path.join(PROJECT_ROOT, "Assets", "Art", "Characters")
 CLIPS = ("Idle", "Attack", "Cast", "Hit", "Death", "Victory")
-LOOPING = {"Idle", "Victory"}
+OPTIONAL_CLIPS = ("AttackWindup",)
+LOOPING = {"Idle", "Victory", "AttackWindup"}
 HIT_EVENT = "OnHitFrame"
 NEEDS_HIT_EVENT = {"Attack", "Cast"}
 FPS = 30
@@ -39,10 +40,29 @@ def skinned_meshes(rig):
     return meshes
 
 
+def is_rotated(obj):
+    if obj.rotation_mode == "QUATERNION":
+        return obj.rotation_quaternion.angle > 1e-4
+    if obj.rotation_mode == "AXIS_ANGLE":
+        return abs(obj.rotation_axis_angle[0]) > 1e-4
+    return any(abs(r) > 1e-4 for r in obj.rotation_euler)
+
+
 def check_transforms(objects, warnings):
     for obj in objects:
-        if any(abs(s - 1.0) > 1e-4 for s in obj.scale) or any(abs(r) > 1e-4 for r in obj.rotation_euler):
+        if any(abs(s - 1.0) > 1e-4 for s in obj.scale) or is_rotated(obj):
             warnings.append(f"'{obj.name}' has unapplied rotation or scale; apply them (Ctrl+A) before export")
+
+
+def check_materials(meshes, warnings):
+    used = set()
+    for mesh in meshes:
+        slots = mesh.material_slots
+        for polygon in mesh.data.polygons:
+            if polygon.material_index < len(slots) and slots[polygon.material_index].material:
+                used.add(slots[polygon.material_index].material.name)
+    if len(used) > 1:
+        warnings.append(f"{len(used)} materials are used ({', '.join(sorted(used))}); a character should have one")
 
 
 def drop_preview_outlines(meshes, warnings):
@@ -58,11 +78,12 @@ def clip_actions(warnings):
     missing = [name for name in CLIPS if name not in bpy.data.actions]
     if missing:
         raise ExportError("missing actions: " + ", ".join(missing))
-    extra = [a for a in bpy.data.actions if a.name not in CLIPS]
+    names = CLIPS + tuple(name for name in OPTIONAL_CLIPS if name in bpy.data.actions)
+    extra = [a for a in bpy.data.actions if a.name not in names]
     for action in extra:
         warnings.append(f"action '{action.name}' is not a game clip and is left out of the export")
         bpy.data.actions.remove(action)
-    return [bpy.data.actions[name] for name in CLIPS]
+    return [bpy.data.actions[name] for name in names]
 
 
 def clip_meta(action):
@@ -77,6 +98,12 @@ def clip_meta(action):
 
 
 def report(rig, meshes, warnings):
+    scene = bpy.context.scene
+    rig.animation_data_create()
+    action, frame = rig.animation_data.action, scene.frame_current
+    idle = bpy.data.actions["Idle"]
+    rig.animation_data.action = idle
+    scene.frame_set(int(round(idle.frame_range[0])))
     depsgraph = bpy.context.evaluated_depsgraph_get()
     triangles = 0
     top = 0.0
@@ -87,6 +114,8 @@ def report(rig, meshes, warnings):
         triangles += len(data.loop_triangles)
         top = max([top] + [(evaluated.matrix_world @ v.co).z for v in data.vertices])
         evaluated.to_mesh_clear()
+    rig.animation_data.action = action
+    scene.frame_set(frame)
     bones = len(rig.data.bones)
     if triangles > MAX_TRIANGLES:
         warnings.append(f"{triangles} triangles is over the budget of {MAX_TRIANGLES}")
@@ -132,6 +161,8 @@ def export_albedo(meshes, path, warnings):
 
 
 def main():
+    if not bpy.app.background:
+        raise ExportError("run it from the command line with -b; in an open Blender it would change your file")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     out_dir = os.path.abspath(argv[0]) if argv else OUT_DIR
     name = os.path.splitext(os.path.basename(bpy.data.filepath))[0]
@@ -146,6 +177,7 @@ def main():
     rig = find_rig()
     meshes = skinned_meshes(rig)
     check_transforms([rig] + meshes, warnings)
+    check_materials(meshes, warnings)
     drop_preview_outlines(meshes, warnings)
     actions = clip_actions(warnings)
     meta = {"clips": [clip_meta(action) for action in actions]}
