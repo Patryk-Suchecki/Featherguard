@@ -23,7 +23,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4550530214315163757
-      type: {class: PartyStatPerk, ns: Featherguard.Meta, asm: Featherguard}
+      type: {class: PartyStatPerk, ns: Featherguard.Meta, asm: Featherguard.Meta}
       data:
         stat: 3
         multiplyPerLevel: 0.06

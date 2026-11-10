@@ -102,69 +102,69 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4550530214315163726
-      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: +20 gold
         amount: 20
     - rid: 4550530214315163727
-      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: +60 gold
         amount: 60
     - rid: 4550530214315163728
-      type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Heal +25%
         fraction: 0.25
     - rid: 4550530214315163729
-      type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: HealReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Full heal
         fraction: 1
     - rid: 4550530214315163730
-      type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Extra card
         minimum: 0
     - rid: 4550530214315163731
-      type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: CardReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Epic card
         minimum: 2
     - rid: 4550530214315163732
-      type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: +40 rage next battle
         amount: 40
     - rid: 4550530214315163733
-      type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: StartRageReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Full rage
         amount: 100
     - rid: 4550530214315163734
-      type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Bad luck... -10 gold
         healthLoss: 0
         goldLoss: 10
     - rid: 4550530214315163735
-      type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: PenaltyReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: BAD LUCK! -15% HP, -20 gold
         healthLoss: 0.15
         goldLoss: 20
     - rid: 4550530214315163736
-      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: +50 gold
         amount: 50
     - rid: 4550530214315163737
-      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: +150 gold
         amount: 150
     - rid: 4550530214315163738
-      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard}
+      type: {class: GoldReward, ns: Featherguard.Run, asm: Featherguard.Run}
       data:
         text: Nothing... +5 gold
         amount: 5

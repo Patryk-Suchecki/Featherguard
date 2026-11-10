@@ -1,0 +1,23 @@
+{
+    "name": "Featherguard.UI",
+    "rootNamespace": "Featherguard.UI",
+    "references": [
+        "Featherguard.Battle.Presentation",
+        "Featherguard.Run",
+        "Featherguard.Meta",
+        "Featherguard.Battle",
+        "Featherguard.Feel",
+        "Featherguard.Core",
+        "Unity.InputSystem",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
