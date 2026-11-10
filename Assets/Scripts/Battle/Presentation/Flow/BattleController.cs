@@ -13,6 +13,9 @@ namespace Featherguard.Battle.Presentation
         public UnitViewFactory Factory;
         public AbilityVisualsLibrary Visuals;
         public IBattleView View;
+        public ITimingCueView TimingCues;
+        public ITimingInput TimingInput;
+        public IRandomSource Random;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;
         public Camera Camera;
@@ -36,7 +39,7 @@ namespace Featherguard.Battle.Presentation
             var picker = new PointerUnitPicker(services.Camera, () => Presenter.Views, services.Config.tapTolerance);
             commands = new PlayerCommands(model, Presenter, picker, services.Config, services.Feedback, services.View);
             if (services.Config.timingPrompts)
-                prompt = new TimingPrompt(services.Config, services.View, services.Feedback, UnityRandomSource.Shared);
+                prompt = new TimingPrompt(services.Config, services.TimingCues, services.View, services.Feedback, services.TimingInput, services.Random);
         }
 
         public void Tick() => commands.Tick();

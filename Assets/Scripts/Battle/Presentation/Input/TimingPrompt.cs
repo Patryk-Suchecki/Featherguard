@@ -3,43 +3,46 @@ using System.Collections;
 using Featherguard.Core;
 using Featherguard.Feel;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Featherguard.Battle.Presentation
 {
     public sealed class TimingPrompt
     {
         readonly BattlePresentationConfig config;
+        readonly ITimingCueView cues;
         readonly IBattleView view;
         readonly ICombatFeedback feedback;
+        readonly ITimingInput input;
         readonly IRandomSource random;
+        readonly TimingJudge judge;
 
-        public TimingPrompt(BattlePresentationConfig config, IBattleView view, ICombatFeedback feedback, IRandomSource random)
+        public TimingPrompt(BattlePresentationConfig config, ITimingCueView cues, IBattleView view, ICombatFeedback feedback, ITimingInput input, IRandomSource random)
         {
             this.config = config;
+            this.cues = cues;
             this.view = view;
             this.feedback = feedback;
+            this.input = input;
             this.random = random;
+            judge = new TimingJudge(config.perfectWindow, config.goodWindow);
         }
-
-        static float Step => Time.unscaledDeltaTime * GameClock.Scale;
 
         public IEnumerator Attack(Vector3 world, Action<TimingResult> done)
         {
             var result = TimingResult.Miss;
             float target = config.attackRingTime;
             yield return null;
-            for (float t = 0f; t <= target + config.goodWindow; t += Step)
+            for (float t = 0f; t <= target + judge.GoodWindow; t += input.FrameTime)
             {
-                view.ShowAttackRing(world, Mathf.Clamp01(1f - t / target));
-                if (Pressed())
+                cues.ShowAttackRing(world, Mathf.Clamp01(1f - t / target));
+                if (input.Pressed())
                 {
-                    result = Judge(t - target);
+                    result = judge.Judge(t - target);
                     break;
                 }
                 yield return null;
             }
-            view.HideTimingCue();
+            cues.HideTimingCue();
             Announce(world, result, "PERFECT!", "GOOD");
             done(result);
         }
@@ -49,33 +52,26 @@ namespace Featherguard.Battle.Presentation
             bool wasted = false;
             float windup = random.Range(config.windupMin, config.windupMax);
             yield return null;
-            for (float t = 0f; t < windup; t += Step)
+            for (float t = 0f; t < windup; t += input.FrameTime)
             {
-                wasted |= Pressed();
+                wasted |= input.Pressed();
                 yield return null;
             }
 
             var result = TimingResult.Miss;
-            for (float t = 0f; t <= config.blockLead + config.goodWindow; t += Step)
+            for (float t = 0f; t <= config.blockLead + judge.GoodWindow; t += input.FrameTime)
             {
-                view.ShowBlockCue(world);
-                if (!wasted && Pressed())
+                cues.ShowBlockCue(world);
+                if (!wasted && input.Pressed())
                 {
-                    result = Judge(t - config.blockLead);
+                    result = judge.Judge(t - config.blockLead);
                     break;
                 }
                 yield return null;
             }
-            view.HideTimingCue();
+            cues.HideTimingCue();
             Announce(world, result, "PERFECT BLOCK!", "BLOCK");
             done(result);
-        }
-
-        TimingResult Judge(float offset)
-        {
-            float distance = Mathf.Abs(offset);
-            if (distance <= config.perfectWindow) return TimingResult.Perfect;
-            return distance <= config.goodWindow ? TimingResult.Good : TimingResult.Miss;
         }
 
         void Announce(Vector3 world, TimingResult result, string perfect, string good)
@@ -84,14 +80,6 @@ namespace Featherguard.Battle.Presentation
             bool isPerfect = result == TimingResult.Perfect;
             view.Popup(world, isPerfect ? perfect : good, isPerfect ? PopupKind.Crit : PopupKind.Buff);
             feedback.Play(isPerfect ? SfxId.Buff : SfxId.Click);
-        }
-
-        static bool Pressed()
-        {
-            if (GameClock.Paused) return false;
-            bool tap = Pointer.current != null && Pointer.current.press.wasPressedThisFrame;
-            bool space = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
-            return tap || space;
         }
     }
 }

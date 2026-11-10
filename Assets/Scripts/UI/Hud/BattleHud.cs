@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Featherguard.UI
 {
-    public class BattleHud : MonoBehaviour, IBattleView
+    public class BattleHud : MonoBehaviour, IBattleView, ITimingCueView
     {
         static readonly Color CalloutColor = new(1f, 0.45f, 0.15f);
 
