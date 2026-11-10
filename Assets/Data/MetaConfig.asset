@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0fe83d5b69fdc345a4c7983f4b8aa99, type: 3}
-  m_Name: Meta
+  m_Name: MetaConfig
   m_EditorClassIdentifier: Featherguard::Featherguard.Meta.MetaConfig
   perks:
   - {fileID: 11400000, guid: 66076aaedba296c4eabacc44fc5193a8, type: 2}

@@ -28,7 +28,7 @@ namespace Featherguard.EditorTools
                 Perk("Legends", "Legends", "Adds Legendary cards to the pool", "Crown", 1, 10, new UnlockPerk { unlock = RunUnlock.Legendaries }),
             };
 
-            return seeder.Seed<MetaConfig>($"{ContentPaths.Data}/Meta.asset", m => m.perks = perks);
+            return seeder.Seed<MetaConfig>($"{ContentPaths.Data}/MetaConfig.asset", m => m.perks = perks);
         }
     }
 }

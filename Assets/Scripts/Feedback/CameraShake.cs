@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Featherguard.Feel
+namespace Featherguard.Feedback
 {
     public class CameraShake : MonoBehaviour
     {

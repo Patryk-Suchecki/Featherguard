@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Featherguard.Feel
+namespace Featherguard.Core
 {
     public static class GameClock
     {

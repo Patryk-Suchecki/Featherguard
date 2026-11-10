@@ -5,7 +5,7 @@ namespace Featherguard.Battle
 {
     public sealed class EnemyTurn
     {
-        readonly Combat combat;
+        readonly BattleState state;
         readonly ActionResolver resolver;
         readonly StatusTicker ticker;
         readonly BossPhases bosses;
@@ -17,9 +17,9 @@ namespace Featherguard.Battle
         int actionsLeft;
         EnemyDecision? pending;
 
-        public EnemyTurn(Combat combat, ActionResolver resolver, StatusTicker ticker, BossPhases bosses, IEnemyBrain brain, BattleLog log, bool awaitBlocks)
+        public EnemyTurn(BattleState state, ActionResolver resolver, StatusTicker ticker, BossPhases bosses, IEnemyBrain brain, BattleLog log, bool awaitBlocks)
         {
-            this.combat = combat;
+            this.state = state;
             this.resolver = resolver;
             this.ticker = ticker;
             this.bosses = bosses;
@@ -33,9 +33,9 @@ namespace Featherguard.Battle
         public void Begin()
         {
             log.Emit(new TurnStarted { Team = Team.Enemies });
-            ticker.BeginTurn(combat.Enemies);
+            ticker.BeginTurn(state.Enemies);
             queue.Clear();
-            foreach (var enemy in combat.Enemies.Snapshot())
+            foreach (var enemy in state.Enemies.Snapshot())
                 queue.Enqueue(enemy);
             acting = null;
             Active = true;
@@ -45,18 +45,18 @@ namespace Featherguard.Battle
         {
             while (true)
             {
-                if (acting != null && (actionsLeft == 0 || !acting.IsAlive || !combat.Heroes.AnyAlive))
+                if (acting != null && (actionsLeft == 0 || !acting.IsAlive || !state.Heroes.AnyAlive))
                     FinishActing();
-                if (acting == null && (!combat.Heroes.AnyAlive || !NextActing()))
+                if (acting == null && (!state.Heroes.AnyAlive || !NextActing()))
                 {
-                    ticker.EndTurn(combat.Enemies);
+                    ticker.EndTurn(state.Enemies);
                     Active = false;
                     return false;
                 }
 
                 actionsLeft--;
                 acting.ActionsLeftThisTurn = actionsLeft;
-                var decision = brain.Decide(acting, combat);
+                var decision = brain.Decide(acting, state);
                 bool hasTarget = decision.Ability.TargetsAll || decision.Target != null;
                 if (awaitBlocks && decision.Ability.IsDamaging && hasTarget)
                 {

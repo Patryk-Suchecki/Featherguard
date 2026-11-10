@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Featherguard.Core;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using UnityEngine;
 
 namespace Featherguard.Battle.Presentation

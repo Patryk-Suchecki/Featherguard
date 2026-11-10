@@ -1,4 +1,4 @@
-using Featherguard.Feel;
+using Featherguard.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
