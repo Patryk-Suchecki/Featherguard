@@ -51,6 +51,7 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 | Clip | What happens | `OnHitFrame` |
 |---|---|---|
 | `Idle` (1–76, loops) | Hunched, heavy breathing lifts the shoulders and mane; the claws flex, an ear twitches, the tail flicks; now and then a curious goat head tilt and a grin. | – |
+| `AttackWindup` (planned, loops) | The raised-claw hold from the start of `Attack`, breathing and trembling, so the game can stretch the wind-up to a random length and the block can't be learned. Made together with blocking (#18, #19). | – |
 | `Attack` (1–31) | He leans back and raises the near arm high above the shoulder, a clear pose to block on; a fast diagonal downward slash with a lunge; the arm swings past the body, a short hold, back to Idle. | 15, when the claws cross the target |
 | `Cast` (1–46) | He straightens, chest out, throws his head back and howls, slams both fists into the ground and points a claw at the hero. | 24, the fists hitting the ground |
 | `Hit` (1–13) | A short jerk backwards, the mane bristles, a snarl, then a quick angry grin. | – |
@@ -73,6 +74,7 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 - [ ] Painted texture (#51, M1; a baked placeholder is in place)
 - [x] Rig (#48)
 - [x] `Idle`
+- [ ] `AttackWindup` (with blocking, #18, #19)
 - [x] `Attack`
 - [x] `Cast`
 - [x] `Hit`
@@ -90,7 +92,7 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
   - [ ] Wolf possession glow
   - [ ] hit fur puff
   - [ ] death glow fade and smoke
-- [ ] Sounds: growl, whoosh, claw tear, Bleed drip, howl, ground thud, Mark ting, Wolf answer howl, hit snort and chuckle, death rattle and fall, ember hiss, victory laugh
+- [ ] Sounds (#56): growl, whoosh, claw tear, Bleed drip, howl, ground thud, Mark ting, Wolf answer howl, hit snort and chuckle, death rattle and fall, ember hiss, victory laugh
 - [x] In the game (`UnitDefinition` and the `BiesTest` encounter, #49)
 
 ## Open questions
