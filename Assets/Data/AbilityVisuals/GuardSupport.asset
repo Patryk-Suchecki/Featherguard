@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae8ff64d4db43e2bce311b451f0bd10, type: 3}
+  m_Name: GuardSupport
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.AbilityVisuals
+  ability: {fileID: 11400000, guid: 672e042ace1fbd644a060c17c3e6b1d9, type: 2}
+  animationState: Cast
+  heavy: 0
+  fxColor: {r: 0.45, g: 0.7, b: 1, a: 1}
+  castSound: 0
+  impactSound: 7
+  delivery:
+    rid: 4550530329866666004
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530329866666004
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
+      data: 

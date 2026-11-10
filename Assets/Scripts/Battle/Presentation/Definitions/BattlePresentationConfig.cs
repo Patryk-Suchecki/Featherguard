@@ -5,6 +5,10 @@ namespace Featherguard.Battle.Presentation
     [CreateAssetMenu(menuName = "Featherguard/Battle Presentation")]
     public class BattlePresentationConfig : ScriptableObject
     {
+        [Header("Abilities")]
+        [Tooltip("How each ability looks and sounds; abilities without an entry use plain defaults.")]
+        public AbilityVisuals[] abilities = new AbilityVisuals[0];
+
         [Header("Formation")]
         public Vector3[] heroSlots = { new(-2.3f, 0f, 0.45f), new(-3.7f, 0f, -0.55f), new(-5.0f, 0f, 0.6f) };
         public Vector3[] enemySlots = { new(2.3f, 0f, 0.45f), new(3.7f, 0f, -0.55f), new(5.0f, 0f, 0.6f) };

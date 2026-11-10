@@ -11,6 +11,7 @@ namespace Featherguard.Battle.Presentation
     {
         public BattlePresentationConfig Config;
         public UnitViewFactory Factory;
+        public AbilityVisualsLibrary Visuals;
         public IBattleView View;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;
@@ -31,7 +32,7 @@ namespace Featherguard.Battle.Presentation
         public BattleController(BattleModel model, BattleServices services)
         {
             Model = model;
-            Presenter = new BattlePresenter(services.Config, services.Factory, services.View, services.Feedback, services.Host, model.Rage);
+            Presenter = new BattlePresenter(services.Config, services.Factory, services.Visuals, services.View, services.Feedback, services.Host, model.Rage);
             var picker = new PointerUnitPicker(services.Camera, () => Presenter.Views, services.Config.tapTolerance);
             commands = new PlayerCommands(model, Presenter, picker, services.Config, services.Feedback, services.View);
             if (services.Config.timingPrompts)

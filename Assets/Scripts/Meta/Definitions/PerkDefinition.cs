@@ -3,6 +3,7 @@ using Featherguard.Battle;
 using Featherguard.Core;
 using Featherguard.Run;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Featherguard.Meta
 {
@@ -26,7 +27,7 @@ namespace Featherguard.Meta
         public abstract void Apply(RunSession session, int level);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class PartyStatPerk : PerkEffect
     {
         public StatType stat;
@@ -40,7 +41,7 @@ namespace Featherguard.Meta
         }
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class LuckPerk : PerkEffect
     {
         public int perLevel = 1;
@@ -48,7 +49,7 @@ namespace Featherguard.Meta
         public override void Apply(RunSession session, int level) => session.Luck += perLevel * level;
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class StartingGoldPerk : PerkEffect
     {
         public int perLevel = 15;
@@ -56,7 +57,7 @@ namespace Featherguard.Meta
         public override void Apply(RunSession session, int level) => session.Wallet.Deposit(perLevel * level);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class UnlockPerk : PerkEffect
     {
         public RunUnlock unlock;

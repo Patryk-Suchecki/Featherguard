@@ -13,7 +13,7 @@ namespace Featherguard.EditorTools
         static readonly Color Spark = new(1f, 0.62f, 0.15f);
         static readonly Color Ember = new(1f, 0.45f, 0.1f);
 
-        public static Dictionary<string, AbilityDefinition> Build(Seeder seeder, IReadOnlyDictionary<string, StatusDefinition> statuses)
+        public static (Dictionary<string, AbilityDefinition> Abilities, AbilityVisuals[] Visuals) Build(Seeder seeder, IReadOnlyDictionary<string, StatusDefinition> statuses)
         {
             var arrow = AssetDatabase.LoadAssetAtPath<GameObject>($"{ContentPaths.Environment}/Arrow.fbx");
             AbilityDelivery Melee() => new MeleeDelivery();
@@ -28,23 +28,28 @@ namespace Featherguard.EditorTools
             };
 
             var abilities = new Dictionary<string, AbilityDefinition>();
+            var visuals = new List<AbilityVisuals>();
 
             void Add(string id, string name, AbilityTarget target, System.Func<AbilityDelivery> delivery, string state, Color color, SfxId cast, SfxId impact,
                 int hits = 1, bool heavy = false, params AbilityEffect[] effects)
             {
-                abilities[id] = seeder.Seed<AbilityDefinition>($"{ContentPaths.Abilities}/{id}.asset", a =>
+                var ability = seeder.Seed<AbilityDefinition>($"{ContentPaths.Abilities}/{id}.asset", a =>
                 {
                     a.displayName = name;
                     a.target = target;
-                    a.delivery = delivery();
-                    a.animationState = state;
                     a.hits = hits;
-                    a.heavy = heavy;
-                    a.fxColor = color;
-                    a.castSound = cast;
-                    a.impactSound = impact;
                     a.effects = effects.ToArray();
                 });
+                abilities[id] = ability;
+                visuals.Add(seeder.Seed<AbilityVisuals>($"{ContentPaths.AbilityVisuals}/{id}.asset", v =>
+                {
+                    v.delivery = delivery();
+                    v.animationState = state;
+                    v.heavy = heavy;
+                    v.fxColor = color;
+                    v.castSound = cast;
+                    v.impactSound = impact;
+                }, v => v.ability = ability));
             }
 
             Add("KnightAttack", "Slash", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Hit, effects: Damage(30));
@@ -67,7 +72,7 @@ namespace Featherguard.EditorTools
             Add("ChieftainAttack", "Chieftain's Wrath", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(34), Status("Stun", chance: 0.35f) });
             Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, effects: Damage(24));
             Add("BiesSpecial", "Howl", AbilityTarget.AllEnemies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Magic, heavy: true, effects: Status("Weaken"));
-            return abilities;
+            return (abilities, visuals.ToArray());
         }
     }
 }

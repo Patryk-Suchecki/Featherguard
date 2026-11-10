@@ -78,7 +78,7 @@ namespace Featherguard.Battle.Presentation
 
         public void Tick()
         {
-            if (!CanCommand || GameClock.Paused) return;
+            if (!CanCommand) return;
             if (picker.TryPick(out var unit))
                 Tap(unit.Unit);
         }

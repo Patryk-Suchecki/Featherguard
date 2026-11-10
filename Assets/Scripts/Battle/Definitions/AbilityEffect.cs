@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Featherguard.Battle
 {
@@ -28,7 +29,7 @@ namespace Featherguard.Battle
         public abstract void Apply(in EffectContext context);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class DamageEffect : AbilityEffect
     {
         [Min(0)] public int power = 20;
@@ -36,7 +37,7 @@ namespace Featherguard.Battle
         public override void Apply(in EffectContext context) => context.Combat.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class HealEffect : AbilityEffect
     {
         [Min(0)] public int power = 30;
@@ -44,7 +45,7 @@ namespace Featherguard.Battle
         public override void Apply(in EffectContext context) => context.Combat.Heal(context.Actor, context.Target, power, context.Ability);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class ApplyStatusEffect : AbilityEffect
     {
         public StatusApplication application = new();

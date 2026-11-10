@@ -12,6 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fddb728b797608448a63aaa72781b77, type: 3}
   m_Name: BattlePresentation
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.Presentation.BattlePresentationConfig
+  abilities:
+  - {fileID: 11400000, guid: 7c96de684e18c5348b94e1652b684bc8, type: 2}
+  - {fileID: 11400000, guid: d7ffee3c6adf0734a904a913ec04909f, type: 2}
+  - {fileID: 11400000, guid: c195fd1cb53831d41af7048b55c03d2a, type: 2}
+  - {fileID: 11400000, guid: f4702a49c4eb8bc4baa8182036972222, type: 2}
+  - {fileID: 11400000, guid: 2747176e6a9a0b3438c6a1b81552194d, type: 2}
+  - {fileID: 11400000, guid: b40b73e4ba28b524c98490dd67fdb02a, type: 2}
+  - {fileID: 11400000, guid: f6362838716d4c744bf479a18d81c14f, type: 2}
+  - {fileID: 11400000, guid: 8bceba264c4832a4099d4aa95caf4552, type: 2}
+  - {fileID: 11400000, guid: b9687fb79e4ecb740aebc12ced161c29, type: 2}
+  - {fileID: 11400000, guid: 055b7f6d54435a74092dad622e708b2b, type: 2}
+  - {fileID: 11400000, guid: 971fe81d50e418f4a8ddcc24917beb04, type: 2}
+  - {fileID: 11400000, guid: a3dbb3e6b6d6a3041b5af8645d6ddffe, type: 2}
+  - {fileID: 11400000, guid: 8da421ab451a8424086f12e4eced5c9c, type: 2}
+  - {fileID: 11400000, guid: 9e5022d1da7b91447a7e96195f60ad68, type: 2}
+  - {fileID: 11400000, guid: 3be278a58acaf4247a0950498f2c09bb, type: 2}
+  - {fileID: 11400000, guid: d14246af460aaaa4ba6e6eb2c1e4aa5a, type: 2}
+  - {fileID: 11400000, guid: fd6981ee94b2bae43b07ae9ba516e292, type: 2}
+  - {fileID: 11400000, guid: dc1deceab019a34459f7e760332d8d00, type: 2}
+  - {fileID: 11400000, guid: 6d7d5a744e34bd241a5250e5e7c91ead, type: 2}
+  - {fileID: 11400000, guid: 43472a2820f1f884d8589c329990bb67, type: 2}
   heroSlots:
   - {x: -2.3, y: 0, z: 0.45}
   - {x: -3.7, y: 0, z: -0.55}

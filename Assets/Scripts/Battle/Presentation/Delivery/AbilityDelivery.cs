@@ -12,31 +12,32 @@ namespace Featherguard.Battle.Presentation
         public UnitView Actor;
         public IReadOnlyList<UnitView> Targets;
         public AbilityDefinition Ability;
+        public AbilityVisuals Visuals;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;
         public Action<int, UnitView> Impact;
     }
 
-    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public abstract class AbilityDelivery
     {
         public abstract IEnumerator Deliver(DeliveryContext context);
     }
 
-    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class InstantDelivery : AbilityDelivery
     {
         public override IEnumerator Deliver(DeliveryContext context)
         {
-            yield return context.Actor.Animator.PlayUntilHitFrame(context.Ability.animationState);
-            context.Feedback.Play(context.Ability.castSound);
+            yield return context.Actor.Animator.PlayUntilHitFrame(context.Visuals.animationState);
+            context.Feedback.Play(context.Visuals.castSound);
             for (int hit = 0; hit < context.Ability.hits; hit++)
                 foreach (var target in context.Targets)
                     context.Impact(hit, target);
         }
     }
 
-    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class MeleeDelivery : AbilityDelivery
     {
         public float approachTime = 0.3f;
@@ -54,8 +55,8 @@ namespace Featherguard.Battle.Presentation
             var strike = victim.transform.position - actor.Facing * (victim.Radius + actor.Radius + reach);
             context.Feedback.Play(SfxId.Whoosh, 0.6f);
             yield return UnitMotion.HopTo(actor.transform, strike, approachTime, approachHop);
-            yield return actor.Animator.PlayUntilHitFrame(context.Ability.animationState);
-            context.Feedback.Play(context.Ability.castSound);
+            yield return actor.Animator.PlayUntilHitFrame(context.Visuals.animationState);
+            context.Feedback.Play(context.Visuals.castSound);
             for (int i = 0; i < context.Ability.hits; i++)
             {
                 foreach (var target in context.Targets)
@@ -68,7 +69,7 @@ namespace Featherguard.Battle.Presentation
         }
     }
 
-    [Serializable, MovedFrom(true, sourceNamespace: "Featherguard.Battle")]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class ProjectileDelivery : AbilityDelivery
     {
         [Tooltip("Model to fly. When empty, a particle trail is used.")]
@@ -81,11 +82,11 @@ namespace Featherguard.Battle.Presentation
 
         public override IEnumerator Deliver(DeliveryContext context)
         {
-            yield return context.Actor.Animator.PlayUntilHitFrame(context.Ability.animationState);
+            yield return context.Actor.Animator.PlayUntilHitFrame(context.Visuals.animationState);
             var flights = new List<Coroutine>();
             for (int i = 0; i < context.Ability.hits; i++)
             {
-                context.Feedback.Play(context.Ability.castSound);
+                context.Feedback.Play(context.Visuals.castSound);
                 foreach (var target in context.Targets)
                     flights.Add(context.Host.StartCoroutine(Fly(context, target, i)));
                 yield return new WaitForSeconds(volleyInterval);
@@ -109,7 +110,7 @@ namespace Featherguard.Battle.Presentation
             else
             {
                 projectile = new GameObject("Projectile").transform;
-                trail = context.Feedback.Trail(projectile, context.Ability.fxColor);
+                trail = context.Feedback.Trail(projectile, context.Visuals.fxColor);
             }
             projectile.position = from;
 
