@@ -51,7 +51,7 @@ All units use the `Featherguard/Toon` shader; its settings live in `Assets/Art/M
 
 ## Textures
 
-Textures are baked from the sculpt, not painted by hand.
+Textures are baked from the sculpt.
 
 - **Flat colours per region:** each part (fur, skin, horns, claws, eyes) gets one base colour from its palette; the baked ambient occlusion and cavity add the shading on top, lightly.
 - **Value before colour:** the face, hands and weapon are the lightest or most contrasting areas, so the eye goes there first.
