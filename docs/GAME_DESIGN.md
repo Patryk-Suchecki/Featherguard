@@ -165,13 +165,3 @@ Each card targets one hero (Hero), the whole party (Party) or the run (Run). A H
 - **Timing:** feedback timings live in `BattlePresentation.asset`. Hitstop, camera shake and popups are configured in `GameConfig.feedback`.
 - **UI:** landscape, 1920×1080 reference resolution, safe area, generous tap tolerance, pause menu with sound toggle and an option to abandon the run.
 
-## Agreed decisions
-
-Record decisions here with the date and who agreed, so both people's AIs follow them.
-
-- 2026-11: Gambling is a reward layer between battles; in-game currency only, never real money.
-- 2026-11: Battle logic stays a pure model emitting events; presentation only replays them.
-- 2026-11: The whole project is in English, including in-game text, data and docs.
-- 2026-11-07 (Aurel and Patryk): The game is heading towards the turn-based Slavic folklore RPG described in [`GDD.md`](GDD.md). Where `GDD.md` and the current build differ, `GDD.md` is the target; this file keeps describing the build as it is until each part is reworked.
-- 2026-11-08 (Aurel, answering the review of #7): The birds-and-lizards setting is dropped entirely; the game is set in Slavic mythology. The whole game is 3D and everything is modelled.
-- 2026-11-08 (Aurel, answering the review of #7): The target design has no gambling. The gambling reward layer above stays in the current build until it is reworked, and may come back one day only as a separate decision.

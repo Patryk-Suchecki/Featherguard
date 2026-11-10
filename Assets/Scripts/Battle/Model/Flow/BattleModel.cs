@@ -31,10 +31,9 @@ namespace Featherguard.Battle
 
         public event Action<BattleUnit> EnemyKilled;
 
-        public BattleModel(BattleSetup setup, BattleRules rules, IRandomSource random = null, IEnemyBrain brain = null)
+        public BattleModel(BattleSetup setup, BattleRules rules, IRandomSource random, IEnemyBrain brain = null)
         {
             this.setup = setup;
-            random ??= UnityRandomSource.Shared;
             Combat = new Combat(rules, random, log, setup.StartRage);
             Combat.UnitKilled += unit =>
             {

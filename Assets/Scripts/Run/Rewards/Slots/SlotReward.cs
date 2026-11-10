@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Featherguard.Run
 {
@@ -16,7 +17,7 @@ namespace Featherguard.Run
         public abstract void Grant(RunSession session, IRewardQueue queue);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class GoldReward : SlotReward
     {
         public int amount = 20;
@@ -24,7 +25,7 @@ namespace Featherguard.Run
         public override void Grant(RunSession session, IRewardQueue queue) => session.Wallet.Earn(amount);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class HealReward : SlotReward
     {
         [Range(0f, 1f)] public float fraction = 0.25f;
@@ -32,7 +33,7 @@ namespace Featherguard.Run
         public override void Grant(RunSession session, IRewardQueue queue) => session.Party.HealAll(fraction);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class CardReward : SlotReward
     {
         public Rarity minimum;
@@ -40,7 +41,7 @@ namespace Featherguard.Run
         public override void Grant(RunSession session, IRewardQueue queue) => queue.QueueCard(minimum);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class StartRageReward : SlotReward
     {
         public float amount = 40f;
@@ -48,7 +49,7 @@ namespace Featherguard.Run
         public override void Grant(RunSession session, IRewardQueue queue) => session.StartRage = Mathf.Max(session.StartRage, amount);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class PenaltyReward : SlotReward
     {
         [Range(0f, 1f)] public float healthLoss;
