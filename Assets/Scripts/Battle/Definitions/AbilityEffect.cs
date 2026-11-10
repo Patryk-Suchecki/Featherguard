@@ -24,6 +24,10 @@ namespace Featherguard.Battle
     public abstract class AbilityEffect
     {
         public virtual bool AppliesPerTarget => true;
+        public virtual bool Damages => false;
+        public virtual bool Heals => false;
+        public virtual int ExpectedDamage => 0;
+        public virtual StatusDefinition StatusOnTarget => null;
         public abstract void Apply(in EffectContext context);
     }
 
@@ -32,6 +36,9 @@ namespace Featherguard.Battle
     {
         [Min(0)] public int power = 20;
 
+        public override bool Damages => true;
+        public override int ExpectedDamage => power;
+
         public override void Apply(in EffectContext context) => context.State.DealDamage(context.Actor, context.Target, power, context.Ability);
     }
 
@@ -39,6 +46,8 @@ namespace Featherguard.Battle
     public sealed class HealEffect : AbilityEffect
     {
         [Min(0)] public int power = 30;
+
+        public override bool Heals => true;
 
         public override void Apply(in EffectContext context) => context.State.Heal(context.Actor, context.Target, power, context.Ability);
     }
@@ -49,6 +58,7 @@ namespace Featherguard.Battle
         public StatusApplication application = new();
 
         public override bool AppliesPerTarget => !application.onSelf;
+        public override StatusDefinition StatusOnTarget => application.onSelf ? null : application.status;
 
         public override void Apply(in EffectContext context)
         {

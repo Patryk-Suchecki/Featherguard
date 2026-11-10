@@ -8,8 +8,6 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public string announcement;
-        public Sprite icon;
-        public Color tint = Color.white;
         [Tooltip("Applied to the unit's stats while the status is active.")]
         public StatModifier[] modifiers = new StatModifier[0];
         [Tooltip("Deals the application's potency as damage at the start of the owner's turn.")]

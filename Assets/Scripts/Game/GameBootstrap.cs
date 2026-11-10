@@ -1,6 +1,5 @@
 using System.Collections;
 using System.IO;
-using System.Collections.Generic;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
@@ -9,7 +8,6 @@ using Featherguard.Meta;
 using Featherguard.Run;
 using Featherguard.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Featherguard.Game
 {
@@ -23,10 +21,9 @@ namespace Featherguard.Game
 
         FeedbackHub feedback;
         BattleHud hud;
-        RunSession session;
+        RunFlow flow;
         BattleController battle;
         ToonMaterials toon;
-        readonly Dictionary<BattleUnit, int> killRewards = new();
 
         MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
 
@@ -40,9 +37,11 @@ namespace Featherguard.Game
             feedback.Init(config.sounds, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
-            hud.Init(battleCamera, AbandonRun);
+            var visuals = new BattleVisuals(config.presentation);
+            flow = new RunFlow(hud, Meta);
+            hud.Init(battleCamera, visuals, flow.Abandon);
 
-            session = RunSession.Current;
+            var session = RunSession.Current;
             if (session == null)
             {
                 yield return CampScreen.Show(hud, Meta);
@@ -56,24 +55,22 @@ namespace Featherguard.Game
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
             var model = new BattleModel(setup, config.rules, session.Random);
-            model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
             toon ??= new ToonMaterials(config.toonMaterial);
-            var factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, toon);
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
-                Visuals = new AbilityVisualsLibrary(config.presentation.abilities),
-                Factory = factory,
+                Visuals = visuals,
+                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, visuals.Units, toon),
                 View = hud,
                 Feedback = feedback,
                 Host = this,
-                Camera = battleCamera,
+                UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
             });
-            battle.Presenter.UnitDefeated += OnUnitDefeated;
+            flow.TrackKills(session, model, battle.Presenter);
             hud.BindBattle(battle.Commands, battle.Presenter.Rage);
 
             yield return battle.Run();
-            yield return Conclude(battle.Result);
+            yield return flow.Conclude(session, battle.Result);
         }
 
         void Update()
@@ -89,57 +86,6 @@ namespace Featherguard.Game
             setup.EnemyHealthScale = encounter.enemyHealth;
             setup.EnemyDamageScale = encounter.enemyDamage;
             setup.Elite = false;
-        }
-
-        void OnUnitDefeated(UnitView unit)
-        {
-            if (killRewards.Remove(unit.Unit, out int gold))
-                hud.Popup(unit.Top + Vector3.up * 0.6f, $"+{gold} gold", PopupKind.Gold);
-        }
-
-        IEnumerator Conclude(BattleResult result)
-        {
-            if (!result.Victory)
-            {
-                FinishRun(false);
-                yield break;
-            }
-            session.RecordVictory(result);
-            yield return new WaitForSeconds(0.8f);
-            if (session.IsFinal)
-            {
-                FinishRun(true);
-                yield break;
-            }
-            yield return RewardSequence.Play(hud, session);
-            session.Advance();
-            Reload();
-        }
-
-        void FinishRun(bool completed)
-        {
-            int feathers = Meta.RecordRun(session, completed);
-            RunSession.End();
-            RunEndScreen.Show(hud, session, completed, feathers, NewRun);
-        }
-
-        void AbandonRun()
-        {
-            if (RunSession.Current != null)
-                Meta.RecordRun(RunSession.Current, false);
-            NewRun();
-        }
-
-        void NewRun()
-        {
-            RunSession.End();
-            Reload();
-        }
-
-        static void Reload()
-        {
-            GameClock.Paused = false;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
