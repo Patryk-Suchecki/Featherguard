@@ -14,6 +14,8 @@ namespace Featherguard.Feel
             FlatMaterial = new Material(particleMaterial) { name = "Flat Vfx", mainTexture = Texture2D.whiteTexture };
         }
 
+        void OnDestroy() => Destroy(FlatMaterial);
+
         public void Burst(Vector3 position, Color color, int count, float speed, float size)
         {
             var ps = Create("Burst", position, null);

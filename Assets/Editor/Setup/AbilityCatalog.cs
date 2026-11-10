@@ -44,10 +44,7 @@ namespace Featherguard.EditorTools
                     a.castSound = cast;
                     a.impactSound = impact;
                     a.effects = effects.ToArray();
-                }, a =>
-                {
-                    if (a.impactEffect == null && impactEffect != null)
-                        a.impactEffect = impactEffect;
+                    a.impactEffect = impactEffect;
                 });
             }
 

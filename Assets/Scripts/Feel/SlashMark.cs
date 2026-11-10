@@ -62,12 +62,13 @@ namespace Featherguard.Feel
             age += Time.unscaledDeltaTime * GameClock.Scale;
             if (age >= shape.Duration)
             {
-                Destroy(mesh);
                 Destroy(gameObject);
                 return;
             }
             Rebuild();
         }
+
+        void OnDestroy() => Destroy(mesh);
 
         void Rebuild()
         {
