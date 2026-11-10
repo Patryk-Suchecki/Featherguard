@@ -28,6 +28,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - reapplying keeps the stronger duration and potency;
   - Poison damage is also multiplied by DamageTaken, so Shield halves it.
 - **Attack timing** (model only for now): an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it. The battle screen does not ask for timing yet (#19), so every attack resolves as Miss.
+- **Block timing** (model only for now): with `BattleSetup.AwaitBlocks` the enemy turn stops before each damaging enemy action (an `EnemyWindup` event) and `Block` resolves it: Good removes 30% and Perfect 60% of the damage for every hero hit, and Perfect adds +10 Rage once. Enemy actions without damage resolve at once. The game does not turn it on yet (#19), so enemy turns resolve at once as before.
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
 - **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
 - **Enemy AI:**
