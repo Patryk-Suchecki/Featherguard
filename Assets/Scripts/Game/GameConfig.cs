@@ -25,9 +25,5 @@ namespace Featherguard.Game
         public AudioClip[] sounds;
         public UiSprites ui;
         public FeedbackTuning feedback = new();
-
-        [Header("Development")]
-        [Tooltip("Editor only: every battle uses this encounter instead of the run's. Leave empty in commits.")]
-        public EncounterDefinition testEncounter;
     }
 }
