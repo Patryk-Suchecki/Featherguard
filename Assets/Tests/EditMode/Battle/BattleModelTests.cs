@@ -246,6 +246,10 @@ namespace Featherguard.Tests
             var model = Create(Encounter(new[] { enemy }), 100f, hero);
             model.Start();
 
+            Assert.IsTrue(model.IsTimed(model.Heroes[0], hero.attack));
+            Assert.IsFalse(model.IsTimed(model.Heroes[0], hero.special));
+            Assert.IsFalse(model.IsTimed(model.Heroes[0], heal));
+
             var events = model.Act(model.Heroes[0], hero.special, model.Enemies[0], TimingResult.Perfect);
 
             Assert.AreEqual(470, model.Enemies[0].Health);
