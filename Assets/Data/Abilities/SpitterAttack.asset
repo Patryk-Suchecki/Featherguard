@@ -18,26 +18,15 @@ MonoBehaviour:
   effects:
   - rid: 4550530214315163776
   - rid: 4550530214315163777
-  animationState: Attack
-  heavy: 0
-  fxColor: {r: 0.5, g: 1, b: 0.2, a: 1}
-  castSound: 5
-  impactSound: 3
-  delivery:
-    rid: 4550530214315163778
-  impactEffect:
-    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 4550530214315163776
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         power: 9
     - rid: 4550530214315163777
-      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         application:
           status: {fileID: 11400000, guid: 4901d84e178cbd34eabcb19e1bee9335, type: 2}
@@ -45,12 +34,3 @@ MonoBehaviour:
           potency: 6
           chance: 0.7
           onSelf: 0
-    - rid: 4550530214315163778
-      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        prefab: {fileID: 0}
-        speed: 10
-        arc: 0.05
-        orientAlongPath: 0
-        volleyInterval: 0.12
-        spread: 0.12

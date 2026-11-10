@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae8ff64d4db43e2bce311b451f0bd10, type: 3}
+  m_Name: SpitterAttack
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.AbilityVisuals
+  ability: {fileID: 11400000, guid: 650a9e3be9a9e8442a04afc7fbce96d2, type: 2}
+  animationState: Attack
+  heavy: 0
+  fxColor: {r: 0.5, g: 1, b: 0.2, a: 1}
+  castSound: 5
+  impactSound: 3
+  delivery:
+    rid: 4550530329866666007
+  impactEffect:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4550530329866666007
+      type: {class: ProjectileDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
+      data:
+        prefab: {fileID: 0}
+        speed: 10
+        arc: 0.05
+        orientAlongPath: 0
+        volleyInterval: 0.12
+        spread: 0.12

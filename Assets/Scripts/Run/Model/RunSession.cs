@@ -46,8 +46,8 @@ namespace Featherguard.Run
             Deck = new UpgradeDeck(definition.upgrades, definition.curses, definition.rarity, random);
         }
 
-        public static RunSession Start(RunDefinition definition, IReadOnlyList<UnitDefinition> heroes, IRandomSource random = null) =>
-            Current = new RunSession(definition, heroes, random ?? UnityRandomSource.Shared);
+        public static RunSession Start(RunDefinition definition, IReadOnlyList<UnitDefinition> heroes, IRandomSource random) =>
+            Current = new RunSession(definition, heroes, random);
 
         public static void End() => Current = null;
 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
+using Featherguard.Core;
 using Featherguard.Feel;
 using Featherguard.Meta;
 using Featherguard.Run;
@@ -24,7 +25,7 @@ namespace Featherguard.Game
         BattleHud hud;
         RunSession session;
         BattleController battle;
-        UnitViewFactory factory;
+        ToonMaterials toon;
         readonly Dictionary<BattleUnit, int> killRewards = new();
 
         MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
@@ -36,7 +37,7 @@ namespace Featherguard.Game
         {
             Time.timeScale = 1f;
             feedback = gameObject.AddComponent<FeedbackHub>();
-            feedback.Init(config.sounds, cameraShake, config.particleMaterial, config.feedback);
+            feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
             hud.Init(battleCamera, AbandonRun);
@@ -45,7 +46,7 @@ namespace Featherguard.Game
             if (session == null)
             {
                 yield return CampScreen.Show(hud, Meta);
-                session = RunSession.Start(config.run, config.heroes);
+                session = RunSession.Start(config.run, config.heroes, UnityRandomSource.Shared);
                 Meta.ApplyTo(session);
             }
             hud.BindWallet(session.Wallet);
@@ -54,12 +55,14 @@ namespace Featherguard.Game
             var testEncounter = TestEncounterSetting.Current;
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
-            var model = new BattleModel(setup, config.rules);
+            var model = new BattleModel(setup, config.rules, session.Random);
             model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
-            factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, config.toonMaterial);
+            toon ??= new ToonMaterials(config.toonMaterial);
+            var factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, toon);
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
+                Visuals = new AbilityVisualsLibrary(config.presentation.abilities),
                 Factory = factory,
                 View = hud,
                 Feedback = feedback,
@@ -73,9 +76,12 @@ namespace Featherguard.Game
             yield return Conclude(battle.Result);
         }
 
-        void Update() => battle?.Tick();
+        void Update()
+        {
+            if (!GameClock.Paused) battle?.Tick();
+        }
 
-        void OnDestroy() => factory?.Dispose();
+        void OnDestroy() => toon?.Dispose();
 
         static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
         {

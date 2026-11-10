@@ -17,42 +17,10 @@ MonoBehaviour:
   hits: 1
   effects:
   - rid: 4550530298483572738
-  animationState: Attack
-  heavy: 1
-  fxColor: {r: 1, g: 0.45, b: 0.1, a: 1}
-  castSound: 1
-  impactSound: 2
-  delivery:
-    rid: 4550530298483572739
-  impactEffect:
-    rid: 4550530299515895808
   references:
     version: 2
     RefIds:
     - rid: 4550530298483572738
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         power: 24
-    - rid: 4550530298483572739
-      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        approachTime: 0.3
-        approachHop: 0.55
-        returnTime: 0.32
-        returnHop: 0.45
-        hitInterval: 0.15
-        recovery: 0.4
-        reach: 0.3
-    - rid: 4550530299515895808
-      type: {class: ClawSlashEffect, ns: Featherguard.Feel, asm: Featherguard}
-      data:
-        claws: 3
-        length: 2
-        width: 0.11
-        spacing: 0.15
-        angle: 55
-        bend: 0.18
-        core: {r: 1, g: 0.69, b: 0.18, a: 1}
-        edge: {r: 0.71, g: 0.33, b: 0.12, a: 1}
-        outline: {r: 0.07, g: 0.05, b: 0.06, a: 1}
-        duration: 0.35

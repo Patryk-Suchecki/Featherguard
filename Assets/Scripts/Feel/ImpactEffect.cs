@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace Featherguard.Feel
 {
@@ -9,13 +10,15 @@ namespace Featherguard.Feel
         public readonly Vector3 Facing;
         public readonly float TargetRadius;
         public readonly Material Material;
+        public readonly Camera Camera;
 
-        public ImpactContext(Vector3 point, Vector3 facing, float targetRadius, Material material)
+        public ImpactContext(Vector3 point, Vector3 facing, float targetRadius, Material material, Camera camera)
         {
             Point = point;
             Facing = facing;
             TargetRadius = targetRadius;
             Material = material;
+            Camera = camera;
         }
     }
 
@@ -25,7 +28,7 @@ namespace Featherguard.Feel
         public abstract void Play(in ImpactContext context);
     }
 
-    [Serializable]
+    [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
     public sealed class ClawSlashEffect : ImpactEffect
     {
         [Min(1)] public int claws = 3;
@@ -46,7 +49,7 @@ namespace Featherguard.Feel
 
         public override void Play(in ImpactContext context)
         {
-            var camera = Camera.main;
+            var camera = context.Camera;
             if (camera == null) return;
 
             var right = camera.transform.right;

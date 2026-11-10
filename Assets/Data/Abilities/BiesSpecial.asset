@@ -17,22 +17,11 @@ MonoBehaviour:
   hits: 1
   effects:
   - rid: 4550530298483572740
-  animationState: Cast
-  heavy: 1
-  fxColor: {r: 1, g: 0.45, b: 0.1, a: 1}
-  castSound: 13
-  impactSound: 5
-  delivery:
-    rid: 4550530298483572741
-  impactEffect:
-    rid: -2
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 4550530298483572740
-      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         application:
           status: {fileID: 11400000, guid: 24792917c9b8fb3468b39eaa4cf4448e, type: 2}
@@ -40,6 +29,3 @@ MonoBehaviour:
           potency: 0
           chance: 1
           onSelf: 0
-    - rid: 4550530298483572741
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 
