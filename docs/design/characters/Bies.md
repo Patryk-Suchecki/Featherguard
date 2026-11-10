@@ -71,7 +71,7 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 - [x] Character sheet approved (this sheet, #47)
 - [x] Concept sheet (#53)
 - [x] Model (#48)
-- [ ] Painted texture (#51, M1; a baked placeholder is in place)
+- [x] Texture (#48, baked from the sculpt)
 - [x] Rig (#48)
 - [x] `Idle`
 - [ ] `AttackWindup` (with blocking, #18, #19)
