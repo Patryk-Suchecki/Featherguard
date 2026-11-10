@@ -4,7 +4,7 @@
     "references": [
         "Featherguard.Core",
         "Featherguard.Battle",
-        "Featherguard.Feel",
+        "Featherguard.Feedback",
         "Featherguard.Battle.Presentation",
         "Featherguard.Run",
         "Featherguard.Meta",

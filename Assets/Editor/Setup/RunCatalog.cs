@@ -12,10 +12,10 @@ namespace Featherguard.EditorTools
         {
             var (upgrades, curses) = UpgradeCatalog.Build(seeder, art);
             var encounters = Encounters(seeder, units);
-            var economy = seeder.Seed<EconomyConfig>($"{ContentPaths.Data}/Economy.asset", null);
+            var economy = seeder.Seed<EconomyConfig>($"{ContentPaths.Data}/EconomyConfig.asset", null);
             var slots = SlotMachine(seeder, art);
 
-            return seeder.Seed<RunDefinition>($"{ContentPaths.Data}/Run.asset", run =>
+            return seeder.Seed<RunDefinition>($"{ContentPaths.Data}/RunDefinition.asset", run =>
             {
                 run.rarity = RarityTiers();
                 run.pathChoices = 2;
@@ -68,7 +68,7 @@ namespace Featherguard.EditorTools
         }
 
         static SlotConfig SlotMachine(Seeder seeder, PresentationAssets art) =>
-            seeder.Seed<SlotConfig>($"{ContentPaths.Data}/SlotMachine.asset", config =>
+            seeder.Seed<SlotConfig>($"{ContentPaths.Data}/SlotConfig.asset", config =>
             {
                 config.symbols = new[]
                 {

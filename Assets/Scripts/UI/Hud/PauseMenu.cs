@@ -1,5 +1,6 @@
 using System;
-using Featherguard.Feel;
+using Featherguard.Core;
+using Featherguard.Feedback;
 using UnityEngine;
 
 namespace Featherguard.UI

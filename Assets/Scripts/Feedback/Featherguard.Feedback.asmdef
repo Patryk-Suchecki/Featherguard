@@ -1,6 +1,6 @@
 {
-    "name": "Featherguard.Feel",
-    "rootNamespace": "Featherguard.Feel",
+    "name": "Featherguard.Feedback",
+    "rootNamespace": "Featherguard.Feedback",
     "references": [
         "Featherguard.Core"
     ],
