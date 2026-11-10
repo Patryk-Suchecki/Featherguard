@@ -37,8 +37,11 @@ namespace Featherguard.UI
         public RectTransform Canvas => canvas;
         public int OverlayIndex => safe.GetSiblingIndex() + 1;
 
-        public void Init(Camera camera, Action onAbandon)
+        public BattleVisuals Visuals { get; private set; }
+
+        public void Init(Camera camera, BattleVisuals visuals, Action onAbandon)
         {
+            Visuals = visuals;
             view = camera;
             canvas = CreateCanvas();
             if (FindAnyObjectByType<EventSystem>() == null)
@@ -125,9 +128,9 @@ namespace Featherguard.UI
         public void UnitAdded(UnitView unit)
         {
             if (unit.Team == Team.Enemies)
-                bars[unit] = UnitBar.Create(unit, barLayer, view);
+                bars[unit] = UnitBar.Create(unit, barLayer, view, Visuals.Statuses);
             else
-                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero)));
+                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero), Visuals.Statuses));
         }
 
         public void UnitRemoved(UnitView unit)

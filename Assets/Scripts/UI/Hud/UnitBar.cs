@@ -1,3 +1,4 @@
+using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,14 +15,16 @@ namespace Featherguard.UI
         RectTransform fill;
         Text health;
         RectTransform statusRow;
+        VisualsLibrary<StatusDefinition, StatusVisuals> statusVisuals;
         CanvasGroup group;
 
-        public static UnitBar Create(UnitView unit, RectTransform parent, Camera view)
+        public static UnitBar Create(UnitView unit, RectTransform parent, Camera view, VisualsLibrary<StatusDefinition, StatusVisuals> statusVisuals)
         {
             var rect = Ui.Rect(unit.Definition.displayName, parent, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(220f, 110f));
             var bar = rect.gameObject.AddComponent<UnitBar>();
             bar.unit = unit;
             bar.view = view;
+            bar.statusVisuals = statusVisuals;
             bar.rect = rect;
             bar.group = rect.gameObject.AddComponent<CanvasGroup>();
             bar.group.blocksRaycasts = false;
@@ -62,7 +65,7 @@ namespace Featherguard.UI
         {
             Ui.SetFill(fill, unit.HealthFraction);
             health.text = $"{unit.Health}/{unit.MaxHealth}";
-            StatusIconRow.Build(statusRow, unit.Statuses, 50f, true);
+            StatusIconRow.Build(statusRow, unit.Statuses, statusVisuals, 50f, true);
         }
     }
 }

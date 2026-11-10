@@ -11,14 +11,14 @@ namespace Featherguard.Battle.Presentation
     {
         public BattlePresentationConfig Config;
         public UnitViewFactory Factory;
-        public AbilityVisualsLibrary Visuals;
+        public BattleVisuals Visuals;
         public IBattleView View;
         public ITimingCueView TimingCues;
         public ITimingInput TimingInput;
         public IRandomSource Random;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;
-        public Camera Camera;
+        public IUnitPicker UnitPicker;
     }
 
     public sealed class BattleController
@@ -36,8 +36,8 @@ namespace Featherguard.Battle.Presentation
         {
             Model = model;
             Presenter = new BattlePresenter(services.Config, services.Factory, services.Visuals, services.View, services.Feedback, services.Host, model.Rage);
-            var picker = new PointerUnitPicker(services.Camera, () => Presenter.Views, services.Config.tapTolerance);
-            commands = new PlayerCommands(model, Presenter, picker, services.Config, services.Feedback, services.View);
+            var highlighter = new TargetHighlighter(model, Presenter, services.Config);
+            commands = new PlayerCommands(model, Presenter, services.UnitPicker, highlighter, services.Feedback, services.View);
             if (services.Config.timingPrompts)
                 prompt = new TimingPrompt(services.Config, services.TimingCues, services.View, services.Feedback, services.TimingInput, services.Random);
         }
@@ -60,7 +60,7 @@ namespace Featherguard.Battle.Presentation
                     yield return null;
                 var command = commands.TakeChosen();
                 var timing = TimingResult.Miss;
-                if (prompt != null && command.IsTimed)
+                if (prompt != null && Model.IsTimed(command.Hero, command.Ability))
                     yield return prompt.Attack(PointOf(command.Target, Model.Enemies), result => timing = result);
                 yield return Play(Model.Act(command.Hero, command.Ability, command.Target, timing));
             }

@@ -10,18 +10,18 @@ namespace Featherguard.Battle.Presentation
     {
         readonly BattlePresentationConfig config;
         readonly ITimingCueView cues;
-        readonly IBattleView view;
-        readonly ICombatFeedback feedback;
+        readonly IPopupView view;
+        readonly ISoundPlayer sounds;
         readonly ITimingInput input;
         readonly IRandomSource random;
         readonly TimingJudge judge;
 
-        public TimingPrompt(BattlePresentationConfig config, ITimingCueView cues, IBattleView view, ICombatFeedback feedback, ITimingInput input, IRandomSource random)
+        public TimingPrompt(BattlePresentationConfig config, ITimingCueView cues, IPopupView view, ISoundPlayer sounds, ITimingInput input, IRandomSource random)
         {
             this.config = config;
             this.cues = cues;
             this.view = view;
-            this.feedback = feedback;
+            this.sounds = sounds;
             this.input = input;
             this.random = random;
             judge = new TimingJudge(config.perfectWindow, config.goodWindow);
@@ -79,7 +79,7 @@ namespace Featherguard.Battle.Presentation
             if (result == TimingResult.Miss) return;
             bool isPerfect = result == TimingResult.Perfect;
             view.Popup(world, isPerfect ? perfect : good, isPerfect ? PopupKind.Crit : PopupKind.Buff);
-            feedback.Play(isPerfect ? SfxId.Buff : SfxId.Click);
+            sounds.Play(isPerfect ? SfxId.Buff : SfxId.Click);
         }
     }
 }

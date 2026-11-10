@@ -25,8 +25,6 @@ namespace Featherguard.Battle.Presentation
             Ability = ability;
             Target = target;
         }
-
-        public bool IsTimed => Ability.IsDamaging && Ability != Hero.Definition.special;
     }
 
     public sealed class PlayerCommands : IPlayerCommands
@@ -36,22 +34,22 @@ namespace Featherguard.Battle.Presentation
         readonly BattleModel model;
         readonly BattlePresenter presenter;
         readonly IUnitPicker picker;
-        readonly BattlePresentationConfig config;
-        readonly ICombatFeedback feedback;
-        readonly IBattleView view;
+        readonly TargetHighlighter highlighter;
+        readonly ISoundPlayer sounds;
+        readonly IPopupView view;
 
         public BattleUnit Selected { get; private set; }
         public bool SpecialArmed { get; private set; }
         public bool AcceptingInput { get; private set; }
         public PlayerCommand? Chosen { get; private set; }
 
-        public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, BattlePresentationConfig config, ICombatFeedback feedback, IBattleView view)
+        public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, TargetHighlighter highlighter, ISoundPlayer sounds, IPopupView view)
         {
             this.model = model;
             this.presenter = presenter;
             this.picker = picker;
-            this.config = config;
-            this.feedback = feedback;
+            this.highlighter = highlighter;
+            this.sounds = sounds;
             this.view = view;
         }
 
@@ -79,14 +77,14 @@ namespace Featherguard.Battle.Presentation
         public void Tick()
         {
             if (!CanCommand) return;
-            if (picker.TryPick(out var unit))
+            if (picker.TryPick(presenter.Views, out var unit))
                 Tap(unit.Unit);
         }
 
         public void Select(BattleUnit hero)
         {
             if (!CanCommand || !model.CanCommand(hero)) return;
-            feedback.Play(SfxId.Click);
+            sounds.Play(SfxId.Click);
             SetSelection(hero);
         }
 
@@ -101,7 +99,7 @@ namespace Featherguard.Battle.Presentation
                 return;
             }
             SpecialArmed = !SpecialArmed;
-            feedback.Play(SfxId.Click);
+            sounds.Play(SfxId.Click);
             RefreshHighlights();
         }
 
@@ -119,10 +117,10 @@ namespace Featherguard.Battle.Presentation
             bool enemy = unit.Team == Team.Enemies;
             var ability = SpecialArmed ? definition.special : enemy ? definition.attack : definition.support;
             if (ability == null || ability.TargetsEnemies != enemy) return;
-            if (!model.CanUse(Selected, ability, unit))
+            if (model.IsBlockedByTaunt(Selected, ability, unit))
             {
                 var target = presenter.ViewOf(unit);
-                if (target != null && unit.IsAlive) view.Popup(target.Top, TauntText, PopupKind.Buff);
+                if (target != null) view.Popup(target.Top, TauntText, PopupKind.Buff);
                 return;
             }
             Submit(ability, unit);
@@ -146,16 +144,8 @@ namespace Featherguard.Battle.Presentation
 
         void RefreshHighlights()
         {
-            foreach (var unit in presenter.Views)
-                unit.Ring.Show(null);
-            if (Selected == null || !CanCommand) return;
-
-            var definition = Selected.Definition;
-            var abilities = SpecialArmed ? new[] { definition.special } : new[] { definition.attack, definition.support };
-            foreach (var ability in abilities.Where(a => a != null))
-                foreach (var target in model.Candidates(Selected, ability))
-                    presenter.ViewOf(target)?.Ring.Show(ability.TargetsEnemies ? config.enemyRing : config.allyRing);
-            presenter.ViewOf(Selected)?.Ring.Show(config.selectedRing);
+            if (Selected == null || !CanCommand) highlighter.Clear();
+            else highlighter.Show(Selected, SpecialArmed);
         }
     }
 }

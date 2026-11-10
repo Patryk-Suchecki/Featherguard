@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26ca20efb73438c83ba04c71d9a538a, type: 3}
+  m_Name: Shaman
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.UnitVisuals
+  unit: {fileID: 11400000, guid: 9737c3f5bc02c454d86edda1619c2569, type: 2}
+  model: {fileID: 919132149155446097, guid: 7485be7cc66bef048b8c49317897aa7d, type: 3}
+  portrait: {fileID: 21300000, guid: f43e1557f15022f47b8ab795057545f0, type: 3}
+  animator: {fileID: 9100000, guid: 8fa9b1ed01a810e4c841dc9a23075cc5, type: 2}
+  modelScale: 1
+  height: 1.5
