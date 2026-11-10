@@ -19,6 +19,7 @@ namespace Featherguard.Battle
         public int EncounterNumber = 1;
         public int EncounterCount = 1;
         public bool Elite;
+        public bool AwaitBlocks;
     }
 
     public sealed class BattleResult

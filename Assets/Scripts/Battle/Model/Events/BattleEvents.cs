@@ -39,6 +39,13 @@ namespace Featherguard.Battle
         public Team Team;
     }
 
+    public sealed class EnemyWindup : BattleEvent
+    {
+        public BattleUnit Actor;
+        public AbilityDefinition Ability;
+        public BattleUnit Target;
+    }
+
     public sealed class ActionPerformed : BattleEvent
     {
         public BattleUnit Actor;

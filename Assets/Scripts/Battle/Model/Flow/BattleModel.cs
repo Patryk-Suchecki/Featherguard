@@ -5,7 +5,7 @@ using Featherguard.Core;
 
 namespace Featherguard.Battle
 {
-    public enum BattlePhase { NotStarted, AwaitingInput, Finished }
+    public enum BattlePhase { NotStarted, AwaitingInput, AwaitingBlock, Finished }
 
     public sealed class BattleModel
     {
@@ -18,6 +18,11 @@ namespace Featherguard.Battle
         readonly WaveSpawner waves;
         readonly BossPhases bosses;
         readonly IEnemyBrain brain;
+        readonly Queue<BattleUnit> enemyQueue = new();
+        bool enemyTurn;
+        BattleUnit acting;
+        int actionsLeft;
+        EnemyDecision? pending;
 
         public Combat Combat { get; }
         public RageMeter Rage => Combat.Rage;
@@ -25,6 +30,7 @@ namespace Featherguard.Battle
         public Squad Enemies => Combat.Enemies;
         public BattlePhase Phase { get; private set; }
         public bool AwaitingInput => Phase == BattlePhase.AwaitingInput;
+        public bool AwaitingBlock => Phase == BattlePhase.AwaitingBlock;
         public bool IsFinished => Phase == BattlePhase.Finished;
         public int Turn { get; private set; }
         public BattleResult Result { get; private set; }
@@ -93,10 +99,36 @@ namespace Featherguard.Battle
             return log.Flush();
         }
 
+        public IReadOnlyList<BattleEvent> Block(TimingResult timing)
+        {
+            if (!AwaitingBlock || pending == null) return Array.Empty<BattleEvent>();
+            var decision = pending.Value;
+            pending = null;
+            resolver.Execute(acting, decision.Ability, decision.Target, ActionTiming.ForBlock(timing));
+            bosses.Check();
+            Advance();
+            return log.Flush();
+        }
+
         void Advance()
         {
             for (int step = 0; step < MaxSteps; step++)
             {
+                if (enemyTurn)
+                {
+                    if (ContinueEnemyTurn())
+                    {
+                        Phase = BattlePhase.AwaitingBlock;
+                        return;
+                    }
+                    enemyTurn = false;
+                    if (CheckFinished()) return;
+                    if (!Enemies.AnyAlive)
+                        waves.SpawnNext();
+                    BeginPlayerTurn();
+                    continue;
+                }
+
                 if (Enemies.AnyAlive && Heroes.Any(h => h.CanAct))
                 {
                     Phase = BattlePhase.AwaitingInput;
@@ -112,11 +144,7 @@ namespace Featherguard.Battle
                     continue;
                 }
 
-                EnemyTurn();
-                if (CheckFinished()) return;
-                if (!Enemies.AnyAlive)
-                    waves.SpawnNext();
-                BeginPlayerTurn();
+                StartEnemyTurn();
             }
             throw new InvalidOperationException("Battle did not reach a decision point.");
         }
@@ -130,26 +158,62 @@ namespace Featherguard.Battle
                 hero.HasActed = hero.SkipsTurn;
         }
 
-        void EnemyTurn()
+        void StartEnemyTurn()
         {
             log.Emit(new TurnStarted { Team = Team.Enemies });
             ticker.BeginTurn(Enemies);
+            enemyQueue.Clear();
             foreach (var enemy in Enemies.Snapshot())
+                enemyQueue.Enqueue(enemy);
+            acting = null;
+            enemyTurn = true;
+        }
+
+        bool ContinueEnemyTurn()
+        {
+            while (true)
             {
-                if (!enemy.IsAlive || enemy.SkipsTurn) continue;
-                if (!Heroes.AnyAlive) break;
-                int actions = Math.Max(1, enemy.Definition.ai.actionsPerTurn);
-                for (int i = 0; i < actions && enemy.IsAlive && Heroes.AnyAlive; i++)
+                if (acting != null && (actionsLeft == 0 || !acting.IsAlive || !Heroes.AnyAlive))
+                    FinishActing();
+                if (acting == null && (!Heroes.AnyAlive || !NextActing()))
                 {
-                    enemy.ActionsLeftThisTurn = actions - 1 - i;
-                    var decision = brain.Decide(enemy, Combat);
-                    resolver.Execute(enemy, decision.Ability, decision.Target);
-                    bosses.Check();
+                    ticker.EndTurn(Enemies);
+                    return false;
                 }
-                enemy.ActionsLeftThisTurn = 0;
-                enemy.TurnsTaken++;
+
+                actionsLeft--;
+                acting.ActionsLeftThisTurn = actionsLeft;
+                var decision = brain.Decide(acting, Combat);
+                bool hasTarget = decision.Ability.TargetsAll || decision.Target != null;
+                if (setup.AwaitBlocks && decision.Ability.IsDamaging && hasTarget)
+                {
+                    pending = decision;
+                    log.Emit(new EnemyWindup { Actor = acting, Ability = decision.Ability, Target = decision.Target });
+                    return true;
+                }
+                resolver.Execute(acting, decision.Ability, decision.Target);
+                bosses.Check();
             }
-            ticker.EndTurn(Enemies);
+        }
+
+        bool NextActing()
+        {
+            while (enemyQueue.Count > 0)
+            {
+                var enemy = enemyQueue.Dequeue();
+                if (!enemy.IsAlive || enemy.SkipsTurn) continue;
+                acting = enemy;
+                actionsLeft = Math.Max(1, enemy.Definition.ai.actionsPerTurn);
+                return true;
+            }
+            return false;
+        }
+
+        void FinishActing()
+        {
+            acting.ActionsLeftThisTurn = 0;
+            acting.TurnsTaken++;
+            acting = null;
         }
 
         bool CheckFinished()
