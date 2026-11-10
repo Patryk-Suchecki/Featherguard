@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Featherguard.Core;
 using UnityEngine;
@@ -16,9 +17,10 @@ namespace Featherguard.Battle
 
         public bool TargetsEnemies => target is AbilityTarget.Enemy or AbilityTarget.AllEnemies;
         public bool TargetsAll => target is AbilityTarget.AllEnemies or AbilityTarget.AllAllies;
-        public bool IsDamaging => effects.Any(e => e is DamageEffect);
-        public bool HasDirectImpact => effects.Any(e => e is DamageEffect or HealEffect);
-
-        public T Effect<T>() where T : AbilityEffect => effects.OfType<T>().FirstOrDefault();
+        public bool IsDamaging => effects.Any(e => e.Damages);
+        public bool Heals => effects.Any(e => e.Heals);
+        public bool HasDirectImpact => effects.Any(e => e.Damages || e.Heals);
+        public int ExpectedDamage => effects.Sum(e => e.ExpectedDamage);
+        public IEnumerable<StatusDefinition> StatusesOnTarget => effects.Select(e => e.StatusOnTarget).Where(s => s != null);
     }
 }

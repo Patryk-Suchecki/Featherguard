@@ -16,6 +16,10 @@ namespace Featherguard.Battle
         public static bool IsValid(AbilityDefinition ability, BattleUnit target, Squad allies, Squad opponents) =>
             target != null && target.IsAlive && Candidates(ability, allies, opponents).Contains(target);
 
+        public static bool IsBlockedByTaunt(AbilityDefinition ability, BattleUnit target, Squad opponents) =>
+            ability.TargetsEnemies && !ability.TargetsAll && target != null && target.IsAlive && target.Team == opponents.Team
+            && opponents.Taunting.Any() && !target.ForcesTargeting;
+
         public static List<BattleUnit> Resolve(AbilityDefinition ability, BattleUnit chosen, Squad allies, Squad opponents)
         {
             if (ability.TargetsAll)

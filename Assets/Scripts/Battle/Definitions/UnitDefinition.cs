@@ -36,11 +36,6 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public Team team;
-        public GameObject model;
-        public Sprite portrait;
-        public RuntimeAnimatorController animator;
-        public float modelScale = 1f;
-        public float height = 1.4f;
         [Min(1)] public int maxHealth = 100;
         public AbilityDefinition attack;
         public AbilityDefinition support;

@@ -15,18 +15,18 @@ Every layer is its own assembly, so the compiler rejects a reference that goes t
 | Core | `Featherguard.Core` | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector`, `GameClock` pause | – |
 | Battle model | `Featherguard.Battle` | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel` resolves synchronously and returns `BattleEvent` lists. Definitions hold rules only. | Core |
 | Feedback | `Featherguard.Feedback` | Scripts/Feedback | Combat feedback: audio, VFX, hitstop, camera shake | Core |
-| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals` holds how each ability looks and sounds. | Battle, Feedback, Core |
+| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` routes events to handlers (`UnitStage`, `BattleAnnouncer`, `ActionPlayback`) that play them through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals`, `UnitVisuals` and `StatusVisuals` hold how abilities, units and statuses look and sound; `BattleVisuals` finds them. | Battle, Feedback, Core |
 | Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
 | Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, `ISaveStore` | Run, Battle, Core |
 | UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feedback, Core |
-| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` composition root, `GameConfig` | everything above |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` composition root, `RunFlow` (victory, rewards, abandoning a run), `GameConfig` | everything above |
 
 `Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
 Layer rules:
 - References only go down the table: a layer never references one below it in the table or beside it unless listed. Never add a reference to work around this; move the type to the right layer instead.
 - Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`. Definitions (`UnitDefinition`, `AbilityDefinition`, `StatusDefinition`, ...) hold rules and numbers only; animation, colours, sounds, VFX and delivery live in presentation assets such as `AbilityVisuals`.
-- New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it. Reward or economy logic goes into `Run/Rewards`, not into UI steps.
+- New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it; the presenter shows it through a handler registered on `BattleEventRouter`, not a new branch in existing code. Reward or economy logic goes into `Run/Rewards`, not into UI steps.
 - Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `ImpactEffect`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
 
 SOLID rules:
@@ -39,7 +39,7 @@ SOLID rules:
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
-- Units, Abilities, AbilityVisuals, Statuses, Encounters, Upgrades, Perks.
+- Units, UnitVisuals, Abilities, AbilityVisuals, Statuses, StatusVisuals, Encounters, Upgrades, Perks.
 - Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `EconomyConfig`, `SlotConfig`, `RunDefinition`, `MetaConfig`, `GameConfig`.
 
 Change balance by editing those assets, not code.
@@ -91,7 +91,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 - Use `var` when the type is obvious, expression-bodied members for one-liners, target-typed `new()`.
 - No `#region`, no XML doc comments, no commented-out code, no `Debug.Log` left in gameplay code.
 - Logic is synchronous and testable; coroutines and `WaitForSeconds` live only in presentation and UI.
-- Randomness always goes through `IRandomSource` so tests can control it.
+- Randomness that affects play (damage, AI, rewards, timing windows) always goes through `IRandomSource` so tests can control it. Purely cosmetic randomness in views and effects (particle spread, sound pitch, popup jitter) may use `UnityEngine.Random`.
 
 ## Working as Claude in this repo
 

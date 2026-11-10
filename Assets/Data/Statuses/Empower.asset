@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
   displayName: Empower
   announcement: Empowered!
-  icon: {fileID: 21300000, guid: 3280a8ddd226cf14089be96f3db27613, type: 3}
-  tint: {r: 1, g: 0.55, b: 0.15, a: 1}
   modifiers:
   - stat: 0
     add: 0
