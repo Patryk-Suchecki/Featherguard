@@ -24,6 +24,7 @@ MonoBehaviour:
   support: {fileID: 11400000, guid: 129590adfcc2f8744acae262e78dd830, type: 2}
   special: {fileID: 11400000, guid: 772d85d256e93c540997454ecfa3d368, type: 2}
   ai:
+    actionsPerTurn: 1
     specialEvery: 0
     supportChance: 0.45
     healThreshold: 0.6

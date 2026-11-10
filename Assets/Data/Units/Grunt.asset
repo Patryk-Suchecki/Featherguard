@@ -24,6 +24,7 @@ MonoBehaviour:
   support: {fileID: 0}
   special: {fileID: 0}
   ai:
+    actionsPerTurn: 1
     specialEvery: 0
     supportChance: 0.45
     healThreshold: 0.6

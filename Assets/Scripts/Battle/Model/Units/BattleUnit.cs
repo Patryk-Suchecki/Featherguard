@@ -17,6 +17,7 @@ namespace Featherguard.Battle
         public bool IsAlive => Health > 0;
         public bool HasActed { get; set; }
         public int TurnsTaken { get; set; }
+        public int ActionsLeftThisTurn { get; set; }
         public bool Enraged { get; set; }
         public StatusContainer Statuses { get; } = new();
         public IReadOnlyList<StatusEffect> ActiveStatuses => Statuses.All;

@@ -242,6 +242,39 @@ namespace Featherguard.Tests
         }
 
         [Test]
+        public void Elite_ActsTwiceInEachEnemyTurn()
+        {
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(1));
+            var elite = Unit("Elite", Team.Enemies, 50, Strike(7));
+            elite.ai.actionsPerTurn = 2;
+            var model = Create(Encounter(new[] { elite }), 0f, hero);
+            model.Start();
+
+            var events = model.Act(model.Heroes[0], hero.attack, model.Enemies[0]);
+
+            Assert.AreEqual(86, model.Heroes[0].Health);
+            Assert.AreEqual(2, events.OfType<ActionPerformed>().Count(a => a.Actor == model.Enemies[0]));
+            Assert.IsTrue(model.AwaitingInput);
+        }
+
+        [Test]
+        public void Elite_DueSpecialReplacesItsLastAction()
+        {
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(1));
+            var elite = Unit("Elite", Team.Enemies, 500, Strike(5), special: Strike(20));
+            elite.ai.actionsPerTurn = 2;
+            elite.ai.specialEvery = 3;
+            var model = Create(Encounter(new[] { elite }), 0f, hero);
+            model.Start();
+
+            model.Act(model.Heroes[0], hero.attack, model.Enemies[0]);
+            Assert.AreEqual(75, model.Heroes[0].Health);
+
+            model.Act(model.Heroes[0], hero.attack, model.Enemies[0]);
+            Assert.AreEqual(65, model.Heroes[0].Health);
+        }
+
+        [Test]
         public void EnemySingleTargetSpecial_PicksAHeroTarget()
         {
             var hero = Unit("Hero", Team.Heroes, 100, Strike(1));

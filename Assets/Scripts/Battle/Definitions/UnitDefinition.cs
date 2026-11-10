@@ -8,7 +8,9 @@ namespace Featherguard.Battle
     [Serializable]
     public class EnemyAiProfile
     {
-        [Tooltip("Use the special ability every N turns (0 = never).")]
+        [Tooltip("Actions in every enemy turn (Elites: 2).")]
+        [Min(1)] public int actionsPerTurn = 1;
+        [Tooltip("Use the special ability every N turns (0 = never). With several actions it replaces the last one.")]
         [Min(0)] public int specialEvery;
         [Range(0f, 1f)] public float supportChance = 0.45f;
         [Tooltip("Allies below this health fraction are healing candidates.")]

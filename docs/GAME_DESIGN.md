@@ -30,6 +30,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
 - **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
 - **Enemy AI:**
+  - acts once per enemy turn, Elites twice (`actionsPerTurn`); a special that is due replaces the last action of the turn;
   - uses its special on its first turn and then every N turns (Chieftain: N = 3);
   - heals the most wounded ally below 60% HP (75% chance) or buffs an ally that lacks the buff (45% chance);
   - otherwise attacks, preferring wounded heroes and heroes it can finish;
@@ -56,7 +57,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 Each encounter also scales enemy HP and damage, as listed in the Run section.
 
-**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. Rending Claws – melee 24, heavy. On its first turn and every 3rd turn after, Howl: Weaken on all heroes. The abilities are placeholders until the target combat rules exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
+**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy. On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. The abilities are placeholders until the target combat rules exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
 
 ### Boss: Chieftain
 

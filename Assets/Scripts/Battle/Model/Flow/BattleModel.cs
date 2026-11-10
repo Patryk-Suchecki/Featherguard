@@ -137,10 +137,16 @@ namespace Featherguard.Battle
             {
                 if (!enemy.IsAlive || enemy.SkipsTurn) continue;
                 if (!Heroes.AnyAlive) break;
-                var decision = brain.Decide(enemy, Combat);
+                int actions = Math.Max(1, enemy.Definition.ai.actionsPerTurn);
+                for (int i = 0; i < actions && enemy.IsAlive && Heroes.AnyAlive; i++)
+                {
+                    enemy.ActionsLeftThisTurn = actions - 1 - i;
+                    var decision = brain.Decide(enemy, Combat);
+                    resolver.Execute(enemy, decision.Ability, decision.Target);
+                    bosses.Check();
+                }
+                enemy.ActionsLeftThisTurn = 0;
                 enemy.TurnsTaken++;
-                resolver.Execute(enemy, decision.Ability, decision.Target);
-                bosses.Check();
             }
             ticker.EndTurn(Enemies);
         }

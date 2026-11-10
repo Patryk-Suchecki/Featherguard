@@ -34,7 +34,7 @@ namespace Featherguard.Battle
             var allies = combat.AlliesOf(enemy);
             var opponents = combat.OpponentsOf(enemy);
 
-            if (definition.special != null && profile.specialEvery > 0 && enemy.TurnsTaken % profile.specialEvery == 0)
+            if (definition.special != null && profile.specialEvery > 0 && enemy.TurnsTaken % profile.specialEvery == 0 && enemy.ActionsLeftThisTurn == 0)
             {
                 var special = definition.special;
                 if (special.TargetsAll) return new EnemyDecision(special, null);
