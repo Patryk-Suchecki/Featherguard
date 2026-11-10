@@ -34,7 +34,7 @@ SOLID rules:
 - **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
 - **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
 - **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
-- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root and MonoBehaviour views reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root, MonoBehaviour views and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
 
 ## Data and balance
 
