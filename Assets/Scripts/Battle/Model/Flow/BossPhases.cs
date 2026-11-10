@@ -4,18 +4,18 @@ namespace Featherguard.Battle
 {
     public sealed class BossPhases
     {
-        readonly Combat combat;
+        readonly BattleState state;
         readonly WaveSpawner spawner;
 
-        public BossPhases(Combat combat, WaveSpawner spawner)
+        public BossPhases(BattleState state, WaveSpawner spawner)
         {
-            this.combat = combat;
+            this.state = state;
             this.spawner = spawner;
         }
 
         public void Check()
         {
-            foreach (var boss in combat.Enemies.Living.Where(ShouldEnrage).ToList())
+            foreach (var boss in state.Enemies.Living.Where(ShouldEnrage).ToList())
                 Enrage(boss);
         }
 
@@ -29,7 +29,7 @@ namespace Featherguard.Battle
         {
             var profile = boss.Definition.boss;
             boss.Enraged = true;
-            combat.Log.Emit(new Enraged { Boss = boss });
+            state.Log.Emit(new Enraged { Boss = boss });
             boss.AddModifier(new StatModifier(StatType.Damage, multiply: profile.enrageDamageBonus));
             foreach (var summon in profile.enrageSummons)
                 if (!spawner.TrySummon(summon))

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace Featherguard.UI
 {
-    public class PressFeel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    public class PressScale : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         float target = 1f;
         float scale = 1f;

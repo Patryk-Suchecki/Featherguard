@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 
 namespace Featherguard.Battle.Presentation
 {
