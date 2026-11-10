@@ -8,28 +8,38 @@ Never recreate an existing game's names, characters, art or music. Everything st
 
 ## Architecture
 
-Assemblies: `Featherguard` (Assets/Scripts), `Featherguard.Editor` (Assets/Editor), `Featherguard.Tests.EditMode` (Assets/Tests/EditMode). Namespaces are per module, not per folder, because `[SerializeReference]` data stores full type names. Never rename a namespace or a serialized class without `[MovedFrom]`.
+Every layer is its own assembly, so the compiler rejects a reference that goes the wrong way. Namespaces are per module, not per folder, because `[SerializeReference]` data stores full type names. Never rename a namespace or a serialized class, or move it to another assembly, without `[MovedFrom]`.
 
-| Module | Path | Role |
-|---|---|---|
-| Core | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector` |
-| Battle model | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel.Start()/Act()` resolve synchronously and return `BattleEvent` lists. No GameObjects, coroutines or waits. |
-| Battle presentation | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. |
-| Run | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic (slots, gamble, shop, card draft, path). |
-| Meta | Scripts/Meta | Perks and feathers, `ISaveStore` (JSON file in `Application.persistentDataPath`). |
-| Feel | Scripts/Feel | Audio, VFX, hitstop, camera shake, `GameClock` pause. |
-| UI | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. |
-| Game | Scripts/Game | `GameBootstrap` composition root, `GameConfig`. |
+| Layer | Assembly | Path | Role | May reference |
+|---|---|---|---|---|
+| Core | `Featherguard.Core` | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector` | – |
+| Battle model | `Featherguard.Battle` | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel` resolves synchronously and returns `BattleEvent` lists. Definitions hold rules only. | Core |
+| Feel | `Featherguard.Feel` | Scripts/Feel | Audio, VFX, hitstop, camera shake, `GameClock` pause | Core |
+| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals` holds how each ability looks and sounds. | Battle, Feel, Core |
+| Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
+| Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, `ISaveStore` | Run, Battle, Core |
+| UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feel, Core |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` composition root, `GameConfig` | everything above |
+
+`Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
 Layer rules:
-- Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`.
+- References only go down the table: a layer never references one below it in the table or beside it unless listed. Never add a reference to work around this; move the type to the right layer instead.
+- Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`. Definitions (`UnitDefinition`, `AbilityDefinition`, `StatusDefinition`, ...) hold rules and numbers only; animation, colours, sounds, VFX and delivery live in presentation assets such as `AbilityVisuals`.
 - New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it. Reward or economy logic goes into `Run/Rewards`, not into UI steps.
-- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
+- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `ImpactEffect`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
+
+SOLID rules:
+- **One job per class.** A class that decides something (rules, judging, scoring) does not also read input, draw, or play sound; split it so the decision is plain C# with EditMode tests. When a class keeps growing a second concern (a state machine, a cache), move it into its own class.
+- **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
+- **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
+- **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root and MonoBehaviour views reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
 
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
-- Units, Abilities, Statuses, Encounters, Upgrades, Perks.
+- Units, Abilities, AbilityVisuals, Statuses, Encounters, Upgrades, Perks.
 - Single assets: `BattleRules`, `BattlePresentation`, `Economy`, `SlotMachine`, `Run`, `Meta`, `GameConfig`.
 
 Change balance by editing those assets, not code.

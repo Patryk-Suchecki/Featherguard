@@ -1,9 +1,8 @@
 {
-    "name": "Featherguard",
-    "rootNamespace": "Featherguard",
+    "name": "Featherguard.Feel",
+    "rootNamespace": "Featherguard.Feel",
     "references": [
-        "Unity.InputSystem",
-        "UnityEngine.UI"
+        "Featherguard.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

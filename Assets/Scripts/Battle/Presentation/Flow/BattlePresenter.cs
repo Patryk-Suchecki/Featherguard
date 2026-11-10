@@ -19,6 +19,7 @@ namespace Featherguard.Battle.Presentation
         readonly IBattleView view;
         readonly ICombatFeedback feedback;
         readonly MonoBehaviour host;
+        readonly AbilityVisualsLibrary visuals;
         readonly Dictionary<BattleUnit, UnitView> views = new();
 
         public RageMeter Rage { get; }
@@ -26,13 +27,14 @@ namespace Featherguard.Battle.Presentation
 
         public event Action<UnitView> UnitDefeated;
 
-        public BattlePresenter(BattlePresentationConfig config, UnitViewFactory factory, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, RageMeter rage)
+        public BattlePresenter(BattlePresentationConfig config, UnitViewFactory factory, AbilityVisualsLibrary visuals, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, RageMeter rage)
         {
             this.config = config;
             this.factory = factory;
             this.view = view;
             this.feedback = feedback;
             this.host = host;
+            this.visuals = visuals;
             Rage = new RageMeter(rage.Max, rage.Value);
         }
 
@@ -134,6 +136,7 @@ namespace Featherguard.Battle.Presentation
         {
             var actor = ViewOf(e.Actor);
             var ability = e.Ability;
+            var look = visuals.Of(ability);
             if (e.Special)
             {
                 view.Callout(ability.displayName);
@@ -151,19 +154,20 @@ namespace Featherguard.Battle.Presentation
                 pending.RemoveAt(index);
                 if (!ability.HasDirectImpact)
                 {
-                    feedback.Rise(target.transform.position, ability.fxColor, target.Radius);
-                    feedback.Play(ability.impactSound);
+                    feedback.Rise(target.transform.position, look.fxColor, target.Radius);
+                    feedback.Play(look.impactSound);
                 }
                 PlayInstant(impact.Outcomes);
             }
 
-            if (actor != null && ability.delivery != null)
+            if (actor != null && look.delivery != null)
             {
-                yield return ability.delivery.Deliver(new DeliveryContext
+                yield return look.delivery.Deliver(new DeliveryContext
                 {
                     Actor = actor,
                     Targets = e.Targets.Select(ViewOf).Where(v => v != null).ToList(),
                     Ability = ability,
+                    Visuals = look,
                     Feedback = feedback,
                     Host = host,
                     Impact = Land,
@@ -186,11 +190,12 @@ namespace Featherguard.Battle.Presentation
             var target = ViewOf(e.Target);
             var source = ViewOf(e.Source);
             if (target == null) return;
-            bool heavy = e.Ability.heavy || e.Critical;
+            var look = visuals.Of(e.Ability);
+            bool heavy = look.heavy || e.Critical;
             var facing = source != null ? source.Facing : -target.Facing;
             var contact = target.Center - facing * target.Radius * 0.7f + Vector3.back * target.Radius;
-            feedback.Impact(contact, e.Ability.fxColor, heavy);
-            feedback.Play(e.Ability.impactSound);
+            feedback.Impact(contact, look.fxColor, heavy);
+            feedback.Play(look.impactSound);
             target.Reaction.Flash();
             target.Reaction.Knockback(facing, heavy ? config.heavyKnockback : config.lightKnockback);
             view.Popup(target.Top, e.Critical ? $"{e.Amount}!" : e.Amount.ToString(), e.Critical ? PopupKind.Crit : PopupKind.Damage);
@@ -203,8 +208,9 @@ namespace Featherguard.Battle.Presentation
             if (target == null) return;
             if (e.Ability != null)
             {
-                feedback.Rise(target.transform.position, e.Ability.fxColor, target.Radius);
-                feedback.Play(e.Ability.impactSound);
+                var look = visuals.Of(e.Ability);
+                feedback.Rise(target.transform.position, look.fxColor, target.Radius);
+                feedback.Play(look.impactSound);
             }
             view.Popup(target.Top, $"+{e.Amount}", PopupKind.Heal);
         }
