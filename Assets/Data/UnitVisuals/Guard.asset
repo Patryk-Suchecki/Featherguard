@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26ca20efb73438c83ba04c71d9a538a, type: 3}
+  m_Name: Guard
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.UnitVisuals
+  unit: {fileID: 11400000, guid: d05dfa4227fdc2b4aa504e53d9f96c23, type: 2}
+  model: {fileID: 919132149155446097, guid: 62243b94c70eb184c97c69aec60f2505, type: 3}
+  portrait: {fileID: 21300000, guid: ae44672d0370f0c4e802a75f7efbf247, type: 3}
+  animator: {fileID: 9100000, guid: e6f1c4a10df6f6b4db5e275cd60b3eae, type: 2}
+  modelScale: 1.1
+  height: 1.5

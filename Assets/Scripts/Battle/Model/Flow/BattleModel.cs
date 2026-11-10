@@ -77,17 +77,22 @@ namespace Featherguard.Battle
             return ability.TargetsAll || Targeting.IsValid(ability, target, State.AlliesOf(hero), State.OpponentsOf(hero));
         }
 
+        public bool IsBlockedByTaunt(BattleUnit hero, AbilityDefinition ability, BattleUnit target) =>
+            CanCommand(hero) && ability != null && AbilitiesOf(hero).Contains(ability) && Targeting.IsBlockedByTaunt(ability, target, State.OpponentsOf(hero));
+
         public IEnumerable<BattleUnit> Candidates(BattleUnit hero, AbilityDefinition ability) =>
             Targeting.Candidates(ability, State.AlliesOf(hero), State.OpponentsOf(hero));
+
+        public bool IsTimed(BattleUnit hero, AbilityDefinition ability) =>
+            hero != null && ability != null && ability.IsDamaging && ability != hero.Definition.special;
 
         public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target, TimingResult timing = TimingResult.Miss)
         {
             if (!CanUse(hero, ability, target)) return Array.Empty<BattleEvent>();
-            bool special = ability == hero.Definition.special;
-            if (special)
+            if (ability == hero.Definition.special)
                 State.ConsumeRage();
             hero.HasActed = true;
-            resolver.Execute(hero, ability, target, special ? ActionTiming.None : ActionTiming.ForAttack(timing));
+            resolver.Execute(hero, ability, target, IsTimed(hero, ability) ? ActionTiming.ForAttack(timing) : ActionTiming.None);
             bosses.Check();
             Advance();
             return log.Flush();

@@ -156,6 +156,40 @@ namespace Featherguard.Tests
 
             Assert.IsFalse(model.CanUse(model.Heroes[0], hero.attack, model.Enemies[0]));
             Assert.IsTrue(model.CanUse(model.Heroes[0], hero.attack, model.Enemies[1]));
+            Assert.IsTrue(model.IsBlockedByTaunt(model.Heroes[0], hero.attack, model.Enemies[0]));
+            Assert.IsFalse(model.IsBlockedByTaunt(model.Heroes[0], hero.attack, model.Enemies[1]));
+        }
+
+        [Test]
+        public void Taunt_DoesNotBlockWhenNobodyTaunts()
+        {
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(10));
+            var guard = Unit("Guard", Team.Enemies, 100, Strike(1));
+            var model = Create(Encounter(new[] { guard }), 0f, hero);
+            model.Start();
+
+            Assert.IsFalse(model.IsBlockedByTaunt(model.Heroes[0], hero.attack, model.Enemies[0]));
+            Assert.IsFalse(model.IsBlockedByTaunt(model.Heroes[0], hero.attack, model.Heroes[0]));
+        }
+
+        [Test]
+        public void Abilities_DescribeTheirEffects()
+        {
+            var poison = ScriptableObject.CreateInstance<StatusDefinition>();
+            var ability = ScriptableObject.CreateInstance<AbilityDefinition>();
+            ability.effects = new AbilityEffect[]
+            {
+                new DamageEffect { power = 12 },
+                new DamageEffect { power = 8 },
+                new ApplyStatusEffect { application = new StatusApplication { status = poison } },
+                new ApplyStatusEffect { application = new StatusApplication { status = poison, onSelf = true } },
+            };
+
+            Assert.IsTrue(ability.IsDamaging);
+            Assert.IsFalse(ability.Heals);
+            Assert.IsTrue(ability.HasDirectImpact);
+            Assert.AreEqual(20, ability.ExpectedDamage);
+            CollectionAssert.AreEqual(new[] { poison }, ability.StatusesOnTarget.ToList());
         }
 
         [Test]
@@ -320,6 +354,10 @@ namespace Featherguard.Tests
             var enemy = Unit("Enemy", Team.Enemies, 500, Strike(0));
             var model = Create(Encounter(new[] { enemy }), 100f, hero);
             model.Start();
+
+            Assert.IsTrue(model.IsTimed(model.Heroes[0], hero.attack));
+            Assert.IsFalse(model.IsTimed(model.Heroes[0], hero.special));
+            Assert.IsFalse(model.IsTimed(model.Heroes[0], heal));
 
             var events = model.Act(model.Heroes[0], hero.special, model.Enemies[0], TimingResult.Perfect);
 
