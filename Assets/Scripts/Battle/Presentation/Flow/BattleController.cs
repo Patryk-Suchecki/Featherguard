@@ -8,11 +8,11 @@ namespace Featherguard.Battle.Presentation
     {
         public BattlePresentationConfig Config;
         public UnitViewFactory Factory;
-        public AbilityVisualsLibrary Visuals;
+        public BattleVisuals Visuals;
         public IBattleView View;
         public ICombatFeedback Feedback;
         public MonoBehaviour Host;
-        public Camera Camera;
+        public IUnitPicker UnitPicker;
     }
 
     public sealed class BattleController
@@ -28,8 +28,8 @@ namespace Featherguard.Battle.Presentation
         {
             Model = model;
             Presenter = new BattlePresenter(services.Config, services.Factory, services.Visuals, services.View, services.Feedback, services.Host, model.Rage);
-            var picker = new PointerUnitPicker(services.Camera, () => Presenter.Views, services.Config.tapTolerance);
-            commands = new PlayerCommands(model, Presenter, picker, services.Config, services.Feedback, services.View);
+            var highlighter = new TargetHighlighter(model, Presenter, services.Config);
+            commands = new PlayerCommands(model, Presenter, services.UnitPicker, highlighter, services.Feedback, services.View);
         }
 
         public void Tick() => commands.Tick();
