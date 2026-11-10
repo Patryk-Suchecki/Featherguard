@@ -25,7 +25,7 @@ Capacity: about 10 hours a week each, 20 hours a week together. Dates are target
 
 | Milestone | Target | Goal | Done when |
 |---|---|---|---|
-| **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test character (the Bies) goes through the full art pipeline (model, baked texture, rig, animations, toon shader, in Unity; hand-painting the texture comes in M1); one music track and the perfect-timing sound are made with our audio workflow; the timing combat prototype feels good; all MVP screens are wireframed; at the end, the M0 build is tested on an Android phone (until then everything is checked in the editor) |
+| **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test character (the Bies) goes through the full art pipeline (model, baked texture, rig, animations, toon shader, in Unity); one music track and the perfect-timing sound are made with our audio workflow; the timing combat prototype feels good; all MVP screens are wireframed; at the end, the M0 build is tested on an Android phone (until then everything is checked in the editor) |
 | **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → land map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
 | **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, forge, potions, saving, rumours and settings work; tutorial exists |
 | **M3 Beta** | 2027-09-26 | Content complete | All MVP art, animation, VFX, music, SFX and texts are in; balance pass done; final title decided; only bug fixes and polish after this |
@@ -61,8 +61,8 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 ### Art
 - Style guide: turns the GDD art direction into references, palettes per land, outline and shading rules, character proportions (M0).
-- Shader and rendering: outline, banded toon shading, painted texture look, lighting and post-processing per land (M0 test, M1 final).
-- Heroes: model, painted texture, rig, portrait (M1: 3 heroes; M3: all 6).
+- Shader and rendering: outline, banded toon shading, lighting and post-processing per land (M0 test, M1 final).
+- Heroes: model, baked texture, rig, portrait (M1: 3 heroes; M3: all 6).
 - Enemies and bosses: same as heroes (M0: the Bies as the test character; M1: Rye Fields; M3: all MVP lands).
 - Environments: battle backdrop per land, the Stronghold, the land map (M1: Rye Fields, Stronghold, map; M3: all).
 - Items and icons: weapons, artifacts, materials, potions, status icons (M2–M3).
