@@ -24,6 +24,7 @@ namespace Featherguard.Game
         BattleHud hud;
         RunSession session;
         BattleController battle;
+        UnitViewFactory factory;
         readonly Dictionary<BattleUnit, int> killRewards = new();
 
         MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
@@ -54,10 +55,11 @@ namespace Featherguard.Game
                 UseTestEncounter(setup, config.testEncounter);
             var model = new BattleModel(setup, config.rules);
             model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
+            factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, config.toonMaterial);
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
-                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, config.toonMaterial),
+                Factory = factory,
                 View = hud,
                 Feedback = feedback,
                 Host = this,
@@ -71,6 +73,8 @@ namespace Featherguard.Game
         }
 
         void Update() => battle?.Tick();
+
+        void OnDestroy() => factory?.Dispose();
 
         static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
         {

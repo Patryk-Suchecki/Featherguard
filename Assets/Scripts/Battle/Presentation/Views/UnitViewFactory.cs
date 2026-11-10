@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Featherguard.Battle.Presentation
 {
-    public sealed class UnitViewFactory
+    public sealed class UnitViewFactory : System.IDisposable
     {
         readonly BattlePresentationConfig config;
         readonly Material flashMaterial;
@@ -54,6 +54,13 @@ namespace Featherguard.Battle.Presentation
             collider.height = view.Height;
             collider.radius = view.Radius;
             return view;
+        }
+
+        public void Dispose()
+        {
+            foreach (var variant in toonVariants.Values)
+                Object.Destroy(variant);
+            toonVariants.Clear();
         }
 
         void ApplyToon(GameObject model)
