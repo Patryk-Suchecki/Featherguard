@@ -1,4 +1,3 @@
-using Featherguard.Feel;
 using UnityEngine;
 
 namespace Featherguard.Battle.Presentation

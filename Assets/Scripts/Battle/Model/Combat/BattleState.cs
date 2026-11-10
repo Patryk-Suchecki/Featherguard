@@ -4,7 +4,7 @@ using Featherguard.Core;
 
 namespace Featherguard.Battle
 {
-    public sealed class Combat
+    public sealed class BattleState
     {
         public BattleRules Rules { get; }
         public IRandomSource Random { get; }
@@ -15,7 +15,7 @@ namespace Featherguard.Battle
 
         public event Action<BattleUnit> UnitKilled;
 
-        public Combat(BattleRules rules, IRandomSource random, BattleLog log, float startRage)
+        public BattleState(BattleRules rules, IRandomSource random, BattleLog log, float startRage)
         {
             Rules = rules;
             Random = random;
@@ -91,7 +91,7 @@ namespace Featherguard.Battle
             Log.Emit(new StatusApplied { Target = target, Status = application.status });
         }
 
-        public void DamageOverTime(BattleUnit unit, StatusEffect effect)
+        public void DamageOverTime(BattleUnit unit, ActiveStatus effect)
         {
             if (!unit.IsAlive) return;
             int dealt = unit.ApplyDamage(effect.Potency);

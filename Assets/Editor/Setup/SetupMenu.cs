@@ -1,5 +1,6 @@
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
+using Featherguard.Feedback;
 using Featherguard.Game;
 using UnityEditor;
 using UnityEngine;
@@ -30,7 +31,7 @@ namespace Featherguard.EditorTools
             var (abilities, visuals) = AbilityCatalog.Build(seeder, statuses);
             var units = UnitCatalog.Build(seeder, abilities, art);
             var rules = seeder.Seed<BattleRules>($"{ContentPaths.Data}/BattleRules.asset", null);
-            var presentation = seeder.Seed<BattlePresentationConfig>($"{ContentPaths.Data}/BattlePresentation.asset", null, p => p.abilities = visuals);
+            var presentation = seeder.Seed<BattlePresentationConfig>($"{ContentPaths.Data}/BattlePresentationConfig.asset", null, p => p.abilities = visuals);
             var run = RunCatalog.Build(seeder, units, art);
             var meta = MetaCatalog.Build(seeder, art);
 
@@ -48,7 +49,7 @@ namespace Featherguard.EditorTools
                 c.ringMaterial = art.Ring;
                 c.sounds = art.Sounds;
                 c.ui = art.Ui;
-                c.feedback ??= new Feel.FeedbackTuning();
+                c.feedback ??= new FeedbackTuning();
             });
             AssetDatabase.SaveAssets();
 

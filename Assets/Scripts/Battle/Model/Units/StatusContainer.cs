@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Featherguard.Battle
 {
-    public sealed class StatusEffect
+    public sealed class ActiveStatus
     {
         public StatusDefinition Definition { get; }
         public int Turns { get; internal set; }
         public int Potency { get; internal set; }
         internal bool Fresh { get; set; }
 
-        public StatusEffect(StatusDefinition definition, int turns, int potency, bool fresh)
+        public ActiveStatus(StatusDefinition definition, int turns, int potency, bool fresh)
         {
             Definition = definition;
             Turns = turns;
@@ -22,11 +22,11 @@ namespace Featherguard.Battle
 
     public sealed class StatusContainer
     {
-        readonly List<StatusEffect> effects = new();
+        readonly List<ActiveStatus> effects = new();
 
         public event Action Changed;
 
-        public IReadOnlyList<StatusEffect> All => effects;
+        public IReadOnlyList<ActiveStatus> All => effects;
 
         public bool Has(StatusDefinition definition) => effects.Any(e => e.Definition == definition);
         public bool Any(Func<StatusDefinition, bool> predicate) => effects.Any(e => predicate(e.Definition));
@@ -45,7 +45,7 @@ namespace Featherguard.Battle
             }
             else
             {
-                effects.Add(new StatusEffect(application.status, application.turns, application.potency, duringOwnTurn));
+                effects.Add(new ActiveStatus(application.status, application.turns, application.potency, duringOwnTurn));
             }
             Changed?.Invoke();
         }

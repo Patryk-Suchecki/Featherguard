@@ -20,7 +20,7 @@ namespace Featherguard.Battle
         public int ActionsLeftThisTurn { get; set; }
         public bool Enraged { get; set; }
         public StatusContainer Statuses { get; } = new();
-        public IReadOnlyList<StatusEffect> ActiveStatuses => Statuses.All;
+        public IReadOnlyList<ActiveStatus> ActiveStatuses => Statuses.All;
         public bool SkipsTurn => Statuses.Any(s => s.skipsTurn);
         public bool ForcesTargeting => Statuses.Any(s => s.forcesTargeting);
         public bool CanAct => IsAlive && !HasActed;

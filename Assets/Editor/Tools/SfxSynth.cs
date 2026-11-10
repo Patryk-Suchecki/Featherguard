@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using UnityEditor;
 using UnityEngine;
 

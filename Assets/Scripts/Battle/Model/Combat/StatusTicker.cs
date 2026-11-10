@@ -4,9 +4,9 @@ namespace Featherguard.Battle
 {
     public sealed class StatusTicker
     {
-        readonly Combat combat;
+        readonly BattleState state;
 
-        public StatusTicker(Combat combat) => this.combat = combat;
+        public StatusTicker(BattleState state) => this.state = state;
 
         public void BeginTurn(Squad squad)
         {
@@ -14,11 +14,11 @@ namespace Featherguard.Battle
             {
                 foreach (var effect in unit.ActiveStatuses.Where(e => e.Definition.damagePerTurn).ToList())
                 {
-                    combat.DamageOverTime(unit, effect);
+                    state.DamageOverTime(unit, effect);
                     if (!unit.IsAlive) break;
                 }
                 if (unit.IsAlive && unit.SkipsTurn)
-                    combat.Log.Emit(new Stunned { Unit = unit });
+                    state.Log.Emit(new Stunned { Unit = unit });
             }
         }
 

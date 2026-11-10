@@ -6,15 +6,15 @@ namespace Featherguard.Battle
 {
     public readonly struct EffectContext
     {
-        public readonly Combat Combat;
+        public readonly BattleState State;
         public readonly BattleUnit Actor;
         public readonly BattleUnit Target;
         public readonly AbilityDefinition Ability;
         public readonly ActionTiming Timing;
 
-        public EffectContext(Combat combat, BattleUnit actor, BattleUnit target, AbilityDefinition ability, ActionTiming timing = default)
+        public EffectContext(BattleState state, BattleUnit actor, BattleUnit target, AbilityDefinition ability, ActionTiming timing = default)
         {
-            Combat = combat;
+            State = state;
             Actor = actor;
             Target = target;
             Ability = ability;
@@ -34,7 +34,7 @@ namespace Featherguard.Battle
     {
         [Min(0)] public int power = 20;
 
-        public override void Apply(in EffectContext context) => context.Combat.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
+        public override void Apply(in EffectContext context) => context.State.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
     }
 
     [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
@@ -42,7 +42,7 @@ namespace Featherguard.Battle
     {
         [Min(0)] public int power = 30;
 
-        public override void Apply(in EffectContext context) => context.Combat.Heal(context.Actor, context.Target, power, context.Ability);
+        public override void Apply(in EffectContext context) => context.State.Heal(context.Actor, context.Target, power, context.Ability);
     }
 
     [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
@@ -55,7 +55,7 @@ namespace Featherguard.Battle
         public override void Apply(in EffectContext context)
         {
             var recipient = application.onSelf ? context.Actor : context.Target;
-            context.Combat.TryApplyStatus(context.Actor, recipient, application);
+            context.State.TryApplyStatus(context.Actor, recipient, application);
         }
     }
 }

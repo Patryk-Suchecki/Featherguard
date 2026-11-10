@@ -18,7 +18,7 @@ namespace Featherguard.Battle
 
     public interface IEnemyBrain
     {
-        EnemyDecision Decide(BattleUnit enemy, Combat combat);
+        EnemyDecision Decide(BattleUnit enemy, BattleState state);
     }
 
     public sealed class DefaultEnemyBrain : IEnemyBrain
@@ -27,12 +27,12 @@ namespace Featherguard.Battle
 
         public DefaultEnemyBrain(IRandomSource random) => this.random = random;
 
-        public EnemyDecision Decide(BattleUnit enemy, Combat combat)
+        public EnemyDecision Decide(BattleUnit enemy, BattleState state)
         {
             var definition = enemy.Definition;
             var profile = definition.ai;
-            var allies = combat.AlliesOf(enemy);
-            var opponents = combat.OpponentsOf(enemy);
+            var allies = state.AlliesOf(enemy);
+            var opponents = state.OpponentsOf(enemy);
 
             if (definition.special != null && profile.specialEvery > 0 && enemy.TurnsTaken % profile.specialEvery == 0 && enemy.ActionsLeftThisTurn == 0)
             {

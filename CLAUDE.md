@@ -12,13 +12,13 @@ Every layer is its own assembly, so the compiler rejects a reference that goes t
 
 | Layer | Assembly | Path | Role | May reference |
 |---|---|---|---|---|
-| Core | `Featherguard.Core` | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector` | – |
+| Core | `Featherguard.Core` | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector`, `GameClock` pause | – |
 | Battle model | `Featherguard.Battle` | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel` resolves synchronously and returns `BattleEvent` lists. Definitions hold rules only. | Core |
-| Feel | `Featherguard.Feel` | Scripts/Feel | Audio, VFX, hitstop, camera shake, `GameClock` pause | Core |
-| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals` holds how each ability looks and sounds. | Battle, Feel, Core |
+| Feedback | `Featherguard.Feedback` | Scripts/Feedback | Combat feedback: audio, VFX, hitstop, camera shake | Core |
+| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals` holds how each ability looks and sounds. | Battle, Feedback, Core |
 | Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
 | Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, `ISaveStore` | Run, Battle, Core |
-| UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feel, Core |
+| UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feedback, Core |
 | Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` composition root, `GameConfig` | everything above |
 
 `Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
@@ -34,13 +34,13 @@ SOLID rules:
 - **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
 - **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
 - **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
-- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root, MonoBehaviour views and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
 
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
 - Units, Abilities, AbilityVisuals, Statuses, Encounters, Upgrades, Perks.
-- Single assets: `BattleRules`, `BattlePresentation`, `Economy`, `SlotMachine`, `Run`, `Meta`, `GameConfig`.
+- Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `EconomyConfig`, `SlotConfig`, `RunDefinition`, `MetaConfig`, `GameConfig`.
 
 Change balance by editing those assets, not code.
 
