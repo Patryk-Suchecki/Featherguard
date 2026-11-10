@@ -27,6 +27,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - a status applied by the owner's own side lasts through the owner's next turn; one applied by the opponent ticks down at the end of the owner's turn;
   - reapplying keeps the stronger duration and potency;
   - Poison damage is also multiplied by DamageTaken, so Shield halves it.
+- **Attack timing** (model only for now): an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it. The battle screen does not ask for timing yet (#19), so every attack resolves as Miss.
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
 - **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
 - **Enemy AI:**
