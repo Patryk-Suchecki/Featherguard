@@ -2,7 +2,14 @@
     "name": "Featherguard.Editor",
     "rootNamespace": "Featherguard.EditorTools",
     "references": [
-        "Featherguard",
+        "Featherguard.Core",
+        "Featherguard.Battle",
+        "Featherguard.Feel",
+        "Featherguard.Battle.Presentation",
+        "Featherguard.Run",
+        "Featherguard.Meta",
+        "Featherguard.UI",
+        "Featherguard.Game",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Core.Runtime"
     ],

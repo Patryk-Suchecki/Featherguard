@@ -1,0 +1,20 @@
+{
+    "name": "Featherguard.Battle.Presentation",
+    "rootNamespace": "Featherguard.Battle.Presentation",
+    "references": [
+        "Featherguard.Battle",
+        "Featherguard.Feel",
+        "Featherguard.Core",
+        "Unity.InputSystem",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
