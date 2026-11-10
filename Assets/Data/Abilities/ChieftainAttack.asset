@@ -18,22 +18,15 @@ MonoBehaviour:
   effects:
   - rid: 4550530214315163720
   - rid: 4550530214315163721
-  animationState: Attack
-  heavy: 1
-  fxColor: {r: 1, g: 0.62, b: 0.15, a: 1}
-  castSound: 1
-  impactSound: 2
-  delivery:
-    rid: 4550530214315163722
   references:
     version: 2
     RefIds:
     - rid: 4550530214315163720
-      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         power: 34
     - rid: 4550530214315163721
-      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         application:
           status: {fileID: 11400000, guid: 9ed2d30f57628cf47a79c05b0c8892b2, type: 2}
@@ -41,13 +34,3 @@ MonoBehaviour:
           potency: 0
           chance: 0.35
           onSelf: 0
-    - rid: 4550530214315163722
-      type: {class: MeleeDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data:
-        approachTime: 0.3
-        approachHop: 0.55
-        returnTime: 0.32
-        returnHop: 0.45
-        hitInterval: 0.15
-        recovery: 0.4
-        reach: 0.3

@@ -17,20 +17,10 @@ MonoBehaviour:
   hits: 1
   effects:
   - rid: 4550530214315163718
-  animationState: Cast
-  heavy: 0
-  fxColor: {r: 0.8, g: 0.45, b: 1, a: 1}
-  castSound: 0
-  impactSound: 6
-  delivery:
-    rid: 4550530214315163719
   references:
     version: 2
     RefIds:
     - rid: 4550530214315163718
-      type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard}
+      type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         power: 25
-    - rid: 4550530214315163719
-      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard}
-      data: 

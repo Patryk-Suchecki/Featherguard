@@ -1,0 +1,17 @@
+{
+    "name": "Featherguard.Run",
+    "rootNamespace": "Featherguard.Run",
+    "references": [
+        "Featherguard.Battle",
+        "Featherguard.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
