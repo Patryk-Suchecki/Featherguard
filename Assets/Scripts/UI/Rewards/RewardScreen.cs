@@ -47,7 +47,7 @@ namespace Featherguard.UI
         void Header(string title, string subtitle)
         {
             Overlay.Title(Root, title, subtitle);
-            PartyStrip.Build(Root, session);
+            PartyStrip.Build(Root, session, hud.Visuals.Units);
         }
 
         public void Close() => overlay?.Close();

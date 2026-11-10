@@ -2,9 +2,13 @@ using UnityEngine;
 
 namespace Featherguard.Feedback
 {
-    public interface ICombatFeedback
+    public interface ISoundPlayer
     {
         void Play(SfxId id, float volume = 1f, float pitchJitter = 0.08f);
+    }
+
+    public interface ICombatFeedback : ISoundPlayer
+    {
         void Impact(Vector3 point, Color color, bool heavy);
         void PlayImpactEffect(ImpactEffect effect, Vector3 point, Vector3 facing, float targetRadius);
         void Shake(float strength, float seconds);

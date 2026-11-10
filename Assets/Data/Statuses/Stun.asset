@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
   displayName: Stun
   announcement: Stunned!
-  icon: {fileID: 21300000, guid: 21c952807f1b4414aa2bdbceac9761c8, type: 3}
-  tint: {r: 1, g: 0.85, b: 0.2, a: 1}
   modifiers: []
   damagePerTurn: 0
   skipsTurn: 1

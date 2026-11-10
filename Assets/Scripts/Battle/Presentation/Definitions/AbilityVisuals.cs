@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Featherguard.Battle.Presentation
 {
     [CreateAssetMenu(menuName = "Featherguard/Ability Visuals")]
-    public class AbilityVisuals : ScriptableObject
+    public class AbilityVisuals : ScriptableObject, IVisualsFor<AbilityDefinition>
     {
         [Tooltip("The ability these visuals belong to.")]
         public AbilityDefinition ability;
@@ -19,5 +19,7 @@ namespace Featherguard.Battle.Presentation
         [SerializeReference, SubclassSelector] public AbilityDelivery delivery = new InstantDelivery();
         [Tooltip("Optional effect drawn on the target when a hit lands.")]
         [SerializeReference, SubclassSelector] public ImpactEffect impactEffect;
+
+        public AbilityDefinition Definition => ability;
     }
 }
