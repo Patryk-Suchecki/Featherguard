@@ -29,6 +29,21 @@ namespace Featherguard.Battle.Presentation
         public float enrageHold = 0.9f;
         public float endDelay = 0.6f;
 
+        [Header("Timing prompts")]
+        [Tooltip("Temporary attack ring and BLOCK! cue. Off: every attack and block resolves as Miss and enemy turns don't wait.")]
+        public bool timingPrompts = true;
+        [Tooltip("Seconds from the ring appearing to the moment it meets the target circle.")]
+        [Min(0.1f)] public float attackRingTime = 0.8f;
+        [Tooltip("Shortest and longest hold of the enemy wind-up before BLOCK!, in seconds.")]
+        [Min(0f)] public float windupMin = 0.4f;
+        [Min(0f)] public float windupMax = 1.2f;
+        [Tooltip("Seconds between the BLOCK! flash and the hit.")]
+        [Min(0f)] public float blockLead = 0.25f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Perfect.")]
+        [Min(0f)] public float perfectWindow = 0.06f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Good.")]
+        [Min(0f)] public float goodWindow = 0.15f;
+
         [Header("Selection")]
         public Color selectedRing = new(1f, 0.85f, 0.2f, 1f);
         public Color enemyRing = new(1f, 0.3f, 0.25f, 0.75f);

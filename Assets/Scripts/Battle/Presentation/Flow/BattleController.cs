@@ -1,4 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Featherguard.Core;
 using Featherguard.Feel;
 using UnityEngine;
 
@@ -17,6 +20,8 @@ namespace Featherguard.Battle.Presentation
     public sealed class BattleController
     {
         readonly PlayerCommands commands;
+        readonly TimingPrompt prompt;
+        EnemyWindup windup;
 
         public BattleModel Model { get; }
         public BattlePresenter Presenter { get; }
@@ -29,21 +34,54 @@ namespace Featherguard.Battle.Presentation
             Presenter = new BattlePresenter(services.Config, services.Factory, services.View, services.Feedback, services.Host, model.Rage);
             var picker = new PointerUnitPicker(services.Camera, () => Presenter.Views, services.Config.tapTolerance);
             commands = new PlayerCommands(model, Presenter, picker, services.Config, services.Feedback, services.View);
+            if (services.Config.timingPrompts)
+                prompt = new TimingPrompt(services.Config, services.View, services.Feedback, UnityRandomSource.Shared);
         }
 
         public void Tick() => commands.Tick();
 
         public IEnumerator Run()
         {
-            yield return Presenter.Play(Model.Start());
+            yield return Play(Model.Start());
             while (!Model.IsFinished)
             {
+                if (Model.AwaitingBlock)
+                {
+                    yield return Block();
+                    continue;
+                }
+
                 commands.Open();
-                while (commands.Submitted == null)
+                while (commands.Chosen == null)
                     yield return null;
-                yield return Presenter.Play(commands.TakeSubmitted());
+                var command = commands.TakeChosen();
+                var timing = TimingResult.Miss;
+                if (prompt != null && command.IsTimed)
+                    yield return prompt.Attack(PointOf(command.Target, Model.Enemies), result => timing = result);
+                yield return Play(Model.Act(command.Hero, command.Ability, command.Target, timing));
             }
             commands.Close();
+        }
+
+        IEnumerator Block()
+        {
+            var timing = TimingResult.Miss;
+            if (prompt != null)
+                yield return prompt.Block(PointOf(windup?.Target, Model.Heroes), result => timing = result);
+            yield return Play(Model.Block(timing));
+        }
+
+        IEnumerator Play(IReadOnlyList<BattleEvent> events)
+        {
+            windup = events.OfType<EnemyWindup>().LastOrDefault() ?? windup;
+            return Presenter.Play(events);
+        }
+
+        Vector3 PointOf(BattleUnit unit, Squad squad)
+        {
+            var target = unit != null && unit.IsAlive ? unit : squad.Living.FirstOrDefault();
+            var view = target != null ? Presenter.ViewOf(target) : null;
+            return view != null ? view.Center : Vector3.zero;
         }
     }
 }

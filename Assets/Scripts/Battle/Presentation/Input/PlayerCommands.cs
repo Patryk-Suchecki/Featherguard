@@ -13,6 +13,22 @@ namespace Featherguard.Battle.Presentation
         void ToggleSpecial();
     }
 
+    public readonly struct PlayerCommand
+    {
+        public readonly BattleUnit Hero;
+        public readonly AbilityDefinition Ability;
+        public readonly BattleUnit Target;
+
+        public PlayerCommand(BattleUnit hero, AbilityDefinition ability, BattleUnit target)
+        {
+            Hero = hero;
+            Ability = ability;
+            Target = target;
+        }
+
+        public bool IsTimed => Ability.IsDamaging && Ability != Hero.Definition.special;
+    }
+
     public sealed class PlayerCommands : IPlayerCommands
     {
         const string TauntText = "Taunted!";
@@ -27,7 +43,7 @@ namespace Featherguard.Battle.Presentation
         public BattleUnit Selected { get; private set; }
         public bool SpecialArmed { get; private set; }
         public bool AcceptingInput { get; private set; }
-        public IReadOnlyList<BattleEvent> Submitted { get; private set; }
+        public PlayerCommand? Chosen { get; private set; }
 
         public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, BattlePresentationConfig config, ICombatFeedback feedback, IBattleView view)
         {
@@ -51,13 +67,13 @@ namespace Featherguard.Battle.Presentation
             SetSelection(null);
         }
 
-        public IReadOnlyList<BattleEvent> TakeSubmitted()
+        public PlayerCommand TakeChosen()
         {
-            var events = Submitted;
-            Submitted = null;
+            var command = Chosen.Value;
+            Chosen = null;
             AcceptingInput = false;
             RefreshHighlights();
-            return events;
+            return command;
         }
 
         public void Tick()
@@ -112,14 +128,13 @@ namespace Featherguard.Battle.Presentation
             Submit(ability, unit);
         }
 
-        bool CanCommand => AcceptingInput && Submitted == null;
+        bool CanCommand => AcceptingInput && Chosen == null;
 
         void Submit(AbilityDefinition ability, BattleUnit target)
         {
-            var events = model.Act(Selected, ability, target);
-            if (events.Count == 0) return;
+            if (!model.CanUse(Selected, ability, target)) return;
             SpecialArmed = false;
-            Submitted = events;
+            Chosen = new PlayerCommand(Selected, ability, target);
         }
 
         void SetSelection(BattleUnit hero)

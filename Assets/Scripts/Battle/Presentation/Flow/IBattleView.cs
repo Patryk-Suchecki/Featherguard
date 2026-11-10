@@ -12,5 +12,8 @@ namespace Featherguard.Battle.Presentation
         void SetProgress(int encounter, int encounters, int wave, int waves);
         void UnitAdded(UnitView unit);
         void UnitRemoved(UnitView unit);
+        void ShowAttackRing(Vector3 world, float closing);
+        void ShowBlockCue(Vector3 world);
+        void HideTimingCue();
     }
 }

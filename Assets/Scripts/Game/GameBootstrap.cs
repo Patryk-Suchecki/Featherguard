@@ -50,6 +50,7 @@ namespace Featherguard.Game
             hud.BindWallet(session.Wallet);
 
             var setup = session.CreateBattleSetup();
+            setup.AwaitBlocks = config.presentation.timingPrompts;
             var testEncounter = TestEncounterSetting.Current;
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
