@@ -2,7 +2,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-namespace Featherguard.Feel
+namespace Featherguard.Battle.Presentation
 {
     public class HitReaction : MonoBehaviour
     {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Featherguard.Feel;
 using UnityEngine;
 
 namespace Featherguard.Battle.Presentation

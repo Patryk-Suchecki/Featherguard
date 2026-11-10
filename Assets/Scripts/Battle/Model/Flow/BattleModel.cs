@@ -19,10 +19,10 @@ namespace Featherguard.Battle
         readonly BossPhases bosses;
         readonly IEnemyBrain brain;
 
-        public Combat Combat { get; }
-        public RageMeter Rage => Combat.Rage;
-        public Squad Heroes => Combat.Heroes;
-        public Squad Enemies => Combat.Enemies;
+        public BattleState State { get; }
+        public RageMeter Rage => State.Rage;
+        public Squad Heroes => State.Heroes;
+        public Squad Enemies => State.Enemies;
         public BattlePhase Phase { get; private set; }
         public bool AwaitingInput => Phase == BattlePhase.AwaitingInput;
         public bool IsFinished => Phase == BattlePhase.Finished;
@@ -34,25 +34,25 @@ namespace Featherguard.Battle
         public BattleModel(BattleSetup setup, BattleRules rules, IRandomSource random, IEnemyBrain brain = null)
         {
             this.setup = setup;
-            Combat = new Combat(rules, random, log, setup.StartRage);
-            Combat.UnitKilled += unit =>
+            State = new BattleState(rules, random, log, setup.StartRage);
+            State.UnitKilled += unit =>
             {
                 if (unit.Team == Team.Enemies) EnemyKilled?.Invoke(unit);
             };
-            resolver = new ActionResolver(Combat);
-            ticker = new StatusTicker(Combat);
-            waves = new WaveSpawner(Combat, setup);
-            bosses = new BossPhases(Combat, waves);
+            resolver = new ActionResolver(State);
+            ticker = new StatusTicker(State);
+            waves = new WaveSpawner(State, setup);
+            bosses = new BossPhases(State, waves);
             this.brain = brain ?? new DefaultEnemyBrain(random);
         }
 
         public IReadOnlyList<BattleEvent> Start()
         {
             if (Phase != BattlePhase.NotStarted) throw new InvalidOperationException("Battle already started.");
-            for (int i = 0; i < setup.Heroes.Count && i < Combat.Rules.heroSlotCount; i++)
+            for (int i = 0; i < setup.Heroes.Count && i < State.Rules.heroSlotCount; i++)
             {
                 var loadout = setup.Heroes[i];
-                Combat.Spawn(loadout.Definition, i, loadout.Modifiers, loadout.Health);
+                State.Spawn(loadout.Definition, i, loadout.Modifiers, loadout.Health);
             }
             waves.SpawnNext();
             BeginPlayerTurn();
@@ -73,17 +73,17 @@ namespace Featherguard.Battle
         public bool CanUse(BattleUnit hero, AbilityDefinition ability, BattleUnit target)
         {
             if (!CanCommand(hero) || ability == null || !AbilitiesOf(hero).Contains(ability)) return false;
-            return ability.TargetsAll || Targeting.IsValid(ability, target, Combat.AlliesOf(hero), Combat.OpponentsOf(hero));
+            return ability.TargetsAll || Targeting.IsValid(ability, target, State.AlliesOf(hero), State.OpponentsOf(hero));
         }
 
         public IEnumerable<BattleUnit> Candidates(BattleUnit hero, AbilityDefinition ability) =>
-            Targeting.Candidates(ability, Combat.AlliesOf(hero), Combat.OpponentsOf(hero));
+            Targeting.Candidates(ability, State.AlliesOf(hero), State.OpponentsOf(hero));
 
         public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target)
         {
             if (!CanUse(hero, ability, target)) return Array.Empty<BattleEvent>();
             if (ability == hero.Definition.special)
-                Combat.ConsumeRage();
+                State.ConsumeRage();
             hero.HasActed = true;
             resolver.Execute(hero, ability, target);
             bosses.Check();
@@ -140,7 +140,7 @@ namespace Featherguard.Battle
                 for (int i = 0; i < actions && enemy.IsAlive && Heroes.AnyAlive; i++)
                 {
                     enemy.ActionsLeftThisTurn = actions - 1 - i;
-                    var decision = brain.Decide(enemy, Combat);
+                    var decision = brain.Decide(enemy, State);
                     resolver.Execute(enemy, decision.Ability, decision.Target);
                     bosses.Check();
                 }

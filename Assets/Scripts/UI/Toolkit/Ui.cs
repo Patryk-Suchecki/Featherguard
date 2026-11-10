@@ -110,7 +110,7 @@ namespace Featherguard.UI
             colors.disabledColor = new Color(0.55f, 0.55f, 0.55f, 0.6f);
             button.colors = colors;
             button.onClick.AddListener(onClick);
-            rt.gameObject.AddComponent<PressFeel>();
+            rt.gameObject.AddComponent<PressScale>();
             return button;
         }
 
