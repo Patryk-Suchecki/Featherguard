@@ -283,7 +283,7 @@ namespace Featherguard.Tests
 
             Assert.IsTrue(model.AwaitingInput);
             Assert.IsEmpty(events.OfType<EnemyWindup>());
-            Assert.IsTrue(events.OfType<StatusApplied>().Any());
+            Assert.IsTrue(events.OfType<ActionPerformed>().Any(a => a.Actor == model.Enemies[0]));
         }
 
         [Test]
