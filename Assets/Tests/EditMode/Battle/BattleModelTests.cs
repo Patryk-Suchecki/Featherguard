@@ -47,7 +47,13 @@ namespace Featherguard.Tests
             return encounter;
         }
 
-        static BattleModel Create(EncounterDefinition encounter, float startRage = 0f, params UnitDefinition[] heroes)
+        static BattleModel Create(EncounterDefinition encounter, float startRage = 0f, params UnitDefinition[] heroes) =>
+            Build(encounter, startRage, false, heroes);
+
+        static BattleModel CreateWithBlocks(EncounterDefinition encounter, params UnitDefinition[] heroes) =>
+            Build(encounter, 0f, true, heroes);
+
+        static BattleModel Build(EncounterDefinition encounter, float startRage, bool awaitBlocks, UnitDefinition[] heroes)
         {
             var rules = ScriptableObject.CreateInstance<BattleRules>();
             rules.baseCritChance = 0f;
@@ -57,20 +63,7 @@ namespace Featherguard.Tests
                 Encounter = encounter,
                 Heroes = heroes.Select(h => new HeroLoadout { Definition = h }).ToList(),
                 StartRage = startRage,
-            };
-            return new BattleModel(setup, rules, new FakeRandom(0.5f));
-        }
-
-        static BattleModel CreateWithBlocks(EncounterDefinition encounter, params UnitDefinition[] heroes)
-        {
-            var rules = ScriptableObject.CreateInstance<BattleRules>();
-            rules.baseCritChance = 0f;
-            rules.damageVariance = 0f;
-            var setup = new BattleSetup
-            {
-                Encounter = encounter,
-                Heroes = heroes.Select(h => new HeroLoadout { Definition = h }).ToList(),
-                AwaitBlocks = true,
+                AwaitBlocks = awaitBlocks,
             };
             return new BattleModel(setup, rules, new FakeRandom(0.5f));
         }
