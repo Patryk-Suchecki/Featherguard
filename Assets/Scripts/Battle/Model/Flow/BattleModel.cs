@@ -76,6 +76,9 @@ namespace Featherguard.Battle
             return ability.TargetsAll || Targeting.IsValid(ability, target, State.AlliesOf(hero), State.OpponentsOf(hero));
         }
 
+        public bool IsBlockedByTaunt(BattleUnit hero, AbilityDefinition ability, BattleUnit target) =>
+            CanCommand(hero) && ability != null && AbilitiesOf(hero).Contains(ability) && Targeting.IsBlockedByTaunt(ability, target, State.OpponentsOf(hero));
+
         public IEnumerable<BattleUnit> Candidates(BattleUnit hero, AbilityDefinition ability) =>
             Targeting.Candidates(ability, State.AlliesOf(hero), State.OpponentsOf(hero));
 
