@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Featherguard.Battle.Presentation
 {
@@ -23,6 +25,8 @@ namespace Featherguard.Battle.Presentation
         {
             var definition = unit.Definition;
             var look = visuals.Of(definition);
+            if (look.model == null)
+                throw new InvalidOperationException($"Unit '{definition.name}' has no UnitVisuals with a model in BattlePresentationConfig.units. Run Featherguard > Rebuild Battle Scene.");
             var root = new GameObject(definition.displayName);
             float yaw = definition.team == Team.Heroes ? config.heroYaw : -config.heroYaw;
             root.transform.SetPositionAndRotation(position, Quaternion.Euler(0f, yaw, 0f));
@@ -42,8 +46,7 @@ namespace Featherguard.Battle.Presentation
             var view = root.AddComponent<UnitView>();
             var reaction = root.AddComponent<HitReaction>();
             reaction.Init(flashMaterial, model.transform);
-            float radius = 0.45f * look.modelScale;
-            var ring = SelectionRing.Create(root.transform, radius * 3.4f, ringMaterial);
+            var ring = SelectionRing.Create(root.transform, look.Radius * 3.4f, ringMaterial);
             view.Bind(unit, look, state, model.AddComponent<UnitAnimator>(), reaction, ring);
             view.HomePosition = position;
 
