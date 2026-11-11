@@ -17,13 +17,6 @@ namespace Featherguard.Run
         }
 
         public bool IsValid => Upgrade != null;
-
-        public string Target => Upgrade.scope switch
-        {
-            UpgradeScope.Hero => Hero.displayName,
-            UpgradeScope.Party => "Whole party",
-            _ => "Run",
-        };
     }
 
     public sealed class UpgradeDeck
