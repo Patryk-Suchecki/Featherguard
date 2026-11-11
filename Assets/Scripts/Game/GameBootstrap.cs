@@ -50,6 +50,7 @@ namespace Featherguard.Game
             hud.BindWallet(session.Wallet);
 
             var setup = session.CreateBattleSetup();
+            setup.AwaitBlocks = config.presentation.timingPrompts;
             var testEncounter = TestEncounterSetting.Current;
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
@@ -60,6 +61,9 @@ namespace Featherguard.Game
                 Visuals = visuals,
                 Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, visuals.Units),
                 View = hud,
+                TimingCues = hud,
+                TimingInput = new PointerTimingInput(),
+                Random = UnityRandomSource.Shared,
                 Feedback = feedback,
                 Host = this,
                 UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
