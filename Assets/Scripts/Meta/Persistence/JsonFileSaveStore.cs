@@ -1,33 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 namespace Featherguard.Meta
 {
-    [Serializable]
-    public class PerkLevel
-    {
-        public string id;
-        public int level;
-    }
-
-    [Serializable]
-    public class SaveData
-    {
-        public int feathers;
-        public int runs;
-        public int wins;
-        public int bestBattles;
-        public List<PerkLevel> perks = new();
-    }
-
-    public interface ISaveStore
-    {
-        SaveData Load();
-        void Save(SaveData data);
-    }
-
     public sealed class JsonFileSaveStore : ISaveStore
     {
         readonly string path;
@@ -60,11 +36,4 @@ namespace Featherguard.Meta
         }
     }
 
-    public sealed class MemorySaveStore : ISaveStore
-    {
-        string json;
-
-        public SaveData Load() => string.IsNullOrEmpty(json) ? new SaveData() : JsonUtility.FromJson<SaveData>(json);
-        public void Save(SaveData data) => json = JsonUtility.ToJson(data);
-    }
 }
