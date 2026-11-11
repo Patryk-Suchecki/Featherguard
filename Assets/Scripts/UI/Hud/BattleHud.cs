@@ -13,8 +13,6 @@ namespace Featherguard.UI
 {
     public class BattleHud : MonoBehaviour, IBattleView
     {
-        static readonly Color CalloutColor = new(1f, 0.45f, 0.15f);
-
         Camera view;
         RectTransform canvas;
         RectTransform safe;
@@ -23,11 +21,8 @@ namespace Featherguard.UI
         TopBar topBar;
         RageButtonView rageButton;
         PauseMenu pauseMenu;
-        Text banner;
+        BannerView banners;
         Text hint;
-        Text callout;
-        float bannerUntil;
-        float calloutStart = -10f;
         IPlayerCommands commands;
         RageMeter rage;
         readonly Dictionary<UnitView, UnitBar> bars = new();
@@ -36,8 +31,11 @@ namespace Featherguard.UI
         public RectTransform Canvas => canvas;
         public int OverlayIndex => safe.GetSiblingIndex() + 1;
 
-        public void Init(Camera camera, Action onAbandon)
+        public BattleVisuals Visuals { get; private set; }
+
+        public void Init(Camera camera, BattleVisuals visuals, Action onAbandon, Func<bool> canAbandon)
         {
+            Visuals = visuals;
             view = camera;
             canvas = CreateCanvas();
             if (FindAnyObjectByType<EventSystem>() == null)
@@ -47,17 +45,14 @@ namespace Featherguard.UI
             popupLayer = Ui.Stretch("Popups", canvas);
             safe = SafeArea.Create(canvas);
             topBar = new TopBar(safe);
-            pauseMenu = new PauseMenu(canvas, onAbandon, () => RunSession.Current != null);
+            pauseMenu = new PauseMenu(canvas, onAbandon, canAbandon);
             var pause = Ui.Rect("Pause", SafeArea.Create(canvas), new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-24f, -14f), new Vector2(92f, 92f));
             Ui.Button(pause, Ui.PanelColor, pauseMenu.Toggle, "Circle");
             Ui.Icon(pause, "Pause", Vector2.zero, 54f);
 
-            banner = Ui.Label(Ui.Rect("Banner", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -110f), new Vector2(1200f, 90f)),
-                "", 70, TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.5f));
+            banners = new BannerView(safe);
             hint = Ui.Label(Ui.Rect("Hint", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -36f), new Vector2(1000f, 50f)),
                 "", 32, TextAnchor.MiddleCenter, Color.white);
-            callout = Ui.Label(Ui.Rect("Callout", safe, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 180f), new Vector2(1600f, 140f)),
-                "", 100, TextAnchor.MiddleCenter, CalloutColor);
         }
 
         static RectTransform CreateCanvas()
@@ -98,17 +93,9 @@ namespace Featherguard.UI
             return Overlay.Create(canvas, name, alpha, OverlayIndex);
         }
 
-        public void ShowBanner(string text)
-        {
-            banner.text = text;
-            bannerUntil = Time.unscaledTime + 1.6f;
-        }
+        public void ShowBanner(string text) => banners.ShowBanner(text);
 
-        public void Callout(string text)
-        {
-            callout.text = text;
-            calloutStart = Time.unscaledTime;
-        }
+        public void Callout(string text) => banners.Callout(text);
 
         public void Popup(Vector3 world, string text, PopupKind kind) => UI.Popup.Spawn(popupLayer, view, world, text, kind);
 
@@ -117,9 +104,9 @@ namespace Featherguard.UI
         public void UnitAdded(UnitView unit)
         {
             if (unit.Team == Team.Enemies)
-                bars[unit] = UnitBar.Create(unit, barLayer, view);
+                bars[unit] = UnitBar.Create(unit, barLayer, view, Visuals.Statuses);
             else
-                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero)));
+                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero), Visuals.Statuses));
         }
 
         public void UnitRemoved(UnitView unit)
@@ -140,10 +127,7 @@ namespace Featherguard.UI
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
                 pauseMenu.Toggle();
 
-            banner.color = WithAlpha(banner.color, Mathf.Clamp01((bannerUntil - Time.unscaledTime) / 0.4f));
-            float calloutAge = Time.unscaledTime - calloutStart;
-            callout.color = WithAlpha(callout.color, calloutAge < 1.1f ? 1f : Mathf.Clamp01(1f - (calloutAge - 1.1f) / 0.3f));
-            callout.rectTransform.localScale = Vector3.one * (calloutAge < 0.15f ? Mathf.Lerp(1.6f, 1f, calloutAge / 0.15f) : 1f);
+            banners.Update();
 
             if (commands == null) return;
             rageButton.Update(rage, commands);
@@ -160,9 +144,9 @@ namespace Featherguard.UI
             var definition = selected.Definition;
             if (commands.SpecialArmed)
                 return $"{definition.special.displayName}: tap a target";
+            if (definition.support == null)
+                return $"Enemy: {definition.attack.displayName}";
             return $"Enemy: {definition.attack.displayName}  ·  Ally: {definition.support.displayName}";
         }
-
-        static Color WithAlpha(Color color, float alpha) => new(color.r, color.g, color.b, alpha);
     }
 }

@@ -8,8 +8,6 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public string announcement;
-        public Sprite icon;
-        public Color tint = Color.white;
         [Tooltip("Applied to the unit's stats while the status is active.")]
         public StatModifier[] modifiers = new StatModifier[0];
         [Tooltip("Deals the application's potency as damage at the start of the owner's turn.")]
@@ -26,8 +24,9 @@ namespace Featherguard.Battle
     public class StatusApplication
     {
         public StatusDefinition status;
-        public int turns = 1;
-        public int potency;
+        [Min(1)] public int turns = 1;
+        [Tooltip("Damage per turn for damage-over-time statuses.")]
+        [Min(0)] public int potency;
         [Range(0f, 1f)] public float chance = 1f;
         public bool onSelf;
     }

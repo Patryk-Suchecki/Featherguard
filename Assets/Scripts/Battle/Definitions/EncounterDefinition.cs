@@ -8,9 +8,11 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public bool boss;
-        public float enemyHealth = 1f;
-        public float enemyDamage = 1f;
-        public int goldReward = 10;
+        [Tooltip("Multiplies every enemy's health.")]
+        [Min(0.1f)] public float enemyHealth = 1f;
+        [Tooltip("Multiplies every enemy's damage.")]
+        [Min(0f)] public float enemyDamage = 1f;
+        [Min(0)] public int goldReward = 10;
         public Wave[] waves;
 
         [Serializable]

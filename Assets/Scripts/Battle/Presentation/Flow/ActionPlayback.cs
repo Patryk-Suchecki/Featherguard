@@ -10,14 +10,14 @@ namespace Featherguard.Battle.Presentation
         const string StunnedText = "Stunned";
 
         readonly BattlePresentationConfig config;
-        readonly AbilityVisualsLibrary visuals;
+        readonly BattleVisuals visuals;
         readonly IBattleView view;
         readonly ICombatFeedback feedback;
         readonly MonoBehaviour host;
         readonly UnitStage stage;
         readonly BattleEventRouter router;
 
-        public ActionPlayback(BattlePresentationConfig config, AbilityVisualsLibrary visuals, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, UnitStage stage, BattleEventRouter router)
+        public ActionPlayback(BattlePresentationConfig config, BattleVisuals visuals, IBattleView view, ICombatFeedback feedback, MonoBehaviour host, UnitStage stage, BattleEventRouter router)
         {
             this.config = config;
             this.visuals = visuals;
@@ -42,7 +42,7 @@ namespace Featherguard.Battle.Presentation
         {
             var actor = stage.ViewOf(e.Actor);
             var ability = e.Ability;
-            var look = visuals.Of(ability);
+            var look = visuals.Abilities.Of(ability);
             if (e.Special)
             {
                 view.Callout(ability.displayName);
@@ -96,7 +96,7 @@ namespace Featherguard.Battle.Presentation
             var target = stage.ViewOf(e.Target);
             var source = stage.ViewOf(e.Source);
             if (target == null) return;
-            var look = visuals.Of(e.Ability);
+            var look = visuals.Abilities.Of(e.Ability);
             bool heavy = look.heavy || e.Critical;
             var facing = source != null ? source.Facing : -target.Facing;
             var contact = target.Center - facing * target.Radius * 0.7f + Vector3.back * target.Radius;
@@ -114,7 +114,7 @@ namespace Featherguard.Battle.Presentation
             if (target == null) return;
             if (e.Ability != null)
             {
-                var look = visuals.Of(e.Ability);
+                var look = visuals.Abilities.Of(e.Ability);
                 feedback.Rise(target.transform.position, look.fxColor, target.Radius);
                 feedback.Play(look.impactSound);
             }
@@ -133,7 +133,7 @@ namespace Featherguard.Battle.Presentation
             var unit = stage.ViewOf(e.Unit);
             if (unit == null) yield break;
             unit.Reaction.Flash();
-            feedback.Rise(unit.transform.position, e.Status.tint, unit.Radius);
+            feedback.Rise(unit.transform.position, visuals.Statuses.Of(e.Status).tint, unit.Radius);
             feedback.Play(SfxId.Hit, 0.5f);
             view.Popup(unit.Top, e.Amount.ToString(), PopupKind.Damage);
             if (unit.IsAlive) unit.Animator.Play("Hit");

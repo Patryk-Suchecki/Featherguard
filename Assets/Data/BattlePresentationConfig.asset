@@ -31,6 +31,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d14246af460aaaa4ba6e6eb2c1e4aa5a, type: 2}
   - {fileID: 11400000, guid: fd6981ee94b2bae43b07ae9ba516e292, type: 2}
   - {fileID: 11400000, guid: dc1deceab019a34459f7e760332d8d00, type: 2}
+  units:
+  - {fileID: 11400000, guid: 4be8ad472778ee14499739dd03395656, type: 2}
+  - {fileID: 11400000, guid: 6185030ef33b36f409ffe48b223e2c24, type: 2}
+  - {fileID: 11400000, guid: fd4278ca6572b3c448b8dbf6cfb7101e, type: 2}
+  - {fileID: 11400000, guid: 0cf5ffe781d815f459f81a498033ea37, type: 2}
+  - {fileID: 11400000, guid: 80a7aa71ae7d6a8478c600630ab3afa3, type: 2}
+  - {fileID: 11400000, guid: 3bd3f4b62d2c52d49ae7a5dc840a393f, type: 2}
+  - {fileID: 11400000, guid: 8b1c9b0790ff91d47a232a53d8d2a4e0, type: 2}
+  - {fileID: 11400000, guid: 654f02ede6dd6eb4ba0bf14e1ff54f27, type: 2}
+  - {fileID: 11400000, guid: 8bf3fd112318bee49bd283ea79f9799b, type: 2}
+  statuses:
+  - {fileID: 11400000, guid: 9ddf30180fd616e48ba015120f4722fe, type: 2}
+  - {fileID: 11400000, guid: 94a12508b60dabd4aa55ceee0ef730a6, type: 2}
+  - {fileID: 11400000, guid: bef1021d927d4b74da62207a78bc5eb3, type: 2}
+  - {fileID: 11400000, guid: db5d2777eebb4b84eae6559015f81fb1, type: 2}
+  - {fileID: 11400000, guid: fd4cee813a399d14d9351cb3b23f24c3, type: 2}
+  - {fileID: 11400000, guid: 4f35519a2906c4c4f9789909f6ccc89c, type: 2}
   heroSlots:
   - {x: -2.3, y: 0, z: 0.45}
   - {x: -3.7, y: 0, z: -0.55}

@@ -36,8 +36,9 @@ namespace Featherguard.Game
             feedback.Init(config.sounds, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
-            flow = new RunFlow(hud, Meta);
-            hud.Init(battleCamera, flow.Abandon);
+            var visuals = new BattleVisuals(config.presentation);
+            flow = new RunFlow(hud, Meta, config.presentation.afterVictory);
+            hud.Init(battleCamera, visuals, flow.Abandon, () => RunSession.Current != null);
 
             var session = RunSession.Current;
             if (session == null)
@@ -52,8 +53,8 @@ namespace Featherguard.Game
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
-                Visuals = new AbilityVisualsLibrary(config.presentation.abilities),
-                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial),
+                Visuals = visuals,
+                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, visuals.Units),
                 View = hud,
                 Feedback = feedback,
                 Host = this,

@@ -8,6 +8,7 @@ namespace Featherguard.Battle.Presentation
     {
         public BattleUnit Unit { get; private set; }
         public UnitDefinition Definition => Unit.Definition;
+        public UnitVisuals Visuals { get; private set; }
         public Team Team => Unit.Team;
         public UnitSnapshot State { get; private set; }
         public bool IsAlive => State.Alive;
@@ -19,17 +20,18 @@ namespace Featherguard.Battle.Presentation
         public HitReaction Reaction { get; private set; }
         public SelectionRing Ring { get; private set; }
         public Vector3 HomePosition { get; set; }
-        public float Height => Definition.height * Definition.modelScale;
-        public float Radius => 0.45f * Definition.modelScale;
+        public float Height => Visuals.ScaledHeight;
+        public float Radius => Visuals.Radius;
         public Vector3 Center => transform.position + Vector3.up * Height * 0.5f;
         public Vector3 Top => transform.position + Vector3.up * (Height + 0.1f);
         public Vector3 Facing => Team == Team.Heroes ? Vector3.right : Vector3.left;
 
         public event Action Changed;
 
-        internal void Bind(BattleUnit unit, UnitSnapshot state, UnitAnimator animator, HitReaction reaction, SelectionRing ring)
+        internal void Bind(BattleUnit unit, UnitVisuals visuals, UnitSnapshot state, UnitAnimator animator, HitReaction reaction, SelectionRing ring)
         {
             Unit = unit;
+            Visuals = visuals;
             State = state;
             Animator = animator;
             Reaction = reaction;
