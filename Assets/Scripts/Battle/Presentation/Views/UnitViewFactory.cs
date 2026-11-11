@@ -10,13 +10,15 @@ namespace Featherguard.Battle.Presentation
         readonly Material flashMaterial;
         readonly Material ringMaterial;
         readonly VisualsLibrary<UnitDefinition, UnitVisuals> visuals;
+        readonly ToonMaterials toon;
 
-        public UnitViewFactory(BattlePresentationConfig config, Material flashMaterial, Material ringMaterial, VisualsLibrary<UnitDefinition, UnitVisuals> visuals)
+        public UnitViewFactory(BattlePresentationConfig config, Material flashMaterial, Material ringMaterial, VisualsLibrary<UnitDefinition, UnitVisuals> visuals, ToonMaterials toon)
         {
             this.config = config;
             this.flashMaterial = flashMaterial;
             this.ringMaterial = ringMaterial;
             this.visuals = visuals;
+            this.toon = toon;
         }
 
         public UnitView Create(BattleUnit unit, UnitSnapshot state, Vector3 position)
@@ -38,6 +40,8 @@ namespace Featherguard.Battle.Presentation
                 animator = model.AddComponent<Animator>();
             animator.runtimeAnimatorController = look.animator;
             animator.applyRootMotion = false;
+
+            toon.Apply(model);
 
             var view = root.AddComponent<UnitView>();
             var reaction = root.AddComponent<HitReaction>();

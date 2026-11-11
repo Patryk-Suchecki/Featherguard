@@ -12,6 +12,7 @@ namespace Featherguard.EditorTools
         public Material Flash;
         public Material Particle;
         public Material Ring;
+        public Material Toon;
         public AudioClip[] Sounds;
         public UiSprites Ui;
         public Dictionary<string, Sprite> Icons;
@@ -39,6 +40,7 @@ namespace Featherguard.EditorTools
                 Flash = CreateMaterial("Flash", "Universal Render Pipeline/Unlit", null),
                 Particle = CreateMaterial("Particle", "Sprites/Default", dot),
                 Ring = CreateMaterial("Ring", "Sprites/Default", ring),
+                Toon = CreateMaterial("Toon", "Featherguard/Toon", null),
                 Sounds = SfxSynth.CreateAll(ContentPaths.Sounds),
                 Ui = seeder.Seed<UiSprites>($"{ContentPaths.Data}/UiSprites.asset", null, ui => ui.sprites = sprites.ToArray()),
                 Icons = icons,

@@ -52,6 +52,7 @@ namespace Featherguard.EditorTools
                 c.flashMaterial = art.Flash;
                 c.particleMaterial = art.Particle;
                 c.ringMaterial = art.Ring;
+                c.toonMaterial = art.Toon;
                 c.sounds = art.Sounds;
                 c.ui = art.Ui;
                 c.feedback ??= new FeedbackTuning();

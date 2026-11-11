@@ -23,6 +23,7 @@ namespace Featherguard.Game
         BattleHud hud;
         RunFlow flow;
         BattleController battle;
+        ToonMaterials toon;
 
         MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
 
@@ -33,7 +34,7 @@ namespace Featherguard.Game
         {
             Time.timeScale = 1f;
             feedback = gameObject.AddComponent<FeedbackHub>();
-            feedback.Init(config.sounds, cameraShake, config.particleMaterial, config.feedback);
+            feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
             var visuals = new BattleVisuals(config.presentation);
@@ -55,11 +56,12 @@ namespace Featherguard.Game
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
             var model = new BattleModel(setup, config.rules, session.Random);
+            toon ??= new ToonMaterials(config.toonMaterial);
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
                 Visuals = visuals,
-                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, visuals.Units),
+                Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial, visuals.Units, toon),
                 View = hud,
                 TimingCues = hud,
                 TimingInput = new PointerTimingInput(),
@@ -79,6 +81,8 @@ namespace Featherguard.Game
         {
             if (!GameClock.Paused) battle?.Tick();
         }
+
+        void OnDestroy() => toon?.Dispose();
 
         static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
         {

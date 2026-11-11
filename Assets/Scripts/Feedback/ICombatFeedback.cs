@@ -10,6 +10,7 @@ namespace Featherguard.Feedback
     public interface ICombatFeedback : ISoundPlayer
     {
         void Impact(Vector3 point, Color color, bool heavy);
+        void PlayImpactEffect(ImpactEffect effect, Vector3 point, Vector3 facing, float targetRadius);
         void Shake(float strength, float seconds);
         void Burst(Vector3 position, Color color, int count, float speed, float size);
         void Rise(Vector3 position, Color color, float radius);
