@@ -90,11 +90,11 @@ namespace Featherguard.Battle
             Log.Emit(new StatusApplied { Target = target, Status = application.status });
         }
 
-        public void DamageOverTime(BattleUnit unit, ActiveStatus effect)
+        public void DamageOverTime(BattleUnit unit, ActiveStatus status)
         {
             if (!unit.IsAlive) return;
-            int dealt = unit.ApplyDamage(effect.Potency);
-            Log.Emit(new StatusTicked { Unit = unit, Status = effect.Definition, Amount = dealt });
+            int dealt = unit.ApplyDamage(status.Potency);
+            Log.Emit(new StatusTicked { Unit = unit, Status = status.Definition, Amount = dealt });
             KillIfDead(unit);
         }
 
