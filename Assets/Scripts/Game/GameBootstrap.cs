@@ -34,7 +34,7 @@ namespace Featherguard.Game
         {
             Time.timeScale = 1f;
             feedback = gameObject.AddComponent<FeedbackHub>();
-            feedback.Init(config.sounds, cameraShake, config.particleMaterial, config.feedback);
+            feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
             var visuals = new BattleVisuals(config.presentation);

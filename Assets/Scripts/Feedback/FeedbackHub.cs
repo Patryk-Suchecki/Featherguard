@@ -21,6 +21,7 @@ namespace Featherguard.Feedback
         AudioSource[] voices;
         int nextVoice;
         CameraShake shake;
+        Camera battleCamera;
         Vfx vfx;
         FeedbackTuning tuning;
         float hitstopUntil;
@@ -33,8 +34,9 @@ namespace Featherguard.Feedback
             if (Instance != null) Instance.Play(id, volume);
         }
 
-        public void Init(AudioClip[] clips, CameraShake cameraShake, Material particleMaterial, FeedbackTuning settings)
+        public void Init(AudioClip[] clips, Camera camera, CameraShake cameraShake, Material particleMaterial, FeedbackTuning settings)
         {
+            battleCamera = camera;
             Instance = this;
             sounds = clips;
             shake = cameraShake;
@@ -73,6 +75,9 @@ namespace Featherguard.Feedback
             vfx.Flash(point, new Color(1f, 0.97f, 0.85f, 0.95f), heavy ? 2.2f : 1.4f);
             vfx.Burst(point, color, heavy ? 34 : 18, heavy ? 8f : 5.5f, heavy ? 0.42f : 0.3f);
         }
+
+        public void PlayImpactEffect(ImpactEffect effect, Vector3 point, Vector3 facing, float targetRadius) =>
+            effect?.Play(new ImpactContext(point, facing, targetRadius, vfx.FlatMaterial, battleCamera));
 
         public void Shake(float strength, float seconds) => shake.Shake(strength, seconds);
         public void Burst(Vector3 position, Color color, int count, float speed, float size) => vfx.Burst(position, color, count, speed, size);

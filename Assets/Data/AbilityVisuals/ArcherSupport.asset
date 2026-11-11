@@ -20,9 +20,13 @@ MonoBehaviour:
   impactSound: 8
   delivery:
     rid: 4550530329866666019
+  impactEffect:
+    rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 4550530329866666019
       type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
       data: 
