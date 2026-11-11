@@ -12,7 +12,7 @@ namespace Featherguard.Battle
         {
             foreach (var unit in squad.Living.ToList())
             {
-                foreach (var status in unit.ActiveStatuses.Where(s => s.Definition.damagePerTurn).ToList())
+                foreach (var status in unit.ActiveStatuses.Where(s => s.Definition.DealsDamageOverTime).ToList())
                 {
                     state.DamageOverTime(unit, status);
                     if (!unit.IsAlive) break;

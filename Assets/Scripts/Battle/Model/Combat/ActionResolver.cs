@@ -33,11 +33,11 @@ namespace Featherguard.Battle
             if (timing.AnyPerfect)
                 state.AddRage(state.Rules.perfectTimingRage);
             if (ability.IsDamaging)
-                actor.Statuses.RemoveWhere(s => s.consumedOnAttack);
+                actor.Statuses.RemoveWhere(s => s.ConsumedOnAttack);
             if (actor.IsAlive)
                 foreach (var effect in ability.effects)
                     if (!effect.AppliesPerTarget)
-                        effect.Apply(new EffectContext(state, actor, actor, ability));
+                        effect.Apply(new EffectContext(state, actor, actor, ability, timing));
             state.Log.Pop();
         }
 
