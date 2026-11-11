@@ -20,6 +20,8 @@ MonoBehaviour:
   goodBlockReduction: 0.3
   perfectBlockReduction: 0.6
   perfectTimingRage: 10
+  perfectWindow: 0.06
+  goodWindow: 0.15
   baseCritChance: 0.15
   baseCritDamage: 1.5
   damageVariance: 0.1

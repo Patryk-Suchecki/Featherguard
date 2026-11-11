@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Featherguard.UI
 {
-    public class BattleHud : MonoBehaviour, IBattleView
+    public class BattleHud : MonoBehaviour, IBattleView, ITimingCueView
     {
         Camera view;
         RectTransform canvas;
@@ -19,6 +19,7 @@ namespace Featherguard.UI
         RectTransform barLayer;
         RectTransform popupLayer;
         TopBar topBar;
+        TimingCueView timingCue;
         RageButtonView rageButton;
         PauseMenu pauseMenu;
         BannerView banners;
@@ -43,6 +44,7 @@ namespace Featherguard.UI
 
             barLayer = Ui.Stretch("Bars", canvas);
             popupLayer = Ui.Stretch("Popups", canvas);
+            timingCue = new TimingCueView(Ui.Stretch("Timing", canvas), camera);
             safe = SafeArea.Create(canvas);
             topBar = new TopBar(safe);
             pauseMenu = new PauseMenu(canvas, onAbandon, canAbandon);
@@ -100,6 +102,12 @@ namespace Featherguard.UI
         public void Popup(Vector3 world, string text, PopupKind kind) => UI.Popup.Spawn(popupLayer, view, world, text, kind);
 
         public void SetProgress(int encounter, int encounters, int wave, int waves) => topBar.SetProgress(encounter, encounters, wave, waves);
+
+        public void ShowAttackRing(Vector3 world, float closing) => timingCue.ShowAttackRing(world, closing);
+
+        public void ShowBlockCue(Vector3 world) => timingCue.ShowBlockCue(world);
+
+        public void HideTimingCue() => timingCue.Hide();
 
         public void UnitAdded(UnitView unit)
         {
