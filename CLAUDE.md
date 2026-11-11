@@ -102,9 +102,10 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 - Avoid unnecessary comments; names should explain the code.
 - Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance` and `RunSession.Current`.
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
-- Branch names: `<type>/<issue>-<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/12-slot-machine-sounds` or `fix/15-double-kill-gold`.
-- Commit messages: `#<issue> <what this commit does>`, one short imperative line (max ~60 characters) naming the exact task, for example `#12 Add jackpot sound to slot machine`. No body unless something is surprising.
-- PR title: `#<issue> <task>`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
+- Names say what the work does, not which issue it is: no issue numbers in branch names, commit messages or PR titles. The issue number appears only in the PR description, so GitHub links and closes the issue.
+- Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/slot-machine-sounds` or `fix/double-kill-gold`.
+- Commit messages: one short imperative line (max ~60 characters) naming the exact task, for example `Add jackpot sound to slot machine`. No body unless something is surprising.
+- PR title: the task, for example `Add slot machine sounds`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
 - Issue labels: `gameplay`, `art`, `audio`, `UI`, `bug`, `balance`. Docs and tooling work (`chore/` branches) needs no label.
 - Never add AI attribution: no `Co-Authored-By` trailers, no "Generated with Claude Code" lines, no mention of AI tools in commits, branches or PRs. `.claude/settings.json` disables it; keep it that way.
 

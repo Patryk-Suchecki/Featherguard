@@ -73,7 +73,7 @@ How the two of us work on this repo, step by step. The rules themselves (archite
    git pull
    ```
    ```bash
-   git switch -c feature/17-attack-timing
+   git switch -c feature/attack-timing
    ```
 3. **Binaries:** lock every binary you will change before editing it, and unlock it after the merge:
    ```bash
@@ -90,7 +90,7 @@ How the two of us work on this repo, step by step. The rules themselves (archite
    ```
 6. **Push and PR:**
    ```bash
-   git push -u origin feature/17-attack-timing
+   git push -u origin feature/attack-timing
    ```
-   Open the pull request from the template; it starts with `Closes #17`.
+   Open the pull request from the template; its description starts with `Closes #17`, the issue it finishes.
 7. **Merge:** the other person reviews and approves (one approval is required), then *Squash and merge*. The issue closes automatically.
