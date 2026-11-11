@@ -1,5 +1,5 @@
-using Featherguard.Core;
 using System;
+using Featherguard.Core;
 
 namespace Featherguard.Battle
 {

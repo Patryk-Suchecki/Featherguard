@@ -64,7 +64,7 @@ namespace Featherguard.UI
         public void Animate(IPlayerCommands commands)
         {
             bool isSelected = unit.Unit == commands.Selected;
-            bool ready = unit.IsAlive && !unit.Unit.HasActed;
+            bool ready = commands.CanSelect(unit.Unit);
             background.color = isSelected ? Selected : Idle;
             frame.enabled = isSelected;
             group.alpha = !unit.IsAlive ? 0.35f : ready || !commands.AcceptingInput ? 1f : 0.5f;

@@ -38,8 +38,8 @@ namespace Featherguard.Game
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
             var visuals = new BattleVisuals(config.presentation);
-            flow = new RunFlow(hud, Meta);
-            hud.Init(battleCamera, visuals, flow.Abandon);
+            flow = new RunFlow(hud, Meta, config.presentation.afterVictory);
+            hud.Init(battleCamera, visuals, flow.Abandon, () => RunSession.Current != null);
 
             var session = RunSession.Current;
             if (session == null)
