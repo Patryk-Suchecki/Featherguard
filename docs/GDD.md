@@ -176,17 +176,17 @@ Power grows mainly through equipment, while new heroes bring new tactical option
 
 ## Art direction and platform
 
-The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, a painterly texture, and folklore instead of generic fantasy.
+The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, and folklore instead of generic fantasy. Rendered in 3D so it reads like a hand-drawn illustrated card game, always our own: never copy another game's characters, shapes or art. Chunky silhouettes that read at phone size, banded toon shading, dark muted backgrounds with saturated characters, a grim but playful storybook tone, and UI and VFX in the same flat, outlined look. The concrete rules, palettes and shader settings are in [`STYLE_GUIDE.md`](STYLE_GUIDE.md).
 
 - **3D:** the whole game is 3D and everything is modelled; there are no 2D sprites.
 - **Perspective:** the camp and the land map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
-- **Animation:** skeletal animation of the 3D models.
+- **Animation:** skeletal animation of the 3D models; snappy and pose-to-pose, with strong anticipation, fast hits, short holds on key poses and squash and stretch on impacts.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
 - **Interface:** shape and sound, not only colour (accessible for colour-blind players); fast-forward of animations ×2 and ×3.
 
-**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System.
+**Platform:** we design mobile-first in landscape (16:9, touch and mouse share one pointer), and Steam is the second platform on the same build. Engine: Unity 6000.6.2f1 (the exact version is pinned in `CLAUDE.md`), URP, Input System. The first release is narrower: see the scope in [`ROADMAP.md`](ROADMAP.md).
 
-**Business model** (recommendation, to be decided after testing): free-to-play.
+**Business model:** the first release is free, with no ads or purchases (see [`ROADMAP.md`](ROADMAP.md)); free-to-play is the recommendation for later, to be decided after testing.
 
 ## Open questions
 
