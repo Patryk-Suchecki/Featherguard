@@ -19,12 +19,6 @@ namespace Featherguard.Core
         public static float Scale => paused ? 0f : 1f;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void Setup()
-        {
-            paused = false;
-            Application.targetFrameRate = 60;
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
-            AudioListener.volume = PlayerPrefs.GetFloat("volume", 1f);
-        }
+        static void Reset() => paused = false;
     }
 }
