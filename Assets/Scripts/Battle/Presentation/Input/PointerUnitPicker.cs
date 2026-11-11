@@ -6,11 +6,6 @@ using UnityEngine.InputSystem;
 
 namespace Featherguard.Battle.Presentation
 {
-    public interface IUnitPicker
-    {
-        bool TryPick(IEnumerable<UnitView> candidates, out UnitView unit);
-    }
-
     public sealed class PointerUnitPicker : IUnitPicker
     {
         readonly Camera camera;

@@ -38,7 +38,7 @@ namespace Featherguard.UI
         public void Update(RageMeter rage, IPlayerCommands commands)
         {
             fill.fillAmount = Mathf.MoveTowards(fill.fillAmount, rage.Fraction, Time.unscaledDeltaTime * 1.5f);
-            bool usable = rage.Ready && commands.AcceptingInput && commands.Selected != null;
+            bool usable = commands.SpecialAvailable;
             button.interactable = usable;
             core.color = usable ? Active : Dormant;
             root.localScale = Vector3.one * (rage.Ready ? 1f + Mathf.Sin(Time.unscaledTime * 7f) * 0.05f : 1f);
