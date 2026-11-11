@@ -10,13 +10,15 @@ namespace Featherguard.Battle
         public readonly BattleUnit Actor;
         public readonly BattleUnit Target;
         public readonly AbilityDefinition Ability;
+        public readonly ActionTiming Timing;
 
-        public EffectContext(BattleState state, BattleUnit actor, BattleUnit target, AbilityDefinition ability)
+        public EffectContext(BattleState state, BattleUnit actor, BattleUnit target, AbilityDefinition ability, ActionTiming timing = default)
         {
             State = state;
             Actor = actor;
             Target = target;
             Ability = ability;
+            Timing = timing;
         }
     }
 
@@ -39,7 +41,7 @@ namespace Featherguard.Battle
         public override bool Damages => true;
         public override int ExpectedDamage => power;
 
-        public override void Apply(in EffectContext context) => context.State.DealDamage(context.Actor, context.Target, power, context.Ability);
+        public override void Apply(in EffectContext context) => context.State.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
     }
 
     [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]

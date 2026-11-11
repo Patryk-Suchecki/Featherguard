@@ -39,12 +39,20 @@ namespace Featherguard.Battle
         public Team Team;
     }
 
+    public sealed class EnemyWindup : BattleEvent
+    {
+        public BattleUnit Actor;
+        public AbilityDefinition Ability;
+        public BattleUnit Target;
+    }
+
     public sealed class ActionPerformed : BattleEvent
     {
         public BattleUnit Actor;
         public AbilityDefinition Ability;
         public IReadOnlyList<BattleUnit> Targets;
         public bool Special;
+        public ActionTiming Timing;
         public readonly List<Impact> Impacts = new();
         public readonly List<BattleEvent> Aftermath = new();
     }
