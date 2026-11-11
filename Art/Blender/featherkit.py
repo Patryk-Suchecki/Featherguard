@@ -143,10 +143,10 @@ def add_action(rig, name, keys):
     return act
 
 
-def export_fbx(path):
+def export_fbx(path, objects=None):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     for obj in bpy.context.scene.objects:
-        obj.select_set(obj.type in {"ARMATURE", "MESH"})
+        obj.select_set(obj in objects if objects is not None else obj.type in {"ARMATURE", "MESH"})
     bpy.ops.export_scene.fbx(
         filepath=path,
         use_selection=True,
