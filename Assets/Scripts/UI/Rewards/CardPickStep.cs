@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using Featherguard.Run;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 

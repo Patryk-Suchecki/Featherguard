@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
-using Featherguard.Feel;
+using Featherguard.Feedback;
 using Featherguard.Meta;
 using Featherguard.Run;
 using Featherguard.UI;
