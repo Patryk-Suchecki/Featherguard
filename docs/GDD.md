@@ -91,7 +91,7 @@ A shared meter filled by hits dealt and taken and by perfect timings. A full met
 
 | Status | Effect |
 |---|---|
-| Bleed | damage every turn for 3 turns (no hero or enemy applies it yet) |
+| Bleed | damage every turn for 3 turns (applied by the Bies' Rending Claws) |
 | Burn | damage every turn, stacks up to 5 |
 | Freeze | +30% damage taken; a Frozen enemy also acts last in the enemy turn (on a hero only the damage part applies) |
 | Curse | −30% damage dealt (no hero or enemy applies it yet) |
@@ -118,7 +118,7 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 
 | Land | Enemies | Boss and mechanic |
 |---|---|---|
-| Rye Fields | Bandit Woman, She-Werewolf, Field Maiden, She-Devil | Lady Midday: calls reinforcements and asks riddles (special QTE) |
+| Rye Fields | Bandit Woman, She-Werewolf, Field Maiden, Wolf; elite: Bies | Lady Midday: calls reinforcements and asks riddles (special QTE) |
 | Marshes | Drowned Maiden, Will-o'-the-Wisp, Bog Hag, Drowned Girl | Water Maiden: drags a hero underwater for 2 turns |
 | Old Forest | Wild Woman, Mamuna, Spider Woman, Werewolf Mother | Lady Leshy: a girl spirit of the forest; summons roots and shuffles the party's formation |
 | Bald Mountain | Sabbath Witch, Storm Maiden, Giantess, Harpy | Dragoness: announces a great fire strike, teaches the perfect block |
