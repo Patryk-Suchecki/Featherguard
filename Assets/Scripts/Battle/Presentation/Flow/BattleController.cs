@@ -39,7 +39,7 @@ namespace Featherguard.Battle.Presentation
             var highlighter = new TargetHighlighter(model, Presenter, services.Config);
             commands = new PlayerCommands(model, Presenter, services.UnitPicker, highlighter, services.Feedback, services.View);
             if (services.Config.timingPrompts)
-                prompt = new TimingPrompt(services.Config, services.TimingCues, services.View, services.Feedback, services.TimingInput, services.Random);
+                prompt = new TimingPrompt(services.Config, new TimingJudge(model.State.Rules), services.TimingCues, services.View, services.Feedback, services.TimingInput, services.Random);
         }
 
         public void Tick() => commands.Tick();

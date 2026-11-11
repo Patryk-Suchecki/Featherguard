@@ -12,6 +12,10 @@ namespace Featherguard.Battle
             GoodWindow = Math.Max(perfectWindow, goodWindow);
         }
 
+        public TimingJudge(BattleRules rules) : this(rules.perfectWindow, rules.goodWindow)
+        {
+        }
+
         public float GoodWindow { get; }
 
         public TimingResult Judge(float offset)

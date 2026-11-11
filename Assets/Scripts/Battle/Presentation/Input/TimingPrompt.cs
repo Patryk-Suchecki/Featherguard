@@ -16,15 +16,15 @@ namespace Featherguard.Battle.Presentation
         readonly IRandomSource random;
         readonly TimingJudge judge;
 
-        public TimingPrompt(BattlePresentationConfig config, ITimingCueView cues, IPopupView view, ISoundPlayer sounds, ITimingInput input, IRandomSource random)
+        public TimingPrompt(BattlePresentationConfig config, TimingJudge judge, ITimingCueView cues, IPopupView view, ISoundPlayer sounds, ITimingInput input, IRandomSource random)
         {
             this.config = config;
+            this.judge = judge;
             this.cues = cues;
             this.view = view;
             this.sounds = sounds;
             this.input = input;
             this.random = random;
-            judge = new TimingJudge(config.perfectWindow, config.goodWindow);
         }
 
         public IEnumerator Attack(Vector3 world, Action<TimingResult> done)

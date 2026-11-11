@@ -4,12 +4,6 @@ using UnityEngine.InputSystem;
 
 namespace Featherguard.Battle.Presentation
 {
-    public interface ITimingInput
-    {
-        float FrameTime { get; }
-        bool Pressed();
-    }
-
     public sealed class PointerTimingInput : ITimingInput
     {
         public float FrameTime => Time.unscaledDeltaTime * GameClock.Scale;

@@ -18,6 +18,18 @@ namespace Featherguard.Tests
             Assert.AreEqual(expected, judge.Judge(offset));
 
         [Test]
+        public void ReadsTheWindowsFromTheRules()
+        {
+            var rules = UnityEngine.ScriptableObject.CreateInstance<BattleRules>();
+            rules.perfectWindow = 0.02f;
+            rules.goodWindow = 0.1f;
+            var fromRules = new TimingJudge(rules);
+
+            Assert.AreEqual(TimingResult.Good, fromRules.Judge(0.05f));
+            Assert.AreEqual(0.1f, fromRules.GoodWindow);
+        }
+
+        [Test]
         public void GoodWindowIsNeverNarrowerThanPerfect()
         {
             var narrow = new TimingJudge(0.1f, 0.05f);

@@ -49,10 +49,6 @@ namespace Featherguard.Battle.Presentation
         [Min(0f)] public float windupMax = 1.2f;
         [Tooltip("Seconds between the BLOCK! flash and the hit.")]
         [Min(0f)] public float blockLead = 0.25f;
-        [Tooltip("A tap this close to the target moment, in seconds, is Perfect.")]
-        [Min(0f)] public float perfectWindow = 0.06f;
-        [Tooltip("A tap this close to the target moment, in seconds, is Good.")]
-        [Min(0f)] public float goodWindow = 0.15f;
 
         [Header("Selection")]
         public Color selectedRing = new(1f, 0.85f, 0.2f, 1f);

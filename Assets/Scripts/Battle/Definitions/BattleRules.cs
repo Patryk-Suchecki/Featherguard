@@ -23,6 +23,10 @@ namespace Featherguard.Battle
         [Range(0f, 1f)] public float perfectBlockReduction = 0.6f;
         [Tooltip("Rage added once for an action with a perfect attack or block.")]
         [Min(0f)] public float perfectTimingRage = 10f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Perfect.")]
+        [Min(0f)] public float perfectWindow = 0.06f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Good.")]
+        [Min(0f)] public float goodWindow = 0.15f;
 
         [Header("Damage")]
         [Range(0f, 1f)] public float baseCritChance = 0.15f;
