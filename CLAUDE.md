@@ -1,6 +1,6 @@
 # Featherguard
 
-Original turn-based mobile game: a squad of birds fights lizards in side view, low-poly 3D. Between battles the run is driven by gambling rewards (slot machine, double or nothing, card picks, shop, cursed chest). Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
+Original turn-based mobile RPG in a dark Slavic folklore setting, fully 3D; the target design is `docs/GDD.md`. The current build is an earlier prototype (a squad of birds fights lizards, with gambling rewards between battles) described in `docs/GAME_DESIGN.md`. Its setting and gambling layer will be removed entirely as the game is reworked. Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
 
 Two people develop this repo, each with their own Claude. These rules are shared; follow them even when a request seems to imply otherwise, and say so if a request conflicts with them.
 
@@ -8,28 +8,38 @@ Never recreate an existing game's names, characters, art or music. Everything st
 
 ## Architecture
 
-Assemblies: `Featherguard` (Assets/Scripts), `Featherguard.Editor` (Assets/Editor), `Featherguard.Tests.EditMode` (Assets/Tests/EditMode). Namespaces are per module, not per folder, because `[SerializeReference]` data stores full type names. Never rename a namespace or a serialized class without `[MovedFrom]`.
+Every layer is its own assembly, so the compiler rejects a reference that goes the wrong way. Namespaces are per module, not per folder, because `[SerializeReference]` data stores full type names. Never rename a namespace or a serialized class, or move it to another assembly, without `[MovedFrom]`.
 
-| Module | Path | Role |
-|---|---|---|
-| Core | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector` |
-| Battle model | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel.Start()/Act()` resolve synchronously and return `BattleEvent` lists. No GameObjects, coroutines or waits. |
-| Battle presentation | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. |
-| Run | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic (slots, gamble, shop, card draft, path). |
-| Meta | Scripts/Meta | Perks and feathers, `ISaveStore` (JSON file in `Application.persistentDataPath`). |
-| Feel | Scripts/Feel | Audio, VFX, hitstop, camera shake, `GameClock` pause. |
-| UI | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. |
-| Game | Scripts/Game | `GameBootstrap` composition root, `GameConfig`. |
+| Layer | Assembly | Path | Role | May reference |
+|---|---|---|---|---|
+| Core | `Featherguard.Core` | Scripts/Core | `IRandomSource`, `WeightedRandom`, `SubclassSelector` | – |
+| Battle model | `Featherguard.Battle` | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel` resolves synchronously and returns `BattleEvent` lists. Definitions hold rules only. | Core |
+| Feel | `Featherguard.Feel` | Scripts/Feel | Audio, VFX, hitstop, camera shake, `GameClock` pause | Core |
+| Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` replays events through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals` holds how each ability looks and sounds. | Battle, Feel, Core |
+| Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
+| Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, `ISaveStore` | Run, Battle, Core |
+| UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feel, Core |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` composition root, `GameConfig` | everything above |
+
+`Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
 Layer rules:
-- Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`.
+- References only go down the table: a layer never references one below it in the table or beside it unless listed. Never add a reference to work around this; move the type to the right layer instead.
+- Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`. Definitions (`UnitDefinition`, `AbilityDefinition`, `StatusDefinition`, ...) hold rules and numbers only; animation, colours, sounds, VFX and delivery live in presentation assets such as `AbilityVisuals`.
 - New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it. Reward or economy logic goes into `Run/Rewards`, not into UI steps.
-- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
+- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `ImpactEffect`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
+
+SOLID rules:
+- **One job per class.** A class that decides something (rules, judging, scoring) does not also read input, draw, or play sound; split it so the decision is plain C# with EditMode tests. When a class keeps growing a second concern (a state machine, a cache), move it into its own class.
+- **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
+- **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
+- **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in the composition root (`GameBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
 
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
-- Units, Abilities, Statuses, Encounters, Upgrades, Perks.
+- Units, Abilities, AbilityVisuals, Statuses, Encounters, Upgrades, Perks.
 - Single assets: `BattleRules`, `BattlePresentation`, `Economy`, `SlotMachine`, `Run`, `Meta`, `GameConfig`.
 
 Change balance by editing those assets, not code.
@@ -39,18 +49,26 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - **Featherguard > Reset Data To Defaults** overwrites all data with catalog values. Only run it on purpose.
 - When you add content, add it to the catalog too, so a fresh checkout can rebuild it.
 
-`docs/GAME_DESIGN.md` describes what is in the game. Update it in the same PR whenever you change content or rules.
+`docs/GAME_DESIGN.md` describes the current build. Update it in the same PR whenever you change content or rules.
 
-## Generated art and audio
+There is no separate decision log. Apply an agreed decision directly in the one doc it belongs to (`docs/GDD.md` for the game, `docs/ROADMAP.md` for scope and plan, `CLAUDE.md` for rules); the PR approval records who agreed. Other docs link to that doc instead of repeating it.
 
-- **Characters and environment:** generated by Blender 5.x scripts in `Art/Blender`, run headless:
+`docs/GDD.md` is the agreed target design. Do not change the current build towards it unless the issue you work on asks for it; each rework gets its own issue. Change it only through a PR both developers agree on.
+
+## Art and audio
+
+- **Hand-made characters:** the target game's characters are modelled, textured, rigged and animated by hand in Blender, following `docs/ART_PIPELINE.md` (names, scale, budgets, clips, `OnHitFrame` markers) and the look in `docs/STYLE_GUIDE.md`. Each has a sheet in `docs/design/characters/`. Export one with:
+  - `blender -b Art/Blender/Characters/<Name>.blend -P Art/Blender/export_character.py`
+
+  It writes `<Name>.fbx`, `<Name>.clips.json` and `Textures/<Name>_Albedo.png` to `Assets/Art/Characters`. Never overwrite a hand-made `.blend` from a script.
+- **Prototype characters and environment:** the bird prototype's characters and the environment are generated by Blender 5.x scripts in `Art/Blender`, run headless:
   - `blender -b -P Art/Blender/build_characters.py`
   - `blender -b -P Art/Blender/build_environment.py`
   - `blender -b -P Art/Blender/render_portraits.py`
 
-  They write `.fbx` to `Assets/Art/Characters`, `Assets/Art/Environment` and `Assets/Art/UI/Portraits`, plus `.blend` files to `Art/Blender/Characters`.
+  They write `.fbx` to `Assets/Art/Characters`, `Assets/Art/Environment` and `Assets/Art/UI/Portraits`, plus `.blend` files to `Art/Blender/Characters`, only for the names listed in the scripts.
 - **Icons and sound effects:** generated by `IconFactory` and `SfxSynth` during Rebuild. `GeneratedFiles.Write` skips unchanged files and refuses to overwrite a read-only (unlocked) file.
-- **Regenerating assets is a separate PR.** Lock the binaries you will change first (`git lfs lock <path>`), then unlock after merge.
+- **Adding, changing or regenerating art or audio is a separate PR**, with no gameplay rule changes. Shaders and VFX may ship with the presentation code they need. Lock the existing binaries you will change first (`git lfs lock <path>`), then unlock after merge.
 
 ## Tests
 
@@ -98,9 +116,10 @@ Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - Avoid unnecessary comments; names should explain the code.
 - Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance` and `RunSession.Current`.
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
-- Branch names: `<type>/<issue>-<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/12-slot-machine-sounds` or `fix/15-double-kill-gold`.
-- Commit messages: `#<issue> <what this commit does>`, one short imperative line (max ~60 characters) naming the exact task, for example `#12 Add jackpot sound to slot machine`. No body unless something is surprising.
-- PR title: `#<issue> <task>`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
+- Names say what the work does, not which issue it is: no issue numbers in branch names, commit messages or PR titles. The issue number appears only in the PR description, so GitHub links and closes the issue.
+- Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/slot-machine-sounds` or `fix/double-kill-gold`.
+- Commit messages: one short imperative line (max ~60 characters) naming the exact task, for example `Add jackpot sound to slot machine`. No body unless something is surprising.
+- PR title: the task, for example `Add slot machine sounds`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
 - Issue labels: `gameplay`, `art`, `audio`, `UI`, `bug`, `balance`. Docs and tooling work (`chore/` branches) needs no label.
 - Never add AI attribution: no `Co-Authored-By` trailers, no "Generated with Claude Code" lines, no mention of AI tools in commits, branches or PRs. `.claude/settings.json` disables it; keep it that way.
 

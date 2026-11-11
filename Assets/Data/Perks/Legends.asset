@@ -23,6 +23,6 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 4550530214315163761
-      type: {class: UnlockPerk, ns: Featherguard.Meta, asm: Featherguard}
+      type: {class: UnlockPerk, ns: Featherguard.Meta, asm: Featherguard.Meta}
       data:
         unlock: 2

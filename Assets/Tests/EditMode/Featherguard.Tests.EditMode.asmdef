@@ -2,7 +2,10 @@
     "name": "Featherguard.Tests.EditMode",
     "rootNamespace": "Featherguard.Tests",
     "references": [
-        "Featherguard",
+        "Featherguard.Core",
+        "Featherguard.Battle",
+        "Featherguard.Run",
+        "Featherguard.Meta",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
