@@ -24,8 +24,9 @@ namespace Featherguard.Battle
     public class StatusApplication
     {
         public StatusDefinition status;
-        public int turns = 1;
-        public int potency;
+        [Min(1)] public int turns = 1;
+        [Tooltip("Damage per turn for damage-over-time statuses.")]
+        [Min(0)] public int potency;
         [Range(0f, 1f)] public float chance = 1f;
         public bool onSelf;
     }

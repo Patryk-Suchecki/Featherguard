@@ -16,5 +16,7 @@ namespace Featherguard.Battle.Presentation
         [Min(0.1f)] public float height = 1.4f;
 
         public UnitDefinition Definition => unit;
+        public float ScaledHeight => height * modelScale;
+        public float Radius => 0.45f * modelScale;
     }
 }

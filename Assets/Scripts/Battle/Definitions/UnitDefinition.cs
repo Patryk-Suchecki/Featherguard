@@ -17,9 +17,9 @@ namespace Featherguard.Battle
         [Range(0f, 1f)] public float healThreshold = 0.6f;
         [Range(0f, 1f)] public float healChance = 0.75f;
         [Tooltip("Extra targeting weight for wounded heroes.")]
-        public float woundedWeight = 2f;
+        [Min(0f)] public float woundedWeight = 2f;
         [Tooltip("Extra targeting weight for heroes the attack would finish.")]
-        public float finishWeight = 3f;
+        [Min(0f)] public float finishWeight = 3f;
     }
 
     [Serializable]
@@ -27,7 +27,8 @@ namespace Featherguard.Battle
     {
         [Tooltip("Health fraction that triggers the enrage phase (0 = never).")]
         [Range(0f, 1f)] public float enrageAt;
-        public float enrageDamageBonus = 0.4f;
+        [Tooltip("Extra damage while enraged (0.4 = +40%).")]
+        [Min(0f)] public float enrageDamageBonus = 0.4f;
         public UnitDefinition[] enrageSummons = new UnitDefinition[0];
     }
 

@@ -20,8 +20,8 @@ namespace Featherguard.Battle.Presentation
         public HitReaction Reaction { get; private set; }
         public SelectionRing Ring { get; private set; }
         public Vector3 HomePosition { get; set; }
-        public float Height => Visuals.height * Visuals.modelScale;
-        public float Radius => 0.45f * Visuals.modelScale;
+        public float Height => Visuals.ScaledHeight;
+        public float Radius => Visuals.Radius;
         public Vector3 Center => transform.position + Vector3.up * Height * 0.5f;
         public Vector3 Top => transform.position + Vector3.up * (Height + 0.1f);
         public Vector3 Facing => Team == Team.Heroes ? Vector3.right : Vector3.left;

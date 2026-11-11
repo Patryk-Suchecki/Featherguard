@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Featherguard.Battle
 {
@@ -30,7 +30,7 @@ namespace Featherguard.Battle
             float multiplier = 1f;
             Accumulate(modifiers, stat, ref value, ref multiplier);
             if (extra != null) Accumulate(extra, stat, ref value, ref multiplier);
-            return value * Mathf.Max(0f, multiplier);
+            return value * Math.Max(0f, multiplier);
         }
 
         static void Accumulate(IEnumerable<StatModifier> source, StatType stat, ref float value, ref float multiplier)
