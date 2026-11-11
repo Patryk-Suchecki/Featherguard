@@ -14,16 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
   displayName: Spitter
   team: 1
-  model: {fileID: 919132149155446097, guid: 60ab8668bcb332245a2f94edef6427cf, type: 3}
-  portrait: {fileID: 21300000, guid: 0acf7c4e883bf484685189bbe2522a7f, type: 3}
-  animator: {fileID: 9100000, guid: 07bf4df16306bf6468b6eceec0e58974, type: 2}
-  modelScale: 1
-  height: 1.5
   maxHealth: 65
   attack: {fileID: 11400000, guid: 650a9e3be9a9e8442a04afc7fbce96d2, type: 2}
   support: {fileID: 0}
   special: {fileID: 0}
   ai:
+    actionsPerTurn: 1
     specialEvery: 0
     supportChance: 0.45
     healThreshold: 0.6

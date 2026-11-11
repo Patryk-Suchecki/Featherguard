@@ -5,7 +5,7 @@ using Featherguard.Core;
 
 namespace Featherguard.Battle
 {
-    public enum BattlePhase { NotStarted, AwaitingInput, Finished }
+    public enum BattlePhase { NotStarted, AwaitingInput, AwaitingBlock, Finished }
 
     public sealed class BattleModel
     {
@@ -17,7 +17,7 @@ namespace Featherguard.Battle
         readonly StatusTicker ticker;
         readonly WaveSpawner waves;
         readonly BossPhases bosses;
-        readonly IEnemyBrain brain;
+        readonly EnemyTurn enemyTurn;
 
         public BattleState State { get; }
         public RageMeter Rage => State.Rage;
@@ -25,6 +25,7 @@ namespace Featherguard.Battle
         public Squad Enemies => State.Enemies;
         public BattlePhase Phase { get; private set; }
         public bool AwaitingInput => Phase == BattlePhase.AwaitingInput;
+        public bool AwaitingBlock => Phase == BattlePhase.AwaitingBlock;
         public bool IsFinished => Phase == BattlePhase.Finished;
         public int Turn { get; private set; }
         public BattleResult Result { get; private set; }
@@ -43,7 +44,7 @@ namespace Featherguard.Battle
             ticker = new StatusTicker(State);
             waves = new WaveSpawner(State, setup);
             bosses = new BossPhases(State, waves);
-            this.brain = brain ?? new DefaultEnemyBrain(random);
+            enemyTurn = new EnemyTurn(State, resolver, ticker, bosses, brain ?? new DefaultEnemyBrain(random), log, setup.AwaitBlocks);
         }
 
         public IReadOnlyList<BattleEvent> Start()
@@ -76,17 +77,31 @@ namespace Featherguard.Battle
             return ability.TargetsAll || Targeting.IsValid(ability, target, State.AlliesOf(hero), State.OpponentsOf(hero));
         }
 
+        public bool IsBlockedByTaunt(BattleUnit hero, AbilityDefinition ability, BattleUnit target) =>
+            CanCommand(hero) && ability != null && AbilitiesOf(hero).Contains(ability) && Targeting.IsBlockedByTaunt(ability, target, State.OpponentsOf(hero));
+
         public IEnumerable<BattleUnit> Candidates(BattleUnit hero, AbilityDefinition ability) =>
             Targeting.Candidates(ability, State.AlliesOf(hero), State.OpponentsOf(hero));
 
-        public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target)
+        public bool IsTimed(BattleUnit hero, AbilityDefinition ability) =>
+            hero != null && ability != null && ability.IsDamaging && ability != hero.Definition.special;
+
+        public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target, TimingResult timing = TimingResult.Miss)
         {
             if (!CanUse(hero, ability, target)) return Array.Empty<BattleEvent>();
             if (ability == hero.Definition.special)
                 State.ConsumeRage();
             hero.HasActed = true;
-            resolver.Execute(hero, ability, target);
+            resolver.Execute(hero, ability, target, IsTimed(hero, ability) ? ActionTiming.ForAttack(timing) : ActionTiming.None);
             bosses.Check();
+            Advance();
+            return log.Flush();
+        }
+
+        public IReadOnlyList<BattleEvent> Block(TimingResult timing)
+        {
+            if (!AwaitingBlock) return Array.Empty<BattleEvent>();
+            enemyTurn.Block(timing);
             Advance();
             return log.Flush();
         }
@@ -95,6 +110,20 @@ namespace Featherguard.Battle
         {
             for (int step = 0; step < MaxSteps; step++)
             {
+                if (enemyTurn.Active)
+                {
+                    if (enemyTurn.Continue())
+                    {
+                        Phase = BattlePhase.AwaitingBlock;
+                        return;
+                    }
+                    if (CheckFinished()) return;
+                    if (!Enemies.AnyAlive)
+                        waves.SpawnNext();
+                    BeginPlayerTurn();
+                    continue;
+                }
+
                 if (Enemies.AnyAlive && Heroes.Any(h => h.CanAct))
                 {
                     Phase = BattlePhase.AwaitingInput;
@@ -110,11 +139,7 @@ namespace Featherguard.Battle
                     continue;
                 }
 
-                EnemyTurn();
-                if (CheckFinished()) return;
-                if (!Enemies.AnyAlive)
-                    waves.SpawnNext();
-                BeginPlayerTurn();
+                enemyTurn.Begin();
             }
             throw new InvalidOperationException("Battle did not reach a decision point.");
         }
@@ -126,22 +151,6 @@ namespace Featherguard.Battle
             ticker.BeginTurn(Heroes);
             foreach (var hero in Heroes)
                 hero.HasActed = hero.SkipsTurn;
-        }
-
-        void EnemyTurn()
-        {
-            log.Emit(new TurnStarted { Team = Team.Enemies });
-            ticker.BeginTurn(Enemies);
-            foreach (var enemy in Enemies.Snapshot())
-            {
-                if (!enemy.IsAlive || enemy.SkipsTurn) continue;
-                if (!Heroes.AnyAlive) break;
-                var decision = brain.Decide(enemy, State);
-                enemy.TurnsTaken++;
-                resolver.Execute(enemy, decision.Ability, decision.Target);
-                bosses.Check();
-            }
-            ticker.EndTurn(Enemies);
         }
 
         bool CheckFinished()

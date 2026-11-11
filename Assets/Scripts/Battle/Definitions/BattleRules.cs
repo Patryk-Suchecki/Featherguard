@@ -6,13 +6,31 @@ namespace Featherguard.Battle
     public class BattleRules : ScriptableObject
     {
         [Header("Rage")]
-        public float maxRage = 100f;
-        public float heroRagePerDamage = 0.45f;
-        public float enemyRagePerDamage = 0.25f;
+        [Min(1f)] public float maxRage = 100f;
+        [Tooltip("Rage gained per point of damage a hero deals.")]
+        [Min(0f)] public float heroRagePerDamage = 0.45f;
+        [Tooltip("Rage gained per point of damage an enemy deals.")]
+        [Min(0f)] public float enemyRagePerDamage = 0.25f;
+
+        [Header("Timing")]
+        [Tooltip("Extra damage for a good attack timing.")]
+        [Min(0f)] public float goodAttackBonus = 0.25f;
+        [Tooltip("Extra damage for a perfect attack timing.")]
+        [Min(0f)] public float perfectAttackBonus = 0.5f;
+        [Tooltip("Damage removed by a good block.")]
+        [Range(0f, 1f)] public float goodBlockReduction = 0.3f;
+        [Tooltip("Damage removed by a perfect block.")]
+        [Range(0f, 1f)] public float perfectBlockReduction = 0.6f;
+        [Tooltip("Rage added once for an action with a perfect attack or block.")]
+        [Min(0f)] public float perfectTimingRage = 10f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Perfect.")]
+        [Min(0f)] public float perfectWindow = 0.06f;
+        [Tooltip("A tap this close to the target moment, in seconds, is Good.")]
+        [Min(0f)] public float goodWindow = 0.15f;
 
         [Header("Damage")]
         [Range(0f, 1f)] public float baseCritChance = 0.15f;
-        public float baseCritDamage = 1.5f;
+        [Min(1f)] public float baseCritDamage = 1.5f;
         [Range(0f, 0.5f)] public float damageVariance = 0.1f;
 
         [Header("Formation")]

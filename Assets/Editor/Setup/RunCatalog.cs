@@ -12,6 +12,7 @@ namespace Featherguard.EditorTools
         {
             var (upgrades, curses) = UpgradeCatalog.Build(seeder, art);
             var encounters = Encounters(seeder, units);
+            TestEncounters(seeder, units);
             var economy = seeder.Seed<EconomyConfig>($"{ContentPaths.Data}/EconomyConfig.asset", null);
             var slots = SlotMachine(seeder, art);
 
@@ -66,6 +67,14 @@ namespace Featherguard.EditorTools
                 Add("Battle09", "Chieftain", 1.3f, 1.15f, 40, true, new[] { g, t, g }, new[] { p, c, s }),
             };
         }
+
+        static void TestEncounters(Seeder seeder, IReadOnlyDictionary<string, UnitDefinition> u) =>
+            seeder.Seed<EncounterDefinition>($"{ContentPaths.Encounters}/BiesTest.asset", e =>
+            {
+                e.displayName = "Bies (test)";
+                e.goldReward = 10;
+                e.waves = new[] { new EncounterDefinition.Wave { enemies = new[] { u["Bies"] } } };
+            });
 
         static SlotConfig SlotMachine(Seeder seeder, PresentationAssets art) =>
             seeder.Seed<SlotConfig>($"{ContentPaths.Data}/SlotConfig.asset", config =>

@@ -7,8 +7,6 @@ namespace Featherguard.UI
 {
     public sealed class PauseMenu
     {
-        const string VolumeKey = "volume";
-
         readonly RectTransform canvas;
         readonly Action onAbandon;
         readonly Func<bool> canAbandon;
@@ -38,7 +36,7 @@ namespace Featherguard.UI
             Ui.Panel(menu, Ui.PanelColor);
             Ui.Label(Ui.Centered("Title", menu, new Vector2(0f, 220f), new Vector2(600f, 100f)), "PAUSED", 80, TextAnchor.MiddleCenter, Ui.GoldColor);
             Ui.TextButton(menu, "Resume", new Vector2(0f, 80f), new Vector2(500f, 120f), Ui.GoColor, Close, "Flag");
-            bool muted = AudioListener.volume < 0.5f;
+            bool muted = VolumeSetting.Muted;
             Ui.TextButton(menu, muted ? "Sound: off" : "Sound: on", new Vector2(0f, -55f), new Vector2(500f, 120f), Ui.NeutralColor, ToggleSound, muted ? "Mute" : "Sound");
             var abandon = Ui.TextButton(menu, "Abandon run", new Vector2(0f, -190f), new Vector2(500f, 120f), Ui.RiskColor, Abandon, "Skull");
             abandon.gameObject.SetActive(canAbandon());
@@ -53,8 +51,7 @@ namespace Featherguard.UI
 
         void ToggleSound()
         {
-            AudioListener.volume = AudioListener.volume < 0.5f ? 1f : 0f;
-            PlayerPrefs.SetFloat(VolumeKey, AudioListener.volume);
+            VolumeSetting.ToggleMute();
             Close();
             Open();
         }

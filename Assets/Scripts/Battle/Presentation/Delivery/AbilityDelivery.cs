@@ -50,6 +50,7 @@ namespace Featherguard.Battle.Presentation
 
         public override IEnumerator Deliver(DeliveryContext context)
         {
+            if (context.Targets.Count == 0) yield break;
             var actor = context.Actor;
             var victim = context.Targets[0];
             var strike = victim.transform.position - actor.Facing * (victim.Radius + actor.Radius + reach);

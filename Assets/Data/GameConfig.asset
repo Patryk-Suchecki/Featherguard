@@ -23,6 +23,7 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: 53263670464c0b045a2e5dd9d2494455, type: 2}
   particleMaterial: {fileID: 2100000, guid: 7155c27b5f4b3e24bb5b6babf50b956a, type: 2}
   ringMaterial: {fileID: 2100000, guid: 40e12e1e2177bff4aab64a3922dd2442, type: 2}
+  toonMaterial: {fileID: 2100000, guid: 682db235fbc4b584fb162d080935354f, type: 2}
   sounds:
   - {fileID: 0}
   - {fileID: 8300000, guid: 17eab65c0ba97644aac77f1a8b569617, type: 3}

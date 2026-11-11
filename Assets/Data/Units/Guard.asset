@@ -14,16 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
   displayName: Shieldbearer
   team: 1
-  model: {fileID: 919132149155446097, guid: 62243b94c70eb184c97c69aec60f2505, type: 3}
-  portrait: {fileID: 21300000, guid: ae44672d0370f0c4e802a75f7efbf247, type: 3}
-  animator: {fileID: 9100000, guid: e6f1c4a10df6f6b4db5e275cd60b3eae, type: 2}
-  modelScale: 1.1
-  height: 1.5
   maxHealth: 110
   attack: {fileID: 11400000, guid: e6b91fb55f88e4749a2f491437191e19, type: 2}
   support: {fileID: 11400000, guid: 672e042ace1fbd644a060c17c3e6b1d9, type: 2}
   special: {fileID: 0}
   ai:
+    actionsPerTurn: 1
     specialEvery: 0
     supportChance: 0.45
     healThreshold: 0.6

@@ -4,23 +4,6 @@ using Featherguard.Core;
 
 namespace Featherguard.Battle
 {
-    public readonly struct EnemyDecision
-    {
-        public readonly AbilityDefinition Ability;
-        public readonly BattleUnit Target;
-
-        public EnemyDecision(AbilityDefinition ability, BattleUnit target)
-        {
-            Ability = ability;
-            Target = target;
-        }
-    }
-
-    public interface IEnemyBrain
-    {
-        EnemyDecision Decide(BattleUnit enemy, BattleState state);
-    }
-
     public sealed class DefaultEnemyBrain : IEnemyBrain
     {
         readonly IRandomSource random;
@@ -34,7 +17,7 @@ namespace Featherguard.Battle
             var allies = state.AlliesOf(enemy);
             var opponents = state.OpponentsOf(enemy);
 
-            if (definition.special != null && profile.specialEvery > 0 && enemy.TurnsTaken % profile.specialEvery == 0)
+            if (definition.special != null && profile.specialEvery > 0 && enemy.TurnsTaken % profile.specialEvery == 0 && enemy.ActionsLeftThisTurn == 0)
             {
                 var special = definition.special;
                 if (special.TargetsAll) return new EnemyDecision(special, null);
@@ -43,7 +26,7 @@ namespace Featherguard.Battle
             }
 
             var support = definition.support;
-            if (support != null && support.Effect<HealEffect>() != null)
+            if (support != null && support.Heals)
             {
                 var wounded = allies.Living.Where(a => a.HealthFraction < profile.healThreshold).OrderBy(a => a.HealthFraction).FirstOrDefault();
                 if (wounded != null && random.Value < profile.healChance)
@@ -51,7 +34,7 @@ namespace Featherguard.Battle
             }
             else if (support != null && random.Value < profile.supportChance)
             {
-                var statuses = support.effects.OfType<ApplyStatusEffect>().Where(e => !e.application.onSelf).Select(e => e.application.status).ToList();
+                var statuses = support.StatusesOnTarget.ToList();
                 var candidates = allies.Living.Where(a => !statuses.Any(a.Statuses.Has)).ToList();
                 if (candidates.Count > 0)
                     return new EnemyDecision(support, WeightedRandom.PickUniform(candidates, random));
@@ -69,7 +52,7 @@ namespace Featherguard.Battle
                 return WeightedRandom.PickUniform(targets, random);
 
             var profile = enemy.Definition.ai;
-            float expected = (ability.Effect<DamageEffect>()?.power ?? 0) * ability.hits * enemy.Stat(StatType.Damage);
+            float expected = ability.ExpectedDamage * ability.hits * enemy.Stat(StatType.Damage);
             return WeightedRandom.Pick(targets, h =>
             {
                 float weight = 1f + profile.woundedWeight * (1f - h.HealthFraction);

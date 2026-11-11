@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
+  m_Name: Bies
+  m_EditorClassIdentifier: Featherguard::Featherguard.Battle.UnitDefinition
+  displayName: Bies
+  team: 1
+  maxHealth: 260
+  attack: {fileID: 11400000, guid: 63179ce84f6c1654f9e8ca5a2f7b3ade, type: 2}
+  support: {fileID: 0}
+  special: {fileID: 11400000, guid: c2bb49a1362bf6345abf69fde6fdbafa, type: 2}
+  ai:
+    actionsPerTurn: 2
+    specialEvery: 3
+    supportChance: 0.45
+    healThreshold: 0.6
+    healChance: 0.75
+    woundedWeight: 2
+    finishWeight: 3
+  boss:
+    enrageAt: 0
+    enrageDamageBonus: 0.4
+    enrageSummons: []

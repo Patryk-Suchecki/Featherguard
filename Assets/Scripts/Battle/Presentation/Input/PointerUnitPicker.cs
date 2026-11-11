@@ -6,33 +6,26 @@ using UnityEngine.InputSystem;
 
 namespace Featherguard.Battle.Presentation
 {
-    public interface IUnitPicker
-    {
-        bool TryPick(out UnitView unit);
-    }
-
     public sealed class PointerUnitPicker : IUnitPicker
     {
         readonly Camera camera;
-        readonly System.Func<IEnumerable<UnitView>> candidates;
         readonly float tolerance;
         readonly List<RaycastResult> uiHits = new();
 
-        public PointerUnitPicker(Camera camera, System.Func<IEnumerable<UnitView>> candidates, float tolerance)
+        public PointerUnitPicker(Camera camera, float tolerance)
         {
             this.camera = camera;
-            this.candidates = candidates;
             this.tolerance = tolerance;
         }
 
-        public bool TryPick(out UnitView unit)
+        public bool TryPick(IEnumerable<UnitView> candidates, out UnitView unit)
         {
             unit = null;
             var pointer = Pointer.current;
             if (pointer == null || !pointer.press.wasPressedThisFrame) return false;
             var position = pointer.position.ReadValue();
             if (OverUi(position)) return false;
-            unit = Pick(position);
+            unit = Pick(position, candidates);
             return unit != null;
         }
 
@@ -44,7 +37,7 @@ namespace Featherguard.Battle.Presentation
             return uiHits.Count > 0;
         }
 
-        UnitView Pick(Vector2 position)
+        UnitView Pick(Vector2 position, IEnumerable<UnitView> candidates)
         {
             if (Physics.Raycast(camera.ScreenPointToRay(position), out var hit, 100f))
             {
@@ -54,7 +47,7 @@ namespace Featherguard.Battle.Presentation
 
             UnitView best = null;
             float bestDistance = Screen.height * tolerance;
-            foreach (var unit in candidates().Where(u => u.IsAlive))
+            foreach (var unit in candidates.Where(u => u.IsAlive))
             {
                 float distance = DistanceToSegment(position, camera.WorldToScreenPoint(unit.transform.position), camera.WorldToScreenPoint(unit.Top));
                 if (distance < bestDistance)

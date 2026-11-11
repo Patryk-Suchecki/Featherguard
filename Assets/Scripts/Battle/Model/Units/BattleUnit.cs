@@ -15,9 +15,10 @@ namespace Featherguard.Battle
         public int MaxHealth => Math.Max(1, (int)Math.Round(Stat(StatType.MaxHealth)));
         public float HealthFraction => (float)Health / MaxHealth;
         public bool IsAlive => Health > 0;
-        public bool HasActed { get; set; }
-        public int TurnsTaken { get; set; }
-        public bool Enraged { get; set; }
+        public bool HasActed { get; internal set; }
+        public int TurnsTaken { get; internal set; }
+        public int ActionsLeftThisTurn { get; internal set; }
+        public bool Enraged { get; internal set; }
         public StatusContainer Statuses { get; } = new();
         public IReadOnlyList<ActiveStatus> ActiveStatuses => Statuses.All;
         public bool SkipsTurn => Statuses.Any(s => s.skipsTurn);

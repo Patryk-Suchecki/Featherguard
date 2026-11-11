@@ -5,9 +5,13 @@ namespace Featherguard.Battle.Presentation
     [CreateAssetMenu(menuName = "Featherguard/Battle Presentation")]
     public class BattlePresentationConfig : ScriptableObject
     {
-        [Header("Abilities")]
+        [Header("Visuals")]
         [Tooltip("How each ability looks and sounds; abilities without an entry use plain defaults.")]
         public AbilityVisuals[] abilities = new AbilityVisuals[0];
+        [Tooltip("Model, portrait and animator of each unit.")]
+        public UnitVisuals[] units = new UnitVisuals[0];
+        [Tooltip("Icon and colour of each status.")]
+        public StatusVisuals[] statuses = new StatusVisuals[0];
 
         [Header("Formation")]
         public Vector3[] heroSlots = { new(-2.3f, 0f, 0.45f), new(-3.7f, 0f, -0.55f), new(-5.0f, 0f, 0.6f) };
@@ -32,6 +36,19 @@ namespace Featherguard.Battle.Presentation
         public float stunnedInterval = 0.25f;
         public float enrageHold = 0.9f;
         public float endDelay = 0.6f;
+        [Tooltip("Seconds between a won battle and the rewards.")]
+        [Min(0f)] public float afterVictory = 0.8f;
+
+        [Header("Timing prompts")]
+        [Tooltip("Temporary attack ring and BLOCK! cue. Off: every attack and block resolves as Miss and enemy turns don't wait.")]
+        public bool timingPrompts = true;
+        [Tooltip("Seconds from the ring appearing to the moment it meets the target circle.")]
+        [Min(0.1f)] public float attackRingTime = 0.8f;
+        [Tooltip("Shortest and longest hold of the enemy wind-up before BLOCK!, in seconds.")]
+        [Min(0f)] public float windupMin = 0.4f;
+        [Min(0f)] public float windupMax = 1.2f;
+        [Tooltip("Seconds between the BLOCK! flash and the hit.")]
+        [Min(0f)] public float blockLead = 0.25f;
 
         [Header("Selection")]
         public Color selectedRing = new(1f, 0.85f, 0.2f, 1f);
