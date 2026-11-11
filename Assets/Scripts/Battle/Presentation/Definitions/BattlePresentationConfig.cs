@@ -5,7 +5,7 @@ namespace Featherguard.Battle.Presentation
     [CreateAssetMenu(menuName = "Featherguard/Battle Presentation")]
     public class BattlePresentationConfig : ScriptableObject
     {
-        [Header("Abilities")]
+        [Header("Visuals")]
         [Tooltip("How each ability looks and sounds; abilities without an entry use plain defaults.")]
         public AbilityVisuals[] abilities = new AbilityVisuals[0];
         [Tooltip("Model, portrait and animator of each unit.")]
@@ -36,6 +36,8 @@ namespace Featherguard.Battle.Presentation
         public float stunnedInterval = 0.25f;
         public float enrageHold = 0.9f;
         public float endDelay = 0.6f;
+        [Tooltip("Seconds between a won battle and the rewards.")]
+        [Min(0f)] public float afterVictory = 0.8f;
 
         [Header("Timing prompts")]
         [Tooltip("Temporary attack ring and BLOCK! cue. Off: every attack and block resolves as Miss and enemy turns don't wait.")]

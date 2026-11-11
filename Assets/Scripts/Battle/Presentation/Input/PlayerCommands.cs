@@ -9,6 +9,8 @@ namespace Featherguard.Battle.Presentation
         BattleUnit Selected { get; }
         bool SpecialArmed { get; }
         bool AcceptingInput { get; }
+        bool SpecialAvailable { get; }
+        bool CanSelect(BattleUnit hero);
         void Select(BattleUnit hero);
         void ToggleSpecial();
     }
@@ -53,6 +55,10 @@ namespace Featherguard.Battle.Presentation
             this.view = view;
         }
 
+        public bool SpecialAvailable => CanCommand && model.Rage.Ready && Selected?.Definition.special != null;
+
+        public bool CanSelect(BattleUnit hero) => model.CanCommand(hero);
+
         public void Open()
         {
             AcceptingInput = model.AwaitingInput;
@@ -90,9 +96,8 @@ namespace Featherguard.Battle.Presentation
 
         public void ToggleSpecial()
         {
-            if (!CanCommand || !model.Rage.Ready || Selected == null) return;
+            if (!SpecialAvailable) return;
             var special = Selected.Definition.special;
-            if (special == null) return;
             if (special.TargetsAll)
             {
                 Submit(special, null);

@@ -15,12 +15,14 @@ namespace Featherguard.Game
     {
         readonly BattleHud hud;
         readonly MetaProgression meta;
+        readonly float afterVictory;
         readonly Dictionary<BattleUnit, int> killRewards = new();
 
-        public RunFlow(BattleHud hud, MetaProgression meta)
+        public RunFlow(BattleHud hud, MetaProgression meta, float afterVictory)
         {
             this.hud = hud;
             this.meta = meta;
+            this.afterVictory = afterVictory;
         }
 
         public void TrackKills(RunSession session, BattleModel model, BattlePresenter presenter)
@@ -37,7 +39,7 @@ namespace Featherguard.Game
                 yield break;
             }
             session.RecordVictory(result);
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(afterVictory);
             if (session.IsFinal)
             {
                 Finish(session, true);
