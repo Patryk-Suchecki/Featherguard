@@ -56,7 +56,11 @@ namespace Featherguard.EditorTools
                 u.boss.enrageAt = 0.5f;
                 u.boss.enrageSummons = new[] { units["Grunt"], units["Grunt"] };
             });
-            Add("Bies", "Bies", Team.Enemies, 260, 2.26f, 1f, "BiesAttack", null, "BiesSpecial", u => u.ai.specialEvery = 3);
+            Add("Bies", "Bies", Team.Enemies, 260, 2.26f, 1f, "BiesAttack", null, "BiesSpecial", u =>
+            {
+                u.ai.actionsPerTurn = 2;
+                u.ai.specialEvery = 3;
+            });
             return (units, visuals.ToArray());
         }
     }

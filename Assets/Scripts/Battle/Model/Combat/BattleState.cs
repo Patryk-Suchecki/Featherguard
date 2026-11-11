@@ -59,10 +59,11 @@ namespace Featherguard.Battle
             Log.Emit(new RageChanged { Value = Rage.Value, Max = Rage.Max });
         }
 
-        public void DealDamage(BattleUnit actor, BattleUnit target, int power, AbilityDefinition ability)
+        public void DealDamage(BattleUnit actor, BattleUnit target, int power, AbilityDefinition ability, ActionTiming timing = default)
         {
             if (!target.IsAlive) return;
-            var roll = DamageCalculator.Roll(power, actor.Stat(StatType.Damage), actor.Stat(StatType.CritChance), actor.Stat(StatType.CritDamage), Rules.damageVariance, Random);
+            float multiplier = actor.Stat(StatType.Damage) * timing.DamageMultiplier(Rules);
+            var roll = DamageCalculator.Roll(power, multiplier, actor.Stat(StatType.CritChance), actor.Stat(StatType.CritDamage), Rules.damageVariance, Random);
             int dealt = target.ApplyDamage(roll.Amount);
             Log.Emit(new Damaged { Source = actor, Target = target, Ability = ability, Amount = dealt, Critical = roll.Critical });
             AddRage(dealt * (actor.Team == Team.Heroes ? Rules.heroRagePerDamage * actor.Stat(StatType.RageGain) : Rules.enemyRagePerDamage));
