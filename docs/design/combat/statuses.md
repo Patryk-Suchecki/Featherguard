@@ -85,7 +85,7 @@ For one hit of a damaging ability:
 2. × the attacker's damage stat: 1 + the sum of its Damage modifiers (Empower +25%, Curse −30%, so both together give −5%).
 3. × the timing multiplier (`ActionTiming`: attack bonus, block reduction).
 4. × a random variance within `BattleRules.damageVariance`.
-5. Critical hit: rolled against the attacker's crit chance (base + modifiers, so Mark adds +50 points); a crit multiplies by its crit damage (1.5).
+5. Critical hit: rolled against the attacker's crit chance plus the target's crit chance taken (Mark on the target adds +50 points); a crit multiplies by the attacker's crit damage (1.5).
 6. × the target's damage taken: 1 + the sum of its DamageTaken modifiers (Freeze +30%).
 7. Round once to a whole number.
 8. Absorb damage soaks what it can; the rest is subtracted from health.
@@ -141,7 +141,7 @@ Values live in the status assets (`StatusDefinition`) and in each ability's `Sta
 | Shield | absorb damage | no | Refresh | 2 turns, 30 base points |
 | Taunt | force targeting | no | Refresh | 1 turn |
 | Stun | skip turn | yes | Refresh | 1 turn |
-| Mark | crit chance +50 points, consumed by a critical hit | yes | Refresh | 2 turns or the first crit |
+| Mark | crit chance against the owner +50 points (`CritChanceTaken`), consumed by a critical hit | yes | Refresh | 2 turns or the first crit |
 | Empower | damage +25% | no | Refresh | 1 turn |
 
 The prototype's Poison and Weaken stay for the bird run until the heroes are reworked (#26); Shield becomes the absorbing Shield above, and Empower changes to +25% for its turns instead of +50% consumed on attack.
@@ -157,7 +157,7 @@ These become EditMode tests on the model:
 - Shield soaks damage over time;
 - Freeze adds 30% damage taken, and a Frozen enemy acts after the others, keeping slot order;
 - Empower and Curse on the same attacker add up to −5%;
-- Mark adds 50 points of crit chance and leaves after the owner's first critical hit taken;
+- Mark adds 50 points of crit chance to hits against its owner and leaves after the owner's first critical hit taken;
 - a `Perfect timing` application happens only with a perfect attack, and never on enemy actions;
 - cleanse removes harmful statuses only;
 - a stunned taunting unit still forces targeting;
