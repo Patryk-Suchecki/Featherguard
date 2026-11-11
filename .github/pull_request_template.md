@@ -1,6 +1,6 @@
 Closes #
 
-<!-- Title: "#<issue> <task>". Branch: "<type>/<issue>-<short-task>". -->
+<!-- Title: "<task>". Branch: "<type>/<short-task>". No issue numbers in either; only "Closes #" above. -->
 
 ## What changed
 
@@ -9,4 +9,4 @@ Closes #
 - [ ] Played it in the editor
 - [ ] `docs/GAME_DESIGN.md` updated if content or rules changed
 - [ ] No unrelated changes to `Battle.unity`, `ProjectSettings` or regenerated assets
-- [ ] Commits are `#<issue> <task>` with no AI attribution
+- [ ] Commits name the task, with no issue number and no AI attribution
