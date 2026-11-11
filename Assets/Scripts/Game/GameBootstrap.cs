@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
+using Featherguard.Core;
 using Featherguard.Feel;
 using Featherguard.Meta;
 using Featherguard.Run;
@@ -44,16 +45,17 @@ namespace Featherguard.Game
             if (session == null)
             {
                 yield return CampScreen.Show(hud, Meta);
-                session = RunSession.Start(config.run, config.heroes);
+                session = RunSession.Start(config.run, config.heroes, UnityRandomSource.Shared);
                 Meta.ApplyTo(session);
             }
             hud.BindWallet(session.Wallet);
 
-            var model = new BattleModel(session.CreateBattleSetup(), config.rules);
+            var model = new BattleModel(session.CreateBattleSetup(), config.rules, session.Random);
             model.EnemyKilled += enemy => killRewards[enemy] = session.RecordKill();
             battle = new BattleController(model, new BattleServices
             {
                 Config = config.presentation,
+                Visuals = new AbilityVisualsLibrary(config.presentation.abilities),
                 Factory = new UnitViewFactory(config.presentation, config.flashMaterial, config.ringMaterial),
                 View = hud,
                 Feedback = feedback,
@@ -67,7 +69,10 @@ namespace Featherguard.Game
             yield return Conclude(battle.Result);
         }
 
-        void Update() => battle?.Tick();
+        void Update()
+        {
+            if (!GameClock.Paused) battle?.Tick();
+        }
 
         void OnUnitDefeated(UnitView unit)
         {
