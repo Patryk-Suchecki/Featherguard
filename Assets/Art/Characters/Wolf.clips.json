@@ -1,0 +1,63 @@
+{
+  "clips": [
+    {
+      "name": "Idle",
+      "start": 1,
+      "end": 48,
+      "loop": true,
+      "events": []
+    },
+    {
+      "name": "Attack",
+      "start": 1,
+      "end": 26,
+      "loop": false,
+      "events": [
+        {
+          "name": "OnHitFrame",
+          "frame": 10
+        }
+      ]
+    },
+    {
+      "name": "Cast",
+      "start": 1,
+      "end": 40,
+      "loop": false,
+      "events": [
+        {
+          "name": "OnHitFrame",
+          "frame": 20
+        }
+      ]
+    },
+    {
+      "name": "Hit",
+      "start": 1,
+      "end": 12,
+      "loop": false,
+      "events": []
+    },
+    {
+      "name": "Death",
+      "start": 1,
+      "end": 40,
+      "loop": false,
+      "events": []
+    },
+    {
+      "name": "Victory",
+      "start": 1,
+      "end": 40,
+      "loop": true,
+      "events": []
+    },
+    {
+      "name": "AttackWindup",
+      "start": 1,
+      "end": 12,
+      "loop": true,
+      "events": []
+    }
+  ]
+}
