@@ -24,12 +24,13 @@ In Slavic folklore the wolf is the beast of the borderland between the village a
 
 | Part | Colour |
 |---|---|
-| Back and tail | dark earth `#2F2A22` |
-| Flanks and legs | dusty grey-brown `#6E6152` |
-| Belly, inner legs, muzzle | faded rye `#A39A5B` |
+| Back and tail | dark earth `#33271F` |
+| Flanks and legs | dusty grey-brown `#5E4A3B` |
+| Belly, inner legs, muzzle | faded rye `#8A6C4C` |
 | Eyes | glowing amber `#FFB02E` |
 | Possession marks along the spine and shoulders | ember cracks `#B5541F` |
 | Claws, nose, lips | near black `#140D0B` |
+| Inside of the mouth | dark red `#4A1F1A` |
 
   Her overall value stays darker than the heroes'; the eyes and marks are the only saturated colours, shared with the Bies so the player sees whom she serves. The plain Wolf swaps them for dull yellow eyes `#B59A3A` and no marks; the marks stay a separate texture layer in the `.blend`, so both albedos come from one bake.
 - **Concept sheet:** `Art/Concepts/Wolf.png`: side, front and back on one ground line in a neutral standing pose, plus the stalking pose.
@@ -57,13 +58,13 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 
 | Clip | What happens | `OnHitFrame` |
 |---|---|---|
-| `Idle` (loops) | Low stalking stance; heavy breathing moves the ribs and ruff, the head sways and sniffs, the ears twitch, the tail flicks low. | – |
-| `AttackWindup` (loops) | A crouch held on bent hind legs, lips curled, a growl that shakes the ruff, so the game can stretch the wind-up before the block. | – |
-| `Attack` | Crouch, a fast lunge with the head forward and jaws open, the bite, a quick shake of the head, back to the stance. | the bite's contact frame |
-| `Cast` | She sits back on her haunches, raises the head and howls, then drops back to the stance. | the peak of the howl |
-| `Hit` | A short yelp and recoil, the head jerks away, the ears flatten, then the snarl returns. | – |
-| `Death` | Her legs give way and she falls on her side; a short twitch, the marks fade, the last frame holds. | – |
-| `Victory` (loops) | She raises the head and gives a short howl, the tail swishes. | – |
+| `Idle` (loops, 48 frames, 1.6 s) | Low stalking stance; heavy breathing moves the ribs and ruff, the head sways and sniffs, the ears twitch, the tail flicks low. | – |
+| `AttackWindup` (loops, 12 frames, 0.4 s) | A crouch held on bent hind legs, lips curled, a growl that shakes the ruff, so the game can stretch the wind-up before the block. | – |
+| `Attack` (26 frames, 0.87 s) | Crouch, a fast lunge with the head forward and jaws open, the bite, a quick shake of the head, back to the stance. | frame 10, the bite's contact |
+| `Cast` (40 frames, 1.33 s) | She sits back on her haunches, raises the head and howls, then drops back to the stance. | frame 20, the peak of the howl |
+| `Hit` (12 frames, 0.4 s) | A short yelp and recoil, the head jerks away, the ears flatten, then the snarl returns. | – |
+| `Death` (40 frames, 1.33 s) | Her legs give way and she falls on her side; a short twitch, the marks fade, the last frame holds. | – |
+| `Victory` (loops, 40 frames, 1.33 s) | She raises the head and gives a short howl, the tail swishes. | – |
 
 ## Sounds
 
@@ -77,17 +78,18 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 
 - [ ] Character sheet approved (this sheet, #86)
 - [ ] Concept sheet (#40)
-- [ ] Model (#40)
-- [ ] Texture (#40, baked from the sculpt, 1024 × 1024): possessed and plain albedos
-- [ ] Rig (#41, the first quadruped rig; the art pipeline gains a quadruped section)
-- [ ] `Idle`
-- [ ] `AttackWindup`
-- [ ] `Attack`
-- [ ] `Cast`
-- [ ] `Hit`
-- [ ] `Death`
-- [ ] `Victory`
-- [ ] Exported to `Assets/Art/Characters`
+- [x] Model (#40)
+- [x] Texture (#40, baked from the sculpt, 1024 × 1024): possessed albedo
+- [ ] Plain albedo (no marks, dull eyes)
+- [x] Rig (#41, the first quadruped rig; the art pipeline gains a quadruped section)
+- [x] `Idle`
+- [x] `AttackWindup`
+- [x] `Attack`
+- [x] `Cast`
+- [x] `Hit`
+- [x] `Death`
+- [x] `Victory`
+- [x] Exported to `Assets/Art/Characters`
 - [ ] Portrait
 - [ ] VFX: marks flare, bite flash, howl ring, hit fur puff, death fade
 - [ ] Sounds: snarl, bite, howl, answering howl, yelp, whimper and fall
