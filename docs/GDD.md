@@ -27,26 +27,35 @@ The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 
 | Place | Role | Boss |
 |---|---|---|
-| Sacred Oak Stronghold | camp and main screen | – |
+| Sacred Oak Stronghold | main screen | – |
 | Rye Fields | land 1, open from the start | Lady Midday |
 | Marshes | land 2 | Water Maiden |
 | Old Forest | land 3 | Lady Leshy |
 | Bald Mountain | land 4 | Dragoness |
 | Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | land 5 | to be decided |
 
-The Stronghold grows with the player. It has a forge, the Wise Woman's hut (potions and bestiary), a tavern (rumours and recruitment), the Priest at the Sacred Oak (story missions) and the gate the party sets out through.
+The Stronghold is the main screen and grows with the player. Its buildings:
+- **Forge:** forging equipment (see Forge).
+- **Wise Woman's Hut:** brewing potions, nothing else.
+- **Sacred Oak:** the Priest's story missions and, after the MVP, the bestiary (unlocked by fighting, with boss weaknesses).
+- **Tavern:** the entrances to the two extra modes, Endless Run (Veles' Well) and Arena (Kupala Night).
+- **Shop:** a merchant with a rotating offer (see Shop).
 
-Extra modes: Kupala Night (arena), Veles' Well (endless mode), Buyan Island (bonus act).
+Extra modes: Veles' Well (Endless Run) and Kupala Night (Arena), both entered from the tavern, and Buyan Island (bonus act).
 
 ## Loop and screen flow
 
-The Stronghold is the main screen with a single **Set out** button. The land and level are chosen on the land map, and after a battle the player returns to the map.
+**Embark** in the Stronghold opens the world map, where the player picks a land and an activity. Every level follows the same flow:
 
-Long-term loop: a level on the map → rewards and materials → the forge in the Stronghold → new equipment and characters → harder story missions.
+Stronghold → world map → battle preparation (a separate screen for a single fight and for a waves fight) → battle → result (victory or defeat) → world map.
+
+The **Camp** is a separate screen, not the main screen. It is built around a campfire where every hero has a fixed place, so the camp fills up as the player collects heroes. In the Camp the player picks the party of 3, looks at a hero's description and equipment, and opens the Storage and the potion bag.
+
+Long-term loop: a level on the map → rewards (materials, gold, loot, schematics, EXP) → the forge and the Wise Woman's Hut in the Stronghold → new equipment and potions → harder story missions.
 
 ## Characters and party
 
-The player collects heroes into a roster (6 for the first alpha and 12–15 in the full game; the roster is built to keep growing after that) and picks 3 before each battle. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
+The player collects heroes into a roster (6 for the first alpha and 12–15 in the full game; the roster is built to keep growing after that) and picks a party of 3 in the Camp. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
 
 Starting roster (prototype):
 
@@ -61,7 +70,7 @@ Starting roster (prototype):
 
 Further classes (Paladin, Berserker, Druid, Alchemist, Necromancer, Rogue, Monk, Engineer, Oracle) are planned and are waiting for their Slavic versions.
 
-Character progression: every character has its own level (cap 10).
+Character progression: heroes earn EXP in battles, and every hero has its own level (cap 10).
 
 ## Combat
 
@@ -130,11 +139,15 @@ The game has 5 lands on a single map. At the start only the Rye Fields are open;
 
 **Story missions:** every land has 5 main story missions (25 in total). The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear.
 
-**Side activities:** a land the player visits offers up to 3 activities drawn at random from its pool, for example a riddle, a battle, a wave battle or a miniboss. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage, and they are the main source of that land's materials.
+**Side activities:** a land the player visits offers up to 3 activities drawn at random from its pool. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage.
 
-A land's **Law** is a combat rule that applies to battles in that land:
+**Activity types** on the world map: Single fight, Waves fight, Puzzle fight, Elite fight, Boss fight and Main quest (a story mission).
 
-| Land | Law | Who shines | Materials |
+**Rewards** of levels are of these kinds: materials, gold, loot (equipment), schematics, EXP, unlocks and story progress.
+
+A land's **Law** is a combat rule that applies to battles in that land. Every land also has 4 materials (see Materials); the table lists candidate names, not yet assigned to a kind:
+
+| Land | Law | Who shines | Material candidates |
 |---|---|---|---|
 | Rye Fields | Noon Heat: every 3rd turn, characters without a Shield lose part of their HP | Shields, tempo | iron, flax |
 | Marshes | Depths: some enemies submerge; wisps switch targets | area attacks, cleansing | amber, herbs |
@@ -146,40 +159,48 @@ Progress and forcing:
 - Party strength = party level (the average level of the 3 picked heroes) + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
 - Every unlocked story mission and activity can be attempted right away. Winning above your strength grants **Daring**: +50% rewards.
 
-**Rumours from the Road** (a board in the tavern) encourage detours from the story:
-- 3 rumours are posted at a time; new ones appear after every story mission, with no time pressure.
-- A rumour points to a neglected land, has a modifier (for example no healer) and a reward visible up front.
-- Most of the roster (for example 9 of 15 characters) joins only through rumours.
-- After the MVP: the Wise Woman's Book (a bestiary unlocked by fighting, with boss weaknesses) and Land Favour (a merchant and a blessing that weakens the Law).
+After the MVP: Land Favour (a merchant and a blessing that weakens the Law).
 
 ## Equipment, forge and economy
 
 Power grows mainly through equipment, while new heroes bring new tactical options rather than raw strength.
 
-**Equipment:** every character has 2 slots, a weapon (attack) and an artifact (health). Weapons are made for a specific role; artifacts are universal and fit everyone. Items from the same set give a bonus (for example "Frost Set": attacks on Frozen enemies Stun); every land has 1–2 sets.
+**Equipment:** every character has 2 slots, a weapon (attack) and an artifact (health). Weapons are made for a specific role; artifacts are universal and fit everyone. Every weapon and artifact has a minimum hero level needed to equip it. Items from the same set give a bonus (for example "Frost Set": attacks on Frozen enemies Stun); every land has 1–2 sets.
 
 | Rarity | Special trait | Source |
 |---|---|---|
-| Common | none | expeditions, forge |
-| Rare | 1 weak trait | expeditions, forge |
+| Common | none | level loot, forge |
+| Rare | 1 weak trait | level loot, forge |
 | Epic | 1 strong trait | bosses, forge with rare materials |
-| Legendary | a play-style-changing trait + a set piece | bosses, rumours |
+| Legendary | a play-style-changing trait + a set piece | bosses |
 
-**Forge:** the player picks a recipe, puts in materials and plays a forging minigame. *TODO*
+The shop can also offer equipment.
 
-**Potions** are brewed by the Wise Woman (healing, cleansing, Rage) and are used in battle instead of a character's action. *TODO*
+**Storage** is the screen with all the player's equipment: it filters by type and role, shows which hero wears an item, and lets the player unequip and salvage items. A separate tab holds the materials.
+
+**Salvage:** equipment (not potions) can be salvaged. The item is destroyed and the player gets materials back. Items cannot be sold.
+
+**Materials:** every land has 4 kinds of materials: Common, Uncommon, Rare and Legendary. Materials are used to forge equipment and to brew potions. They come from level rewards, Salvage and the shop.
+
+**Schematics** are a kind of level reward and can also be bought in the shop. A schematic unlocks a recipe: without it the matching item cannot be forged, or the matching potion brewed.
+
+**Forge:** the player picks a recipe unlocked by a schematic, puts in materials and gold, and plays a forging minigame. The forged item goes to the Storage. *TODO:* the minigame; the current proposal is a timing ring like the attack's, with three strikes (see Open questions).
+
+**Potions** (healing, cleansing, Rage) are brewed at the Wise Woman's Hut from a schematic, materials and gold. They are single-use. The player takes at most 3 potions into a battle, chosen beforehand from the potion bag. In battle, using a potion replaces a hero's action.
+
+**Shop:** a merchant with 3 slots, each holding a random item from the shop's pool: materials, schematics, equipment or potions. The offer changes on a timer, for now every 24 hours.
 
 | Currency | Source | Spent on |
 |---|---|---|
-| Gold | battles, selling items | forge, potions, merchants |
-| Land materials | expeditions in a specific land | recipes |
+| Gold | battles | forge, potions, shop |
+| Land materials | levels in that land, Salvage, shop | recipes (forging and brewing) |
 
 ## Art direction and platform
 
 The style is dark cartoon with good-looking characters: a thick hand-drawn outline, heavy cool shadows, a single warm light, and folklore instead of generic fantasy. Rendered in 3D so it reads like a hand-drawn illustrated card game, always our own: never copy another game's characters, shapes or art. Chunky silhouettes that read at phone size, banded toon shading, dark muted backgrounds with saturated characters, a grim but playful storybook tone, and UI and VFX in the same flat, outlined look. The concrete rules, palettes and shader settings are in [`STYLE_GUIDE.md`](STYLE_GUIDE.md).
 
 - **3D:** the whole game is 3D and everything is modelled; there are no 2D sprites.
-- **Perspective:** the camp and the land map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
+- **Perspective:** the camp and the world map in a light top-down view (3/4); combat seen from the side at a slight angle (a side-on isometric view); heroes face right, enemies face left.
 - **Animation:** skeletal animation of the 3D models; snappy and pose-to-pose, with strong anticipation, fast hits, short holds on key poses and squash and stretch on impacts.
 - **Audio:** a clear perfect-timing sound is part of the mechanics; music and voices come later.
 - **Interface:** shape and sound, not only colour (accessible for colour-blind players); fast-forward of animations ×2 and ×3.
@@ -195,5 +216,19 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - Where each land's boss sits among its 5 story missions, and which story mission unlocks which land.
 - Whether a land's Law grows stronger as the player progresses through that land.
 - How threat levels (1–10) are assigned to story missions and side activities.
-- How a riddle plays, as a side activity and as Lady Midday's mechanic.
-- Whether Rumours from the Road are their own system or a kind of side activity.
+- How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
+- How the player gets new heroes; the tavern offers no recruitment.
+- Where equipment of each rarity comes from (level loot, forge, shop).
+- Whether the party of 3 picked in the Camp can be changed on the battle preparation screen, so a party is still built for each specific fight.
+- Materials use Common, Uncommon, Rare and Legendary, while equipment uses Common, Rare, Epic and Legendary: should the two scales differ?
+- The names of the 4 materials of each land.
+- How Salvage pays out: how many and which materials come back, and whether an item a hero wears can be salvaged.
+- The forging minigame: the proposal is a timing ring like the attack's, with three strikes. Does the result affect the item's quality?
+- Costs of forging and brewing, shop prices, and what happens to a shop slot after a purchase.
+- Defeat: the wireframe shows no rewards and no EXP, a Retry button and a return to the map. Does that apply, and are the potions used in the battle lost?
+- Endless Run (Veles' Well) and Arena (Kupala Night): rules, rewards and scoring.
+- Where Buyan Island is entered.
+- The battle preparation screens show "Difficulty: Medium / Hard", while the threat rating uses Easy, Even, Dangerous and Madness: which names do we use?
+- "Elite fight" as an activity type shares its name with the Elite enemy archetype.
+- The wireframes show equipment rarity and material kind only by the colour of the frame, while the interface must read by shape and sound, not only colour.
+- Whether the merchant of Land Favour is the Stronghold shop or a separate one.
