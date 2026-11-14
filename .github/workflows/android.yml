@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   apk:
@@ -64,3 +64,21 @@ jobs:
           name: Featherguard-${{ github.run_number }}
           path: build/Android
           retention-days: 30
+
+      - name: Name the release
+        id: version
+        if: github.ref == 'refs/heads/release'
+        run: |
+          version=$(grep -m1 'bundleVersion:' ProjectSettings/ProjectSettings.asset | awk '{print $2}')
+          echo "tag=v$version-build.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          cp build/Android/Featherguard.apk "Featherguard-$version-build.${{ github.run_number }}.apk"
+
+      - uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/release'
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Featherguard ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          generate_release_notes: true
+          files: Featherguard-*.apk
