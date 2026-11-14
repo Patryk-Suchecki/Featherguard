@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Featherguard.Battle;
 using Featherguard.Run;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ namespace Featherguard.Meta
             this.store = store;
             Data = store.Load();
         }
+
+        public HeroRoster CreateRoster(IReadOnlyList<UnitDefinition> heroes, int seats) => new(heroes, seats, Data, store);
 
         public int Level(PerkDefinition perk) => Data.perks.FirstOrDefault(p => p.id == perk.Id)?.level ?? 0;
         public bool IsMaxed(PerkDefinition perk) => Level(perk) >= perk.maxLevel;

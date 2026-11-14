@@ -15,6 +15,9 @@ namespace Featherguard.EditorTools
         static readonly Vector3 SignpostPosition = new(8f, 0f, -4.5f);
         static readonly Color WarmLight = new(1f, 0.62f, 0.3f);
 
+        const float SeatRadius = 2.6f;
+        const float SeatArcStart = 165f;
+        const float SeatArcEnd = 15f;
         const int GroundTiles = 6;
         const float GroundTileSize = 8f;
 
@@ -52,7 +55,7 @@ namespace Featherguard.EditorTools
 
             var world = new GameObject("World").transform;
             Ground(world);
-            var (campfire, seats) = Campfire(world);
+            var (campfire, seats) = Campfire(world, config.campSeats);
             Forge(world, new Vector3(-8f, 0f, 3f));
             WiseWomansHut(world, new Vector3(-4f, 0f, 8f));
             SacredOak(world, new Vector3(4.5f, 0f, 9f));
@@ -67,6 +70,7 @@ namespace Featherguard.EditorTools
             serialized.FindProperty("config").objectReferenceValue = config;
             serialized.FindProperty("sceneCamera").objectReferenceValue = camera;
             serialized.FindProperty("campfire").objectReferenceValue = campfire;
+            serialized.FindProperty("campView").objectReferenceValue = CampView(world);
             var seatsProperty = serialized.FindProperty("seats");
             seatsProperty.arraySize = seats.Length;
             for (int i = 0; i < seats.Length; i++)
@@ -137,7 +141,7 @@ namespace Featherguard.EditorTools
             Object.DestroyImmediate(road.GetComponent<Collider>());
         }
 
-        (Transform, Transform[]) Campfire(Transform world)
+        (Transform, CampSeat[]) Campfire(Transform world, int seatCount)
         {
             var camp = Place(world, "Campfire", StrongholdPlaceKind.Camp, "Camp", CampfirePosition, new Vector3(0f, -0.3f, -1.8f));
             for (int i = 0; i < 8; i++)
@@ -150,18 +154,45 @@ namespace Featherguard.EditorTools
             var flame = Part(PrimitiveType.Sphere, "Flame", camp, new Vector3(0f, 0.55f, 0f), new Vector3(0.5f, 0.9f, 0.5f), palette.Flame).transform;
             Lamp(camp, "Fire Light", new Vector3(0f, 1.3f, 0f), new Color(1f, 0.55f, 0.2f), 14f, 16f, null, 0.35f, flame);
 
-            var party = new GameObject("Party").transform;
-            party.SetParent(world, false);
-            var seats = new[] { new Vector3(-2f, 0f, 1.1f), new Vector3(0f, 0f, 2.2f), new Vector3(2f, 0f, 1.1f) }
-                .Select((position, i) =>
-                {
-                    var seat = new GameObject($"Seat {i + 1}").transform;
-                    seat.SetParent(party, false);
-                    seat.position = CampfirePosition + position;
-                    return seat;
-                }).ToArray();
             FinishPlace(camp, 1.6f);
-            return (camp, seats);
+            return (camp, Seats(world, seatCount));
+        }
+
+        CampSeat[] Seats(Transform world, int count)
+        {
+            var party = new GameObject("Seats").transform;
+            party.SetParent(world, false);
+            return Enumerable.Range(0, count).Select(i =>
+            {
+                float angle = Mathf.Lerp(SeatArcStart, SeatArcEnd, count > 1 ? i / (count - 1f) : 0.5f) * Mathf.Deg2Rad;
+                var direction = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+                var seat = new GameObject($"Seat {i + 1}").transform;
+                seat.SetParent(party, false);
+                seat.position = CampfirePosition + direction * SeatRadius;
+                seat.rotation = Quaternion.LookRotation(-direction);
+                Decoration(PrimitiveType.Cylinder, "Stump", seat, new Vector3(0f, 0.18f, -0.55f), new Vector3(0.45f, 0.18f, 0.45f), palette.WoodDark);
+                var collider = seat.gameObject.AddComponent<CapsuleCollider>();
+                collider.center = Vector3.up * 0.8f;
+                collider.height = 1.7f;
+                collider.radius = 0.6f;
+                var label = new GameObject("Label").transform;
+                label.SetParent(seat, false);
+                label.localPosition = Vector3.up * 2.1f;
+                var component = new SerializedObject(seat.gameObject.AddComponent<CampSeat>());
+                component.FindProperty("index").intValue = i;
+                component.FindProperty("labelAnchor").objectReferenceValue = label;
+                component.ApplyModifiedPropertiesWithoutUndo();
+                return seat.GetComponent<CampSeat>();
+            }).ToArray();
+        }
+
+        static Transform CampView(Transform world)
+        {
+            var view = new GameObject("Camp View").transform;
+            view.SetParent(world, false);
+            view.position = CampfirePosition + new Vector3(0f, 6.5f, -7f);
+            view.rotation = Quaternion.LookRotation(CampfirePosition + new Vector3(0f, 0.8f, 1.4f) - view.position);
+            return view;
         }
 
         void Forge(Transform world, Vector3 position)
@@ -388,7 +419,7 @@ namespace Featherguard.EditorTools
 
         sealed class Palette
         {
-            public readonly Material Ground = Lit("Ground", new Color(0.11f, 0.1f, 0.09f));
+            public readonly Material Ground = Lit("Ground", new Color(0.11f, 0.16f, 0.09f));
             public readonly Material Road = Lit("Road", new Color(0.17f, 0.14f, 0.11f));
             public readonly Material Wood = Lit("Wood", new Color(0.27f, 0.19f, 0.13f));
             public readonly Material WoodDark = Lit("Wood Dark", new Color(0.17f, 0.12f, 0.09f));
@@ -397,7 +428,7 @@ namespace Featherguard.EditorTools
             public readonly Material RoofDark = Lit("Roof Dark", new Color(0.12f, 0.1f, 0.11f));
             public readonly Material RoofMoss = Lit("Roof Moss", new Color(0.13f, 0.16f, 0.11f));
             public readonly Material Door = Lit("Door", new Color(0.06f, 0.05f, 0.05f));
-            public readonly Material Bark = Lit("Bark", new Color(0.15f, 0.13f, 0.12f));
+            public readonly Material Bark = Lit("Bark", new Color(0.2f, 0.17f, 0.08f));
             public readonly Material Withered = Lit("Withered", new Color(0.16f, 0.17f, 0.12f));
             public readonly Material Iron = Lit("Iron", new Color(0.12f, 0.12f, 0.13f));
             public readonly Material Bone = Lit("Bone", new Color(0.76f, 0.73f, 0.64f));

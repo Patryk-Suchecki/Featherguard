@@ -22,6 +22,7 @@ namespace Featherguard.UI
         Camera sceneCamera;
         Canvas canvas;
         RectTransform labelLayer;
+        RectTransform settingsButton;
         Text toast;
         Coroutine toastRoutine;
 
@@ -42,19 +43,27 @@ namespace Featherguard.UI
             }
 
             var safe = SafeArea.Create(root);
-            var settings = Ui.Rect("Settings", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -24f), new Vector2(240f, 84f));
+            var settings = settingsButton = Ui.Rect("Settings", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -24f), new Vector2(240f, 84f));
             Ui.Button(settings, SettingsColor, () => onSettings());
             Ui.Label(Ui.Stretch("Label", settings), "Settings", 34, TextAnchor.MiddleCenter, PlaceNameColor);
 
-            toast = Ui.Label(Ui.Rect("Toast", safe, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(1200f, 70f)),
+            toast = Ui.Label(Ui.Rect("Toast", safe, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 120f), new Vector2(1200f, 70f)),
                 "", 46, TextAnchor.MiddleCenter, ToastColor);
         }
 
-        public void ComingSoon(string place)
+        public void ComingSoon(string place) => Toast($"{place}: coming soon");
+
+        public void Toast(string text)
         {
             FeedbackHub.Ui(SfxId.Click);
             if (toastRoutine != null) StopCoroutine(toastRoutine);
-            toastRoutine = StartCoroutine(ShowToast($"{place}: coming soon"));
+            toastRoutine = StartCoroutine(ShowToast(text));
+        }
+
+        public void SetOverviewVisible(bool visible)
+        {
+            labelLayer.gameObject.SetActive(visible);
+            settingsButton.gameObject.SetActive(visible);
         }
 
         void LateUpdate()
