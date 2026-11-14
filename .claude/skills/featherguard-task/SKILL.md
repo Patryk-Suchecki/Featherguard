@@ -81,7 +81,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
 ## 7. After review and merge
 
 - Never approve or merge without your developer asking in the conversation.
-- A squash merge of a parent PR retargets the stacked child to `main`, dismisses its approval and usually leaves conflicts. Merge `main` into the child (when git cannot tell what is already in, `git merge-tree --merge-base=<old parent tip>` helps), push, and ask for a fresh approval.
+- **Merging a stack:** new commits do not dismiss approvals on PRs into `main`. Merge the stack from the top: squash each child into its parent branch, add the child's `Closes #<issue>` to the parent's description, then merge the parent into `main`. Merging the parent first instead retargets the child to `main` and usually leaves conflicts; then merge `main` into the child (when git cannot tell what is already in, `git merge-tree --merge-base=<old parent tip>` helps) and push.
 - Never rename a PR's head branch: GitHub closes the PR.
 - Unlock LFS files you locked once the PR is merged (`git lfs locks`, `git lfs unlock <path>`).
 - Remove worktrees you created when their branch is merged (`git worktree remove <path>`; on Windows a very deep `Library` folder may need deleting by hand first).
