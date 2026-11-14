@@ -99,7 +99,13 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 ## Working as Claude in this repo
 
-- Each developer has their own Claude session; `CLAUDE.md` and `.claude/settings.json` are the only shared instructions. Personal memory is not shared, so anything both sessions must follow belongs here.
+- Each developer has their own Claude session; `CLAUDE.md`, `.claude/settings.json` and the skills in `.claude/skills/` are the only shared instructions. Personal memory and personal skills are not shared, so anything both sessions must follow belongs here or in a shared skill.
+- `CLAUDE.md` holds the rules; the shared skills hold the step-by-step procedures. Use them:
+  - `featherguard-task`: from the issue to the PR (worktrees while Unity is open, Rebuild and its noise, tests through the Unity CLI or batch mode, stacked PRs);
+  - `featherguard-spec`: specs and character sheets (draft with proposals, the developer decides, one spec per PR);
+  - `featherguard-character`: concept prompts, Blender reference images (`scripts/make_refs.py`), modelling through the Blender connection, export;
+  - `systematic-debugging`, `verification-before-completion` and `receiving-code-review`: general habits (MIT, from obra/superpowers).
+  Change a procedure by changing its skill in a PR, like a rule.
 - Start every change from an issue. If there is none, propose one and create it with `gh issue create` using the matching template once your developer agrees.
 - Branch from an up-to-date `main`, keep the PR small, run the tests, push, and open the PR with `gh pr create` following `.github/pull_request_template.md`.
 - Never do these without your developer explicitly asking in this conversation:
