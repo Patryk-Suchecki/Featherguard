@@ -65,6 +65,8 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 
 **Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy, Bleed (6 per turn, 3 turns). On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. Howl is a placeholder until Sic the Pack and the Wolves exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
 
+**Wolf (test only, not in the run):** the Bies' pack and the first hand-made quadruped. 70 HP. Bite – melee 14. On its first turn and every 3rd turn after, Pack Howl (Empower on all its allies, the Bies included) replaces the Bite. Placeholders until Sic the Pack and the enemy archetypes exist. The `BiesPack` encounter puts the Bies in the middle slot with a Wolf on each side (wave order Wolf, Bies, Wolf); pick it the same way as `BiesTest`.
+
 ### Boss: Chieftain
 
 - 460 HP.

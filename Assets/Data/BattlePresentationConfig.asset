@@ -33,6 +33,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc1deceab019a34459f7e760332d8d00, type: 2}
   - {fileID: 11400000, guid: 6d7d5a744e34bd241a5250e5e7c91ead, type: 2}
   - {fileID: 11400000, guid: 43472a2820f1f884d8589c329990bb67, type: 2}
+  - {fileID: 11400000, guid: 85b531df43ae43942bb2c8a84416dc68, type: 2}
+  - {fileID: 11400000, guid: 99bf127b935f8c34480bed7612cb7e4f, type: 2}
   units:
   - {fileID: 11400000, guid: 4be8ad472778ee14499739dd03395656, type: 2}
   - {fileID: 11400000, guid: 6185030ef33b36f409ffe48b223e2c24, type: 2}
@@ -44,6 +46,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 654f02ede6dd6eb4ba0bf14e1ff54f27, type: 2}
   - {fileID: 11400000, guid: 8bf3fd112318bee49bd283ea79f9799b, type: 2}
   - {fileID: 11400000, guid: 1d8a09e73e51dec428c91657a67463ec, type: 2}
+  - {fileID: 11400000, guid: 6228fb3bad9470c4caddc516902de376, type: 2}
   statuses:
   - {fileID: 11400000, guid: 9ddf30180fd616e48ba015120f4722fe, type: 2}
   - {fileID: 11400000, guid: 94a12508b60dabd4aa55ceee0ef730a6, type: 2}

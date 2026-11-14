@@ -61,6 +61,7 @@ namespace Featherguard.EditorTools
                 u.ai.actionsPerTurn = 2;
                 u.ai.specialEvery = 3;
             });
+            Add("Wolf", "Wolf", Team.Enemies, 70, 1.1f, 1f, "WolfAttack", null, "WolfSpecial", u => u.ai.specialEvery = 3);
             return (units, visuals.ToArray());
         }
     }
