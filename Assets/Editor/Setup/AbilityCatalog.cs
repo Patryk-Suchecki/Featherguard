@@ -54,7 +54,7 @@ namespace Featherguard.EditorTools
             }
 
             Add("KnightAttack", "Slash", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Hit, effects: Damage(30));
-            Add("KnightSupport", "Cover", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.75f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield"), Status("Taunt", onSelf: true) });
+            Add("KnightSupport", "Cover", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.75f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield", potency: 30), Status("Taunt", onSelf: true) });
             Add("KnightSpecial", "Shield Bash", AbilityTarget.Enemy, Melee, "Attack", new Color(1f, 0.7f, 0.25f), SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(85), Status("Stun") });
             Add("ArcherAttack", "Double Shot", AbilityTarget.Enemy, Arrow, "Attack", Spark, SfxId.Arrow, SfxId.Hit, hits: 2, effects: new[] { Damage(14), Status("Poison", 2, 5, 0.3f) });
             Add("ArcherSupport", "Battle Cry", AbilityTarget.Ally, Instant, "Cast", new Color(1f, 0.6f, 0.2f), SfxId.None, SfxId.Buff, effects: Status("Empower"));
@@ -68,10 +68,10 @@ namespace Featherguard.EditorTools
             Add("BruteAttack", "Crush", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(26), Status("Stun", chance: 0.25f) });
             Add("SpitterAttack", "Venom", AbilityTarget.Enemy, Magic, "Attack", new Color(0.5f, 1f, 0.2f), SfxId.Magic, SfxId.Hit, effects: new[] { Damage(9), Status("Poison", 2, 6, 0.7f) });
             Add("GuardAttack", "Spear Thrust", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Hit, effects: Damage(14));
-            Add("GuardSupport", "Shield Wall", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.7f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield"), Status("Taunt", onSelf: true) });
+            Add("GuardSupport", "Shield Wall", AbilityTarget.Ally, Instant, "Cast", new Color(0.45f, 0.7f, 1f), SfxId.None, SfxId.Shield, effects: new[] { Status("Shield", potency: 30), Status("Taunt", onSelf: true) });
             Add("ChieftainSpecial", "Earthquake", AbilityTarget.AllEnemies, Instant, "Attack", new Color(1f, 0.45f, 0.15f), SfxId.Smash, SfxId.Smash, heavy: true, effects: new[] { Damage(22), Status("Weaken", chance: 0.5f) });
             Add("ChieftainAttack", "Chieftain's Wrath", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(34), Status("Stun", chance: 0.35f) });
-            Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, impactEffect: new ClawSlashEffect(), effects: Damage(24));
+            Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, impactEffect: new ClawSlashEffect(), effects: new[] { Damage(24), Status("Bleed", 3, 6) });
             Add("BiesSpecial", "Howl", AbilityTarget.AllEnemies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Magic, heavy: true, effects: Status("Weaken"));
             return (abilities, visuals.ToArray());
         }

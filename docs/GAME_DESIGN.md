@@ -20,13 +20,17 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - it starts every battle at 0, unless a Rage slot reward set a starting value;
   - it fills by 0.45 per point of damage a hero deals (× that hero's RageGain) and by 0.25 per point of damage the enemies deal to the party;
   - a hero special consumes the whole meter. Enemy specials do not use the meter.
-- **Damage:** power × attacker's Damage stat × random 90–110%, then crit (15% base chance, ×1.5 base damage), then × the target's DamageTaken stat. Lifesteal heals the attacker by that share of the damage actually dealt.
+- **Damage:** power × attacker's Damage stat × timing × random 90–110%, then crit (15% base chance plus the target's CritChanceTaken, ×1.5 base damage), then × the target's DamageTaken stat, rounded once. A Shield soaks what it can; the rest is taken from health. Lifesteal heals the attacker by that share of the damage that reached health. Rage only counts damage that reached health.
 - **Healing:** power × the healer's Healing stat. No randomness and no crits; it cannot exceed max HP or revive a fallen unit.
 - **Statuses:**
-  - damage over time and stuns resolve at the start of the owner's turn, so poison can kill a unit before it acts;
+  - a status is a list of behaviours (`StatusBehaviour`): stat modifiers, damage over time, skip turn, force targeting, absorb damage, act last, consumed on attack, consumed by a critical hit;
+  - damage over time and stuns resolve at the start of the owner's turn, so poison can kill a unit before it acts; damage over time is potency × stacks, cannot crit or be blocked, is multiplied by DamageTaken, is soaked by Shield and gives Rage to the side that applied it;
   - a status applied by the owner's own side lasts through the owner's next turn; one applied by the opponent ticks down at the end of the owner's turn;
-  - reapplying keeps the stronger duration and potency;
-  - Poison damage is also multiplied by DamageTaken, so Shield halves it.
+  - reapplying keeps the stronger duration and potency; a stacking status (Burn) also adds a stack up to its maximum;
+  - Shield points are the application's potency × the caster's Healing stat; reapplying keeps the larger value, and the Shield leaves at 0 points;
+  - an application can require a perfect attack timing (`StatusCondition.PerfectTiming`);
+  - a cleanse (`CleanseEffect`) removes harmful statuses; death clears all statuses; heroes keep theirs between waves;
+  - enemies with an act-last status (Freeze) act after the other enemies.
 - **Attack timing:** an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it. A temporary ring asks for it (see Presentation) until #19 brings the final battle screen.
 - **Block timing:** with `BattleSetup.AwaitBlocks` the enemy turn stops before each damaging enemy action (an `EnemyWindup` event) and `Block` resolves it: Good removes 30% and Perfect 60% of the damage for every hero hit, and Perfect adds +10 Rage once. Enemy actions without damage resolve at once. The game turns it on together with the temporary timing prompts.
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
@@ -43,7 +47,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 | Hero | HP | Attack | Support | Special (full rage) |
 |---|---|---|---|---|
-| Robin (Knight) | 150 | Slash – melee, 30 dmg | Cover – Shield on an ally + Taunt on self | Shield Bash – melee, 85 dmg + Stun, heavy |
+| Robin (Knight) | 150 | Slash – melee, 30 dmg | Cover – Shield (30) on an ally + Taunt on self | Shield Bash – melee, 85 dmg + Stun, heavy |
 | Jay (Archer) | 105 | Double Shot – 2 arrows × 14 dmg, 30% Poison (5/turn, 2 turns) | Battle Cry – Empower on an ally | Arrow Rain – all enemies, 2 × 24 dmg + Poison (6/turn, 2 turns) |
 | Owl | 115 | Spark – magic bolt, 20 dmg, 35% Weaken | Mend – heal 40 | Forest Renewal – heal all allies 60 |
 
@@ -55,11 +59,11 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 | Shaman | 70 | Hex – bolt 12, 50% Weaken; Dark Mending – heal 25 |
 | Brute | 170 | Crush – melee 26, heavy, 25% Stun |
 | Spitter | 65 | Venom – bolt 9, 70% Poison (6/turn, 2 turns) |
-| Shieldbearer (Guard) | 110 | Spear Thrust – melee 14; Shield Wall – Shield on an ally + Taunt on self |
+| Shieldbearer (Guard) | 110 | Spear Thrust – melee 14; Shield Wall – Shield (30) on an ally + Taunt on self |
 
 Each encounter also scales enemy HP and damage, as listed in the Run section.
 
-**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy. On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. The abilities are placeholders until the target combat rules exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
+**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy, Bleed (6 per turn, 3 turns). On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. Howl is a placeholder until Sic the Pack and the Wolves exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
 
 ### Boss: Chieftain
 
@@ -72,14 +76,19 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 
 | Status | Effect |
 |---|---|
-| Shield | −50% damage taken |
-| Empower | +50% damage, consumed by the next damaging ability |
-| Poison | Takes the potency as damage at the start of the owner's turn |
-| Stun | Skips the turn |
-| Weaken | −30% damage |
+| Shield | Soaks damage up to its points |
+| Empower | +25% damage |
+| Poison | Takes the potency as damage at the start of the owner's turn (harmful) |
+| Stun | Skips the turn (harmful) |
+| Weaken | −30% damage (harmful) |
 | Taunt | Opponents' single-target abilities must target this unit |
+| Bleed | Takes the potency as damage at the start of the owner's turn (harmful) |
+| Burn | The same, potency × stacks, up to 5 stacks (harmful) |
+| Freeze | +30% damage taken; an enemy acts last (harmful) |
+| Curse | −30% damage (harmful) |
+| Mark | +50 points of crit chance against the owner, gone after the first crit it takes (harmful) |
 
-The default duration is 1 turn unless stated otherwise.
+The default duration is 1 turn unless stated otherwise. Bleed is used by the Bies; Burn, Freeze, Curse and Mark exist for the reworked heroes and enemies and use placeholder icons until their own are drawn. The rules follow `docs/design/combat/statuses.md`.
 
 ## Run
 

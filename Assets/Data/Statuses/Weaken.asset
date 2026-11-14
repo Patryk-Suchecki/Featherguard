@@ -14,11 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
   displayName: Weaken
   announcement: Weakened
-  modifiers:
-  - stat: 0
-    add: 0
-    multiply: -0.3
-  damagePerTurn: 0
-  skipsTurn: 0
-  forcesTargeting: 0
-  consumedOnAttack: 0
+  harmful: 1
+  stacking: 0
+  maxStacks: 1
+  behaviours:
+  - rid: 4550530345986162691
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530345986162691
+      type: {class: ModifyStats, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        modifiers:
+        - stat: 0
+          add: 0
+          multiply: -0.3

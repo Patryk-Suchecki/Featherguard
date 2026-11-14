@@ -147,7 +147,7 @@ namespace Featherguard.Tests
         public void Taunt_ForcesHeroesToTargetTheTaunter()
         {
             var taunt = ScriptableObject.CreateInstance<StatusDefinition>();
-            taunt.forcesTargeting = true;
+            taunt.behaviours = new StatusBehaviour[] { new ForceTargeting() };
             var hero = Unit("Hero", Team.Heroes, 100, Strike(10));
             var guard = Unit("Guard", Team.Enemies, 100, Strike(1));
             var model = Create(Encounter(new[] { guard, guard }), 0f, hero);
@@ -409,7 +409,7 @@ namespace Featherguard.Tests
         public void Stun_SkipsHeroTurnAndEnemyActsAgain()
         {
             var stun = ScriptableObject.CreateInstance<StatusDefinition>();
-            stun.skipsTurn = true;
+            stun.behaviours = new StatusBehaviour[] { new SkipTurn() };
             var hero = Unit("Hero", Team.Heroes, 100, Strike(1));
             var stunner = Unit("Stunner", Team.Enemies, 100, Strike(3), special: Apply(stun, AbilityTarget.AllEnemies));
             stunner.ai.specialEvery = 2;

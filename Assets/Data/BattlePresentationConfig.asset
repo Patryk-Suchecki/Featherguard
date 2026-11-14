@@ -51,6 +51,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db5d2777eebb4b84eae6559015f81fb1, type: 2}
   - {fileID: 11400000, guid: fd4cee813a399d14d9351cb3b23f24c3, type: 2}
   - {fileID: 11400000, guid: 4f35519a2906c4c4f9789909f6ccc89c, type: 2}
+  - {fileID: 11400000, guid: 3218a762e08b5894abf0ebebb2282449, type: 2}
+  - {fileID: 11400000, guid: a48693037119b5c4fbbbd728aac73c89, type: 2}
+  - {fileID: 11400000, guid: 2d391b86a73832143b81351e6cbe5995, type: 2}
+  - {fileID: 11400000, guid: 48e2ca7acdf065b4abdf71ba97573ce2, type: 2}
+  - {fileID: 11400000, guid: d05d49a148fb71b4daee690a81ea897c, type: 2}
   heroSlots:
   - {x: -2.3, y: 0, z: 0.45}
   - {x: -3.7, y: 0, z: -0.55}
@@ -75,6 +80,7 @@ MonoBehaviour:
   stunnedInterval: 0.25
   enrageHold: 0.9
   endDelay: 0.6
+  afterVictory: 0.8
   timingPrompts: 1
   attackRingTime: 0.8
   windupMin: 0.4

@@ -35,9 +35,9 @@ Combat is the core of the game and is specified first, in `combat/`.
 | 3 | Time structure | Battle → wave → round → turn → action: the phases of each | – |
 | 4 | Events (triggers) | At which moments of the time structure can something hook in (for example turn start, round end, before damage taken, on death)? | – |
 | 5 | Actions | What a unit can do on its turn (attack, support, Rage, potion, pass); targeting rules | – |
-| 6 | Building blocks | Effects (what can happen), conditions (when), statuses (duration, stacking, removal) | – |
-| 7 | Calculations | How damage and healing are calculated, the order of modifiers, rounding | – |
-| 8 | Special mechanics | Attack and block timing, Rage, described with layers 4–7 | [timing](combat/timing.md) (Rage to come) |
+| 6 | Building blocks | Effects (what can happen), conditions (when), statuses (duration, stacking, removal) | [statuses](combat/statuses.md) (effects and conditions to come) |
+| 7 | Calculations | How damage and healing are calculated, the order of modifiers, rounding | [statuses](combat/statuses.md#damage-calculation-layer-7) (healing to come) |
+| 8 | Special mechanics | Attack and block timing, Rage, described with layers 4–7 | [timing](combat/timing.md), [Rage](combat/rage.md) |
 | 9 | Enemy behaviour | AI, archetypes, boss phases | – |
 | 10 | Sources outside combat | How equipment and sets, Laws of the lands, passives, potions and difficulty plug into combat | – |
 | 11 | Feedback | What the player sees and hears for every event; what the UI shows (for example enemy intents) | – |
