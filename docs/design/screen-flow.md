@@ -17,7 +17,7 @@ The wireframes show layout and flow only. Game rules live in [`GDD.md`](../GDD.m
 | V | Camp | Pick the party; hero details, Storage and potions |
 | VIa / VIb | Battle result | Victory with rewards and EXP, or defeat |
 | VII | Tavern | Entrances to Endless Run and Arena |
-| VIII | Sacred Oak | Story missions; the bestiary after the MVP |
+| VIII | Sacred Oak | Story scenes; the bestiary after the MVP |
 | IX | Storage | All equipment; a separate tab for materials |
 | X | Wise Woman's Hut | Brewing potions |
 | XI | Forge | Forging equipment and the forging minigame |
@@ -49,6 +49,7 @@ flowchart LR
     Battle --> Defeat[VIb. Defeat]
     Victory --> Map
     Defeat --> Map
+    Defeat --> Single
     Defeat --> Waves
     Defeat --> Camp
     Defeat --> Hut
@@ -56,5 +57,7 @@ flowchart LR
     Camp --> Storage[IX. Storage]
     Forge --> Storage
 ```
+
+**Retry** after a defeat returns to the preparation of the same fight. The party is changed in the Camp, which the preparation screens open (see Characters and party in the GDD).
 
 **Back** returns to the screen the player came from (the main screen, the world map or the Camp). Settings opens as a window from most screens.
