@@ -15,7 +15,7 @@ What sets us apart:
 
 Pillars:
 - **Readable combat with depth:** one decision per character per turn; depth comes from synergies, statuses and timing.
-- **Hero collection:** a large roster and party building for each fight; most characters are earned outside the main story.
+- **Hero collection:** a large roster and party building for each fight; heroes are earned by playing, through story missions and side activities.
 - **Equipment that changes play:** items change the play style, not only the numbers.
 - **Short sessions:** a level takes 10–15 minutes.
 
@@ -37,7 +37,7 @@ The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 The Stronghold is the main screen and grows with the player. Its buildings:
 - **Forge:** forging equipment (see Forge).
 - **Wise Woman's Hut:** brewing potions, nothing else.
-- **Sacred Oak:** the Priest's story missions and, after the MVP, the bestiary (unlocked by fighting, with boss weaknesses).
+- **Sacred Oak:** the Priest's story scenes and, after the MVP, the bestiary (unlocked by fighting, with boss weaknesses).
 - **Tavern:** the entrances to the two extra modes, Endless Run (Veles' Well) and Arena (Kupala Night).
 - **Shop:** a merchant with a rotating offer (see Shop).
 
@@ -55,7 +55,7 @@ Long-term loop: a level on the map → rewards (materials, gold, loot, schematic
 
 ## Characters and party
 
-The player collects heroes into a roster (6 for the first alpha and 12–15 in the full game; the roster is built to keep growing after that) and picks a party of 3 in the Camp. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
+The player collects heroes into a roster (6 for the first alpha and 12–15 in the full game; the roster is built to keep growing after that) and picks a party of 3 in the Camp; the battle preparation screen leads back to the Camp to change the party before a fight. New heroes are unlocked by playing: story missions and side activities can reward them. Every character has a role, an attack, a support action and a Rage action. Heroes are of mixed genders; a class does not determine gender.
 
 Starting roster (prototype):
 
@@ -137,15 +137,15 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 
 The game has 5 lands on a single map. At the start only the Rye Fields are open; the other lands unlock as the player completes story missions.
 
-**Story missions:** every land has 5 main story missions (25 in total). The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear.
+**Story missions:** every land has 5 main story missions (25 in total). They appear on the world map as Main quest activities, like the side activities; the Sacred Oak only holds the story scenes between them. The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear.
 
 **Side activities:** a land the player visits offers up to 3 activities drawn at random from its pool. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage.
 
-**Activity types** on the world map: Single fight, Waves fight, Puzzle fight, Elite fight, Boss fight and Main quest (a story mission).
+**Activity types** on the world map: Single fight, Waves fight, Puzzle fight, Elite fight (a fight against an Elite enemy), Boss fight and Main quest (a story mission).
 
 **Rewards** of levels are of these kinds: materials, gold, loot (equipment), schematics, EXP, unlocks and story progress.
 
-A land's **Law** is a combat rule that applies to battles in that land. Every land also has 4 materials (see Materials); the table lists candidate names, not yet assigned to a kind:
+A land's **Law** is a combat rule that applies to battles in that land. Every land also has 4 materials (see Materials). The material column is incomplete and will be filled in later; its names are candidates, not yet assigned to a kind:
 
 | Land | Law | Who shines | Material candidates |
 |---|---|---|---|
@@ -217,9 +217,8 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - Whether a land's Law grows stronger as the player progresses through that land.
 - How threat levels (1–10) are assigned to story missions and side activities.
 - How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
-- How the player gets new heroes; the tavern offers no recruitment.
+- Which story missions and side activities unlock which heroes.
 - Where equipment of each rarity comes from (level loot, forge, shop).
-- Whether the party of 3 picked in the Camp can be changed on the battle preparation screen, so a party is still built for each specific fight.
 - Materials use Common, Uncommon, Rare and Legendary, while equipment uses Common, Rare, Epic and Legendary: should the two scales differ?
 - The names of the 4 materials of each land.
 - How Salvage pays out: how many and which materials come back, and whether an item a hero wears can be salvaged.
@@ -229,6 +228,5 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - Endless Run (Veles' Well) and Arena (Kupala Night): rules, rewards and scoring.
 - Where Buyan Island is entered.
 - The battle preparation screens show "Difficulty: Medium / Hard", while the threat rating uses Easy, Even, Dangerous and Madness: which names do we use?
-- "Elite fight" as an activity type shares its name with the Elite enemy archetype.
 - The wireframes show equipment rarity and material kind only by the colour of the frame, while the interface must read by shape and sound, not only colour.
 - Whether the merchant of Land Favour is the Stronghold shop or a separate one.
