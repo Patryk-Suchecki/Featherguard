@@ -73,6 +73,8 @@ namespace Featherguard.EditorTools
             Add("ChieftainAttack", "Chieftain's Wrath", AbilityTarget.Enemy, Melee, "Attack", Spark, SfxId.Slash, SfxId.Smash, heavy: true, effects: new[] { Damage(34), Status("Stun", chance: 0.35f) });
             Add("BiesAttack", "Rending Claws", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Smash, heavy: true, impactEffect: new ClawSlashEffect(), effects: Damage(24));
             Add("BiesSpecial", "Howl", AbilityTarget.AllEnemies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Magic, heavy: true, effects: Status("Weaken"));
+            Add("WolfAttack", "Bite", AbilityTarget.Enemy, Melee, "Attack", Ember, SfxId.Slash, SfxId.Hit, effects: Damage(14));
+            Add("WolfSpecial", "Pack Howl", AbilityTarget.AllAllies, Instant, "Cast", Ember, SfxId.Rage, SfxId.Buff, effects: Status("Empower"));
             return (abilities, visuals.ToArray());
         }
     }
