@@ -12,7 +12,10 @@ namespace Featherguard.Game
     public class GameConfig : ScriptableObject
     {
         [Header("Content")]
+        [Tooltip("Heroes who have joined, in the order of their seats at the campfire.")]
         public UnitDefinition[] heroes;
+        [Tooltip("Fixed seats at the campfire; seats without a hero stay empty until one joins.")]
+        [Min(3)] public int campSeats = 6;
         public BattleRules rules;
         public RunDefinition run;
         public MetaConfig meta;
