@@ -419,7 +419,7 @@ namespace Featherguard.EditorTools
 
         sealed class Palette
         {
-            public readonly Material Ground = Lit("Ground", new Color(0.11f, 0.1f, 0.09f));
+            public readonly Material Ground = Lit("Ground", new Color(0.11f, 0.16f, 0.09f));
             public readonly Material Road = Lit("Road", new Color(0.17f, 0.14f, 0.11f));
             public readonly Material Wood = Lit("Wood", new Color(0.27f, 0.19f, 0.13f));
             public readonly Material WoodDark = Lit("Wood Dark", new Color(0.17f, 0.12f, 0.09f));
@@ -428,7 +428,7 @@ namespace Featherguard.EditorTools
             public readonly Material RoofDark = Lit("Roof Dark", new Color(0.12f, 0.1f, 0.11f));
             public readonly Material RoofMoss = Lit("Roof Moss", new Color(0.13f, 0.16f, 0.11f));
             public readonly Material Door = Lit("Door", new Color(0.06f, 0.05f, 0.05f));
-            public readonly Material Bark = Lit("Bark", new Color(0.15f, 0.13f, 0.12f));
+            public readonly Material Bark = Lit("Bark", new Color(0.2f, 0.17f, 0.08f));
             public readonly Material Withered = Lit("Withered", new Color(0.16f, 0.17f, 0.12f));
             public readonly Material Iron = Lit("Iron", new Color(0.12f, 0.12f, 0.13f));
             public readonly Material Bone = Lit("Bone", new Color(0.76f, 0.73f, 0.64f));
