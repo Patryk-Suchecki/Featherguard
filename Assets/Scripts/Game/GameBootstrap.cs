@@ -44,6 +44,7 @@ namespace Featherguard.Game
             var session = RunSession.Current;
             if (session == null)
             {
+                yield return StrongholdScreen.Show(hud);
                 yield return CampScreen.Show(hud, Meta);
                 session = RunSession.Start(config.run, config.heroes, UnityRandomSource.Shared);
                 Meta.ApplyTo(session);

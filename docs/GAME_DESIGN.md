@@ -97,7 +97,7 @@ Nine encounters (`RunDefinition.asset`):
 | 8 | Lizard Camp | Shieldbearer, Shaman, Brute → Spitter, Brute, Thug | 1.3 / 1.15 | 25 |
 | 9 | Chieftain (boss) | Thug, Shieldbearer, Thug → Spitter, Chieftain, Shaman | 1.3 / 1.15 | 40 |
 
-- **Start:** every run starts at the camp screen, where feathers are spent on perks, then "Set out!".
+- **Start:** the game opens on the Stronghold main screen. It shows the Forge, Wise Woman's Hut, Sacred Oak, Tavern, Shop, Camp and Settings, all locked for now ("Coming soon"). **Embark** leads to the camp screen, where feathers are spent on perks, then "Set out!" starts the run. The Stronghold is shown again after a run ends.
 - **Hero HP between battles:** heroes keep their HP from battle to battle. After a win, survivors heal 20% of max HP and fallen heroes return with 30%.
 - **Gold bonus:** kill gold, encounter gold and gold from the slot machine are multiplied by the run's gold bonus (Lucky Penny, Treasurer, Leaky Purse). Losses, purchases and double-or-nothing are not.
 - **Losing:** a lost battle ends the run. Abandoning the run from the pause menu counts as a loss.
