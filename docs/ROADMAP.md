@@ -26,8 +26,8 @@ Capacity: about 10 hours a week each, 20 hours a week together. Dates are target
 | Milestone | Target | Goal | Done when |
 |---|---|---|---|
 | **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test character (the Bies) goes through the full art pipeline (model, baked texture, rig, animations, toon shader, in Unity); one music track and the perfect-timing sound are made with our audio workflow; the timing combat prototype feels good; all MVP screens are wireframed; at the end, the M0 build is tested on an Android phone (until then everything is checked in the editor) |
-| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → land map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
-| **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, forge, potions, saving, rumours and settings work; tutorial exists |
+| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → world map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
+| **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, Storage and Salvage, schematics, forge, potions, shop, saving and settings work; tutorial exists |
 | **M3 Beta** | 2027-09-26 | Content complete | All MVP art, animation, VFX, music, SFX and texts are in; balance pass done; final title decided; only bug fixes and polish after this |
 | **M4 Release** | 2027-11-07 | Ship it on Google Play | Runs smoothly on a mid-range Android phone; signed release build; store page, content rating and privacy policy done |
 
@@ -39,21 +39,21 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Combat rules: timing, Rage, statuses, archetypes (M0 prototype, M1 final).
 - Difficulty curve, threat levels, the order of story missions across lands and land unlocks (M1 for the Rye Fields, M2 for all).
 - Economy: gold, materials, forge costs, rewards of missions and side activities, Daring bonus (M2).
-- Story mission scripts and encounters; side activity pools per land (battle, wave battle, riddle, miniboss) (M1 for the Rye Fields, M3 for all).
+- Story mission scripts and encounters; side activity pools per land (Single, Waves, Puzzle and Elite fights) (M1 for the Rye Fields, M3 for all).
 - Balance passes with simulations in EditMode tests (every phase).
 
 ### Programming
 - Battle model: timing results, party Rage, new statuses, enemy brains per archetype, boss mechanics (M0 prototype, M1).
-- Progression: Stronghold, land map, story missions, side activities, land unlocks, character levels; replaces the bird run and its gambling rewards (M1–M2).
-- Roster and party pick, equipment, sets, forge, potions (M2).
-- Rumours from the Road, Laws of the lands (M2).
+- Progression: Stronghold, world map, story missions, side activities, land and hero unlocks, character levels; replaces the bird run and its gambling rewards (M1–M2).
+- Roster and party pick in the Camp, equipment, Storage and Salvage, sets, schematics, forge, potions, shop (M2).
+- Laws of the lands (M2).
 - Save system and data migration between versions (M2).
 - Content pipeline: catalogs and importers for new heroes, enemies and items (M1).
 - Android build: signing and versioning (M1 first build, M4 release).
 
 ### UI/UX
 - Screen flow and wireframes for every MVP screen (M0).
-- Screens: Stronghold, land map, party pick, battle HUD, timing indicators, victory and defeat, roster, equipment, forge, Wise Woman's hut, tavern, bestiary, settings, pause (M1 for the slice path, M2 for the rest).
+- Screens: Stronghold, world map, battle preparation, battle HUD, timing indicators, victory and defeat, Camp (roster and party pick), hero details and equipment, Storage, forge, Wise Woman's Hut, shop, Sacred Oak, tavern, bestiary, settings, pause (M1 for the slice path, M2 for the rest).
 - Tutorial and onboarding, teaching timing first (M2).
 - Fonts, icon set, UI animation and UI sounds (M1).
 - Accessibility: auto-timing, shape and sound cues besides colour, fast-forward ×2 and ×3, readable text sizes (M2).
@@ -64,7 +64,7 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Shader and rendering: outline, banded toon shading, lighting and post-processing per land (M0 test, M1 final).
 - Heroes: model, baked texture, rig, portrait (M1: 3 heroes; M3: all 6).
 - Enemies and bosses: same as heroes (M0: the Bies as the test character; M1: Rye Fields; M3: all MVP lands).
-- Environments: battle backdrop per land, the Stronghold, the land map (M1: Rye Fields, Stronghold, map; M3: all).
+- Environments: battle backdrop per land, the Stronghold, the world map (M1: Rye Fields, Stronghold, map; M3: all).
 - Items and icons: weapons, artifacts, materials, potions, status icons (M2–M3).
 - Store art: app icon, feature graphic, screenshots (M4).
 
@@ -80,14 +80,14 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Hits, crits, deaths, Law effects per land, UI effects (rewards, level up).
 
 ### Audio
-- Music: Stronghold, land map, battle per land, boss per land, victory and defeat stingers.
+- Music: Stronghold, world map, battle per land, boss per land, victory and defeat stingers.
 - SFX per ability, statuses, hits, blocks and the perfect-timing sound (part of the mechanic, M0).
 - Ambient per land, UI sounds.
 - Mixer setup, volume settings, ducking (M1).
 
 ### Narrative and text
 - Main story outline and ending, once the GDD open questions are answered (M1).
-- Priest's story mission texts, tavern rumours, riddles, mission briefings (M1 for the Rye Fields, M3 for all).
+- Priest's story scenes, mission briefings, Puzzle fight riddles (M1 for the Rye Fields, M3 for all).
 - Bestiary entries, hero bios, item and set names and descriptions (M2–M3).
 
 ### QA
@@ -114,5 +114,5 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 ## Later
 
-Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night, Veles' Well, Buyan Island). The open design questions are listed at the end of [`GDD.md`](GDD.md).
+Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night and Veles' Well, which already have entrances in the tavern, and Buyan Island). The open design questions are listed at the end of [`GDD.md`](GDD.md).
 
