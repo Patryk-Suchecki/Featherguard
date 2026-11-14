@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Featherguard.Game
 {
     [RequireComponent(typeof(Light))]
-    public class CampfireFlicker : MonoBehaviour
+    public class FlickeringLight : MonoBehaviour
     {
         [SerializeField, Min(0f)] float baseIntensity = 6f;
         [SerializeField, Range(0f, 1f)] float flicker = 0.35f;

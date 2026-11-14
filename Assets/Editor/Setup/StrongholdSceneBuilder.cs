@@ -13,6 +13,10 @@ namespace Featherguard.EditorTools
         static readonly Color NightColor = new(0.05f, 0.06f, 0.08f);
         static readonly Vector3 CampfirePosition = Vector3.zero;
         static readonly Vector3 SignpostPosition = new(8f, 0f, -4.5f);
+        static readonly Color WarmLight = new(1f, 0.62f, 0.3f);
+
+        const int GroundTiles = 6;
+        const float GroundTileSize = 8f;
 
         Palette palette;
 
@@ -79,9 +83,9 @@ namespace Featherguard.EditorTools
         {
             RenderSettings.skybox = null;
             RenderSettings.ambientMode = AmbientMode.Trilight;
-            RenderSettings.ambientSkyColor = new Color(0.17f, 0.19f, 0.27f);
-            RenderSettings.ambientEquatorColor = new Color(0.11f, 0.12f, 0.15f);
-            RenderSettings.ambientGroundColor = new Color(0.05f, 0.05f, 0.05f);
+            RenderSettings.ambientSkyColor = new Color(0.24f, 0.27f, 0.36f);
+            RenderSettings.ambientEquatorColor = new Color(0.16f, 0.17f, 0.21f);
+            RenderSettings.ambientGroundColor = new Color(0.08f, 0.08f, 0.08f);
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Exponential;
             RenderSettings.fogColor = NightColor;
@@ -90,7 +94,7 @@ namespace Featherguard.EditorTools
             var moon = new GameObject("Moon").AddComponent<Light>();
             moon.type = LightType.Directional;
             moon.color = new Color(0.52f, 0.6f, 0.82f);
-            moon.intensity = 1.9f;
+            moon.intensity = 2.8f;
             moon.shadows = LightShadows.Soft;
             moon.shadowStrength = 0.8f;
             moon.transform.rotation = Quaternion.Euler(48f, 35f, 0f);
@@ -115,8 +119,12 @@ namespace Featherguard.EditorTools
 
         void Ground(Transform world)
         {
-            var ground = Part(PrimitiveType.Plane, "Ground", world, Vector3.zero, new Vector3(10f, 1f, 8f), palette.Ground);
-            Object.DestroyImmediate(ground.GetComponent<Collider>());
+            var ground = new GameObject("Ground").transform;
+            ground.SetParent(world, false);
+            for (int x = -GroundTiles; x < GroundTiles; x++)
+            for (int z = -GroundTiles; z < GroundTiles; z++)
+                Decoration(PrimitiveType.Plane, "Tile", ground, new Vector3((x + 0.5f) * GroundTileSize, 0f, (z + 0.5f) * GroundTileSize),
+                    new Vector3(GroundTileSize * 0.1f, 1f, GroundTileSize * 0.1f), palette.Ground);
             Road(world, CampfirePosition, SignpostPosition);
             Road(world, SignpostPosition, SignpostPosition + new Vector3(8f, 0f, -4.5f));
         }
@@ -140,20 +148,7 @@ namespace Featherguard.EditorTools
             for (int i = 0; i < 3; i++)
                 Part(PrimitiveType.Cylinder, "Log", camp, new Vector3(0f, 0.16f, 0f), new Vector3(0.16f, 0.55f, 0.16f), palette.WoodDark, new Vector3(90f, i * 60f, 0f));
             var flame = Part(PrimitiveType.Sphere, "Flame", camp, new Vector3(0f, 0.55f, 0f), new Vector3(0.5f, 0.9f, 0.5f), palette.Flame).transform;
-
-            var lightObject = new GameObject("FireLight", typeof(Light));
-            lightObject.transform.SetParent(camp, false);
-            lightObject.transform.localPosition = new Vector3(0f, 1.3f, 0f);
-            var fireLight = lightObject.GetComponent<Light>();
-            fireLight.type = LightType.Point;
-            fireLight.color = new Color(1f, 0.55f, 0.2f);
-            fireLight.range = 13f;
-            fireLight.intensity = 8f;
-            fireLight.shadows = LightShadows.None;
-            var flicker = new SerializedObject(lightObject.AddComponent<CampfireFlicker>());
-            flicker.FindProperty("baseIntensity").floatValue = 8f;
-            flicker.FindProperty("flame").objectReferenceValue = flame;
-            flicker.ApplyModifiedPropertiesWithoutUndo();
+            Lamp(camp, "Fire Light", new Vector3(0f, 1.3f, 0f), new Color(1f, 0.55f, 0.2f), 14f, 16f, null, 0.35f, flame);
 
             var party = new GameObject("Party").transform;
             party.SetParent(world, false);
@@ -172,7 +167,8 @@ namespace Featherguard.EditorTools
         void Forge(Transform world, Vector3 position)
         {
             var forge = Place(world, "Forge", StrongholdPlaceKind.Forge, "Forge", position, Vector3.up * 4.4f);
-            House(forge, 3.2f, 2.2f, 2.6f, palette.Stone, palette.RoofDark, Vector3.zero);
+            House(forge, 3.2f, 2.2f, 2.6f, palette.Stone, palette.RoofDark, Vector3.zero, palette.Window);
+            Lamp(forge, "Forge Glow", new Vector3(0f, 0.5f, -1.45f), new Color(1f, 0.38f, 0.12f), 12f, 9f, palette.Ember, 0.3f, scale: new Vector3(0.6f, 0.35f, 0.15f));
             Part(PrimitiveType.Cube, "Chimney", forge, new Vector3(0.9f, 3.2f, 0.4f), new Vector3(0.5f, 2.2f, 0.5f), palette.StoneDark);
             Part(PrimitiveType.Cube, "Anvil Base", forge, new Vector3(2.1f, 0.25f, -1.2f), new Vector3(0.35f, 0.5f, 0.35f), palette.Iron);
             Part(PrimitiveType.Cube, "Anvil", forge, new Vector3(2.1f, 0.6f, -1.2f), new Vector3(0.8f, 0.2f, 0.35f), palette.Iron);
@@ -182,8 +178,9 @@ namespace Featherguard.EditorTools
         void WiseWomansHut(Transform world, Vector3 position)
         {
             var hut = Place(world, "Wise Woman's Hut", StrongholdPlaceKind.WiseWomansHut, "Wise Woman's Hut", position, Vector3.up * 3.8f);
-            House(hut, 2.4f, 1.8f, 2.2f, palette.WoodDark, palette.RoofMoss, new Vector3(0f, 7f, 5f));
+            House(hut, 2.4f, 1.8f, 2.2f, palette.WoodDark, palette.RoofMoss, new Vector3(0f, 7f, 5f), palette.WitchGlow);
             Part(PrimitiveType.Cylinder, "Cauldron", hut, new Vector3(1.6f, 0.35f, -1.2f), new Vector3(0.7f, 0.35f, 0.7f), palette.Iron);
+            Lamp(hut, "Cauldron Glow", new Vector3(1.6f, 0.72f, -1.2f), new Color(0.45f, 1f, 0.4f), 9f, 8f, palette.WitchGlow, 0.25f, scale: new Vector3(0.6f, 0.08f, 0.6f));
             Part(PrimitiveType.Cylinder, "Pole", hut, new Vector3(-1.6f, 0.8f, -1.1f), new Vector3(0.06f, 0.8f, 0.06f), palette.WoodDark);
             Part(PrimitiveType.Sphere, "Skull", hut, new Vector3(-1.6f, 1.7f, -1.1f), Vector3.one * 0.3f, palette.Bone);
             FinishPlace(hut);
@@ -200,15 +197,17 @@ namespace Featherguard.EditorTools
             Part(PrimitiveType.Sphere, "Withered Crown", oak, new Vector3(1.4f, 6.1f, -0.2f), new Vector3(2f, 1.3f, 2f), palette.Withered);
             for (int i = 0; i < 3; i++)
                 Part(PrimitiveType.Cube, "Shrine Stone", oak, new Vector3(-1f + i, 0.3f, -1.6f), new Vector3(0.5f, 0.6f + i % 2 * 0.3f, 0.4f), palette.StoneDark);
+            Lamp(oak, "Grave Candles", new Vector3(0f, 0.95f, -1.6f), WarmLight, 8f, 8f, palette.Lantern, 0.3f, scale: new Vector3(0.12f, 0.18f, 0.12f));
             FinishPlace(oak);
         }
 
         void Tavern(Transform world, Vector3 position)
         {
             var tavern = Place(world, "Tavern", StrongholdPlaceKind.Tavern, "Tavern", position, Vector3.up * 5f);
-            House(tavern, 3.8f, 2.6f, 3f, palette.Wood, palette.RoofDark, Vector3.zero);
+            House(tavern, 3.8f, 2.6f, 3f, palette.Wood, palette.RoofDark, Vector3.zero, palette.Window);
             Part(PrimitiveType.Cylinder, "Sign Post", tavern, new Vector3(-2.3f, 1.2f, -1.6f), new Vector3(0.1f, 1.2f, 0.1f), palette.WoodDark);
             Part(PrimitiveType.Cube, "Sign", tavern, new Vector3(-2.3f, 2f, -1.6f), new Vector3(0.9f, 0.55f, 0.08f), palette.Wood);
+            Lamp(tavern, "Lantern", new Vector3(-2.3f, 1.5f, -1.8f), WarmLight, 10f, 9f, palette.Lantern, 0.15f, scale: Vector3.one * 0.24f);
             FinishPlace(tavern);
         }
 
@@ -221,6 +220,7 @@ namespace Featherguard.EditorTools
             Part(PrimitiveType.Cube, "Awning", shop, new Vector3(0f, 2f, 0.1f), new Vector3(2.9f, 0.08f, 1.7f), palette.Cloth, new Vector3(-18f, 0f, 0f));
             Part(PrimitiveType.Cube, "Crate", shop, new Vector3(-1.7f, 0.3f, -0.8f), Vector3.one * 0.6f, palette.WoodDark, new Vector3(0f, 15f, 0f));
             Part(PrimitiveType.Cube, "Crate", shop, new Vector3(1.8f, 0.25f, -0.7f), Vector3.one * 0.5f, palette.WoodDark, new Vector3(0f, -10f, 0f));
+            Lamp(shop, "Lantern", new Vector3(0f, 1.45f, -0.75f), WarmLight, 9f, 8f, palette.Lantern, 0.15f, scale: Vector3.one * 0.22f);
             FinishPlace(shop);
         }
 
@@ -231,6 +231,7 @@ namespace Featherguard.EditorTools
             Part(PrimitiveType.Cube, "Board", sign, new Vector3(0.45f, 2.3f, 0f), new Vector3(1.4f, 0.32f, 0.08f), palette.Wood, new Vector3(0f, 25f, 6f));
             Part(PrimitiveType.Cube, "Board", sign, new Vector3(-0.35f, 1.8f, 0f), new Vector3(1.1f, 0.28f, 0.08f), palette.Wood, new Vector3(0f, -20f, -5f));
             Part(PrimitiveType.Sphere, "Skull", sign, new Vector3(0f, 2.75f, 0f), Vector3.one * 0.28f, palette.Bone);
+            Lamp(sign, "Lantern", new Vector3(0.2f, 1.4f, -0.2f), WarmLight, 10f, 9f, palette.Lantern, 0.15f, scale: Vector3.one * 0.24f);
             FinishPlace(sign, 1.2f);
         }
 
@@ -254,6 +255,31 @@ namespace Featherguard.EditorTools
             var bones = new[] { new Vector3(3.5f, 0.05f, -2.6f), new Vector3(-3f, 0.05f, 1.5f), new Vector3(1.6f, 0.05f, 4.3f), new Vector3(9.8f, 0.05f, -3.4f) };
             for (int i = 0; i < bones.Length; i++)
                 Decoration(PrimitiveType.Capsule, "Bone", graves, bones[i], new Vector3(0.08f, 0.22f, 0.08f), palette.Bone, new Vector3(90f, i * 47f, 0f));
+
+            var spirit = new Color(0.55f, 0.75f, 1f);
+            Lamp(graves, "Wisp", new Vector3(0.6f, 1.3f, 5.8f), spirit, 7f, 7f, palette.Spirit, 0.5f, scale: Vector3.one * 0.2f);
+            Lamp(graves, "Wisp", new Vector3(3.2f, 1.6f, 7.4f), spirit, 6f, 7f, palette.Spirit, 0.5f, scale: Vector3.one * 0.16f);
+        }
+
+        static void Lamp(Transform parent, string name, Vector3 position, Color color, float intensity, float range, Material glow, float flicker,
+            Transform flame = null, Vector3 scale = default)
+        {
+            if (glow != null)
+                Decoration(PrimitiveType.Sphere, $"{name} Glow", parent, position, scale, glow);
+            var lightObject = new GameObject(name, typeof(Light));
+            lightObject.transform.SetParent(parent, false);
+            lightObject.transform.localPosition = position + Vector3.up * 0.2f;
+            var lamp = lightObject.GetComponent<Light>();
+            lamp.type = LightType.Point;
+            lamp.color = color;
+            lamp.range = range;
+            lamp.intensity = intensity;
+            lamp.shadows = LightShadows.None;
+            var flickering = new SerializedObject(lightObject.AddComponent<FlickeringLight>());
+            flickering.FindProperty("baseIntensity").floatValue = intensity;
+            flickering.FindProperty("flicker").floatValue = flicker;
+            flickering.FindProperty("flame").objectReferenceValue = flame;
+            flickering.ApplyModifiedPropertiesWithoutUndo();
         }
 
         void DeadTrees(Transform world)
@@ -274,12 +300,14 @@ namespace Featherguard.EditorTools
             }
         }
 
-        void House(Transform parent, float width, float height, float depth, Material walls, Material roof, Vector3 roofTilt)
+        void House(Transform parent, float width, float height, float depth, Material walls, Material roof, Vector3 roofTilt, Material windows)
         {
             Part(PrimitiveType.Cube, "Walls", parent, new Vector3(0f, height * 0.5f, 0f), new Vector3(width, height, depth), walls);
             float side = width * 0.74f;
             Part(PrimitiveType.Cube, "Roof", parent, new Vector3(0f, height, 0f), new Vector3(side, side, depth * 1.12f), roof, new Vector3(roofTilt.x, roofTilt.y, 45f + roofTilt.z));
             Part(PrimitiveType.Cube, "Door", parent, new Vector3(0f, height * 0.3f, -depth * 0.5f - 0.02f), new Vector3(width * 0.22f, height * 0.6f, 0.05f), palette.Door);
+            foreach (float x in new[] { -width * 0.3f, width * 0.3f })
+                Part(PrimitiveType.Cube, "Window", parent, new Vector3(x, height * 0.58f, -depth * 0.5f - 0.02f), new Vector3(width * 0.15f, height * 0.2f, 0.04f), windows);
         }
 
         static Transform Place(Transform world, string name, StrongholdPlaceKind kind, string displayName, Vector3 position, Vector3 labelOffset)
@@ -342,7 +370,7 @@ namespace Featherguard.EditorTools
             var color = profile.Add<ColorAdjustments>(true);
             color.saturation.Override(-35f);
             color.contrast.Override(8f);
-            color.postExposure.Override(0.25f);
+            color.postExposure.Override(0.45f);
             color.colorFilter.Override(new Color(0.88f, 0.92f, 1f));
             var vignette = profile.Add<Vignette>(true);
             vignette.intensity.Override(0.4f);
@@ -375,6 +403,11 @@ namespace Featherguard.EditorTools
             public readonly Material Bone = Lit("Bone", new Color(0.76f, 0.73f, 0.64f));
             public readonly Material Cloth = Lit("Cloth", new Color(0.32f, 0.09f, 0.09f));
             public readonly Material Flame = Unlit("Flame", new Color(4f, 1.6f, 0.4f));
+            public readonly Material Ember = Unlit("Ember", new Color(4f, 1.2f, 0.3f));
+            public readonly Material Lantern = Unlit("Lantern", new Color(3f, 1.8f, 0.7f));
+            public readonly Material Window = Unlit("Window", new Color(1.8f, 1f, 0.4f));
+            public readonly Material WitchGlow = Unlit("Witch Glow", new Color(0.7f, 2.4f, 0.6f));
+            public readonly Material Spirit = Unlit("Spirit", new Color(1.2f, 1.8f, 3.2f));
 
             static Material Lit(string name, Color color)
             {
