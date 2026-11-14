@@ -98,7 +98,7 @@ A shared meter filled by hits dealt and taken and by perfect timings. A full met
 | Shield | absorbs damage up to its value |
 | Taunt | enemies must attack this character |
 | Stun | skips the turn |
-| Mark | +50 percentage points of critical hit chance; a critical hit deals ×1.5 damage |
+| Mark | hits against the marked character get +50 percentage points of critical hit chance; a critical hit deals ×1.5 damage |
 | Empower | +25% damage dealt |
 
 ## Enemies and bosses

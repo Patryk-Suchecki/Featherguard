@@ -53,7 +53,7 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 ### UI/UX
 - Screen flow and wireframes for every MVP screen (M0).
-- Screens: Stronghold, world map, battle preparation, battle HUD, timing indicators, victory and defeat, Camp (roster and party pick), hero details and equipment, Storage, forge, Wise Woman's Hut, shop, Sacred Oak, tavern, bestiary, settings, pause (M1 for the slice path, M2 for the rest).
+- Screens: Stronghold, world map, battle preparation, battle HUD, timing indicators, victory and defeat, Camp (roster and party pick), hero details and equipment, Storage, forge, Wise Woman's Hut, shop, Sacred Oak, settings, pause (M1 for the slice path, M2 for the rest).
 - Tutorial and onboarding, teaching timing first (M2).
 - Fonts, icon set, UI animation and UI sounds (M1).
 - Accessibility: auto-timing, shape and sound cues besides colour, fast-forward ×2 and ×3, readable text sizes (M2).
@@ -88,7 +88,7 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 ### Narrative and text
 - Main story outline and ending, once the GDD open questions are answered (M1).
 - Priest's story scenes, mission briefings, Puzzle fight riddles (M1 for the Rye Fields, M3 for all).
-- Bestiary entries, hero bios, item and set names and descriptions (M2–M3).
+- Hero bios, item and set names and descriptions (M2–M3).
 
 ### QA
 - EditMode tests for every rule and economy change (every PR).
@@ -114,5 +114,5 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 
 ## Later
 
-Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night and Veles' Well, which already have entrances in the tavern, and Buyan Island). The open design questions are listed at the end of [`GDD.md`](GDD.md).
+Not planned now; revisit after M1: which 3 lands make the MVP, iOS and Steam, ads or purchases, localization, voices, extra modes (Kupala Night and Veles' Well with the Tavern screen that opens them, and Buyan Island), the bestiary in the Sacred Oak. Until then the Tavern stands in the Stronghold but is closed. The open design questions are listed at the end of [`GDD.md`](GDD.md).
 
