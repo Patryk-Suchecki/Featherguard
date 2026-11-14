@@ -86,7 +86,7 @@ How the two of us work on this repo, step by step. The rules themselves (archite
 4. **Work and commit** following `CLAUDE.md`.
 5. **Before pushing:** run the EditMode tests and play the game for a moment in the editor. If Rebuild touched files your PR is not about, close the scene in Unity (File → New Scene) and discard them:
    ```bash
-   git restore Assets/Scenes/Battle.unity Assets/Settings/BattlePostFX.asset ProjectSettings
+   git restore Assets/Scenes Assets/Settings/BattlePostFX.asset Assets/Settings/StrongholdPostFX.asset ProjectSettings
    ```
 6. **Push and PR:**
    ```bash
