@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Featherguard.Battle
 {
@@ -35,7 +36,7 @@ namespace Featherguard.Battle
             log.Emit(new TurnStarted { Team = Team.Enemies });
             ticker.BeginTurn(state.Enemies);
             queue.Clear();
-            foreach (var enemy in state.Enemies.Snapshot())
+            foreach (var enemy in state.Enemies.Snapshot().OrderBy(e => e.ActsLast))
                 queue.Enqueue(enemy);
             acting = null;
             Active = true;

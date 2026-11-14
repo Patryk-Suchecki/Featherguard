@@ -5,10 +5,10 @@ namespace Featherguard.Battle
 {
     public readonly struct DamageRoll
     {
-        public readonly int Amount;
+        public readonly float Amount;
         public readonly bool Critical;
 
-        public DamageRoll(int amount, bool critical)
+        public DamageRoll(float amount, bool critical)
         {
             Amount = amount;
             Critical = critical;
@@ -22,7 +22,7 @@ namespace Featherguard.Battle
             bool critical = random.Value < critChance;
             float amount = power * damageMultiplier * random.Range(1f - variance, 1f + variance);
             if (critical) amount *= critDamage;
-            return new DamageRoll((int)Math.Round(amount), critical);
+            return new DamageRoll(amount, critical);
         }
 
         public static int Heal(int power, float healingMultiplier) => (int)Math.Round(power * healingMultiplier);
