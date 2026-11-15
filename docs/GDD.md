@@ -11,7 +11,7 @@ Genre core: party-versus-party turn-based combat, a shared party Rage, and colle
 What sets us apart:
 - **Every class is a separate character.** The player collects heroes and builds a party of 3 for each specific fight.
 - **Timing (QTE).** Clicking at the right moment in the right place strengthens an attack or reduces damage taken. This is our main differentiator and will be expanded further.
-- **Slavic folklore with a twist.** Some monsters get female versions (for example a Lady Leshy instead of the Leshy).
+- **Slavic folklore with a twist.** Monsters are taken from Slavic folklore and given our own dark storybook look.
 
 Pillars:
 - **Readable combat with depth:** one decision per character per turn; depth comes from synergies, statuses and timing.
@@ -30,8 +30,8 @@ The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 | Sacred Oak Stronghold | camp and main screen | – |
 | Rye Fields | land 1, open from the start | Lady Midday |
 | Marshes | land 2 | Water Maiden |
-| Old Forest | land 3 | Lady Leshy |
-| Bald Mountain | land 4 | Dragoness |
+| Old Forest | land 3 | Leshy |
+| Bald Mountain | land 4 | Zmey |
 | Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | land 5 | to be decided |
 
 The Stronghold grows with the player. It has a forge, the Wise Woman's hut (potions and bestiary), a tavern (rumours and recruitment), the Priest at the Sacred Oak (story missions) and the gate the party sets out through.
@@ -103,7 +103,7 @@ A shared meter filled by hits dealt and taken and by perfect timings. A full met
 
 ## Enemies and bosses
 
-Enemies fall into archetypes, and the player learns to read a wave's composition and pick counters. Some monsters that are male in folklore get female versions; those that are already female (Lady Midday, the Wild Woman, the Strzyga) stay as they are.
+Enemies fall into archetypes, and the player learns to read a wave's composition and pick counters. Regular enemies are the monsters as folklore knows them, with their folklore gender. Bosses may be female where it suits the character (such as Lady Midday), but never only for the sake of it.
 
 | Archetype | Behaviour | Good counter |
 |---|---|---|
@@ -118,10 +118,10 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 
 | Land | Enemies | Boss and mechanic |
 |---|---|---|
-| Rye Fields | Bandit Woman, She-Werewolf, Field Maiden, Wolf; elite: Bies | Lady Midday: calls reinforcements and asks riddles (special QTE) |
-| Marshes | Drowned Maiden, Will-o'-the-Wisp, Bog Hag, Drowned Girl | Water Maiden: drags a hero underwater for 2 turns |
-| Old Forest | Wild Woman, Mamuna, Spider Woman, Werewolf Mother | Lady Leshy: a girl spirit of the forest; summons roots and shuffles the party's formation |
-| Bald Mountain | Sabbath Witch, Storm Maiden, Giantess, Harpy | Dragoness: announces a great fire strike, teaches the perfect block |
+| Rye Fields | Bandit, Werewolf, Polevik, Wolf; elite: Bies | Lady Midday: calls reinforcements and asks riddles (special QTE) |
+| Marshes | Drowned Man, Will-o'-the-Wisp, Bog Hag, Rusalka | Water Maiden: drags a hero underwater for 2 turns |
+| Old Forest | Wild Woman, Mamuna, Licho, Forest Grandfather | Leshy: the old lord of the forest; summons roots and shuffles the party's formation |
+| Bald Mountain | Sabbath Witch, Planetnik, Giant, Sirin | Zmey: announces a great fire strike, teaches the perfect block |
 | Nav | Wraith, Strzyga, Nightmare, Death | to be decided |
 
 ## World structure and progression

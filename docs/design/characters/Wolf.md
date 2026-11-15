@@ -7,7 +7,7 @@ A regular Rye Fields enemy and the Bies' pack, and the first quadruped made with
 - **Side:** enemy, female (a she-wolf; the pack is mixed, the model is one).
 - **Land:** Rye Fields.
 - **Archetype or role:** Slasher: she hits one hero hard and goes for the weakest. Alone she is a nuisance; in a pair with the Bies she turns his Mark into a kill.
-- **Encounters:** two Wolves with the Bies; packs of two or three Wolves, or a Wolf with the Bandit Woman, in ordinary Rye Fields battles.
+- **Encounters:** two Wolves with the Bies; packs of two or three Wolves, or a Wolf with the Bandit, in ordinary Rye Fields battles.
 - **With the Bies:** the Wolves always act after him in the enemy turn, so Sic the Pack pays off in the same turn. When he dies they fight on unchanged.
 - **Plain and possessed:** the player meets plain field Wolves first; the possessed ones, with the Bies' embers, fight at his side. Both use the same model and rules; the plain Wolf has an albedo without the ember marks and with dull yellow eyes.
 
