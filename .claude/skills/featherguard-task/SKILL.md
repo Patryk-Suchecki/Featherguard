@@ -75,6 +75,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
   - the description starts with `Closes #<issue>`, or `Part of #<issue>` when the issue needs more PRs;
   - for a stacked PR, set `--base <parent branch>` and add "Based on #<parent>. Merge it first; this PR then retargets to `main`.";
   - add the label of the issue.
+  - assign your developer (`--assignee @me`).
 - `CODEOWNERS` requests the other developer's review. `gh pr create` may still print "Could not add requested reviewers"; check with `gh pr view <n> --json reviewRequests`.
 - **Editing a PR description:** write the body to a file, check that the file is not empty, then `gh pr edit <n> --body-file <file>`. An empty file wipes the description.
 - Never mention AI tools, generated images or Claude anywhere in the repo, commits or PRs.
