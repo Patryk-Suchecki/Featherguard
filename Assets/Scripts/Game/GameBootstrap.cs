@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
@@ -17,18 +16,13 @@ namespace Featherguard.Game
         [SerializeField] Camera battleCamera;
         [SerializeField] CameraShake cameraShake;
 
-        static MetaProgression meta;
-
         FeedbackHub feedback;
         BattleHud hud;
         RunFlow flow;
         BattleController battle;
         ToonMaterials toon;
 
-        MetaProgression Meta => meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetOnLoad() => meta = null;
+        MetaProgression Meta => SavedGame.Meta(config);
 
         IEnumerator Start()
         {
@@ -45,7 +39,8 @@ namespace Featherguard.Game
             if (session == null)
             {
                 yield return CampScreen.Show(hud, Meta);
-                session = RunSession.Start(config.run, config.heroes, UnityRandomSource.Shared);
+                var roster = SavedGame.Roster(config);
+                session = RunSession.Start(config.run, roster.IsPartyComplete ? roster.Party : config.heroes, UnityRandomSource.Shared);
                 Meta.ApplyTo(session);
             }
             hud.BindWallet(session.Wallet);
