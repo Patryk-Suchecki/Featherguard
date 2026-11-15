@@ -33,7 +33,7 @@ namespace Featherguard.EditorTools
 
             Seeder.EnsureFolder(System.IO.Path.GetDirectoryName(ContentPaths.Scene));
             EditorSceneManager.SaveScene(scene, ContentPaths.Scene);
-            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ContentPaths.Scene, true) };
+            BuildScenes.Register();
         }
 
         static void ConfigureLighting()

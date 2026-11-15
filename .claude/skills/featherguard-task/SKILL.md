@@ -16,6 +16,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
   gh api -X POST repos/Patryk-Suchecki/Featherguard/issues/<epic>/sub_issues -F sub_issue_id=$id
   ```
 - Docs and tooling issues need no label; others get `gameplay`, `art`, `audio`, `UI`, `bug` or `balance`.
+- Assign your developer when work starts (`gh issue create --assignee @me`, or `gh issue edit <n> --add-assignee @me` for an existing issue), as `docs/CONTRIBUTING.md` asks.
 
 ## 2. Where to work
 
@@ -74,6 +75,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
   - the description starts with `Closes #<issue>`, or `Part of #<issue>` when the issue needs more PRs;
   - for a stacked PR, set `--base <parent branch>` and add "Based on #<parent>. Merge it first; this PR then retargets to `main`.";
   - add the label of the issue.
+  - assign your developer (`--assignee @me`).
 - `CODEOWNERS` requests the other developer's review. `gh pr create` may still print "Could not add requested reviewers"; check with `gh pr view <n> --json reviewRequests`.
 - **Editing a PR description:** write the body to a file, check that the file is not empty, then `gh pr edit <n> --body-file <file>`. An empty file wipes the description.
 - Never mention AI tools, generated images or Claude anywhere in the repo, commits or PRs.
@@ -81,7 +83,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
 ## 7. After review and merge
 
 - Never approve or merge without your developer asking in the conversation.
-- A squash merge of a parent PR retargets the stacked child to `main`, dismisses its approval and usually leaves conflicts. Merge `main` into the child (when git cannot tell what is already in, `git merge-tree --merge-base=<old parent tip>` helps), push, and ask for a fresh approval.
+- **Merging a stack:** new commits do not dismiss approvals on PRs into `main`. Merge the stack from the top: squash each child into its parent branch, add the child's `Closes #<issue>` to the parent's description, then merge the parent into `main`. Merging the parent first instead retargets the child to `main` and usually leaves conflicts; then merge `main` into the child (when git cannot tell what is already in, `git merge-tree --merge-base=<old parent tip>` helps) and push.
 - Never rename a PR's head branch: GitHub closes the PR.
 - Unlock LFS files you locked once the PR is merged (`git lfs locks`, `git lfs unlock <path>`).
 - Remove worktrees you created when their branch is merged (`git worktree remove <path>`; on Windows a very deep `Library` folder may need deleting by hand first).

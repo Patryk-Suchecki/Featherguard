@@ -41,7 +41,7 @@ Combat is the core of the game and is specified first, in `combat/`.
 | 9 | Enemy behaviour | AI, archetypes, boss phases | – |
 | 10 | Sources outside combat | How equipment and sets, Laws of the lands, passives, potions and difficulty plug into combat | – |
 | 11 | Feedback | What the player sees and hears for every event; what the UI shows (for example enemy intents) | – |
-| 12 | Content | Heroes, enemies, bosses and encounters, built from the layers above. Each character has its own sheet in `characters/`, made from `characters/TEMPLATE.md` | – |
+| 12 | Content | Heroes, enemies, bosses and encounters, built from the layers above. Each character has its own sheet in `characters/`, made from `characters/TEMPLATE.md` | [enemy index](enemies.md), [land template](lands/TEMPLATE.md) |
 | 13 | Balance | Target values (battle length, turns to defeat an enemy) and how we tune them | – |
 
 ## Other systems
@@ -50,9 +50,9 @@ Specified after combat, in this order. Each follows the same structure on a smal
 
 | # | System | Covers | Spec |
 |---|---|---|---|
-| 1 | Party | Roster, picking 3 heroes, character levels and growth | – |
-| 2 | World progression | Land map, lands, story missions, side activities, unlocks | – |
+| 1 | Party | Roster, picking 3 heroes, character levels and growth | [`party.md`](party.md) |
+| 2 | World progression | World map, lands, story missions, side activities, unlocks | [`world-progression.md`](world-progression.md) |
 | 3 | Equipment and forge | Slots, rarities, sets, recipes, materials | – |
 | 4 | Economy | Currencies, where they come from, what they are spent on and how fast | – |
 | 5 | Stronghold | Buildings, what they offer, how they grow | – |
-| 6 | Screen flow and UI | How the player moves between all of the above | – |
+| 6 | Screen flow and UI | How the player moves between all of the above | [`screen-flow.md`](screen-flow.md) |

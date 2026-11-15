@@ -58,3 +58,4 @@ For a variant of the same character (another colouring, a possessed version), ha
   Use the height it prints for the unit's `UnitVisuals.height`.
 - Lock existing binaries before changing them (`git lfs lock`), open the model and the rig as `art/` PRs with no gameplay changes, and bring the character into the game (`UnitCatalog`, `UnitVisuals`, an encounter) in its own feature PR (see `featherguard-task`).
 - Tick the asset checklist in the character's sheet as each step lands.
+- A PR that moves an enemy or boss to a new stage updates its row in `docs/design/enemies.md`.

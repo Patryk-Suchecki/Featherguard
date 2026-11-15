@@ -59,6 +59,7 @@ namespace Featherguard.EditorTools
             });
             AssetDatabase.SaveAssets();
 
+            StrongholdSceneBuilder.Build(config);
             SceneBuilder.Build(config);
             MobileSettings.Apply();
             Debug.Log(resetToDefaults ? "Featherguard: data reset to defaults and scene rebuilt." : "Featherguard: scene rebuilt.");
