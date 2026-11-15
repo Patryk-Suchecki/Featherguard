@@ -78,6 +78,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
   - In the editor: Window → General → Test Runner → EditMode → Run All.
   - With the optional Unity CLI connected to an open editor: `unity command test run --mode EditMode --filter Featherguard`.
   - Without an open editor (the project must be closed in Unity): `"<Unity.exe>" -batchmode -projectPath . -runTests -testPlatform EditMode -testResults Temp/results.xml`.
+- **On every pull request** into `main`, GitHub Actions runs the EditMode tests (`.github/workflows/tests.yml`) and shows the result on the PR.
 - **Before every push:** run the tests. Add or update tests for any rule or economy change. Prefer testing the model directly with `FakeRandom`.
 - If you cannot run the tests or the game yourself, ask the person you work with to run them and report back. Never claim tests passed or something works without seeing it.
 
