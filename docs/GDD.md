@@ -129,8 +129,8 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 |---|---|---|
 | Rye Fields | Bandit, Werewolf, Polevik, Wolf; elite: Bies | Lady Midday: calls reinforcements and asks riddles (special QTE) |
 | Marshes | Drowned Man, Will-o'-the-Wisp, Bog Hag, Rusalka | Water Maiden: drags a hero underwater for 2 turns |
-| Old Forest | Wild Woman, Mamuna, Licho, Forest Grandfather | Leshy: the old lord of the forest; summons roots and shuffles the party's formation |
 | Bald Mountain | Sabbath Witch, Planetnik, Giant, Sirin | Zmey: announces a great fire strike, teaches the perfect block |
+| Old Forest | Wild Woman, Mamuna, Licho, Forest Grandfather | Leshy: the old lord of the forest; summons roots and shuffles the party's formation |
 | Nav | Wraith, Strzyga, Nightmare, Death | to be decided |
 
 ## World structure and progression
@@ -151,8 +151,8 @@ A land's **Law** is a combat rule that applies to battles in that land. Every la
 |---|---|---|---|
 | Rye Fields | Noon Heat: every 3rd turn, characters without a Shield lose part of their HP | Shields, tempo | iron, flax |
 | Marshes | Depths: some enemies submerge; wisps switch targets | area attacks, cleansing | amber, herbs |
-| Old Forest | Misleading: the party's formation shuffles; enemies stay hidden until Marked | Mark, control | wood, resin |
 | Bald Mountain | Storm: lightning strikes a random character; dodge it in a QTE | block, cleansing | ore, thunderstone |
+| Old Forest | Misleading: the party's formation shuffles; enemies stay hidden until Marked | Mark, control | wood, resin |
 | Nav | Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire | fast damage, fire | Nav essence |
 
 Progress and forcing:
