@@ -36,7 +36,7 @@ The world map is where the player decides what to do next. The story pulls them 
     | 4 | Rye Fields | 9 | Rye Fields | 14 | Old Forest | 19 | Nav | 24 | Nav |
     | 5 | Marshes | 10 | Bald Mountain | 15 | Nav | 20 | Old Forest | 25 | Nav (boss) |
 
-4. **A land's 5th story mission is its Boss fight**: Lady Midday at 12, the Water Maiden at 17, the Dragoness at 21, Lady Leshy at 23 and the boss of Nav at 25. A boss first appears only in its story mission. **Once beaten, the boss can also appear in its land as a side activity.**
+4. **A land's 5th story mission is its Boss fight**: Lady Midday at 12, the Water Maiden at 17, Zmey at 21, the Leshy at 23 and the boss of Nav at 25. A boss first appears only in its story mission. **Once beaten, the boss can also appear in its land as a side activity.**
 
 ### Lands
 
