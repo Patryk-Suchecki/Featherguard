@@ -22,6 +22,8 @@ namespace Featherguard.Meta
         public int madnessFrom = 4;
         [Tooltip("Extra share of gold, materials and EXP for a win at Dangerous or Madness.")]
         [Min(0f)] public float daringBonus = 0.5f;
+        [Tooltip("The party strength ratings use until heroes have levels.")]
+        [Min(0f)] public float partyStrength = 1f;
 
         public ThreatRating Rate(float threatAboveStrength) =>
             threatAboveStrength <= easyAtMost ? ThreatRating.Easy

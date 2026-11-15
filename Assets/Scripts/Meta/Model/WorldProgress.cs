@@ -21,8 +21,10 @@ namespace Featherguard.Meta
             this.random = random;
             data.world ??= new WorldSave();
             data.world.storyWon = Math.Clamp(data.world.storyWon, 0, world.storyMissions.Length);
+            string chosen = data.world.chosen;
             if (!RestoreSideActivities())
                 Reroll();
+            Chosen = OnMap(chosen);
         }
 
         public IReadOnlyList<LandDefinition> Lands => world.lands;
@@ -30,6 +32,7 @@ namespace Featherguard.Meta
         public int StoryCount => world.storyMissions.Length;
         public ActivityDefinition NextStory => StoryWon < StoryCount ? world.storyMissions[StoryWon] : null;
         public bool IsStoryComplete => NextStory == null;
+        public ActivityDefinition Chosen { get; private set; }
 
         public bool IsOpen(LandDefinition land) => world.storyMissions.Take(Math.Min(StoryWon + 1, StoryCount)).Any(m => m.land == land);
 
@@ -53,6 +56,8 @@ namespace Featherguard.Meta
 
         public bool IsStoryMission(ActivityDefinition activity) => activity != null && activity == NextStory;
 
+        public ThreatRating Rate(ActivityDefinition activity) => Rate(activity, world.partyStrength);
+
         public ThreatRating Rate(ActivityDefinition activity, float partyStrength) => world.Rate(activity.threat - partyStrength);
 
         public bool IsDaring(ThreatRating rating) => rating >= ThreatRating.Dangerous;
@@ -62,7 +67,22 @@ namespace Featherguard.Meta
         public void Win(ActivityDefinition activity)
         {
             if (IsStoryMission(activity)) data.world.storyWon++;
+            Chosen = null;
             Reroll();
+        }
+
+        public bool Choose(ActivityDefinition activity)
+        {
+            if (activity == null || !ActivitiesIn(activity.land).Contains(activity)) return false;
+            Chosen = activity;
+            Save();
+            return true;
+        }
+
+        public void ClearChoice()
+        {
+            Chosen = null;
+            Save();
         }
 
         public void Reroll()
@@ -87,6 +107,9 @@ namespace Featherguard.Meta
             Save();
         }
 
+        ActivityDefinition OnMap(string id) =>
+            string.IsNullOrEmpty(id) ? null : world.lands.Where(IsOpen).SelectMany(ActivitiesIn).FirstOrDefault(a => a.name == id);
+
         IEnumerable<ActivityDefinition> Drawable(LandDefinition land) =>
             land.sideActivities.Where(a => a != null && a.availableAfter <= StoryWon && (a.type != ActivityType.BossFight || IsBossBeaten(land)));
 
@@ -110,6 +133,7 @@ namespace Featherguard.Meta
             data.world.offers = sideActivities
                 .Select(pair => new LandOffer { land = pair.Key.name, activities = pair.Value.Select(a => a.name).ToList() })
                 .ToList();
+            data.world.chosen = Chosen != null ? Chosen.name : "";
             store.Save(data);
         }
     }

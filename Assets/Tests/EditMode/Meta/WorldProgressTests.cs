@@ -224,5 +224,61 @@ namespace Featherguard.Tests
             Assert.IsTrue(reloaded.ActivitiesIn(fields).All(a => a != null));
             Assert.AreEqual(1, reloaded.ActivitiesIn(fields).Count);
         }
+
+        [Test]
+        public void ChosenActivity_IsSavedAndRestored()
+        {
+            var progress = Create(0.99f);
+
+            Assert.IsTrue(progress.Choose(story[0]));
+
+            var reloaded = new MetaProgression(meta.Config, store).CreateWorld(world, new FakeRandom(0f));
+            Assert.AreSame(story[0], reloaded.Chosen);
+        }
+
+        [Test]
+        public void AnActivityNotOnTheMap_CannotBeChosen()
+        {
+            var progress = Create();
+
+            Assert.IsFalse(progress.Choose(story[2]));
+            Assert.IsFalse(progress.Choose(marshes.sideActivities[0]));
+            Assert.IsNull(progress.Chosen);
+        }
+
+        [Test]
+        public void Winning_ClearsTheChoice()
+        {
+            var progress = Create();
+            progress.Choose(story[0]);
+
+            progress.Win(story[0]);
+
+            Assert.IsNull(progress.Chosen);
+        }
+
+        [Test]
+        public void ClearingTheChoice_IsSaved()
+        {
+            var progress = Create();
+            progress.Choose(story[0]);
+
+            progress.ClearChoice();
+
+            var reloaded = new MetaProgression(meta.Config, store).CreateWorld(world, new FakeRandom(0f));
+            Assert.IsNull(reloaded.Chosen);
+        }
+
+        [Test]
+        public void ASavedChoiceNoLongerOnTheMap_IsDropped()
+        {
+            Create();
+            meta.Data.world.chosen = "Removed";
+            store.Save(meta.Data);
+
+            var reloaded = new MetaProgression(meta.Config, store).CreateWorld(world, new FakeRandom(0f));
+
+            Assert.IsNull(reloaded.Chosen);
+        }
     }
 }

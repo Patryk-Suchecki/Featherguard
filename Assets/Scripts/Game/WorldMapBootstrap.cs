@@ -13,8 +13,6 @@ namespace Featherguard.Game
 {
     public class WorldMapBootstrap : MonoBehaviour
     {
-        const float PartyStrength = 1f;
-
         [SerializeField] GameConfig config;
         [SerializeField] Camera sceneCamera;
         [SerializeField] WorldMapLand[] lands;
@@ -35,6 +33,7 @@ namespace Featherguard.Game
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             world = SavedGame.World(config);
+            if (world.Chosen != null) world.ClearChoice();
 
             var markers = new List<MapMarkerLabel>();
             foreach (var land in lands)
@@ -67,7 +66,7 @@ namespace Featherguard.Game
             var marker = hit.collider.GetComponentInParent<MapMarker>();
             if (marker != null)
             {
-                hud.Toast($"{marker.Activity.displayName}: battle preparation coming soon");
+                Prepare(marker.Activity);
                 return;
             }
             var land = hit.collider.GetComponentInParent<WorldMapLand>();
@@ -84,8 +83,16 @@ namespace Featherguard.Game
             var marker = Instantiate(template, slot.position, slot.rotation, slot);
             marker.SetActive(true);
             marker.AddComponent<MapMarker>().Bind(activity);
-            var rating = world.Rate(activity, PartyStrength);
+            var rating = world.Rate(activity);
             return new MapMarkerLabel(marker.transform, activity.displayName, story, rating, world.IsDaring(rating));
+        }
+
+        void Prepare(ActivityDefinition activity)
+        {
+            if (!world.Choose(activity)) return;
+            leaving = true;
+            FeedbackHub.Ui(SfxId.Whoosh);
+            SceneManager.LoadScene(GameScenes.Preparation);
         }
 
         void Back()

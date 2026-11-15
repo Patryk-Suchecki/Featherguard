@@ -19,7 +19,7 @@ Every layer is its own assembly, so the compiler rejects a reference that goes t
 | Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
 | Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, hero roster, world progress (`WorldProgress`), `ISaveStore` | Run, Battle, Core |
 | UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feedback, Core |
-| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen) and `WorldMapBootstrap` (world map scene) composition roots, `RunFlow` (victory, rewards, abandoning a run), `GameScenes`, `GameConfig` | everything above |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen), `WorldMapBootstrap` (world map) and `PreparationBootstrap` (battle preparation) composition roots, `ActivityFlow` (the result of an activity battle), `RunFlow` (victory, rewards, abandoning a run), `GameScenes`, `GameConfig` | everything above |
 
 `Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
@@ -34,7 +34,7 @@ SOLID rules:
 - **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
 - **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
 - **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
-- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `RunFlow` it drives, `StrongholdBootstrap` or `WorldMapBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `RunFlow` it drives, `StrongholdBootstrap`, `WorldMapBootstrap` or `PreparationBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
 
 ## Data and balance
 
@@ -45,9 +45,10 @@ All tuning lives in ScriptableObjects under `Assets/Data`:
 Change balance by editing those assets, not code.
 
 Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
-- **Featherguard > Rebuild Battle Scene** creates missing assets and refreshes art links without overwriting edited values. It also regenerates all three scenes, `Assets/Scenes/Stronghold.unity`, `Assets/Scenes/WorldMap.unity` and `Assets/Scenes/Battle.unity`, with their post-FX in `Assets/Settings`.
+- **Featherguard > Rebuild Battle Scene** creates missing assets and refreshes art links without overwriting edited values. It also regenerates all four scenes, `Assets/Scenes/Stronghold.unity`, `WorldMap.unity`, `Preparation.unity` and `Battle.unity`, with their post-FX in `Assets/Settings`.
 - **Featherguard > Rebuild Stronghold Scene** regenerates only the Stronghold scene (main screen), its post-FX and its placeholder materials in `Assets/Art/Materials/Stronghold`.
 - **Featherguard > Rebuild World Map Scene** seeds missing lands and activities, then regenerates only the world map scene and its post-FX. It shares the night placeholder materials with the Stronghold.
+- **Featherguard > Rebuild Preparation Scene** regenerates only the battle preparation scene and its post-FX.
 - **Featherguard > Reset Data To Defaults** overwrites all data with catalog values. Only run it on purpose.
 - When you add content, add it to the catalog too, so a fresh checkout can rebuild it.
 
@@ -135,7 +136,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 - Everyone uses Unity **6000.6.2f1** exactly. Never upgrade the editor or packages in a feature PR.
 - Never hand-edit `.unity`, `.prefab` or `.asset` YAML while an editor has the project open; Unity overwrites it. Prefer editing through scripts or the inspector.
-- Only one person changes `Battle.unity`, `Stronghold.unity` or `WorldMap.unity` at a time. Rebuild regenerates it, so discard scene, post-FX and ProjectSettings noise from a Rebuild (`git restore`) unless the PR is about them.
+- Only one person changes a scene (`Battle.unity`, `Stronghold.unity`, `WorldMap.unity` or `Preparation.unity`) at a time. Rebuild regenerates it, so discard scene, post-FX and ProjectSettings noise from a Rebuild (`git restore`) unless the PR is about them.
 - Always commit `.meta` files together with their assets; moving a script or asset must move its `.meta` (use `git mv`) to keep GUIDs.
 - Binaries (`fbx`, `blend`, `png`, `wav`, `ogg`) are in Git LFS and lockable: lock before editing and unlock after merging.
 - Set up Unity Smart Merge once per clone (see `docs/CONTRIBUTING.md`).

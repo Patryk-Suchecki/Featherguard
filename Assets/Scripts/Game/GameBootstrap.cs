@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
@@ -18,7 +19,7 @@ namespace Featherguard.Game
 
         FeedbackHub feedback;
         BattleHud hud;
-        RunFlow flow;
+        BattleVisuals visuals;
         BattleController battle;
         ToonMaterials toon;
 
@@ -31,8 +32,38 @@ namespace Featherguard.Game
             feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             hud = gameObject.AddComponent<BattleHud>();
-            var visuals = new BattleVisuals(config.presentation);
-            flow = new RunFlow(hud, Meta, config.presentation.afterVictory);
+            visuals = new BattleVisuals(config.presentation);
+
+            var world = SavedGame.World(config);
+            if (world.Chosen != null)
+                yield return FightActivity(world, world.Chosen);
+            else
+                yield return PlayPrototypeRun();
+        }
+
+        void Update()
+        {
+            if (!GameClock.Paused) battle?.Tick();
+        }
+
+        void OnDestroy() => toon?.Dispose();
+
+        IEnumerator FightActivity(WorldProgress world, ActivityDefinition activity)
+        {
+            var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory);
+            hud.Init(battleCamera, visuals, flow.Abandon, () => true);
+            hud.BindWallet(new Wallet());
+            var roster = SavedGame.Roster(config);
+            var party = roster.IsPartyComplete ? roster.Party : config.heroes.Take(HeroRoster.PartySize).ToList();
+            var setup = ActivityBattle.CreateSetup(activity, party);
+            StartBattle(setup, UnityRandomSource.Shared);
+            yield return battle.Run();
+            yield return flow.Conclude(battle.Result);
+        }
+
+        IEnumerator PlayPrototypeRun()
+        {
+            var flow = new RunFlow(hud, Meta, config.presentation.afterVictory);
             hud.Init(battleCamera, visuals, flow.Abandon, () => RunSession.Current != null);
 
             var session = RunSession.Current;
@@ -46,11 +77,19 @@ namespace Featherguard.Game
             hud.BindWallet(session.Wallet);
 
             var setup = session.CreateBattleSetup();
-            setup.AwaitBlocks = config.presentation.timingPrompts;
             var testEncounter = TestEncounterSetting.Current;
             if (testEncounter != null)
                 UseTestEncounter(setup, testEncounter);
-            var model = new BattleModel(setup, config.rules, session.Random);
+            var model = StartBattle(setup, session.Random);
+            flow.TrackKills(session, model, battle.Presenter);
+            yield return battle.Run();
+            yield return flow.Conclude(session, battle.Result);
+        }
+
+        BattleModel StartBattle(BattleSetup setup, IRandomSource random)
+        {
+            setup.AwaitBlocks = config.presentation.timingPrompts;
+            var model = new BattleModel(setup, config.rules, random);
             toon ??= new ToonMaterials(config.toonMaterial);
             battle = new BattleController(model, new BattleServices
             {
@@ -65,19 +104,9 @@ namespace Featherguard.Game
                 Host = this,
                 UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
             });
-            flow.TrackKills(session, model, battle.Presenter);
             hud.BindBattle(battle.Commands, battle.Presenter.Rage);
-
-            yield return battle.Run();
-            yield return flow.Conclude(session, battle.Result);
+            return model;
         }
-
-        void Update()
-        {
-            if (!GameClock.Paused) battle?.Tick();
-        }
-
-        void OnDestroy() => toon?.Dispose();
 
         static void UseTestEncounter(BattleSetup setup, EncounterDefinition encounter)
         {

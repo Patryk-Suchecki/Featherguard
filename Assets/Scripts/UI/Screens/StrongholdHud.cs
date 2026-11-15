@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Featherguard.Feedback;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace Featherguard.UI
@@ -29,9 +27,7 @@ namespace Featherguard.UI
         public void Init(Camera camera, IEnumerable<(Transform Anchor, string Name)> places, Action onSettings)
         {
             sceneCamera = camera;
-            if (FindAnyObjectByType<EventSystem>() == null)
-                new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            var root = CreateCanvas();
+            var root = ScreenCanvas.Create("StrongholdHUD");
             canvas = root.GetComponent<Canvas>();
 
             labelLayer = Ui.Stretch("Labels", root);
@@ -85,19 +81,6 @@ namespace Featherguard.UI
             toast.color = ToastColor;
             yield return new WaitForSecondsRealtime(ToastHold);
             yield return Tweens.Fade(toast, ToastFade);
-        }
-
-        static RectTransform CreateCanvas()
-        {
-            var canvasObject = new GameObject("StrongholdHUD", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            var c = canvasObject.GetComponent<Canvas>();
-            c.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObject.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 1f;
-            return (RectTransform)canvasObject.transform;
         }
     }
 }
