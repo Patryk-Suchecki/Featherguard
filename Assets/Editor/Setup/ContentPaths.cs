@@ -23,5 +23,8 @@ namespace Featherguard.EditorTools
         public const string Perks = "Assets/Data/Perks";
         public const string PostProfile = "Assets/Settings/BattlePostFX.asset";
         public const string Scene = "Assets/Scenes/Battle.unity";
+        public const string StrongholdScene = "Assets/Scenes/Stronghold.unity";
+        public const string StrongholdPostProfile = "Assets/Settings/StrongholdPostFX.asset";
+        public const string StrongholdMaterials = "Assets/Art/Materials/Stronghold";
     }
 }
