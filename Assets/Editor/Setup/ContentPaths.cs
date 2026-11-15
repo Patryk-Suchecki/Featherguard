@@ -26,5 +26,10 @@ namespace Featherguard.EditorTools
         public const string StrongholdScene = "Assets/Scenes/Stronghold.unity";
         public const string StrongholdPostProfile = "Assets/Settings/StrongholdPostFX.asset";
         public const string StrongholdMaterials = "Assets/Art/Materials/Stronghold";
+        public const string World = "Assets/Data/World";
+        public const string Lands = "Assets/Data/World/Lands";
+        public const string Activities = "Assets/Data/World/Activities";
+        public const string WorldMapScene = "Assets/Scenes/WorldMap.unity";
+        public const string WorldMapPostProfile = "Assets/Settings/WorldMapPostFX.asset";
     }
 }

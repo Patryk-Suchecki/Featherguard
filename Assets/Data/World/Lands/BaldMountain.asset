@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb5a7f8a208b7d41bfc84a4774af664, type: 3}
+  m_Name: BaldMountain
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
+  displayName: Bald Mountain
+  law: 'Storm: lightning strikes a random character; dodge it in a QTE.'
+  sideActivities:
+  - {fileID: 11400000, guid: 126ead3717a70db418b98867e47d5e8d, type: 2}
+  - {fileID: 11400000, guid: df025ee62c5071844bbd11747bdbaf4f, type: 2}
+  - {fileID: 11400000, guid: 05c0355f2fda49040bf2ca343d72b430, type: 2}
+  - {fileID: 11400000, guid: e7d638c9e3d1c85499034ca50edb233d, type: 2}
+  - {fileID: 11400000, guid: bb3aabbbaca2ce544b0ecd2b6e93a982, type: 2}

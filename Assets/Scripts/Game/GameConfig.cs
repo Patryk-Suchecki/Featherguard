@@ -16,6 +16,8 @@ namespace Featherguard.Game
         public UnitDefinition[] heroes;
         [Tooltip("Fixed seats at the campfire; seats without a hero stay empty until one joins.")]
         [Min(3)] public int campSeats = 6;
+        [Tooltip("Lands, story order and side activities of the world map.")]
+        public WorldDefinition world;
         public BattleRules rules;
         public RunDefinition run;
         public MetaConfig meta;

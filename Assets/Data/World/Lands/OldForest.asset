@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb5a7f8a208b7d41bfc84a4774af664, type: 3}
+  m_Name: OldForest
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
+  displayName: Old Forest
+  law: 'Misleading: the party''s formation shuffles; enemies stay hidden until Marked.'
+  sideActivities:
+  - {fileID: 11400000, guid: 6f324c47f383bb64bbd6f1c9ef0c84f9, type: 2}
+  - {fileID: 11400000, guid: 4e5c161fe6270a4459c4c9ea3ec792fb, type: 2}
+  - {fileID: 11400000, guid: 113ab8ca9d9728841b1b1e7544250890, type: 2}
+  - {fileID: 11400000, guid: c5e78a884841e9242aeec5e6fa351e5a, type: 2}
+  - {fileID: 11400000, guid: 80e66c383b120d84cac2232b4679b066, type: 2}

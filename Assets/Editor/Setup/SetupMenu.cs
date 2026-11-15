@@ -38,6 +38,7 @@ namespace Featherguard.EditorTools
                 p.statuses = statusVisuals;
             });
             var run = RunCatalog.Build(seeder, units, art);
+            var world = WorldCatalog.Build(seeder);
             var meta = MetaCatalog.Build(seeder, art);
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
@@ -49,6 +50,7 @@ namespace Featherguard.EditorTools
                 c.presentation = presentation;
                 c.run = run;
                 c.meta = meta;
+                c.world = world;
                 c.flashMaterial = art.Flash;
                 c.particleMaterial = art.Particle;
                 c.ringMaterial = art.Ring;
@@ -60,6 +62,7 @@ namespace Featherguard.EditorTools
             AssetDatabase.SaveAssets();
 
             StrongholdSceneBuilder.Build(config);
+            WorldMapSceneBuilder.Build(config);
             SceneBuilder.Build(config);
             MobileSettings.Apply();
             Debug.Log(resetToDefaults ? "Featherguard: data reset to defaults and scene rebuilt." : "Featherguard: scene rebuilt.");

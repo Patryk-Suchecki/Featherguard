@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85c33581dc1f5e439af20915cae39fb, type: 3}
+  m_Name: OldForestElite
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.ActivityDefinition
+  displayName: Old Forest Elite
+  type: 3
+  land: {fileID: 11400000, guid: 24edd298d2e6f834c8e746523059ea8c, type: 2}
+  encounter: {fileID: 11400000, guid: 7713d5ccc2cce7d49aee8dba32fed65d, type: 2}
+  threat: 6
+  availableAfter: 11
