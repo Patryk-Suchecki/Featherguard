@@ -73,7 +73,8 @@ namespace Featherguard.Game
         static void NewRun()
         {
             RunSession.End();
-            Reload();
+            GameClock.Paused = false;
+            SceneManager.LoadScene(GameScenes.Stronghold);
         }
 
         static void Reload()

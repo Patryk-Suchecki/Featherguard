@@ -18,5 +18,6 @@ namespace Featherguard.Meta
         public int wins;
         public int bestBattles;
         public List<PerkLevel> perks = new();
+        public List<string> party = new();
     }
 }
