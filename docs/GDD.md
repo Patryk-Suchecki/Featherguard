@@ -30,8 +30,8 @@ The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 | Sacred Oak Stronghold | main screen | – |
 | Rye Fields | land 1, open from the start | Lady Midday |
 | Marshes | land 2 | Water Maiden |
-| Old Forest | land 3 | Lady Leshy |
-| Bald Mountain | land 4 | Dragoness |
+| Bald Mountain | land 3 | Dragoness |
+| Old Forest | land 4 | Lady Leshy |
 | Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | land 5 | to be decided |
 
 The Stronghold is the main screen and grows with the player. Its buildings:
@@ -137,9 +137,9 @@ Enemies fall into archetypes, and the player learns to read a wave's composition
 
 The game has 5 lands on a single map. At the start only the Rye Fields are open; the other lands unlock as the player completes story missions.
 
-**Story missions:** every land has 5 main story missions (25 in total). They appear on the world map as Main quest activities, like the side activities; the Sacred Oak only holds the story scenes between them. The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear.
+**Story missions:** every land has 5 main story missions (25 in total). They appear on the world map as Main quest activities, like the side activities; the Sacred Oak only holds the story scenes between them. The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear. Only the next story mission is available at a time, and a land opens when the story first reaches it. Each land's 5th story mission is its boss; once beaten, the boss can also return in its land as a side activity. The full order of the 25 missions is in [`design/world-progression.md`](design/world-progression.md).
 
-**Side activities:** a land the player visits offers up to 3 activities drawn at random from its pool. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage.
+**Side activities:** an open land shows 1 to 3 activities at a time, the next story mission included when it is there; the others are side activities drawn at random from the land's pool, and they are drawn again after every won activity. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage.
 
 **Activity types** on the world map: Single fight, Waves fight, Puzzle fight, Elite fight (a fight against an Elite enemy), Boss fight and Main quest (a story mission).
 
@@ -213,7 +213,6 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 
 - What drives the main story and how it ends.
 - The boss of Nav.
-- Where each land's boss sits among its 5 story missions, and which story mission unlocks which land.
 - Whether a land's Law grows stronger as the player progresses through that land.
 - How threat levels (1–10) are assigned to story missions and side activities.
 - How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
