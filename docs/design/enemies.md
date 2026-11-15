@@ -23,27 +23,27 @@ One table of every enemy and boss with its design and production stage. Which en
 
 | Enemy | Land | Type | Archetype | Sheet | Stage | Issue |
 |---|---|---|---|---|---|---|
-| Bandit Woman | Rye Fields | enemy | ? | – | Idea | – |
-| She-Werewolf | Rye Fields | enemy | ? | – | Idea | – |
-| Field Maiden | Rye Fields | enemy | ? | – | Idea | – |
+| Bandit | Rye Fields | enemy | ? | – | Idea | – |
+| Werewolf | Rye Fields | enemy | ? | – | Idea | – |
+| Polevik | Rye Fields | enemy | ? | – | Idea | – |
 | Wolf | Rye Fields | enemy | Slasher | [Wolf](characters/Wolf.md) | In game | #42 |
 | Bies | Rye Fields | elite | Elite | [Bies](characters/Bies.md) | In game | #15 |
 | Lady Midday | Rye Fields | boss | ? | – | Idea | #25 |
-| Drowned Maiden | Marshes | enemy | ? | – | Idea | – |
+| Drowned Man | Marshes | enemy | ? | – | Idea | – |
 | Will-o'-the-Wisp | Marshes | enemy | ? | – | Idea | – |
 | Bog Hag | Marshes | enemy | ? | – | Idea | – |
-| Drowned Girl | Marshes | enemy | ? | – | Idea | – |
+| Rusalka | Marshes | enemy | ? | – | Idea | – |
 | Water Maiden | Marshes | boss | ? | – | Idea | – |
 | Wild Woman | Old Forest | enemy | ? | – | Idea | – |
 | Mamuna | Old Forest | enemy | ? | – | Idea | – |
-| Spider Woman | Old Forest | enemy | ? | – | Idea | – |
-| Werewolf Mother | Old Forest | enemy | ? | – | Idea | – |
-| Lady Leshy | Old Forest | boss | ? | – | Idea | – |
+| Licho | Old Forest | enemy | ? | – | Idea | – |
+| Forest Grandfather | Old Forest | enemy | ? | – | Idea | – |
+| Leshy | Old Forest | boss | ? | – | Idea | – |
 | Sabbath Witch | Bald Mountain | enemy | ? | – | Idea | – |
-| Storm Maiden | Bald Mountain | enemy | ? | – | Idea | – |
-| Giantess | Bald Mountain | enemy | ? | – | Idea | – |
-| Harpy | Bald Mountain | enemy | ? | – | Idea | – |
-| Dragoness | Bald Mountain | boss | ? | – | Idea | – |
+| Planetnik | Bald Mountain | enemy | ? | – | Idea | – |
+| Giant | Bald Mountain | enemy | ? | – | Idea | – |
+| Sirin | Bald Mountain | enemy | ? | – | Idea | – |
+| Zmey | Bald Mountain | boss | ? | – | Idea | – |
 | Wraith | Nav | enemy | ? | – | Idea | – |
 | Strzyga | Nav | enemy | ? | – | Idea | – |
 | Nightmare | Nav | enemy | ? | – | Idea | – |
