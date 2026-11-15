@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
@@ -7,8 +5,6 @@ using Featherguard.Feedback;
 using Featherguard.Meta;
 using Featherguard.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace Featherguard.Game
@@ -24,20 +20,16 @@ namespace Featherguard.Game
         [SerializeField] Transform campView;
         [SerializeField] CampSeat[] seats;
 
-        readonly List<RaycastResult> uiHits = new();
         StrongholdHud hud;
         CampHud campHud;
         HeroRoster roster;
         StrongholdPlace campPlace;
+        IScreenGestures gestures;
+        CameraFlight flight;
         Pose overview;
-        Coroutine flight;
         bool inCamp;
         bool fromPreparation;
         bool leaving;
-        bool pressing;
-        bool holdHandled;
-        float pressStart;
-        Vector2 pressPosition;
 
         void Start()
         {
@@ -47,6 +39,9 @@ namespace Featherguard.Game
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             overview = new Pose(sceneCamera.transform.position, sceneCamera.transform.rotation);
+            gestures = new PointerGestures(HoldTime);
+            flight = gameObject.AddComponent<CameraFlight>();
+            flight.Init(sceneCamera.transform, FlightTime);
 
             roster = SavedGame.Roster(config);
             SeatHeroes();
@@ -64,32 +59,27 @@ namespace Featherguard.Game
 
         void Update()
         {
-            if (leaving || flight != null) return;
-            var pointer = Pointer.current;
-            if (pointer == null) return;
-            var position = pointer.position.ReadValue();
-
-            if (pointer.press.wasPressedThisFrame)
+            if (leaving || flight.Flying) return;
+            var gesture = gestures.Read(holds: inCamp);
+            switch (gesture.Kind)
             {
-                pressing = !OverUi(position);
-                holdHandled = false;
-                pressStart = Time.unscaledTime;
-                pressPosition = position;
+                case GestureKind.Hold:
+                    HoldInCamp(gesture.Position);
+                    return;
+                case GestureKind.Tap when inCamp:
+                    TapInCamp(gesture.Position);
+                    return;
+                case GestureKind.Tap:
+                    TapInStronghold(gesture.Position);
+                    return;
             }
-            if (!pressing) return;
+        }
 
-            if (inCamp && !holdHandled && Time.unscaledTime - pressStart >= HoldTime)
-            {
-                holdHandled = true;
-                var held = SeatAt(pressPosition);
-                if (held != null && roster.AtSeat(held.Index) != null)
-                    campHud.ShowDetails(roster.AtSeat(held.Index), roster.InParty(roster.AtSeat(held.Index)));
-            }
-            if (!pointer.press.wasReleasedThisFrame) return;
-            pressing = false;
-            if (holdHandled) return;
-            if (inCamp) TapInCamp(position);
-            else TapInStronghold(position);
+        void HoldInCamp(Vector2 position)
+        {
+            var seat = SeatAt(position);
+            var hero = seat != null ? roster.AtSeat(seat.Index) : null;
+            if (hero != null) campHud.ShowDetails(hero, roster.InParty(hero));
         }
 
         void TapInStronghold(Vector2 position)
@@ -157,19 +147,20 @@ namespace Featherguard.Game
             if (campPlace != null) campPlace.GetComponent<Collider>().enabled = false;
             hud.SetOverviewVisible(false);
             ShowSeats();
+            var view = new Pose(campView.position, campView.rotation);
             if (instant)
             {
-                sceneCamera.transform.SetPositionAndRotation(campView.position, campView.rotation);
+                flight.Jump(view);
                 campHud.SetVisible(true);
                 return;
             }
             FeedbackHub.Ui(SfxId.Whoosh);
-            flight = StartCoroutine(Fly(new Pose(campView.position, campView.rotation), () => campHud.SetVisible(true)));
+            flight.Fly(view, () => campHud.SetVisible(true));
         }
 
         void LeaveCamp()
         {
-            if (flight != null) return;
+            if (flight.Flying) return;
             FeedbackHub.Ui(SfxId.Whoosh);
             if (fromPreparation)
             {
@@ -181,22 +172,7 @@ namespace Featherguard.Game
             campHud.SetVisible(false);
             if (campPlace != null) campPlace.GetComponent<Collider>().enabled = true;
             ShowSeats();
-            flight = StartCoroutine(Fly(overview, () => hud.SetOverviewVisible(true)));
-        }
-
-        IEnumerator Fly(Pose target, System.Action arrived)
-        {
-            var camera = sceneCamera.transform;
-            var start = new Pose(camera.position, camera.rotation);
-            for (float t = 0f; t < 1f; t += Time.unscaledDeltaTime / FlightTime)
-            {
-                float k = Mathf.SmoothStep(0f, 1f, t);
-                camera.SetPositionAndRotation(Vector3.Lerp(start.position, target.position, k), Quaternion.Slerp(start.rotation, target.rotation, k));
-                yield return null;
-            }
-            camera.SetPositionAndRotation(target.position, target.rotation);
-            flight = null;
-            arrived();
+            flight.Fly(overview, () => hud.SetOverviewVisible(true));
         }
 
         void SeatHeroes()
@@ -231,13 +207,5 @@ namespace Featherguard.Game
 
         CampSeat SeatAt(Vector2 position) =>
             Physics.Raycast(sceneCamera.ScreenPointToRay(position), out var hit, 200f) ? hit.collider.GetComponentInParent<CampSeat>() : null;
-
-        bool OverUi(Vector2 position)
-        {
-            if (EventSystem.current == null) return false;
-            uiHits.Clear();
-            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = position }, uiHits);
-            return uiHits.Count > 0;
-        }
     }
 }

@@ -34,7 +34,7 @@ SOLID rules:
 - **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
 - **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
 - **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
-- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `RunFlow` it drives, `StrongholdBootstrap`, `WorldMapBootstrap` or `PreparationBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it.
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `RunFlow` it drives, `StrongholdBootstrap`, `WorldMapBootstrap` or `PreparationBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`, or `PointerGestures` behind `IScreenGestures`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it. `SavedGame` keeps the one `MetaProgression` across scene loads; only composition roots call it, and they pass the progression, roster or world on.
 
 ## Data and balance
 
@@ -123,7 +123,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 - Everything is in English: code, identifiers, file names, in-game text, data assets, docs, commits, branches and PRs.
 - Avoid unnecessary comments; names should explain the code.
-- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance` and `RunSession.Current`.
+- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance`, `RunSession.Current` and `SavedGame`.
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
 - Names say what the work does, not which issue it is: no issue numbers in branch names, commit messages or PR titles. The issue number appears only in the PR description, so GitHub links and closes the issue.
 - Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/slot-machine-sounds` or `fix/double-kill-gold`.
