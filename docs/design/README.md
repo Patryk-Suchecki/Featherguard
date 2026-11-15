@@ -55,4 +55,4 @@ Specified after combat, in this order. Each follows the same structure on a smal
 | 3 | Equipment and forge | Slots, rarities, sets, recipes, materials | – |
 | 4 | Economy | Currencies, where they come from, what they are spent on and how fast | – |
 | 5 | Stronghold | Buildings, what they offer, how they grow | – |
-| 6 | Screen flow and UI | How the player moves between all of the above | – |
+| 6 | Screen flow and UI | How the player moves between all of the above | [`screen-flow.md`](screen-flow.md) |
