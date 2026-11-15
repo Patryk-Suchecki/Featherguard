@@ -6,11 +6,15 @@ namespace Featherguard.Battle
     {
         public readonly StatusDefinition Definition;
         public readonly int Turns;
+        public readonly int Stacks;
+        public readonly int Points;
 
-        public StatusSnapshot(StatusDefinition definition, int turns)
+        public StatusSnapshot(StatusDefinition definition, int turns, int stacks = 1, int points = 0)
         {
             Definition = definition;
             Turns = turns;
+            Stacks = stacks;
+            Points = points;
         }
     }
 

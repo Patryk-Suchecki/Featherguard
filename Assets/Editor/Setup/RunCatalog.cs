@@ -68,13 +68,19 @@ namespace Featherguard.EditorTools
             };
         }
 
-        static void TestEncounters(Seeder seeder, IReadOnlyDictionary<string, UnitDefinition> u) =>
-            seeder.Seed<EncounterDefinition>($"{ContentPaths.Encounters}/BiesTest.asset", e =>
-            {
-                e.displayName = "Bies (test)";
-                e.goldReward = 10;
-                e.waves = new[] { new EncounterDefinition.Wave { enemies = new[] { u["Bies"] } } };
-            });
+        static void TestEncounters(Seeder seeder, IReadOnlyDictionary<string, UnitDefinition> u)
+        {
+            void Add(string id, string name, params UnitDefinition[] enemies) =>
+                seeder.Seed<EncounterDefinition>($"{ContentPaths.Encounters}/{id}.asset", e =>
+                {
+                    e.displayName = name;
+                    e.goldReward = 10;
+                    e.waves = new[] { new EncounterDefinition.Wave { enemies = enemies } };
+                });
+
+            Add("BiesTest", "Bies (test)", u["Bies"]);
+            Add("BiesPack", "Bies and Wolves (test)", u["Wolf"], u["Bies"], u["Wolf"]);
+        }
 
         static SlotConfig SlotMachine(Seeder seeder, PresentationAssets art) =>
             seeder.Seed<SlotConfig>($"{ContentPaths.Data}/SlotConfig.asset", config =>

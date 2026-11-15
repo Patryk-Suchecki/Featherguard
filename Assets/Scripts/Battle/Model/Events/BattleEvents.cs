@@ -70,6 +70,7 @@ namespace Featherguard.Battle
         public BattleUnit Target;
         public AbilityDefinition Ability;
         public int Amount;
+        public int Absorbed;
         public bool Critical;
     }
 
@@ -91,6 +92,12 @@ namespace Featherguard.Battle
         public BattleUnit Unit;
         public StatusDefinition Status;
         public int Amount;
+        public int Absorbed;
+    }
+
+    public sealed class Cleansed : BattleEvent
+    {
+        public BattleUnit Unit;
     }
 
     public sealed class Stunned : BattleEvent

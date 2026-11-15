@@ -2,7 +2,7 @@ using System;
 
 namespace Featherguard.Battle
 {
-    public enum StatType { Damage, CritChance, CritDamage, MaxHealth, Healing, DamageTaken, Lifesteal, RageGain }
+    public enum StatType { Damage, CritChance, CritDamage, MaxHealth, Healing, DamageTaken, Lifesteal, RageGain, CritChanceTaken }
 
     [Serializable]
     public class StatModifier

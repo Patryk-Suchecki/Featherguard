@@ -17,6 +17,7 @@ MonoBehaviour:
   hits: 1
   effects:
   - rid: 4550530298483572738
+  - rid: 4550530345986162692
   references:
     version: 2
     RefIds:
@@ -24,3 +25,13 @@ MonoBehaviour:
       type: {class: DamageEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         power: 24
+    - rid: 4550530345986162692
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 948a89bd2d2954e4dbfb9990258ac000, type: 2}
+          turns: 3
+          potency: 6
+          chance: 1
+          onSelf: 0
+          condition: 0

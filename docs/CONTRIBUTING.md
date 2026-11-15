@@ -42,7 +42,7 @@ How the two of us work on this repo, step by step. The rules themselves (archite
 6. **Project:** add the folder in Unity Hub (Add → Add project from disk), pick editor 6000.6.2f1 and wait for the first import (a few minutes).
 7. **Scene:** open `Assets/Scenes/Battle.unity` and press Play.
 8. **Tests:** Window → General → Test Runner → EditMode → Run All. Everything must be green.
-9. **Claude Code:** install it from https://claude.com/claude-code (desktop app or CLI) and open it in the repo folder. It loads `CLAUDE.md` and `.claude/settings.json` automatically. Your own Claude memory is not shared with the other developer: anything you both need goes into `CLAUDE.md` through a PR.
+9. **Claude Code:** install it from https://claude.com/claude-code (desktop app or CLI) and open it in the repo folder. It loads `CLAUDE.md`, `.claude/settings.json` and the shared skills in `.claude/skills/` automatically. Your own Claude memory and personal skills are not shared with the other developer: anything you both need goes into `CLAUDE.md` or a shared skill through a PR.
 10. **Optional tools:**
     - **Blender 5.x** – for character and environment models in `Art/Blender`.
     - **Unity CLI (`unity`)** – lets Claude run tests and drive an open editor from the terminal. Without it, run tests in the Test Runner when Claude asks.

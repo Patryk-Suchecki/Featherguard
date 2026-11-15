@@ -53,12 +53,12 @@ Timing is what sets the combat apart: the player is not only choosing actions bu
 
 ## 5. Connections
 
-- **Damage:** the timing multiplier is applied to the damage roll of each hit (`Combat.DealDamage`).
+- **Damage:** the timing multiplier is applied to the damage roll of each hit (`BattleState.DealDamage`).
 - **Rage:** a perfect attack or block adds Rage through the same meter as damage; it can make Rage ready mid-turn.
 - **Enemy brain:** unchanged; it still decides what the enemy does, and the model then decides whether that action waits for a block.
 - **Animation:** heroes play `Attack` after the ring; enemies loop `AttackWindup` while the block cue runs, then play `Attack` with damage on `OnHitFrame`.
 - **Sound:** the perfect-timing and block sounds (#22) play on `Perfect` and `Good` results.
-- **Statuses with "perfect only" effects** (an extra Burn stack, a guaranteed Stun) read the timing result of the action; they are added with the abilities that use them.
+- **Statuses with "perfect only" effects** (an extra Burn stack, a guaranteed Stun) read the timing result of the action; the [status spec](statuses.md) defines them as `Perfect timing` applications.
 
 ## 6. Feedback
 
@@ -72,11 +72,11 @@ Timing is what sets the combat apart: the player is not only choosing actions bu
 
 | Value | Start | Lives in |
 |---|---|---|
-| Perfect window | ±60 ms around the target moment | `BattlePresentation` |
-| Good window | ±150 ms | `BattlePresentation` |
-| Attack ring duration | 0.8 s from appearing to the target moment | `BattlePresentation` |
-| Enemy wind-up hold | random 0.4–1.2 s (through `IRandomSource`) | `BattlePresentation` |
-| BLOCK! lead | 0.25 s before the hit | `BattlePresentation` |
+| Perfect window | ±60 ms around the target moment | `BattleRules` |
+| Good window | ±150 ms | `BattleRules` |
+| Attack ring duration | 0.8 s from appearing to the target moment | `BattlePresentationConfig` |
+| Enemy wind-up hold | random 0.4–1.2 s (through `IRandomSource`) | `BattlePresentationConfig` |
+| BLOCK! lead | 0.25 s before the hit | `BattlePresentationConfig` |
 | Good attack bonus | +25% damage | `BattleRules` |
 | Perfect attack bonus | +50% damage | `BattleRules` |
 | Good block reduction | −30% damage | `BattleRules` |

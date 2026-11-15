@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
+  m_Name: WolfSpecial
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.AbilityDefinition
+  displayName: Pack Howl
+  target: 3
+  hits: 1
+  effects:
+  - rid: 4550530374014074885
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530374014074885
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 8b7cc26af3f808548b82f0675d710c98, type: 2}
+          turns: 1
+          potency: 0
+          chance: 1
+          onSelf: 0

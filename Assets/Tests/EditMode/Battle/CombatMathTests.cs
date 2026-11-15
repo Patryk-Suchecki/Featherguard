@@ -43,9 +43,9 @@ namespace Featherguard.Tests
             var normal = DamageCalculator.Roll(20, 1f, 0.5f, 2f, 0.1f, new FakeRandom(0.5f, 0.9f, 1f));
 
             Assert.IsTrue(crit.Critical);
-            Assert.AreEqual(60, crit.Amount);
+            Assert.AreEqual(60f, crit.Amount, 0.001f);
             Assert.IsFalse(normal.Critical);
-            Assert.AreEqual(22, normal.Amount);
+            Assert.AreEqual(22f, normal.Amount, 0.001f);
         }
 
         [Test]
@@ -95,14 +95,14 @@ namespace Featherguard.Tests
         public void StatusContainer_ReapplyingKeepsStrongestValues()
         {
             var poison = ScriptableObject.CreateInstance<StatusDefinition>();
-            poison.damagePerTurn = true;
+            poison.behaviours = new StatusBehaviour[] { new DamageOverTime() };
             var statuses = new StatusContainer();
             statuses.Apply(new StatusApplication { status = poison, turns = 3, potency = 4 }, false);
             statuses.Apply(new StatusApplication { status = poison, turns = 1, potency = 6 }, false);
 
             Assert.AreEqual(1, statuses.All.Count);
             Assert.AreEqual(3, statuses.All[0].Turns);
-            Assert.AreEqual(6, statuses.Potency(s => s.damagePerTurn));
+            Assert.AreEqual(6, statuses.Potency(s => s.DealsDamageOverTime));
         }
     }
 }
