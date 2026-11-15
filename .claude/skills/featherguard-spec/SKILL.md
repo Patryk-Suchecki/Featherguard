@@ -29,6 +29,7 @@ How specs are structured is in `docs/design/README.md`; character sheets follow 
 
 - Branch `chore/<name>-spec` or `chore/<name>-sheet`, docs only.
 - Link the spec in its row of `docs/design/README.md`.
+- A PR that moves an enemy or boss to a new stage (for example its sheet) updates its row in `docs/design/enemies.md`.
 - PR description: `Closes #<issue>`, a summary of the rules, and a line "Agreed with <developer>: ..." listing the decisions they made.
 - The code that implements a spec is a separate PR, usually stacked on the spec branch. When the code shows the spec was unclear or wrong, fix the spec on its own branch and merge it into the code branch, rather than letting them drift apart.
 
