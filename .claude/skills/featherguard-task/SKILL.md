@@ -16,6 +16,7 @@ The rules are in `CLAUDE.md`; this skill is the order of steps that has worked f
   gh api -X POST repos/Patryk-Suchecki/Featherguard/issues/<epic>/sub_issues -F sub_issue_id=$id
   ```
 - Docs and tooling issues need no label; others get `gameplay`, `art`, `audio`, `UI`, `bug` or `balance`.
+- Assign your developer when work starts (`gh issue create --assignee @me`, or `gh issue edit <n> --add-assignee @me` for an existing issue), as `docs/CONTRIBUTING.md` asks.
 
 ## 2. Where to work
 
