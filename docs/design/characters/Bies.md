@@ -7,7 +7,7 @@ The first elite enemy and the first character made with the art pipeline. Abilit
 - **Side:** enemy, male.
 - **Land:** Rye Fields.
 - **Archetype or role:** Elite, 2 actions per turn; the counter is the perfect block. Master of the pack: he hits hard himself and drives his possessed Wolves onto one hero.
-- **Encounters:** the Bies with two Wolves.
+- **Encounters:** the Bies with two Wolves ([`Wolf.md`](Wolf.md)). The Wolves always act after him and fight on unchanged when he dies.
 
 ## Concept and tone
 
@@ -98,9 +98,7 @@ Snappy and pose-to-pose; every clip plays in place and the game moves the unit. 
 ## Open questions
 
 - **Blood Call:** should he become Empowered when a Wolf dies? A possible passive that would make kill order matter more.
-- **Wolves after his death:** do they weaken or flee when the Bies dies?
 - **Mark target:** how does he choose whom to Mark: lowest HP, the healer, or at random?
-- **Wolf turn order:** do the Wolves always act after him, so Sic the Pack pays off in the same turn?
 - **Second attack:** can it target a different hero from the first?
 - **The body after death:** what happens to the corpse when the next wave arrives?
 - **Numbers:** HP, damage, Bleed strength.

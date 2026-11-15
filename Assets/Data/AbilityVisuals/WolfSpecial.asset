@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae8ff64d4db43e2bce311b451f0bd10, type: 3}
+  m_Name: WolfSpecial
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.AbilityVisuals
+  ability: {fileID: 11400000, guid: b667792a2fba19a47bb15b2d40616768, type: 2}
+  animationState: Cast
+  heavy: 0
+  fxColor: {r: 1, g: 0.45, b: 0.1, a: 1}
+  castSound: 13
+  impactSound: 8
+  delivery:
+    rid: 4550530374014074884
+  impactEffect:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4550530374014074884
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
+      data: 

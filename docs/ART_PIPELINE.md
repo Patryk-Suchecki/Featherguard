@@ -108,7 +108,7 @@ Pass a folder after `--` to export somewhere else for a test, for example `-- Te
 
 ## Character workflow
 
-What worked for the Bies, the first hand-made character. Follow it for every new character; the Wolf will add a quadruped section to the rig and animation steps.
+What worked for the Bies, the first hand-made character. Follow it for every new character; the Wolf, the first quadruped, added step 6b and the quadruped notes in step 7.
 
 ### 1. Concept and references
 
@@ -163,7 +163,33 @@ What worked for the Bies, the first hand-made character. Follow it for every new
   - Put rigid parts (horns, teeth, eyes, claws) 100% on one bone, and the lower jaw 100% on `jaw`.
   - Limit to 4 influences per vertex, remove weights under 0.01 and normalize.
   - Test extreme poses (arms up, deep crouch, head turn, jaw open) before animating.
-- Quadrupeds such as the Wolf need their own section here.
+
+### 6b. Rig and skinning (quadruped)
+
+What the Wolf, the first quadruped, uses:
+- Layout:
+  - `root` at the origin; it is never animated.
+  - `ctrl_cog` above the middle of the back carries the whole body. A fall or a sit is a move or roll of `ctrl_cog`, not of `root`.
+  - `pelvis`, two spine bones, `chest`, two neck bones and `head`.
+  - `jaw`, with its head at the hinge.
+  - `ear.L/R`, and a tail chain of three bones.
+  - Front leg: `scapula`, `upper_arm`, `forearm`, `hand` (the pastern) and `toes_front`.
+  - Hind leg: `thigh`, `shin`, `metatarsal` and `toes_hind`.
+  - The Wolf has 49 bones, 31 of them deforming.
+- Legs:
+  - One IK control per paw on the ground (`ik_paw_front`, `ik_paw_hind`).
+  - The front leg is a 2-bone IK (`upper_arm` to `forearm`) to a wrist target under the paw control, with the elbow pole behind the leg. `hand` copies the rotation of a helper under the paw control.
+  - The hind leg is a 2-bone IK (`thigh` to `shin`) to a hock target, with the knee pole in front of the leg. `metatarsal` aims at a helper above the paw.
+  - Set the pole angles so the rest pose does not move: the Wolf's error is 2 mm.
+- Give every bone in a leg the same roll, local X = world X. That keeps every elbow, knee and hock a hinge on local X: lock IK Y and Z on `forearm` and `shin`.
+- Skinning:
+  - Bone heat often fails on a game mesh made of fur clumps that cut into the body. Instead, skin a voxel-remeshed copy of the welded sculpt with automatic weights, then transfer the weights to the game mesh (Data Transfer, nearest face interpolated).
+  - Then fix by hand:
+    - The jaw, lower fangs and nothing else go 100% on `jaw`. The upper lip and the cheeks stay on `head`, or the jaw drags them down as a spike when it opens.
+    - Eyes and upper teeth go on `head`, claws on the toe bone of their paw.
+    - Smooth the weights under the throat, on the shoulders and on the thighs, where neighbouring vertices switch bones within a centimetre.
+    - Then limit to 4 influences, clean and normalize.
+  - Test head up, head down, jaw open, crouch and a paw lifted. Measure the longest edge stretch per clip; the Wolf stays under 4 cm in the battle clips.
 
 ### 7. Animation
 
@@ -180,6 +206,14 @@ What worked for the Bies, the first hand-made character. Follow it for every new
   - Keep wrists within about 60° and elbows between 30° and 165°.
   - A hand that copies the rotation of an unanimated IK control breaks the wrist as soon as the arm moves. Animate arms in FK, or key the IK control's rotation too.
   - Check that no hand or claw goes inside the body.
+- Quadrupeds:
+  - All four paws stay planted through IK in every clip except `Death`.
+    - A lunge is `ctrl_cog` forward with the neck stretched.
+    - A crouch is `ctrl_cog` down and back.
+    - A sit or a howl is `ctrl_cog` down and back with the chest and neck raised. Keep the summed back and neck pitch under about 45°, or the body stands up like a biped.
+  - To fall on the side in `Death`, roll `ctrl_cog` about its long axis (local Z, along −Y) and switch the leg IK off with constant interpolation on the influence keys, so the legs follow the body instead of stretching to the ground.
+  - Key the tail clear of the ground in every pose: a low tail and a lowered `ctrl_cog` push the tip under the floor.
+  - Check the lowest vertex on every frame; only paw pads and a one-frame impact may touch the ground.
 
 ### 8. What stays in the `.blend`
 
@@ -202,4 +236,4 @@ What worked for the Bies, the first hand-made character. Follow it for every new
 ### Open points
 
 - Portraits for hand-made characters are not covered yet (the generated ones come from `render_portraits.py`).
-- The quadruped rig and animation rules come with the Wolf.
+- Quadruped clips are blocked with key poses only so far; breakdowns and timing polish like the Bies' are still to do.

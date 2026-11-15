@@ -8,6 +8,7 @@ namespace Featherguard.Battle.Presentation
     public sealed class ActionPlayback
     {
         const string StunnedText = "Stunned";
+        const string CleansedText = "Cleansed";
 
         readonly BattlePresentationConfig config;
         readonly BattleVisuals visuals;
@@ -36,6 +37,7 @@ namespace Featherguard.Battle.Presentation
             router.OnInstant<StatusApplied>(ShowStatus);
             router.On<StatusTicked>(Tick);
             router.On<Stunned>(Stun);
+            router.OnInstant<Cleansed>(ShowCleanse);
         }
 
         IEnumerator Perform(ActionPerformed e)
@@ -106,6 +108,7 @@ namespace Featherguard.Battle.Presentation
             target.Reaction.Flash();
             target.Reaction.Knockback(facing, heavy ? config.heavyKnockback : config.lightKnockback);
             view.Popup(target.Top, e.Critical ? $"{e.Amount}!" : e.Amount.ToString(), e.Critical ? PopupKind.Crit : PopupKind.Damage);
+            ShowAbsorbed(target, e.Absorbed);
             if (target.IsAlive) target.Animator.Play("Hit");
         }
 
@@ -137,6 +140,7 @@ namespace Featherguard.Battle.Presentation
             feedback.Rise(unit.transform.position, visuals.Statuses.Of(e.Status).tint, unit.Radius);
             feedback.Play(SfxId.Hit, 0.5f);
             view.Popup(unit.Top, e.Amount.ToString(), PopupKind.Damage);
+            ShowAbsorbed(unit, e.Absorbed);
             if (unit.IsAlive) unit.Animator.Play("Hit");
             yield return BattleEventRouter.Wait(config.statusTickInterval);
         }
@@ -147,6 +151,19 @@ namespace Featherguard.Battle.Presentation
             if (unit == null) yield break;
             view.Popup(unit.Top, StunnedText, PopupKind.Buff);
             yield return BattleEventRouter.Wait(config.stunnedInterval);
+        }
+
+        void ShowAbsorbed(UnitView unit, int absorbed)
+        {
+            if (absorbed > 0)
+                view.Popup(unit.Top + Vector3.up * 0.35f, $"({absorbed})", PopupKind.Buff);
+        }
+
+        void ShowCleanse(Cleansed e)
+        {
+            var unit = stage.ViewOf(e.Unit);
+            if (unit != null)
+                view.Popup(unit.Top + Vector3.up * 0.35f, CleansedText, PopupKind.Heal);
         }
     }
 }

@@ -34,3 +34,4 @@ MonoBehaviour:
           potency: 0
           chance: 0.25
           onSelf: 0
+          condition: 0

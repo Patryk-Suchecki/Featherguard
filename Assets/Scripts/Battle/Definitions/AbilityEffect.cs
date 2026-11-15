@@ -65,7 +65,13 @@ namespace Featherguard.Battle
         public override void Apply(in EffectContext context)
         {
             var recipient = application.onSelf ? context.Actor : context.Target;
-            context.State.TryApplyStatus(context.Actor, recipient, application);
+            context.State.TryApplyStatus(context.Actor, recipient, application, context.Timing);
         }
+    }
+
+    [Serializable]
+    public sealed class CleanseEffect : AbilityEffect
+    {
+        public override void Apply(in EffectContext context) => context.State.Cleanse(context.Target);
     }
 }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0862f1ccd19a3f4fbed10b95b74c2ad, type: 3}
+  m_Name: Burn
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.StatusDefinition
+  displayName: Burn
+  announcement: Burning
+  harmful: 1
+  stacking: 1
+  maxStacks: 5
+  behaviours:
+  - rid: 4550530345983279108
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530345983279108
+      type: {class: DamageOverTime, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data: 

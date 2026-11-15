@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
+  m_Name: Wolf
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.UnitDefinition
+  displayName: Wolf
+  team: 1
+  maxHealth: 70
+  attack: {fileID: 11400000, guid: 4cdfa929854dde448b5a9545a00deda3, type: 2}
+  support: {fileID: 0}
+  special: {fileID: 11400000, guid: b667792a2fba19a47bb15b2d40616768, type: 2}
+  ai:
+    actionsPerTurn: 1
+    specialEvery: 3
+    supportChance: 0.45
+    healThreshold: 0.6
+    healChance: 0.75
+    woundedWeight: 2
+    finishWeight: 3
+  boss:
+    enrageAt: 0
+    enrageDamageBonus: 0.4
+    enrageSummons: []

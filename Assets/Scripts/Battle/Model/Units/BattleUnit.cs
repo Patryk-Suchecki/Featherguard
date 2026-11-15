@@ -4,6 +4,18 @@ using System.Linq;
 
 namespace Featherguard.Battle
 {
+    public readonly struct DamageOutcome
+    {
+        public readonly int Dealt;
+        public readonly int Absorbed;
+
+        public DamageOutcome(int dealt, int absorbed)
+        {
+            Dealt = dealt;
+            Absorbed = absorbed;
+        }
+    }
+
     public sealed class BattleUnit
     {
         readonly StatBlock stats;
@@ -21,8 +33,9 @@ namespace Featherguard.Battle
         public bool Enraged { get; internal set; }
         public StatusContainer Statuses { get; } = new();
         public IReadOnlyList<ActiveStatus> ActiveStatuses => Statuses.All;
-        public bool SkipsTurn => Statuses.Any(s => s.skipsTurn);
-        public bool ForcesTargeting => Statuses.Any(s => s.forcesTargeting);
+        public bool SkipsTurn => Statuses.Any(s => s.SkipsTurn);
+        public bool ForcesTargeting => Statuses.Any(s => s.ForcesTargeting);
+        public bool ActsLast => Statuses.Any(s => s.ActsLast);
         public bool CanAct => IsAlive && !HasActed;
 
         public event Action Changed;
@@ -51,12 +64,14 @@ namespace Featherguard.Battle
             NotifyChanged();
         }
 
-        public int ApplyDamage(int amount)
+        public DamageOutcome TakeDamage(float amount)
         {
-            amount = Math.Clamp((int)Math.Round(amount * Stat(StatType.DamageTaken)), 0, Health);
-            Health -= amount;
+            int total = Math.Max(0, (int)Math.Round(amount * Stat(StatType.DamageTaken)));
+            int absorbed = Statuses.Absorb(total);
+            int dealt = Math.Min(total - absorbed, Health);
+            Health -= dealt;
             NotifyChanged();
-            return amount;
+            return new DamageOutcome(dealt, absorbed);
         }
 
         public int ApplyHeal(int amount)
@@ -72,7 +87,7 @@ namespace Featherguard.Battle
         {
             Health = Health,
             MaxHealth = MaxHealth,
-            Statuses = Statuses.All.Select(s => new StatusSnapshot(s.Definition, s.Turns)).ToList(),
+            Statuses = Statuses.All.Select(s => new StatusSnapshot(s.Definition, s.Turns, s.Stacks, s.Points)).ToList(),
         };
 
         void NotifyChanged() => Changed?.Invoke();

@@ -28,8 +28,14 @@ namespace Featherguard.UI
                 icon.sprite = visuals.Of(status.Definition).icon;
                 var badge = Ui.Rect("Turns", holder, new Vector2(1f, 0f), new Vector2(0.5f, 0.5f), new Vector2(-4f, 4f), Vector2.one * size * 0.5f);
                 Ui.Image(badge, Badge).sprite = Ui.Sprite("Circle");
-                Ui.Label(Ui.Stretch("Label", badge), status.Turns.ToString(), Mathf.RoundToInt(size * 0.38f), TextAnchor.MiddleCenter, Color.white);
+                Ui.Label(Ui.Stretch("Label", badge), BadgeText(status), Mathf.RoundToInt(size * 0.38f), TextAnchor.MiddleCenter, Color.white);
             }
+        }
+
+        static string BadgeText(StatusSnapshot status)
+        {
+            if (status.Points > 0) return status.Points.ToString();
+            return status.Stacks > 1 ? $"x{status.Stacks}" : status.Turns.ToString();
         }
     }
 }

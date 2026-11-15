@@ -14,8 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard::Featherguard.Battle.StatusDefinition
   displayName: Poison
   announcement: Poisoned
-  modifiers: []
-  damagePerTurn: 1
-  skipsTurn: 0
-  forcesTargeting: 0
-  consumedOnAttack: 0
+  harmful: 1
+  stacking: 0
+  maxStacks: 1
+  behaviours:
+  - rid: 4550530345986162688
+  references:
+    version: 2
+    RefIds:
+    - rid: 4550530345986162688
+      type: {class: DamageOverTime, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data: 
