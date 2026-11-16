@@ -102,10 +102,10 @@ The Stronghold is built from these models. Each concept sheet is in `Art/Concept
 | Palisade | [Palisade](../Art/Concepts/Stronghold/Palisade.png) | segment 2 m long, 2.2 m tall | three pieces that tile: straight segment, broken segment, end post with a carved band; the same height and log thickness |
 | Lantern post | [LanternPost](../Art/Concepts/Stronghold/LanternPost.png) | 2.4 m tall | the side view repeats the front; use the front and three-quarter views. The lantern glass is the only warm part and gets a light in the scene |
 | Graveyard kit | [Graveyard](../Art/Concepts/Stronghold/Graveyard.png) | 0.4–1.3 m | roofed wooden cross, plank marker, mossy headstone, grave mound, bones with a skull |
-| Forge, ruined | – | as the Forge | the same footprint and logs: the roof caved in, the chimney half fallen, the doors broken, no glow, soot and rubble |
-| Wise Woman's Hut, ruined | – | as the hut | the roof collapsed into the hut, walls leaning further, the herbs and skulls fallen, no glow |
-| Tavern, ruined | – | as the Tavern | the thatch burnt through to the rafters, a wall broken, dark windows, the sign hanging from one chain |
-| Shop, ruined | – | as the Shop | a pole snapped, the awning torn and hanging, crates smashed and empty |
+| Forge, ruined | [ForgeRuined](../Art/Concepts/Stronghold/ForgeRuined.png) | as the Forge | made from the Forge model, so the footprint, logs and chimney stay where they are; the sheet moves the chimney and keeps most of the roof, so use it only for the broken door, soot and rubble. The roof caved in, the chimney half fallen, no glow |
+| Wise Woman's Hut, ruined | [WiseWomansHutRuined](../Art/Concepts/Stronghold/WiseWomansHutRuined.png) | as the hut | made from the hut model; the sheet keeps its shape well: the mossy roof broken open with rafters showing, a broken wall corner, fallen herbs and skulls, broken pots, no glow |
+| Tavern, ruined | [TavernRuined](../Art/Concepts/Stronghold/TavernRuined.png) | as the Tavern | made from the Tavern model; the sheet draws a bigger building with a second gable, so take only the look of the damage: the thatch burnt through to bare rafters, a wall broken in, dark windows, the sign hanging |
+| Shop, ruined | [ShopRuined](../Art/Concepts/Stronghold/ShopRuined.png) | as the Shop | made from the Shop model; the sheet's poles lean differently, so take the torn awning, the cracked empty counter and the smashed crates. Ignore the colour swatches on the sheet |
 | Dead trees | [DeadTrees](../Art/Concepts/Stronghold/DeadTrees.png) | 4–7 m tall | three variants, taken from the first, third and fifth tree from the left: tall and thin, twisted and leaning, broken snag with moss; the other trees are their other views |
 | Camp props | [CampProps](../Art/Concepts/Stronghold/CampProps.png) | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork; the three rows are the front, side and back views |
 
