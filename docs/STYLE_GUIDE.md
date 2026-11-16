@@ -88,6 +88,25 @@ Night around old oak, logs and stone; warm firelight against cold mist and a coo
 - **Light:** the campfire, the forge hearth and the tavern windows are the only warm light; the hut's glow and the wisps are the only cold accents.
 - **For the models:** follow the layout and shapes, not the painting. Keep the outlines and toon bands of the style, leave out the painted letters on the forge wall, and keep the empty space in front of the fire for the party.
 
+The Stronghold is built from these models. Each concept sheet is in `Art/Concepts/Stronghold/`; the labels and dimension lines on the sheets are only notes and are not modelled.
+
+| Model | Concept | Size | Notes for the model |
+|---|---|---|---|
+| Forge | – | 3.2 × 2.6 m, 4.4 m tall | log smithy on a stone foundation, stone chimney, half-open double door with the hearth glow; anvil on a block and a stone trough as separate props |
+| Wise Woman's Hut | – | 2.8 × 2.4 m, 3.5 m tall | crooked, mossy roof, herbs and skulls under the eaves, green glow from the window and door |
+| Sacred Oak | – | about 9 m tall | the crown as a few big leaf clumps; shrine, candles and ribbons as separate parts |
+| Tavern | [Tavern](../Art/Concepts/Stronghold/Tavern.png) | 4.5 × 3.5 m, 4.5 m tall | mossy thatch, carved horse heads on the gables, porch over the door, the sign has no letters; barrels and benches as separate props |
+| Shop | [Shop](../Art/Concepts/Stronghold/Shop.png) | 2.5 × 1.5 m, 2.5 m tall | the front view is the reference; the side view draws the awning differently, so model it sagging between the poles as in the front and top views |
+| Campfire and stump seat | [Campfire](../Art/Concepts/Stronghold/Campfire.png) | ring 1.4 m across; seat 0.5 m wide, 0.45 m tall | logs and embers only, the flame is an effect; one stump model, used six times |
+| Signpost | [Signpost](../Art/Concepts/Stronghold/Signpost.png) | 2.5 m tall | three arrow boards with carved symbols and no letters, rope and nails, a stone pile at the foot |
+| Palisade | [Palisade](../Art/Concepts/Stronghold/Palisade.png) | segment 2 m long, 2.2 m tall | three pieces that tile: straight segment, broken segment, end post with a carved band; the same height and log thickness |
+| Lantern post | [LanternPost](../Art/Concepts/Stronghold/LanternPost.png) | 2.4 m tall | the side view repeats the front; use the front and three-quarter views. The lantern glass is the only warm part and gets a light in the scene |
+| Graveyard kit | [Graveyard](../Art/Concepts/Stronghold/Graveyard.png) | 0.4–1.3 m | roofed wooden cross, plank marker, mossy headstone, grave mound, bones with a skull |
+| Dead trees | – | 4–7 m tall | three variants: tall and thin, twisted and leaning, broken snag |
+| Camp props | – | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork |
+
+The ground, roads, mist, fire and wisps are not models: the scene and its effects make them.
+
 
 | Use | Colour |
 |---|---|
