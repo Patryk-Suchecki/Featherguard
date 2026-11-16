@@ -92,9 +92,9 @@ The Stronghold is built from these models. Each concept sheet is in `Art/Concept
 
 | Model | Concept | Size | Notes for the model |
 |---|---|---|---|
-| Forge | – | 3.2 × 2.6 m, 4.4 m tall | log smithy on a stone foundation, stone chimney, half-open double door with the hearth glow; anvil on a block and a stone trough as separate props |
-| Wise Woman's Hut | – | 2.8 × 2.4 m, 3.5 m tall | crooked, mossy roof, herbs and skulls under the eaves, green glow from the window and door |
-| Sacred Oak | – | about 9 m tall | the crown as a few big leaf clumps; shrine, candles and ribbons as separate parts |
+| Forge | [Forge](../Art/Concepts/Stronghold/Forge.png) | 3.2 × 2.6 m, 4.4 m tall | the top row and the three-quarter view are the reference; the second front view (doors wide open) is an alternative. The chimney sits in a different place in each view: follow the three-quarter view. Leave out the painted letters on the wall. The anvil on its block and the stone trough are separate props |
+| Wise Woman's Hut | [WiseWomansHut](../Art/Concepts/Stronghold/WiseWomansHut.png) | 2.8 × 2.4 m, 3.5 m tall | the top row is the reference; the second row repeats it with the door the other way. The sheet draws it straight: lean and sag it a little, as in the main concept. Herbs, garlic and skulls under the eaves, pots by the door, the green glow from the door |
+| Sacred Oak | [SacredOak](../Art/Concepts/Stronghold/SacredOak.png) | about 9 m tall | the front and three-quarter views are the reference; the side view draws the crown narrower. The crown as a few big leaf clumps; the shrine with candles at the front roots and the ribbons are separate parts |
 | Tavern | [Tavern](../Art/Concepts/Stronghold/Tavern.png) | 4.5 × 3.5 m, 4.5 m tall | mossy thatch, carved horse heads on the gables, porch over the door, the sign has no letters; barrels and benches as separate props |
 | Shop | [Shop](../Art/Concepts/Stronghold/Shop.png) | 2.5 × 1.5 m, 2.5 m tall | the front view is the reference; the side view draws the awning differently, so model it sagging between the poles as in the front and top views |
 | Campfire and stump seat | [Campfire](../Art/Concepts/Stronghold/Campfire.png) | ring 1.4 m across; seat 0.5 m wide, 0.45 m tall | logs and embers only, the flame is an effect; one stump model, used six times |
@@ -102,8 +102,8 @@ The Stronghold is built from these models. Each concept sheet is in `Art/Concept
 | Palisade | [Palisade](../Art/Concepts/Stronghold/Palisade.png) | segment 2 m long, 2.2 m tall | three pieces that tile: straight segment, broken segment, end post with a carved band; the same height and log thickness |
 | Lantern post | [LanternPost](../Art/Concepts/Stronghold/LanternPost.png) | 2.4 m tall | the side view repeats the front; use the front and three-quarter views. The lantern glass is the only warm part and gets a light in the scene |
 | Graveyard kit | [Graveyard](../Art/Concepts/Stronghold/Graveyard.png) | 0.4–1.3 m | roofed wooden cross, plank marker, mossy headstone, grave mound, bones with a skull |
-| Dead trees | – | 4–7 m tall | three variants: tall and thin, twisted and leaning, broken snag |
-| Camp props | – | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork |
+| Dead trees | [DeadTrees](../Art/Concepts/Stronghold/DeadTrees.png) | 4–7 m tall | three variants, taken from the first, third and fifth tree from the left: tall and thin, twisted and leaning, broken snag with moss; the other trees are their other views |
+| Camp props | [CampProps](../Art/Concepts/Stronghold/CampProps.png) | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork; the three rows are the front, side and back views |
 
 The ground, roads, mist, fire and wisps are not models: the scene and its effects make them.
 
