@@ -80,7 +80,14 @@ Noon over muted rye; warm but faded light.
 
 ### Sacred Oak Stronghold
 
-Dusk around old oak and stone; warm firelight against a cool sky.
+Night around old oak, logs and stone; warm firelight against cold mist and a cool sky. The concept is [`Art/Concepts/Stronghold.png`](../Art/Concepts/Stronghold.png).
+
+- **View:** light top-down three-quarter view of the whole camp, like a tabletop diorama, with dark ground around it.
+- **Layout:** the campfire in the centre with six stump seats behind it; the forge back left (a log smithy on a stone foundation with a stone chimney and an open, glowing door); the Wise Woman's Hut back centre (crooked, mossy, herbs and skulls, green glow); the Sacred Oak back right, the tallest shape, with a shrine and candles at its roots; the tavern right (log walls, thatched roof, lit windows); the shop front left (a stall with an awning and crates); the signpost front right where the road leaves the camp. A broken palisade of sharpened logs runs around it.
+- **Mood:** ground mist, dead leafless trees at the edges, a graveyard front left with wooden markers, crosses, bones and blue-green wisps, lanterns on posts along the paths.
+- **Light:** the campfire, the forge hearth and the tavern windows are the only warm light; the hut's glow and the wisps are the only cold accents.
+- **For the models:** follow the layout and shapes, not the painting. Keep the outlines and toon bands of the style, leave out the painted letters on the forge wall, and keep the empty space in front of the fire for the party.
+
 
 | Use | Colour |
 |---|---|
@@ -88,7 +95,7 @@ Dusk around old oak and stone; warm firelight against a cool sky.
 | Old oak wood | `#4A3627` |
 | Moss and leaves | `#5E6B3A` |
 | Stone | `#8A8780` |
-| Dusk sky, distance | `#5B6A86` |
+| Night sky, distance | `#5B6A86` |
 | Firelight, key light | `#F0B060` |
 
 ### Shared

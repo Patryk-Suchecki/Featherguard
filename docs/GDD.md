@@ -34,7 +34,7 @@ The world is a Slavic fairy tale in a dark tone, built on Slavic mythology.
 | Old Forest | land 4 | Lady Leshy |
 | Nav, the land of the dead (beyond the Smorodina River and the Kalinov Bridge) | land 5 | to be decided |
 
-The Stronghold is the main screen and grows with the player. Its buildings:
+The Stronghold is the main screen and grows with the player. It is a fortified camp at night, a grim refuge on the edge of death: a palisade, dead trees, a graveyard with wisps, and the campfire at its heart, where the party gathers (the concept is [`Art/Concepts/Stronghold.png`](../Art/Concepts/Stronghold.png); its look is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md#sacred-oak-stronghold)). Its buildings:
 - **Forge:** forging equipment (see Forge).
 - **Wise Woman's Hut:** brewing potions, nothing else.
 - **Sacred Oak:** the Priest's story scenes and, after the MVP, the bestiary (unlocked by fighting, with boss weaknesses).
