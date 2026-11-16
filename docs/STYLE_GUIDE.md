@@ -102,6 +102,10 @@ The Stronghold is built from these models. Each concept sheet is in `Art/Concept
 | Palisade | [Palisade](../Art/Concepts/Stronghold/Palisade.png) | segment 2 m long, 2.2 m tall | three pieces that tile: straight segment, broken segment, end post with a carved band; the same height and log thickness |
 | Lantern post | [LanternPost](../Art/Concepts/Stronghold/LanternPost.png) | 2.4 m tall | the side view repeats the front; use the front and three-quarter views. The lantern glass is the only warm part and gets a light in the scene |
 | Graveyard kit | [Graveyard](../Art/Concepts/Stronghold/Graveyard.png) | 0.4–1.3 m | roofed wooden cross, plank marker, mossy headstone, grave mound, bones with a skull |
+| Forge, ruined | – | as the Forge | the same footprint and logs: the roof caved in, the chimney half fallen, the doors broken, no glow, soot and rubble |
+| Wise Woman's Hut, ruined | – | as the hut | the roof collapsed into the hut, walls leaning further, the herbs and skulls fallen, no glow |
+| Tavern, ruined | – | as the Tavern | the thatch burnt through to the rafters, a wall broken, dark windows, the sign hanging from one chain |
+| Shop, ruined | – | as the Shop | a pole snapped, the awning torn and hanging, crates smashed and empty |
 | Dead trees | [DeadTrees](../Art/Concepts/Stronghold/DeadTrees.png) | 4–7 m tall | three variants, taken from the first, third and fifth tree from the left: tall and thin, twisted and leaning, broken snag with moss; the other trees are their other views |
 | Camp props | [CampProps](../Art/Concepts/Stronghold/CampProps.png) | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork; the three rows are the front, side and back views |
 
