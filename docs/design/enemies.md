@@ -51,3 +51,16 @@ One table of every enemy and boss with its design and production stage. Which en
 | to be decided | Nav | boss | ? | – | Idea | – |
 
 **Count:** 21 enemies (one of them elite) and 5 bosses, one not yet named; 2 enemies are in game. The MVP in [`ROADMAP.md`](../ROADMAP.md#content-scale) needs 12 enemies and 3 bosses from 3 lands; the Rye Fields give 5 enemies and 1 boss.
+
+## Candidates
+
+Figures proposed for later lands, not yet in the GDD. Moving one into the roster changes the GDD first; it then gets a row in the table above. The Rye Fields candidates are in [`lands/rye-fields.md`](lands/rye-fields.md#candidates-for-the-regular-enemies).
+
+| Candidate | Fits | Folk belief |
+|---|---|---|
+| Kikimora | Marshes | a thin spirit of the house and the bog with a bird-like head |
+| Rokita | Marshes | the Polish devil of the bogs |
+| Boruta | Old Forest | the Polish devil of the forests; must not read like the goat-like Bies |
+| Baba Jaga | Old Forest or Bald Mountain, as an Elite | the witch with a hut on a chicken leg who flies in a mortar |
+| Psoglav | Bald Mountain or Nav | a dog-headed man-eater from the southern Slavs |
+| Koschei the Deathless | Nav, as the boss | a deathless sorcerer whose death is hidden in a needle, in an egg, in a duck |

@@ -28,6 +28,18 @@ Concept: `Art/Concepts/RyeFields.png`.
 
 To be written with the Rye Fields spec.
 
+### Candidates for the regular enemies
+
+Proposals only: the roster is chosen by both developers and written in the GDD. The land needs 4 regular enemies; the Wolf is one of them. The candidates come from Slavic folk belief about the village and its fields. Each must read as its own black silhouette next to the Wolf (low and long), the Bies (tall and hunched) and Lady Midday (tallest, floating).
+
+| Candidate | Folk belief | Silhouette and size | Accent |
+|---|---|---|---|
+| Kłobuk | a household spirit that steals grain for its master; it looks like a wet, ruffled hen | small and hunched, about 0.8 m: bedraggled wet feathers, oversized feet, a stolen sheaf of rye clutched under one wing | the bright gold of the stolen grain |
+| Skrzat | a little spirit of the barn and the farmyard that works for whoever feeds it and plays tricks on the rest | the smallest in the land, about 0.9 m: an old man's face, a long beard, big hands and feet, a tall drooping cap | a red cap |
+| Wąpierz | a villager who will not stay in his grave and comes back to drink the blood of his own; he was buried with a sickle across his neck to keep him down | a gaunt peasant, about 1.6 m, in a grey burial shirt, a flushed, swollen face, the sickle still tied across his neck | blood-red face and lips |
+
+With these the land would read as a low quadruped (Wolf), a small bird (Kłobuk), a little man (Skrzat) and a gaunt man (Wąpierz). The Kłobuk is the first bird and needs its own rig.
+
 ## Wave building blocks
 
 To be written with the Rye Fields spec.
