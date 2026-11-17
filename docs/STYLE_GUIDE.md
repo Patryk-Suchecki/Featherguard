@@ -78,6 +78,70 @@ Noon over muted rye; warm but faded light.
 | Hazy noon sky, distance | `#9FAEA8` |
 | Key light | `#F2DFB8` |
 
+### Marshes
+
+Dusk over black water; cold pale light and drowned wisps. Concept and theme: [`lands/marshes.md`](design/lands/marshes.md).
+
+| Use | Colour |
+|---|---|
+| Black water | `#1E2426` |
+| Mud | `#3B3A2C` |
+| Reeds and moss | `#55613A` |
+| Pale grass | `#7D8460` |
+| Dusk sky, distance | `#6C6A86` |
+| Wisps (the only saturated colour) | `#8FE0C8` |
+| Key light | `#B8C2D0` |
+
+### Bald Mountain
+
+A stormy summit at night; cold lightning and a far dragon fire. Concept and theme: [`lands/bald-mountain.md`](design/lands/bald-mountain.md).
+
+| Use | Colour |
+|---|---|
+| Dark basalt | `#24232A` |
+| Grey rock | `#5C5A63` |
+| Pale rock edges | `#8C8A90` |
+| Storm sky | `#3A3F55` |
+| Lightning | `#D8E4FF` |
+| Dragon fire (the only warm colour) | `#E8783A` |
+| Key light | `#CBD6F0` |
+
+### Old Forest
+
+Ancient trees at night; moonlight and a witch light in the dark. Concept and theme: [`lands/old-forest.md`](design/lands/old-forest.md).
+
+| Use | Colour |
+|---|---|
+| Dark bark | `#262019` |
+| Roots and earth | `#3F3426` |
+| Moss | `#4E5E33` |
+| Pale mushrooms | `#B9B08F` |
+| Moonlight | `#A9B7C9` |
+| Witch light (the only saturated colour) | `#7CE070` |
+| Key light | `#B4C2D6` |
+
+### Nav
+
+The land of the dead in grey twilight; ash, bone and fog. Concept and theme: [`lands/nav.md`](design/lands/nav.md).
+
+| Use | Colour |
+|---|---|
+| Dark ash | `#2A2A2E` |
+| Ash ground | `#4A4A4D` |
+| Bone white | `#CFCBC0` |
+| Cold fog | `#8A93A0` |
+| River | `#1F2A2E` |
+| Ghost light (the only saturated colour) | `#B8E8FF` |
+| Key light | `#C9CED6` |
+
+### World map
+
+One continuous valley seen from high above at night, like a painted landscape model: the Stronghold on a low hill in the centre, the Rye Fields front left, the Marshes front right, Bald Mountain back left, the Old Forest back right, and Nav beyond the Smorodina and the Kalinov Bridge at the back. The regions flow into each other through natural edges (fields thinning into wet grass, slopes rising into rock), never as separate tiles. Locked lands lie under thick mist. Each region uses its land's palette, darkened for night; the campfire and the Rye Fields lantern are the only warm lights. Concept: `Art/Concepts/WorldMap.png`.
+
+### Battle preparation
+
+A muddy road through an empty field at night before a fight: the heroes' side on the left lit by a lantern on a post with a blank signpost, the enemies' side further along the road on the right in a cold violet glow from the ground, a wisp between them, dead trees, graves and ground mist. The warm lantern against the cold enemy side is the only colour contrast. Concept: `Art/Concepts/Preparation.png`.
+
 ### Sacred Oak Stronghold
 
 Dusk around old oak and stone; warm firelight against a cool sky.
