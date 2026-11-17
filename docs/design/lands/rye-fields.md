@@ -40,6 +40,8 @@ Proposals only: the roster is chosen by both developers and written in the GDD. 
 
 With these the land would read as a low quadruped (Wolf), a small bird (Kłobuk), a little man (Skrzat) and a gaunt man (Wąpierz). The Kłobuk is the first bird and needs its own rig.
 
+First concepts, to choose from: [`Klobuk`](../../../Art/Concepts/Candidates/Klobuk.png), [`Skrzat`](../../../Art/Concepts/Candidates/Skrzat.png), [`Wapierz`](../../../Art/Concepts/Candidates/Wapierz.png) in `Art/Concepts/Candidates`. A chosen candidate gets its sheet and its final concept in `Art/Concepts`.
+
 ## Wave building blocks
 
 To be written with the Rye Fields spec.

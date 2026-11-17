@@ -56,6 +56,8 @@ One table of every enemy and boss with its design and production stage. Which en
 
 Figures proposed for later lands, not yet in the GDD. Moving one into the roster changes the GDD first; it then gets a row in the table above. The Rye Fields candidates are in [`lands/rye-fields.md`](lands/rye-fields.md#candidates-for-the-regular-enemies).
 
+Their first concepts are in `Art/Concepts/Candidates`, one image per candidate (`BabaJaga`, `Boruta`, `Rokita`, `Kikimora`, `Koschei`, `Psoglav`).
+
 | Candidate | Fits | Folk belief |
 |---|---|---|
 | Kikimora | Marshes | a thin spirit of the house and the bog with a bird-like head |
