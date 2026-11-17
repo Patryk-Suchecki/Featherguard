@@ -165,7 +165,7 @@ The whole Stronghold is on screen at once, so the budget is shared.
 
 ### Export
 
-- Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); until then, export by hand with **Selected Objects**, **Apply Transform** and the FBX axis settings of `export_character.py`.
+- Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); it can reuse `export_static_fbx` in `Art/Blender/featherkit.py`. Until then, export by hand with the same settings: **Selected Objects**, Apply Scalings **FBX All**, Forward **−Z**, Up **Y**, Smoothing **Face**, no animation.
 - Lock and commit exactly as for characters (see [Version control](#version-control)): one `art/` PR per model or kit.
 
 ## Character workflow
