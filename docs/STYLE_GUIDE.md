@@ -138,6 +138,17 @@ The land of the dead in grey twilight; ash, bone and fog. Concept and theme: [`l
 
 One continuous valley seen from high above at night, like a painted landscape model: the Stronghold on a low hill in the centre, the Rye Fields front left, the Marshes front right, Bald Mountain back left, the Old Forest back right, and Nav beyond the Smorodina and the Kalinov Bridge at the back. The regions flow into each other through natural edges (fields thinning into wet grass, slopes rising into rock), never as separate tiles. Locked lands lie under thick mist. Each region uses its land's palette, darkened for night; the campfire and the Rye Fields lantern are the only warm lights. Concept: `Art/Concepts/WorldMap.png`.
 
+The map's landmarks are small models placed on the terrain (#150); their sheet is `Art/Concepts/WorldMap/MapLandmarks.png`, with each piece in a three-quarter view (top row) and a front view (bottom row):
+- the Stronghold: the oak, its palisade ring and the campfire;
+- the Rye Fields: three stooks, a scarecrow, a roadside cross and a lantern post;
+- the Marshes: a pool with reeds and a jetty;
+- Bald Mountain: the peak and its rocks; the dragon fire on top is an effect;
+- the Old Forest: one merged clump of dead trees; the green glow is an effect;
+- the Kalinov Bridge: the bridge only, since the river is part of the terrain;
+- Nav: a few graves and roofed crosses; the ghost light is an effect.
+
+The round bases on the sheet are not modelled: every piece stands straight on the map terrain.
+
 ### Battle preparation
 
 A muddy road through an empty field at night before a fight: the heroes' side on the left lit by a lantern on a post with a blank signpost, the enemies' side further along the road on the right in a cold violet glow from the ground, a wisp between them, dead trees, graves and ground mist. The warm lantern against the cold enemy side is the only colour contrast. Concept: `Art/Concepts/Preparation.png`.
