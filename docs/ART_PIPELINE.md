@@ -1,6 +1,6 @@
 # Art Pipeline
 
-How a hand-made 3D character goes from an idea to the game. How it should look (proportions, heights by role, fur, textures, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
+How a hand-made 3D character goes from an idea to the game; buildings and props follow the same steps without the rig, with the differences in [Environment models](#environment-models). How it should look (proportions, heights by role, fur, textures, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
 
 ## Steps
 
@@ -105,6 +105,68 @@ Pass a folder after `--` to export somewhere else for a test, for example `-- Te
 - Every binary (`.blend`, `.fbx`, `.png`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
 - A character is added or changed in its own `art/` PR, with no gameplay rule changes. Code that puts the character into the game comes in its own PR.
 - Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
+
+## Environment models
+
+Buildings, trees and props (for example the Stronghold's, listed with their concept sheets in [`STYLE_GUIDE.md`](STYLE_GUIDE.md#sacred-oak-stronghold)) follow the character steps without the rig and the animation. Only the differences are here.
+
+### Names and folders
+
+The model name is the concept sheet's name: `Forge`, `SacredOak`, `Palisade`. One `.blend` per sheet holds every object drawn on it.
+
+| What | Where |
+|---|---|
+| Concept | `Art/Concepts/<Place>/<Name>.png` (for example `Art/Concepts/Stronghold/Forge.png`) |
+| Blender source | `Art/Blender/Environment/<Place>/<Name>.blend` |
+| Exported model | `Assets/Art/Environment/<Place>/<Object>.fbx`, one per object |
+| Texture | `Assets/Art/Environment/<Place>/Textures/<Name>_Albedo.png`, one per `.blend` |
+
+Inside the `.blend`:
+- a building and its ruined variant are two objects, `<Name>` and `<Name>Ruined` (`Forge`, `ForgeRuined`), with the same origin and footprint, so the scene swaps one for the other in place;
+- a kit names each piece after the kit: `PalisadeStraight`, `PalisadeBroken`, `PalisadeEnd`; `GraveCross`, `GraveMarker`, `Headstone`, `GraveMound`, `Bones`;
+- separate props drawn with a building (the Forge's anvil and trough) are their own objects in its `.blend`: `ForgeAnvil`, `ForgeTrough`.
+
+### Scale, origin and orientation
+
+- 1 Blender unit = 1 metre, at the size given in the model list; Z is up.
+- The front (the door, the shrine, the side the camera sees) faces −Y, as for characters. The scene turns each model into place.
+- The origin is on the ground at the centre of the footprint, so a model stands on the ground at Y 0 in Unity.
+- Apply rotation and scale before export.
+
+### Budgets
+
+The whole Stronghold is on screen at once, so the budget is shared.
+
+| | Building (each variant) | Large prop (Sacred Oak, dead tree) | Small prop or kit piece |
+|---|---|---|---|
+| Triangles: aim for | 2,000–4,000 | 1,500–4,000 | 100–800 |
+| Triangles: never more than | 6,000 | 6,000 | 1,500 |
+| Texture | 1024 × 1024, shared by the building and its ruin | 1024 × 1024 | one 1024 × 1024 atlas per kit |
+
+- The whole Stronghold scene stays under about 100,000 triangles, characters included.
+- One material and one albedo texture per `.blend`: a building, its ruin and its separate props share one atlas, and every piece of a kit shares one atlas, so the scene needs few draw calls.
+- Texel density about 200 px per metre, even across the atlas; the Stronghold camera is far, so detail comes from shapes, not from the texture.
+- No normal, roughness or metallic maps, as for characters.
+
+### Modelling and texture
+
+- Model straight in low poly from the reference images; a high-res sculpt is optional and only worth it for organic shapes (the Sacred Oak's trunk and roots, the dead trees).
+- Chunky, slightly irregular shapes: logs, planks and stones are a little crooked and uneven in size, never perfectly straight or repeated. Silhouette breaks (roof edges, broken planks, chimney stones) are real geometry; small detail goes into the texture.
+- A ruined variant starts as a copy of the intact model: break the roof, walls and props on that copy, so its shape and footprint stay the same. Its burnt and broken areas get their own islands in the shared atlas.
+- Leaf crowns are a few big closed clumps, not single leaves or cards.
+- Texture as for characters: flat colours from the land palette with light baked ambient occlusion, following the texture rules of the style guide.
+- Lights, flames, glows, mist and wisps are not part of the model. Mark where they go with empties named `Light`, `Light.001`, ... (a hearth, a window, a lantern, a candle) and `Label` (where the place's name label sits), placed in the object's hierarchy; the scene builder reads them.
+
+### Look in the game
+
+- Environment models use the `Featherguard/Toon` shader and its outline, like characters, so the Stronghold reads in the same style.
+- Models at the edges of the scene (dead trees, palisade) may use the background softness the style guide allows, but never more detail than the buildings.
+- Colliders are not modelled: the scene builder adds simple ones for the places the player taps.
+
+### Export
+
+- Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); until then, export by hand with **Selected Objects**, **Apply Transform** and the FBX axis settings of `export_character.py`.
+- Lock and commit exactly as for characters (see [Version control](#version-control)): one `art/` PR per model or kit.
 
 ## Character workflow
 
