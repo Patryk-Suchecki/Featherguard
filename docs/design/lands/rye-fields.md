@@ -37,10 +37,12 @@ Proposals only: the roster is chosen by both developers and written in the GDD. 
 | Kłobuk | a household spirit that steals grain for its master; it looks like a wet, ruffled hen | small and hunched, about 0.8 m: bedraggled wet feathers, oversized feet, a stolen sheaf of rye clutched under one wing | the bright gold of the stolen grain |
 | Skrzat | a little spirit of the barn and the farmyard that works for whoever feeds it and plays tricks on the rest | the smallest in the land, about 0.9 m: an old man's face, a long beard, big hands and feet, a tall drooping cap | a red cap |
 | Wąpierz | a villager who will not stay in his grave and comes back to drink the blood of his own; he was buried with a sickle across his neck to keep him down | a gaunt peasant, about 1.6 m, in a grey burial shirt, a flushed, swollen face, the sickle still tied across his neck | blood-red face and lips |
+| Bebok | a Silesian bogeyman who carries off children in his sack; he waits at the edge of the village fields | hunched and shaggy, about 1.6 m: a huge patched sack over his shoulder, a mop of matted hair hiding the face, long arms with big hands | yellow eyes glinting under the hair |
+| Dusiołek | the little demon from Leśmian's ballad that sits on a sleeper's chest and chokes him; it finds the peasant napping by the road at noon | small and heavy, about 0.7 m: a round, stone-like body, spindly legs, big flat pressing hands, heavy drowsy eyelids | poppy red, the flower of sleep, as in Lady Midday's wreath |
 
-With these the land would read as a low quadruped (Wolf), a small bird (Kłobuk), a little man (Skrzat) and a gaunt man (Wąpierz). The Kłobuk is the first bird and needs its own rig.
+With the Kłobuk, the Skrzat and the Wąpierz the land would read as a low quadruped (Wolf), a small bird (Kłobuk), a little man (Skrzat) and a gaunt man (Wąpierz). The Bebok and the Dusiołek are further options; the Dusiołek, the Kłobuk and the Skrzat are all small, so at most one or two of them fit one land. The Kłobuk is the first bird and needs its own rig.
 
-First concepts, to choose from: [`Klobuk`](../../../Art/Concepts/Candidates/Klobuk.png), [`Skrzat`](../../../Art/Concepts/Candidates/Skrzat.png), [`Wapierz`](../../../Art/Concepts/Candidates/Wapierz.png) in `Art/Concepts/Candidates`. A chosen candidate gets its sheet and its final concept in `Art/Concepts`.
+First concepts, to choose from: [`Klobuk`](../../../Art/Concepts/Candidates/Klobuk.png), [`Skrzat`](../../../Art/Concepts/Candidates/Skrzat.png), [`Wapierz`](../../../Art/Concepts/Candidates/Wapierz.png), [`Bebok`](../../../Art/Concepts/Candidates/Bebok.png), [`Dusiolek`](../../../Art/Concepts/Candidates/Dusiolek.png) in `Art/Concepts/Candidates`. A chosen candidate gets its sheet and its final concept in `Art/Concepts`.
 
 ## Wave building blocks
 

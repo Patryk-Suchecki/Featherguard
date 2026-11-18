@@ -56,7 +56,7 @@ One table of every enemy and boss with its design and production stage. Which en
 
 Figures proposed for later lands, not yet in the GDD. Moving one into the roster changes the GDD first; it then gets a row in the table above. The Rye Fields candidates are in [`lands/rye-fields.md`](lands/rye-fields.md#candidates-for-the-regular-enemies).
 
-Their first concepts are in `Art/Concepts/Candidates`, one image per candidate (`BabaJaga`, `Boruta`, `Rokita`, `Kikimora`, `Koschei`, `Psoglav`).
+Their first concepts are in `Art/Concepts/Candidates`, one image per candidate (`BabaJaga`, `Boruta`, `Rokita`, `Kikimora`, `Koschei`, `Psoglav`, `Basilisk`).
 
 | Candidate | Fits | Folk belief |
 |---|---|---|
@@ -66,3 +66,4 @@ Their first concepts are in `Art/Concepts/Candidates`, one image per candidate (
 | Baba Jaga | Old Forest or Bald Mountain, as an Elite | the witch with a hut on a chicken leg who flies in a mortar |
 | Psoglav | Bald Mountain or Nav | a dog-headed man-eater from the southern Slavs |
 | Koschei the Deathless | Nav, as the boss | a deathless sorcerer whose death is hidden in a needle, in an egg, in a duck |
+| Basilisk | Nav, or a cellar under an old castle | from the Warsaw legend: a rooster-headed serpent hatched from a rooster's egg that guards treasure, kills with its gaze and dies of its own reflection in a mirror |
