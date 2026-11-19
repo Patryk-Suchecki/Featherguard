@@ -80,7 +80,37 @@ Noon over muted rye; warm but faded light.
 
 ### Sacred Oak Stronghold
 
-Dusk around old oak and stone; warm firelight against a cool sky.
+Night around old oak, logs and stone; warm firelight against cold mist and a cool sky. The concept is [`Art/Concepts/Stronghold.png`](../Art/Concepts/Stronghold.png).
+
+- **View:** light top-down three-quarter view of the whole camp, like a tabletop diorama, with dark ground around it.
+- **Layout:** the campfire in the centre with six stump seats behind it; the forge back left (a log smithy on a stone foundation with a stone chimney and an open, glowing door); the Wise Woman's Hut back centre (crooked, mossy, herbs and skulls, green glow); the Sacred Oak back right, the tallest shape, with a shrine and candles at its roots; the tavern right (log walls, thatched roof, lit windows); the shop front left (a stall with an awning and crates); the signpost front right where the road leaves the camp. A broken palisade of sharpened logs runs around it.
+- **Mood:** ground mist, dead leafless trees at the edges, a graveyard front left with wooden markers, crosses, bones and blue-green wisps, lanterns on posts along the paths.
+- **Light:** the campfire, the forge hearth and the tavern windows are the only warm light; the hut's glow and the wisps are the only cold accents.
+- **For the models:** follow the layout and shapes, not the painting. Keep the outlines and toon bands of the style, leave out the painted letters on the forge wall, and keep the empty space in front of the fire for the party.
+
+The Stronghold is built from these models. Each concept sheet is in `Art/Concepts/Stronghold/`; the labels and dimension lines on the sheets are only notes and are not modelled.
+
+| Model | Concept | Size | Notes for the model |
+|---|---|---|---|
+| Forge | [Forge](../Art/Concepts/Stronghold/Forge.png) | 3.2 × 2.6 m, 4.4 m tall | the top row and the three-quarter view are the reference; the second front view (doors wide open) is an alternative. The chimney sits in a different place in each view: follow the three-quarter view. Leave out the painted letters on the wall. The anvil on its block and the stone trough are separate props |
+| Wise Woman's Hut | [WiseWomansHut](../Art/Concepts/Stronghold/WiseWomansHut.png) | 2.8 × 2.4 m, 3.5 m tall | the top row is the reference; the second row repeats it with the door the other way. The sheet draws it straight: lean and sag it a little, as in the main concept. Herbs, garlic and skulls under the eaves, pots by the door, the green glow from the door |
+| Sacred Oak | [SacredOak](../Art/Concepts/Stronghold/SacredOak.png) | about 9 m tall | the front and three-quarter views are the reference; the side view draws the crown narrower. The crown as a few big leaf clumps; the shrine with candles at the front roots and the ribbons are separate parts |
+| Tavern | [Tavern](../Art/Concepts/Stronghold/Tavern.png) | 4.5 × 3.5 m, 4.5 m tall | mossy thatch, carved horse heads on the gables, porch over the door, the sign has no letters; barrels and benches as separate props |
+| Shop | [Shop](../Art/Concepts/Stronghold/Shop.png) | 2.5 × 1.5 m, 2.5 m tall | the front view is the reference; the side view draws the awning differently, so model it sagging between the poles as in the front and top views |
+| Campfire and stump seat | [Campfire](../Art/Concepts/Stronghold/Campfire.png) | ring 1.4 m across; seat 0.5 m wide, 0.45 m tall | logs and embers only, the flame is an effect; one stump model, used six times |
+| Signpost | [Signpost](../Art/Concepts/Stronghold/Signpost.png) | 2.5 m tall | three arrow boards with carved symbols and no letters, rope and nails, a stone pile at the foot |
+| Palisade | [Palisade](../Art/Concepts/Stronghold/Palisade.png) | segment 2 m long, 2.2 m tall | three pieces that tile: straight segment, broken segment, end post with a carved band; the same height and log thickness |
+| Lantern post | [LanternPost](../Art/Concepts/Stronghold/LanternPost.png) | 2.4 m tall | the side view repeats the front; use the front and three-quarter views. The lantern glass is the only warm part and gets a light in the scene |
+| Graveyard kit | [Graveyard](../Art/Concepts/Stronghold/Graveyard.png) | 0.4–1.3 m | roofed wooden cross, plank marker, mossy headstone, grave mound, bones with a skull |
+| Forge, ruined | [ForgeRuined](../Art/Concepts/Stronghold/ForgeRuined.png) | as the Forge | made from the Forge model, so the footprint, logs and chimney stay where they are; the sheet moves the chimney and keeps most of the roof, so use it only for the broken door, soot and rubble. The roof caved in, the chimney half fallen, no glow |
+| Wise Woman's Hut, ruined | [WiseWomansHutRuined](../Art/Concepts/Stronghold/WiseWomansHutRuined.png) | as the hut | made from the hut model; the sheet keeps its shape well: the mossy roof broken open with rafters showing, a broken wall corner, fallen herbs and skulls, broken pots, no glow |
+| Tavern, ruined | [TavernRuined](../Art/Concepts/Stronghold/TavernRuined.png) | as the Tavern | made from the Tavern model; the sheet draws a bigger building with a second gable, so take only the look of the damage: the thatch burnt through to bare rafters, a wall broken in, dark windows, the sign hanging |
+| Shop, ruined | [ShopRuined](../Art/Concepts/Stronghold/ShopRuined.png) | as the Shop | made from the Shop model; the sheet's poles lean differently, so take the torn awning, the cracked empty counter and the smashed crates. Ignore the colour swatches on the sheet |
+| Dead trees | [DeadTrees](../Art/Concepts/Stronghold/DeadTrees.png) | 4–7 m tall | three variants, taken from the first, third and fifth tree from the left: tall and thin, twisted and leaning, broken snag with moss; the other trees are their other views |
+| Camp props | [CampProps](../Art/Concepts/Stronghold/CampProps.png) | 0.4–1 m | crate, stacked crates, barrel, sack, bucket, axe in a chopping block, pitchfork; the three rows are the front, side and back views |
+
+The ground, roads, mist, fire and wisps are not models: the scene and its effects make them.
+
 
 | Use | Colour |
 |---|---|
@@ -88,7 +118,7 @@ Dusk around old oak and stone; warm firelight against a cool sky.
 | Old oak wood | `#4A3627` |
 | Moss and leaves | `#5E6B3A` |
 | Stone | `#8A8780` |
-| Dusk sky, distance | `#5B6A86` |
+| Night sky, distance | `#5B6A86` |
 | Firelight, key light | `#F0B060` |
 
 ### Shared
