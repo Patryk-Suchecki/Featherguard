@@ -34,20 +34,20 @@ One table of every enemy and boss with its design and production stage. Which en
 | Bog Hag | Marshes | enemy | ? | – | Idea | – |
 | Rusalka | Marshes | enemy | ? | – | Idea | – |
 | Water Maiden | Marshes | boss | ? | – | Idea | – |
-| Wild Woman | Old Forest | enemy | ? | – | Idea | – |
-| Mamuna | Old Forest | enemy | ? | – | Idea | – |
-| Licho | Old Forest | enemy | ? | – | Idea | – |
-| Forest Grandfather | Old Forest | enemy | ? | – | Idea | – |
-| Leshy | Old Forest | boss | ? | – | Idea | – |
 | Sabbath Witch | Bald Mountain | enemy | ? | – | Idea | – |
 | Planetnik | Bald Mountain | enemy | ? | – | Idea | – |
 | Giant | Bald Mountain | enemy | ? | – | Idea | – |
 | Sirin | Bald Mountain | enemy | ? | – | Idea | – |
 | Zmey | Bald Mountain | boss | ? | – | Idea | – |
+| Wild Woman | Old Forest | enemy | ? | – | Idea | – |
+| Mamuna | Old Forest | enemy | ? | – | Idea | – |
+| Licho | Old Forest | enemy | ? | – | Idea | – |
+| Forest Grandfather | Old Forest | enemy | ? | – | Idea | – |
+| Leshy | Old Forest | boss | ? | – | Idea | – |
 | Wraith | Nav | enemy | ? | – | Idea | – |
 | Strzyga | Nav | enemy | ? | – | Idea | – |
 | Nightmare | Nav | enemy | ? | – | Idea | – |
 | Death | Nav | enemy | ? | – | Idea | – |
 | to be decided | Nav | boss | ? | – | Idea | – |
 
-**Count:** 21 enemies (one of them elite) and 5 bosses, one not yet named; 2 enemies are in game. The MVP in [`ROADMAP.md`](../ROADMAP.md#content-scale) needs 12 enemies and 3 bosses from 3 lands; the Rye Fields give 5 enemies and 1 boss.
+**Count:** 20 regular enemies, 1 elite and 5 bosses, one not yet named; elites are counted apart from regular enemies. 2 are in game (the Wolf and the Bies). The MVP in [`ROADMAP.md`](../ROADMAP.md#content-scale) needs 12 regular enemies and 3 bosses from 3 lands; the Rye Fields give 4 regular enemies, 1 elite and 1 boss.
