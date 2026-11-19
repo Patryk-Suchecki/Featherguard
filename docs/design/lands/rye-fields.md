@@ -20,6 +20,22 @@ Concept: `Art/Concepts/RyeFields.png`.
   - the near-black outline on foreground shapes, like on the characters;
   - the foreground rye at the bottom edge stays low, so it never covers the characters' feet or the timing rings.
 
+### Models
+
+The backdrop is built from these models (#149). Each sheet is in `Art/Concepts/RyeFields/`; the labels and dimension lines on the sheets are notes only.
+
+| Model | Sheet | Size | Notes for the model |
+|---|---|---|---|
+| Rye clumps and stooks | [RyeStooks](../../../Art/Concepts/RyeFields/RyeStooks.png) | clumps 0.6, 0.9 and 1.2 m; stook 1.3 m | three clump sizes, a stook and a stook with a sickle; the rows are the front and back views |
+| Field boundary | [FieldBoundary](../../../Art/Concepts/RyeFields/FieldBoundary.png) | fence 2 m long, 0.8 m tall; stones 0.4–0.8 m | a straight and a broken wattle segment and three boundary stones; the biggest carries a plain carved circle with a dot |
+| Roadside cross | [RoadsideCross](../../../Art/Concepts/RyeFields/RoadsideCross.png) | 2.6 m | the front and three-quarter views are the reference: the back view loses the shrine and the side view loses the cross arm. The shrine, its figure, the wreath and the ribbons are separate parts |
+| Scarecrow and cart wheel | [FieldProps](../../../Art/Concepts/RyeFields/FieldProps.png) | scarecrow 1.9 m; wheel 1 m across | the wheel is one model, placed standing or lying |
+| Barn | [Barn](../../../Art/Concepts/RyeFields/Barn.png) | 6 × 4 m, 5 m tall | no chimney; the crossed beams sit only on the two gables, and the hay opening only on the front gable |
+| Pear tree and crows | [PearTree](../../../Art/Concepts/RyeFields/PearTree.png) | tree 5 m; crows 0.4 m | the crown is fuller in the front view than in the back view: follow the front and three-quarter views. The crows are separate small models, perched on the branches by the scene |
+| Tree line | [TreeLine](../../../Art/Concepts/RyeFields/TreeLine.png) | about 20 m long, 5–8 m tall | a low-detail background silhouette, softer than the props as the style guide allows |
+
+The clearing ground with the field balk is shaped in the scene, not from a sheet.
+
 ## Law
 
 **Noon Heat** (from the GDD): every 3rd turn, characters without a Shield lose part of their HP. How it changes these fights comes with the Rye Fields spec.
