@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08598dafcf7395468855c9b59db31d1, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.UnitDefinition
+  displayName: Warrior
+  team: 0
+  maxHealth: 140
+  attack: {fileID: 11400000, guid: 6fcc154d175004540b3f3b36deda8170, type: 2}
+  support: {fileID: 11400000, guid: fcaf2ffca64e6e94fa7429def6d31596, type: 2}
+  special: {fileID: 11400000, guid: 8ffcde458ad69c042b9e0e3a2a757269, type: 2}
+  ai:
+    actionsPerTurn: 1
+    specialEvery: 0
+    supportChance: 0.45
+    healThreshold: 0.6
+    healChance: 0.75
+    woundedWeight: 2
+    finishWeight: 3
+  boss:
+    enrageAt: 0
+    enrageDamageBonus: 0.4
+    enrageSummons: []

@@ -4,6 +4,7 @@
     "references": [
         "Featherguard.Core",
         "Featherguard.Battle",
+        "Featherguard.Battle.Presentation",
         "Featherguard.Run",
         "Featherguard.Meta",
         "UnityEngine.TestRunner",

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
+  m_Name: WarriorSupport
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.AbilityDefinition
+  displayName: War Shout
+  target: 3
+  hits: 1
+  effects:
+  - rid: 2988852411375026217
+  - rid: 2988852411375026218
+  alwaysTimed: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 2988852411375026217
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 8b7cc26af3f808548b82f0675d710c98, type: 2}
+          turns: 2
+          potency: 0
+          chance: 1
+          onSelf: 0
+          condition: 0
+    - rid: 2988852411375026218
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 8b7cc26af3f808548b82f0675d710c98, type: 2}
+          turns: 3
+          potency: 0
+          chance: 1
+          onSelf: 0
+          condition: 1

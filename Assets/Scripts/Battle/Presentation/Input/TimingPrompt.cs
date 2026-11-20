@@ -27,24 +27,30 @@ namespace Featherguard.Battle.Presentation
             this.random = random;
         }
 
-        public IEnumerator Attack(Vector3 world, Action<TimingResult> done)
+        public IEnumerator Perform(TimingGesture gesture, Vector3 world, Action<TimingResult> done)
         {
-            var result = TimingResult.Miss;
-            float target = config.attackRingTime;
+            var run = (gesture ?? new RingGesture { closeTime = config.attackRingTime }).Start(judge);
+            var sketch = new GestureSketch();
             yield return null;
-            for (float t = 0f; t <= target + judge.GoodWindow; t += input.FrameTime)
+            while (!run.Finished)
             {
-                cues.ShowAttackRing(world, Mathf.Clamp01(1f - t / target));
-                if (input.Pressed())
-                {
-                    result = judge.Judge(t - target);
-                    break;
-                }
+                float frame = input.FrameTime;
+                if (frame > 0f) run.Tick(frame, input.Sample());
+                while (run.TryTakeCue(out var part))
+                    if (!run.Finished) PlayPart(part);
+                sketch.Clear(run.AtTarget ? world : null);
+                run.Draw(sketch);
+                cues.ShowGesture(sketch);
                 yield return null;
             }
             cues.HideTimingCue();
-            Announce(world, result, "PERFECT!", "GOOD");
-            done(result);
+            Announce(world, run.Result, "PERFECT!", "GOOD");
+            done(run.Result);
+        }
+
+        void PlayPart(TimingResult part)
+        {
+            if (part != TimingResult.Miss) sounds.Play(part == TimingResult.Perfect ? SfxId.Buff : SfxId.Click);
         }
 
         public IEnumerator Block(Vector3 world, Action<TimingResult> done)

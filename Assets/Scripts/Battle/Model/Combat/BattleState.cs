@@ -77,14 +77,18 @@ namespace Featherguard.Battle
                 int stolen = actor.ApplyHeal((int)Math.Round(dealt * lifesteal));
                 if (stolen > 0) Log.Emit(new Healed { Target = actor, Amount = stolen });
             }
+            if (actor != target && actor.Team != target.Team)
+                Retaliate(target, actor);
             KillIfDead(target);
         }
 
-        public void Heal(BattleUnit actor, BattleUnit target, int power, AbilityDefinition ability)
+        public int Heal(BattleUnit actor, BattleUnit target, int power, AbilityDefinition ability, ActionTiming timing = default)
         {
-            if (!target.IsAlive) return;
-            int healed = target.ApplyHeal(DamageCalculator.Heal(power, actor.Stat(StatType.Healing)));
+            if (!target.IsAlive) return 0;
+            int amount = DamageCalculator.Heal(power, actor.Stat(StatType.Healing) * timing.SupportMultiplier(Rules));
+            int healed = target.ApplyHeal(amount);
             Log.Emit(new Healed { Target = target, Ability = ability, Amount = healed });
+            return Math.Max(0, amount - healed);
         }
 
         public void TryApplyStatus(BattleUnit actor, BattleUnit target, StatusApplication application, ActionTiming timing = default)
@@ -92,9 +96,32 @@ namespace Featherguard.Battle
             if (application.status == null || !target.IsAlive) return;
             if (application.condition == StatusCondition.PerfectTiming && timing.Attack != TimingResult.Perfect) return;
             if (Random.Value > application.chance) return;
-            int points = application.status.AbsorbsDamage ? (int)Math.Round(application.potency * actor.Stat(StatType.Healing)) : 0;
+            int points = application.status.AbsorbsDamage ? (int)Math.Round(application.potency * actor.Stat(StatType.Healing) * timing.SupportMultiplier(Rules)) : 0;
             target.Statuses.Apply(application, target.Team == actor.Team, actor.Team, points);
             Log.Emit(new StatusApplied { Target = target, Status = application.status });
+        }
+
+        public void GrantShield(BattleUnit actor, BattleUnit target, StatusDefinition shield, int turns, int points)
+        {
+            if (shield == null || points <= 0 || !target.IsAlive) return;
+            var application = new StatusApplication { status = shield, turns = turns };
+            target.Statuses.Apply(application, target.Team == actor.Team, actor.Team, points);
+            Log.Emit(new StatusApplied { Target = target, Status = shield });
+        }
+
+        void Retaliate(BattleUnit holder, BattleUnit attacker)
+        {
+            int power = holder.Statuses.Potency(s => s.Retaliates);
+            if (power <= 0 || !attacker.IsAlive) return;
+            var outcome = attacker.TakeDamage(power);
+            Log.Emit(new Damaged { Source = holder, Target = attacker, Amount = outcome.Dealt, Absorbed = outcome.Absorbed });
+            foreach (var application in holder.Statuses.RetaliationStatuses)
+            {
+                if (!attacker.IsAlive || application.status == null || Random.Value > application.chance) continue;
+                attacker.Statuses.Apply(application, true, holder.Team);
+                Log.Emit(new StatusApplied { Target = attacker, Status = application.status });
+            }
+            KillIfDead(attacker);
         }
 
         public void DamageOverTime(BattleUnit unit, ActiveStatus status)

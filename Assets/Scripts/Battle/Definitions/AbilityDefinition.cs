@@ -14,6 +14,8 @@ namespace Featherguard.Battle
         public AbilityTarget target;
         [Min(1)] public int hits = 1;
         [SerializeReference, SubclassSelector] public AbilityEffect[] effects = new AbilityEffect[0];
+        [Tooltip("Timed by the player even without damage or as the Rage action. Damaging attacks are always timed.")]
+        public bool alwaysTimed;
 
         public bool TargetsEnemies => target is AbilityTarget.Enemy or AbilityTarget.AllEnemies;
         public bool TargetsAll => target is AbilityTarget.AllEnemies or AbilityTarget.AllAllies;

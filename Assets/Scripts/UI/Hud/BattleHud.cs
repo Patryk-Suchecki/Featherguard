@@ -103,7 +103,7 @@ namespace Featherguard.UI
 
         public void SetProgress(int encounter, int encounters, int wave, int waves) => topBar.SetProgress(encounter, encounters, wave, waves);
 
-        public void ShowAttackRing(Vector3 world, float closing) => timingCue.ShowAttackRing(world, closing);
+        public void ShowGesture(GestureSketch sketch) => timingCue.ShowGesture(sketch);
 
         public void ShowBlockCue(Vector3 world) => timingCue.ShowBlockCue(world);
 

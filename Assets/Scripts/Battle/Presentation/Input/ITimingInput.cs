@@ -4,5 +4,6 @@ namespace Featherguard.Battle.Presentation
     {
         float FrameTime { get; }
         bool Pressed();
+        GestureSample Sample();
     }
 }

@@ -14,8 +14,9 @@ namespace Featherguard.EditorTools
             var visuals = new List<UnitVisuals>();
 
             void Add(string id, string name, Team team, int health, float height, float scale, string attack, string support, string special,
-                System.Action<UnitDefinition> extra = null)
+                System.Action<UnitDefinition> extra = null, string model = null)
             {
+                model ??= id;
                 var unit = seeder.Seed<UnitDefinition>($"{ContentPaths.Units}/{id}.asset", u =>
                 {
                     u.displayName = name;
@@ -36,15 +37,19 @@ namespace Featherguard.EditorTools
                 }, v =>
                 {
                     v.unit = unit;
-                    v.model = AssetDatabase.LoadAssetAtPath<GameObject>($"{ContentPaths.Characters}/{id}.fbx");
-                    v.portrait = art.Portrait(id);
-                    v.animator = AnimatorBuilder.Build(id);
+                    v.model = AssetDatabase.LoadAssetAtPath<GameObject>($"{ContentPaths.Characters}/{model}.fbx");
+                    v.portrait = art.Portrait(model);
+                    v.animator = AnimatorBuilder.Build(model);
                 }));
             }
 
             Add("Knight", "Robin", Team.Heroes, 150, 1.4f, 1f, "KnightAttack", "KnightSupport", "KnightSpecial");
             Add("Archer", "Jay", Team.Heroes, 105, 1.4f, 1f, "ArcherAttack", "ArcherSupport", "ArcherSpecial");
             Add("Owl", "Owl", Team.Heroes, 115, 1.4f, 1f, "OwlAttack", "OwlSupport", "OwlSpecial");
+            Add("Warrior", "Warrior", Team.Heroes, 140, 1.4f, 1f, "WarriorAttack", "WarriorSupport", "WarriorSpecial", model: "Knight");
+            Add("ThornWarden", "Thorn Warden", Team.Heroes, 165, 1.4f, 1.15f, "ThornWardenAttack", "ThornWardenSupport", "ThornWardenSpecial", model: "Knight");
+            Add("Healer", "Healer", Team.Heroes, 110, 1.4f, 1f, "HealerAttack", "HealerSupport", "HealerSpecial", model: "Owl");
+            Add("Thundercaller", "Thundercaller of Perun", Team.Heroes, 100, 1.4f, 1f, "ThundercallerAttack", "ThundercallerSupport", "ThundercallerSpecial", model: "Archer");
             Add("Grunt", "Thug", Team.Enemies, 80, 1.5f, 1f, "GruntAttack", null, null);
             Add("Shaman", "Shaman", Team.Enemies, 70, 1.5f, 1f, "ShamanAttack", "ShamanSupport", null);
             Add("Brute", "Brute", Team.Enemies, 170, 1.5f, 1.4f, "BruteAttack", null, null);

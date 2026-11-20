@@ -15,6 +15,19 @@ namespace Featherguard.Battle
         public virtual bool ActsLast => false;
         public virtual bool ConsumedOnAttack => false;
         public virtual bool ConsumedByCriticalHit => false;
+        public virtual bool Retaliates => false;
+        public virtual IEnumerable<StatusApplication> RetaliationStatuses => Array.Empty<StatusApplication>();
+    }
+
+    [Serializable]
+    public sealed class Retaliate : StatusBehaviour
+    {
+        [Tooltip("Optional status put on each attacker, for example a chance to Stun.")]
+        public StatusApplication onAttacker = new();
+
+        public override bool Retaliates => true;
+        public override IEnumerable<StatusApplication> RetaliationStatuses =>
+            onAttacker != null && onAttacker.status != null ? new[] { onAttacker } : Array.Empty<StatusApplication>();
     }
 
     [Serializable]

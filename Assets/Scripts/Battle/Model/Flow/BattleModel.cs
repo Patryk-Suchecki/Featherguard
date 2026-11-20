@@ -84,7 +84,7 @@ namespace Featherguard.Battle
             Targeting.Candidates(ability, State.AlliesOf(hero), State.OpponentsOf(hero));
 
         public bool IsTimed(BattleUnit hero, AbilityDefinition ability) =>
-            hero != null && ability != null && ability.IsDamaging && ability != hero.Definition.special;
+            hero != null && ability != null && (ability.alwaysTimed || ability.IsDamaging && ability != hero.Definition.special);
 
         public IReadOnlyList<BattleEvent> Act(BattleUnit hero, AbilityDefinition ability, BattleUnit target, TimingResult timing = TimingResult.Miss)
         {

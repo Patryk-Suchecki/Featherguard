@@ -31,7 +31,10 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - an application can require a perfect attack timing (`StatusCondition.PerfectTiming`);
   - a cleanse (`CleanseEffect`) removes harmful statuses; death clears all statuses; heroes keep theirs between waves;
   - enemies with an act-last status (Freeze) act after the other enemies.
-- **Attack timing:** an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it. A temporary ring asks for it (see Presentation) until #19 brings the final battle screen.
+- **Attack timing:** an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it unless the ability is `alwaysTimed`; then Good adds +20% and Perfect +40% to its healing and Shield points, and its damage gets the attack bonus. Effects wrapped in `PerfectTimingEffect` (or status applications with `PerfectTiming`) only happen on a perfect result. A gesture asks for the timing (see Presentation) until #19 brings the final battle screen.
+- **Retaliation:** a status with `Retaliate` (Thorns, Sparks) returns its potency as damage to every opponent hit that lands on its owner, and can put a status on the attacker (Sparks: 30% Stun). An attacker killed this way stops its remaining hits.
+- **Chain damage:** `ChainDamageEffect` hits the target, then every other enemy in slot order, each jump keeping 60% of the previous hit.
+- **Overflow healing:** a `HealEffect` with `overflowShield` turns healing beyond full health into Shield points for 2 turns.
 - **Block timing:** with `BattleSetup.AwaitBlocks` the enemy turn stops before each damaging enemy action (an `EnemyWindup` event) and `Block` resolves it: Good removes 30% and Perfect 60% of the damage for every hero hit, and Perfect adds +10 Rage once. Enemy actions without damage resolve at once. The game turns it on together with the temporary timing prompts.
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
 - **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
@@ -50,6 +53,19 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 | Robin (Knight) | 150 | Slash – melee, 30 dmg | Cover – Shield (30) on an ally + Taunt on self | Shield Bash – melee, 85 dmg + Stun, heavy |
 | Jay (Archer) | 105 | Double Shot – 2 arrows × 14 dmg, 30% Poison (5/turn, 2 turns) | Battle Cry – Empower on an ally | Arrow Rain – all enemies, 2 × 24 dmg + Poison (6/turn, 2 turns) |
 | Owl | 115 | Spark – magic bolt, 20 dmg, 35% Weaken | Mend – heal 40 | Forest Renewal – heal all allies 60 |
+| Warrior | 140 | Sword Cut – melee, 30 dmg; perfect: Bleed (5/turn, 3 turns) | War Shout – Empower on the party for 2 turns; perfect: 3 turns | Hero's Blow – melee, 85 dmg, heavy; perfect: Stun |
+| Thorn Warden | 165 | Thorn Lash – melee, 16 dmg + Taunt on self; perfect: Weaken | Thorn Guard – Thorns (8) on an ally for 2 turns; perfect: Shield (20) | Bramble Wall – Thorns (20) on the party + Taunt on self; perfect: party Shield (25) |
+| Healer | 110 | Amber Spark – magic bolt, 14 dmg; perfect: Mark | Oak Blessing – heal 40, overflow becomes Shield; perfect: cleanse | Grace of the Oak – heal 45 and cleanse the party; perfect: party Shield (25) |
+| Thundercaller of Perun | 100 | Chain Lightning – 22 dmg, jumps to every other enemy at 60% each jump; perfect: 50% Stun | Spark Ward – Sparks (8) on an ally for 2 turns; perfect: Empower | Perun's Storm – all enemies, 50 dmg; perfect: Stun all |
+
+The Warrior, Thorn Warden, Healer and Thundercaller come from the new roster; they use the Knight, Owl and Archer models and portraits as placeholders until their own art is made. The campfire seats the four of them, Robin and Jay; the Owl keeps its data but has no seat. Each of their actions has its own gesture:
+
+| Hero | Attack | Support | Rage |
+|---|---|---|---|
+| Warrior | Slash to the right | Series of 2 rings | 3 Slashes: right, up-left, down |
+| Thorn Warden | Ring | Trace a thorn line | Trace a shield, then a Ring |
+| Healer | Charge: hold, release in the gold | Guide the light along a wave | Draw a circle from memory |
+| Thundercaller | Series of 3 rings | Spin twice | Draw a lightning sign from memory |
 
 ### Enemies
 
@@ -89,6 +105,8 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 | Freeze | +30% damage taken; an enemy acts last (harmful) |
 | Curse | −30% damage (harmful) |
 | Mark | +50 points of crit chance against the owner, gone after the first crit it takes (harmful) |
+| Thorns | Every hit the owner takes returns the potency as damage to the attacker |
+| Sparks | Like Thorns, plus a 30% chance to Stun the attacker |
 
 The default duration is 1 turn unless stated otherwise. Bleed is used by the Bies; Burn, Freeze, Curse and Mark exist for the reworked heroes and enemies and use placeholder icons until their own are drawn. The rules follow `docs/design/combat/statuses.md`.
 
@@ -181,7 +199,19 @@ Each card targets one hero (Hero), the whole party (Party) or the run (Run). A H
 - **Visuals:** low-poly characters, generated procedurally in Blender (`Art/Blender`), with animations Idle, Attack, Cast, Hit, Death and Victory. Portraits are rendered from the same models.
 - **Toon shading:** every unit is drawn with the `Featherguard/Toon` shader: flat light bands, a cool shadow colour and a dark outline. The settings live in `Assets/Art/Materials/Toon.mat`; each unit keeps its own texture and colour.
 - **Impact effects:** an ability can draw an extra effect on the target when its hit lands (`AbilityVisuals.impactEffect`). The Bies' Rending Claws draws three ember claw slashes with a dark outline that cut in, hold and fade within about 0.35 s; their shape and colours are tuned on its AbilityVisuals asset.
-- **Timing prompts (temporary, `BattlePresentationConfig.timingPrompts`):** a damaging hero attack (not the Rage action) shows a white ring shrinking onto a gold circle on the target for 0.8 s; a tap anywhere or Space is judged against the moment they meet: within 0.06 s Perfect, within 0.15 s Good, otherwise Miss (windows in `BattleRules`). Before each damaging enemy action the game waits a random 0.4–1.2 s, then flashes BLOCK! over the hero 0.25 s before the hit; a tap before the flash is wasted. GOOD / PERFECT! (or BLOCK / PERFECT BLOCK!) pops up over the unit. The enemy only moves and strikes after the block is judged; matching the cue to the animation comes with #19. With the switch off, every attack and block is a Miss and enemy turns don't wait.
+- **Timing prompts (temporary, `BattlePresentationConfig.timingPrompts`):** every timed hero action plays the gesture on its `AbilityVisuals.gesture`. Without one, it shows a white ring shrinking onto a gold circle on the target for 0.8 s; a tap anywhere or Space is judged against the moment they meet: within 0.06 s Perfect, within 0.15 s Good, otherwise Miss (windows in `BattleRules`, scaled by the gesture's `windowScale`). The other gestures play in a panel in the middle of the screen:
+  - **Ring:** the ring above.
+  - **Series:** numbered rings at different places, each tapped as it closes; Space works too.
+  - **Slash:** swipe through the gold gate in the arrow's direction as the ring closes.
+  - **Charge:** hold (or hold Space), release with the bar in the gold zone; holding too long is a Miss.
+  - **Trace:** draw along the shown line from the gold dot; judged by how much of the line is covered and how far the stroke strays.
+  - **Guide:** hold the light and follow it along the path; judged by the share of time the finger stays on it.
+  - **Spin:** circle around the centre the given number of times; Perfect within 65% of the time limit.
+  - **Sign:** a sign is shown, then drawn from memory; judged by a stroke matcher against the sign.
+  - **Sequence:** several gestures in a row; Perfect only if every step is Perfect, Good if at least 60% of the steps hit.
+  - Series and Sequence are judged the same way over their parts. Gesture logic is plain C# (`GestureRun` subclasses) drawn through a `GestureSketch` by the HUD.
+
+  Before each damaging enemy action the game waits a random 0.4–1.2 s, then flashes BLOCK! over the hero 0.25 s before the hit; a tap before the flash is wasted. GOOD / PERFECT! (or BLOCK / PERFECT BLOCK!) pops up over the unit. The enemy only moves and strikes after the block is judged; matching the cue to the animation comes with #19. With the switch off, every attack and block is a Miss and enemy turns don't wait.
 - **Icons and sounds:** procedural, generated by `IconFactory` and `SfxSynth`.
 - **Timing:** feedback timings live in `BattlePresentationConfig.asset`. Hitstop, camera shake and popups are configured in `GameConfig.feedback`.
 - **UI:** landscape, 1920×1080 reference resolution, safe area, generous tap tolerance, pause menu with sound toggle and an option to abandon the run.
