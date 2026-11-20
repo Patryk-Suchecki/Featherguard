@@ -94,3 +94,13 @@ How the two of us work on this repo, step by step. The rules themselves (archite
    ```
    Open the pull request from the template; its description starts with `Closes #17`, the issue it finishes.
 7. **Merge:** the other person reviews and approves (one approval is required), then *Squash and merge*. The issue closes automatically.
+
+## 4. Android builds
+
+A push to the `release` branch builds an Android APK on GitHub (`.github/workflows/android.yml`, about 20–30 minutes). To build what is on `main`:
+```bash
+git push origin main:release
+```
+A build can also be started by hand: Actions → Android build → Run workflow.
+
+When it finishes, a build from `release` is published as a pre-release on the repository's Releases page (tag `v<version>-build.<number>`, with the APK attached and the changes since the last one). Open the release on the phone and tap the `.apk`; a manual or PR build is only kept as the `Featherguard-<number>` artifact of its run for 30 days. Install the APK by opening it on the phone (allow installing unknown apps for your file manager), or install it with `adb install -r Featherguard.apk`. The build uses a debug signing key, so it is for our own phones only; the Google Play upload comes later.

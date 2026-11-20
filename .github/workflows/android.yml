@@ -1,0 +1,78 @@
+name: Android build
+
+on:
+  push:
+    branches: [release]
+  pull_request:
+    paths: [.github/workflows/android.yml]
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    name: Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          android: false
+          tool-cache: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: List the LFS files the game needs
+        run: git lfs ls-files --long --include="Assets/**" | cut -d ' ' -f1 | sort > .lfs-assets-id
+
+      - uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Pull the LFS files the game needs
+        run: git lfs pull --include="Assets/**"
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          androidExportType: androidPackage
+          androidVersionCode: ${{ github.run_number }}
+          buildName: Featherguard
+          versioning: None
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Featherguard-${{ github.run_number }}
+          path: build/Android
+          retention-days: 30
+
+      - name: Name the release
+        id: version
+        if: github.ref == 'refs/heads/release'
+        run: |
+          version=$(grep -m1 'bundleVersion:' ProjectSettings/ProjectSettings.asset | awk '{print $2}')
+          echo "tag=v$version-build.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          cp build/Android/Featherguard.apk "Featherguard-$version-build.${{ github.run_number }}.apk"
+
+      - uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/release'
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Featherguard ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          generate_release_notes: true
+          files: Featherguard-*.apk
