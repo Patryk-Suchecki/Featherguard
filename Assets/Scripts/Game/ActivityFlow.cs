@@ -1,0 +1,57 @@
+using System.Collections;
+using Featherguard.Battle;
+using Featherguard.Core;
+using Featherguard.Meta;
+using Featherguard.UI;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace Featherguard.Game
+{
+    public sealed class ActivityFlow
+    {
+        readonly BattleHud hud;
+        readonly WorldProgress world;
+        readonly ActivityDefinition activity;
+        readonly float afterVictory;
+
+        public ActivityFlow(BattleHud hud, WorldProgress world, ActivityDefinition activity, float afterVictory)
+        {
+            this.hud = hud;
+            this.world = world;
+            this.activity = activity;
+            this.afterVictory = afterVictory;
+        }
+
+        public IEnumerator Conclude(BattleResult result)
+        {
+            if (!result.Victory)
+            {
+                ActivityResultScreen.ShowDefeat(hud, activity.displayName, world.Rate(activity).ToString(), Retry, Abandon);
+                yield break;
+            }
+            var rating = world.Rate(activity);
+            int gold = ActivityBattle.Gold(activity, world.DaringMultiplier(rating));
+            string reward = world.IsDaring(rating) ? $"+{gold} gold (Daring +50%)" : $"+{gold} gold";
+            bool story = world.IsStoryMission(activity);
+            world.Win(activity);
+            yield return new WaitForSeconds(afterVictory);
+            string progress = !story ? null : world.IsStoryComplete ? "The story is complete" : $"Story missions {world.StoryWon} / {world.StoryCount}";
+            ActivityResultScreen.ShowVictory(hud, activity.displayName, reward, progress, () => Load(GameScenes.WorldMap));
+        }
+
+        public void Abandon()
+        {
+            world.ClearChoice();
+            Load(GameScenes.WorldMap);
+        }
+
+        static void Retry() => Load(GameScenes.Preparation);
+
+        static void Load(string scene)
+        {
+            GameClock.Paused = false;
+            SceneManager.LoadScene(scene);
+        }
+    }
+}

@@ -4,6 +4,7 @@ namespace Featherguard.Game
     {
         public const string Stronghold = "Stronghold";
         public const string WorldMap = "WorldMap";
+        public const string Preparation = "Preparation";
         public const string Battle = "Battle";
     }
 }

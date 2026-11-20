@@ -26,6 +26,7 @@ namespace Featherguard.Meta
     public class WorldSave
     {
         public int storyWon;
+        public string chosen = "";
         public List<LandOffer> offers = new();
     }
 

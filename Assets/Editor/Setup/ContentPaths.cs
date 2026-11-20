@@ -31,5 +31,7 @@ namespace Featherguard.EditorTools
         public const string Activities = "Assets/Data/World/Activities";
         public const string WorldMapScene = "Assets/Scenes/WorldMap.unity";
         public const string WorldMapPostProfile = "Assets/Settings/WorldMapPostFX.asset";
+        public const string PreparationScene = "Assets/Scenes/Preparation.unity";
+        public const string PreparationPostProfile = "Assets/Settings/PreparationPostFX.asset";
     }
 }

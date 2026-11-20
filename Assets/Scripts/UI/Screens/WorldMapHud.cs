@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Featherguard.Feedback;
 using Featherguard.Meta;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace Featherguard.UI
@@ -67,9 +65,7 @@ namespace Featherguard.UI
             Action onBack, Action onPrototype)
         {
             sceneCamera = camera;
-            if (FindAnyObjectByType<EventSystem>() == null)
-                new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            var root = CreateCanvas();
+            var root = ScreenCanvas.Create("WorldMapHUD");
             canvas = root.GetComponent<Canvas>();
 
             var layer = Ui.Stretch("Labels", root);
@@ -142,19 +138,6 @@ namespace Featherguard.UI
             var rect = Ui.Rect(label, parent, anchor, anchor, position, new Vector2(width, 84f));
             Ui.Button(rect, ButtonColor, () => onClick());
             Ui.Label(Ui.Stretch("Label", rect), label, 34, TextAnchor.MiddleCenter, LandColor);
-        }
-
-        static RectTransform CreateCanvas()
-        {
-            var canvasObject = new GameObject("WorldMapHUD", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            var c = canvasObject.GetComponent<Canvas>();
-            c.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObject.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 1f;
-            return (RectTransform)canvasObject.transform;
         }
     }
 }

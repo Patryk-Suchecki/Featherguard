@@ -32,6 +32,7 @@ namespace Featherguard.Game
         Pose overview;
         Coroutine flight;
         bool inCamp;
+        bool fromPreparation;
         bool leaving;
         bool pressing;
         bool holdHandled;
@@ -57,6 +58,8 @@ namespace Featherguard.Game
             campHud = gameObject.AddComponent<CampHud>();
             campHud.Init(sceneCamera, seats.Select(s => s.LabelAnchor).ToList(), LeaveCamp, () => hud.ComingSoon("Storage"), () => hud.ComingSoon("Potions"));
             ShowSeats();
+            fromPreparation = SavedGame.World(config).Chosen != null;
+            if (fromPreparation) EnterCamp(instant: true);
         }
 
         void Update()
@@ -148,13 +151,19 @@ namespace Featherguard.Game
             }
         }
 
-        void EnterCamp()
+        void EnterCamp(bool instant = false)
         {
-            FeedbackHub.Ui(SfxId.Whoosh);
             inCamp = true;
             if (campPlace != null) campPlace.GetComponent<Collider>().enabled = false;
             hud.SetOverviewVisible(false);
             ShowSeats();
+            if (instant)
+            {
+                sceneCamera.transform.SetPositionAndRotation(campView.position, campView.rotation);
+                campHud.SetVisible(true);
+                return;
+            }
+            FeedbackHub.Ui(SfxId.Whoosh);
             flight = StartCoroutine(Fly(new Pose(campView.position, campView.rotation), () => campHud.SetVisible(true)));
         }
 
@@ -162,6 +171,12 @@ namespace Featherguard.Game
         {
             if (flight != null) return;
             FeedbackHub.Ui(SfxId.Whoosh);
+            if (fromPreparation)
+            {
+                leaving = true;
+                SceneManager.LoadScene(GameScenes.Preparation);
+                return;
+            }
             inCamp = false;
             campHud.SetVisible(false);
             if (campPlace != null) campPlace.GetComponent<Collider>().enabled = true;
@@ -191,17 +206,8 @@ namespace Featherguard.Game
             {
                 var hero = roster.AtSeat(seat.Index);
                 if (hero == null) continue;
-                var look = visuals.Of(hero);
-                if (look.model == null) continue;
-                var facing = campfire.position - seat.transform.position;
-                facing.y = 0f;
-                var model = Instantiate(look.model, seat.transform.position, Quaternion.LookRotation(facing) * Quaternion.Euler(0f, 180f, 0f), seat.transform);
-                model.transform.localScale = Vector3.one * look.modelScale;
-                var animator = model.GetComponent<Animator>();
-                if (animator == null) animator = model.AddComponent<Animator>();
-                animator.runtimeAnimatorController = look.animator;
-                animator.applyRootMotion = false;
-                seat.Hero = model;
+                var model = UnitModels.Place(visuals.Of(hero), seat.transform, campfire.position - seat.transform.position);
+                if (model != null) seat.Hero = model;
             }
         }
 

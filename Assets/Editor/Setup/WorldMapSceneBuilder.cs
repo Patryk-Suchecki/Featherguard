@@ -69,8 +69,8 @@ namespace Featherguard.EditorTools
             var serialized = new SerializedObject(bootstrap);
             serialized.FindProperty("config").objectReferenceValue = config;
             serialized.FindProperty("sceneCamera").objectReferenceValue = camera;
-            SetArray(serialized.FindProperty("lands"), built);
-            SetArray(serialized.FindProperty("markerTemplates"), markers);
+            SerializedArray.Set(serialized.FindProperty("lands"), built);
+            SerializedArray.Set(serialized.FindProperty("markerTemplates"), markers);
             serialized.FindProperty("mainQuestTemplate").objectReferenceValue = mainQuest;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
@@ -106,7 +106,7 @@ namespace Featherguard.EditorTools
             area.size = new Vector3(AreaSize.x, 0.2f, AreaSize.z);
             var land = new SerializedObject(root.gameObject.AddComponent<WorldMapLand>());
             land.FindProperty("land").objectReferenceValue = definition;
-            SetArray(land.FindProperty("slots"), slots);
+            SerializedArray.Set(land.FindProperty("slots"), slots);
             land.FindProperty("labelAnchor").objectReferenceValue = label;
             land.FindProperty("lockedCover").objectReferenceValue = cover;
             land.ApplyModifiedPropertiesWithoutUndo();
@@ -244,13 +244,6 @@ namespace Featherguard.EditorTools
             NightScene.FitCollider(marker.transform, 1.2f);
             marker.SetActive(false);
             return marker;
-        }
-
-        static void SetArray(SerializedProperty property, Object[] values)
-        {
-            property.arraySize = values.Length;
-            for (int i = 0; i < values.Length; i++)
-                property.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
         }
     }
 }

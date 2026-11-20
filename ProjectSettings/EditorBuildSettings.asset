@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap.unity
     guid: be4c92bed190cca42a718c1e34dad521
   - enabled: 1
+    path: Assets/Scenes/Preparation.unity
+    guid: 59e4427cfea09d1478dab2ff4ae048d0
+  - enabled: 1
     path: Assets/Scenes/Battle.unity
     guid: 0e2a6b0db5eb19042a727f3efa20aaad
   m_configObjects:

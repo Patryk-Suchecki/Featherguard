@@ -63,6 +63,7 @@ namespace Featherguard.EditorTools
 
             StrongholdSceneBuilder.Build(config);
             WorldMapSceneBuilder.Build(config);
+            PreparationSceneBuilder.Build(config);
             SceneBuilder.Build(config);
             MobileSettings.Apply();
             Debug.Log(resetToDefaults ? "Featherguard: data reset to defaults and scene rebuilt." : "Featherguard: scene rebuilt.");
