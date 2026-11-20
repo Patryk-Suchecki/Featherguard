@@ -140,7 +140,7 @@ namespace Featherguard.Game
                 case StrongholdPlaceKind.Embark:
                     leaving = true;
                     FeedbackHub.Ui(SfxId.Rage);
-                    SceneManager.LoadScene(GameScenes.Battle);
+                    SceneManager.LoadScene(GameScenes.WorldMap);
                     return;
                 default:
                     hud.ComingSoon(place.DisplayName);

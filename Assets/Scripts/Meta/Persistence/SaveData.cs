@@ -19,5 +19,20 @@ namespace Featherguard.Meta
         public int bestBattles;
         public List<PerkLevel> perks = new();
         public List<string> party = new();
+        public WorldSave world = new();
+    }
+
+    [Serializable]
+    public class WorldSave
+    {
+        public int storyWon;
+        public List<LandOffer> offers = new();
+    }
+
+    [Serializable]
+    public class LandOffer
+    {
+        public string land;
+        public List<string> activities = new();
     }
 }

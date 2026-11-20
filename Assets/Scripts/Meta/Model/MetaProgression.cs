@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Featherguard.Battle;
+using Featherguard.Core;
 using Featherguard.Run;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Featherguard.Meta
             this.store = store;
             Data = store.Load();
         }
+
+        public WorldProgress CreateWorld(WorldDefinition world, IRandomSource random) => new(world, Data, store, random);
 
         public HeroRoster CreateRoster(IReadOnlyList<UnitDefinition> heroes, int seats) => new(heroes, seats, Data, store);
 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb5a7f8a208b7d41bfc84a4774af664, type: 3}
+  m_Name: Marshes
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
+  displayName: Marshes
+  law: 'Depths: some enemies submerge; wisps switch targets.'
+  sideActivities:
+  - {fileID: 11400000, guid: 3578df0d4f7e07441895b2f24e20f0df, type: 2}
+  - {fileID: 11400000, guid: 4682ac86c5187114d9697b2f63c1aa1d, type: 2}
+  - {fileID: 11400000, guid: 429eb6ab3c398f64a8d8ceeed9031e93, type: 2}
+  - {fileID: 11400000, guid: 7cccb337ce8e34949aec50313290f86d, type: 2}
+  - {fileID: 11400000, guid: d3e310d9aeae4a241977942bd5ab260e, type: 2}

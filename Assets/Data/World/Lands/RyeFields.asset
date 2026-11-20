@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb5a7f8a208b7d41bfc84a4774af664, type: 3}
+  m_Name: RyeFields
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
+  displayName: Rye Fields
+  law: 'Noon Heat: every 3rd turn, characters without a Shield lose part of their HP.'
+  sideActivities:
+  - {fileID: 11400000, guid: 18e9ed1cd3040e545a3592c993233c7a, type: 2}
+  - {fileID: 11400000, guid: dc913c42b7d18834c877b86b8f0cc295, type: 2}
+  - {fileID: 11400000, guid: e3fc3a7e647a5de4c97a27503a399ff3, type: 2}
+  - {fileID: 11400000, guid: f3667f792f4fa0248b8251e0fa9cd4f1, type: 2}
+  - {fileID: 11400000, guid: 82a64baacd8456641bd35032b1de956e, type: 2}

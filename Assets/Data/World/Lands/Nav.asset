@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb5a7f8a208b7d41bfc84a4774af664, type: 3}
+  m_Name: Nav
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
+  displayName: Nav
+  law: 'Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire.'
+  sideActivities:
+  - {fileID: 11400000, guid: 702b95f7d5bb4b549b6ee6df20f7ee06, type: 2}
+  - {fileID: 11400000, guid: 6c32709d1065a4e48960a046f01ab5f7, type: 2}
+  - {fileID: 11400000, guid: 7dc04ea6e5a1bad40b763f42c5f0cef5, type: 2}
+  - {fileID: 11400000, guid: 15dede9a422c26a48a6b9b07fe9b2d25, type: 2}
+  - {fileID: 11400000, guid: 66b4bf11ee3c80f44b96af5b64656f4f, type: 2}
