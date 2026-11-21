@@ -108,6 +108,8 @@ MonoBehaviour:
   windupMax: 1.2
   blockLead: 0.25
   selectedRing: {r: 1, g: 0.85, b: 0.2, a: 1}
+  readyRing: {r: 1, g: 0.82, b: 0.15, a: 1}
+  hoverRing: {r: 1, g: 1, b: 1, a: 1}
   enemyRing: {r: 1, g: 0.3, b: 0.25, a: 0.75}
   allyRing: {r: 0.35, g: 1, b: 0.5, a: 0.7}
   tapTolerance: 0.12
