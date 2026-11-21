@@ -31,6 +31,7 @@ namespace Featherguard.Game
             feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
+            DebugTools.Install(config);
             hud = gameObject.AddComponent<BattleHud>();
             visuals = new BattleVisuals(config.presentation);
 
@@ -46,7 +47,11 @@ namespace Featherguard.Game
             if (!GameClock.Paused) battle?.Tick();
         }
 
-        void OnDestroy() => toon?.Dispose();
+        void OnDestroy()
+        {
+            DebugTools.Track(null);
+            toon?.Dispose();
+        }
 
         IEnumerator FightActivity(WorldProgress world, ActivityDefinition activity)
         {
@@ -105,6 +110,7 @@ namespace Featherguard.Game
                 UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
             });
             hud.BindBattle(battle.Commands, battle.Presenter.Rage);
+            DebugTools.Track(battle);
             return model;
         }
 

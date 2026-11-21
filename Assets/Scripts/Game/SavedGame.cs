@@ -10,11 +10,19 @@ namespace Featherguard.Game
         static MetaProgression meta;
 
         public static MetaProgression Meta(GameConfig config) =>
-            meta ??= new MetaProgression(config.meta, new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName)));
+            meta ??= new MetaProgression(config.meta, Store(config));
 
         public static HeroRoster Roster(GameConfig config) => Meta(config).CreateRoster(config.heroes, config.campSeats);
 
         public static WorldProgress World(GameConfig config) => Meta(config).CreateWorld(config.world, UnityRandomSource.Shared);
+
+        public static void ResetProgress(GameConfig config)
+        {
+            Store(config).Save(new SaveData());
+            meta = null;
+        }
+
+        static ISaveStore Store(GameConfig config) => new JsonFileSaveStore(Path.Combine(Application.persistentDataPath, config.meta.saveFileName));
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetOnLoad() => meta = null;

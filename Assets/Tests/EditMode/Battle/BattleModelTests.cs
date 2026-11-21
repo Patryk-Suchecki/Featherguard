@@ -95,6 +95,24 @@ namespace Featherguard.Tests
         }
 
         [Test]
+        public void End_FinishesTheBattleAtOnceWithTheGivenResult()
+        {
+            var hero = Unit("Hero", Team.Heroes, 100, Strike(10));
+            var enemy = Unit("Enemy", Team.Enemies, 50, Strike(5));
+            var model = Create(Encounter(new[] { enemy }, new[] { enemy }), 0f, hero);
+            Assert.IsEmpty(model.End(true));
+            model.Start();
+
+            var events = model.End(true);
+
+            Assert.IsTrue(model.IsFinished);
+            Assert.IsTrue(model.Result.Victory);
+            Assert.IsTrue(events.OfType<BattleEnded>().Single().Victory);
+            Assert.IsEmpty(model.End(false));
+            Assert.IsTrue(model.Result.Victory);
+        }
+
+        [Test]
         public void Act_RejectsInvalidCommands()
         {
             var hero = Unit("Hero", Team.Heroes, 100, Strike(10));
