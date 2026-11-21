@@ -19,7 +19,12 @@ namespace Featherguard.EditorTools
         public readonly Material Iron = Lit("Iron", new Color(0.12f, 0.12f, 0.13f));
         public readonly Material Bone = Lit("Bone", new Color(0.76f, 0.73f, 0.64f));
         public readonly Material Cloth = Lit("Cloth", new Color(0.32f, 0.09f, 0.09f));
+        public readonly Material Rye = Lit("Rye", new Color(0.32f, 0.27f, 0.12f));
+        public readonly Material Straw = Lit("Straw", new Color(0.55f, 0.45f, 0.2f));
+        public readonly Material Bog = Lit("Bog", new Color(0.08f, 0.11f, 0.07f));
+        public readonly Material Water = Lit("Water", new Color(0.05f, 0.08f, 0.11f));
         public readonly Material Ash = Lit("Ash", new Color(0.2f, 0.2f, 0.22f));
+        public readonly Material Mist = Lit("Mist", new Color(0.13f, 0.14f, 0.18f));
         public readonly Material Flame = Unlit("Flame", new Color(4f, 1.6f, 0.4f));
         public readonly Material Ember = Unlit("Ember", new Color(4f, 1.2f, 0.3f));
         public readonly Material Lantern = Unlit("Lantern", new Color(3f, 1.8f, 0.7f));

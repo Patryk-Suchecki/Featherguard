@@ -13,6 +13,7 @@ namespace Featherguard.Game
     {
         [SerializeField] GameConfig config;
         [SerializeField] Camera sceneCamera;
+        [SerializeField] WorldMapLand[] lands;
 
         WorldProgress world;
         bool leaving;
@@ -20,45 +21,42 @@ namespace Featherguard.Game
         void Start()
         {
             GameClock.Paused = false;
+            DynamicGI.UpdateEnvironment();
             var feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             world = SavedGame.World(config);
             if (world.Chosen != null) world.ClearChoice();
 
-            var lands = config.world.lands.Select(DescribeLand).ToList();
-            gameObject.AddComponent<WorldMapHud>().Init(lands, world.StoryWon, world.StoryCount, Back, Prototype);
+            foreach (var land in lands)
+                land.SetOpen(world.IsOpen(land.Land));
+            gameObject.AddComponent<WorldMapHud>().Init(sceneCamera, lands.Select(DescribeLand).ToList(), world.StoryWon, world.StoryCount, Back, Prototype);
         }
 
-        MapLand DescribeLand(LandDefinition land)
+        MapLand DescribeLand(WorldMapLand land)
         {
-            bool open = world.IsOpen(land);
+            bool open = world.IsOpen(land.Land);
             return new MapLand
             {
-                Name = land.displayName,
-                Law = land.law,
+                Name = land.Land.displayName,
                 Open = open,
-                StoryWon = world.StoryWonIn(land),
-                StoryTotal = world.StoryCountIn(land),
-                Activities = open ? world.ActivitiesIn(land).Select(DescribeActivity).ToList() : new List<MapActivity>(),
+                StoryWon = world.StoryWonIn(land.Land),
+                StoryTotal = world.StoryCountIn(land.Land),
+                LabelAnchor = land.LabelAnchor,
+                ActivitiesAnchor = land.ActivitiesAnchor,
+                Activities = open ? world.ActivitiesIn(land.Land).Select(DescribeActivity).ToList() : new List<MapActivity>(),
             };
         }
 
-        MapActivity DescribeActivity(ActivityDefinition activity)
+        MapActivity DescribeActivity(ActivityDefinition activity) => new()
         {
-            var rating = world.Rate(activity);
-            return new MapActivity
-            {
-                Name = activity.displayName,
-                Type = activity.type,
-                Waves = ActivityBattle.Waves(activity),
-                Story = world.IsStoryMission(activity),
-                Rating = rating,
-                Daring = world.IsDaring(rating),
-                Reward = activity.reward,
-                Select = () => Prepare(activity),
-            };
-        }
+            Name = activity.displayName,
+            Type = activity.type,
+            Story = world.IsStoryMission(activity),
+            Rating = world.Rate(activity),
+            Reward = activity.reward,
+            Select = () => Prepare(activity),
+        };
 
         void Prepare(ActivityDefinition activity)
         {

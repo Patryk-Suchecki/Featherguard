@@ -47,7 +47,7 @@ Change balance by editing those assets, not code.
 Default content is seeded from `Assets/Editor/Setup/*Catalog.cs`:
 - **Featherguard > Rebuild Battle Scene** creates missing assets and refreshes art links without overwriting edited values. It also regenerates all four scenes, `Assets/Scenes/Stronghold.unity`, `WorldMap.unity`, `Preparation.unity` and `Battle.unity`, with their post-FX in `Assets/Settings`.
 - **Featherguard > Rebuild Stronghold Scene** regenerates only the Stronghold scene (main screen), its post-FX and its placeholder materials in `Assets/Art/Materials/Stronghold`.
-- **Featherguard > Rebuild World Map Scene** seeds missing lands and activities, then regenerates only the world map scene (a camera and the bootstrap; the map itself is built in UI).
+- **Featherguard > Rebuild World Map Scene** seeds missing lands and activities, then regenerates only the world map scene and its post-FX. It shares the night placeholder materials with the Stronghold.
 - **Featherguard > Rebuild Preparation Scene** regenerates only the battle preparation scene and its post-FX.
 - **Featherguard > Reset Data To Defaults** overwrites all data with catalog values. Only run it on purpose.
 - When you add content, add it to the catalog too, so a fresh checkout can rebuild it.

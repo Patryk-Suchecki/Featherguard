@@ -25,17 +25,6 @@ namespace Featherguard.UI
             _ => "",
         };
 
-        public static string RewardIcon(RewardKind reward) => reward switch
-        {
-            RewardKind.Exp => "Empower",
-            RewardKind.Gold => "Coin",
-            RewardKind.Materials => "Gem",
-            RewardKind.Loot => "Chest",
-            RewardKind.Schematic => "Card",
-            RewardKind.Unlock => "Flag",
-            _ => null,
-        };
-
         public static Color RatingColor(ThreatRating rating) => rating switch
         {
             ThreatRating.Easy => new Color(0.55f, 0.85f, 0.5f),
