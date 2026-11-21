@@ -14,7 +14,7 @@ The world map is where the player decides what to do next. The story pulls them 
 - **Side activity:** an activity drawn from a land's pool.
 - **Activity places:** the 1 to 3 activities an open land shows at a time, the story mission included.
 - **Reroll:** drawing the side activities of every open land again.
-- **Threat level:** 1–10, how hard an activity is, set in its data.
+- **Threat level:** 1–10, how hard an activity is: fixed in a story mission's data; a side activity's follows the story ([`side-activities.md`](side-activities.md)).
 - **Party strength:** how strong the current party is, on the same 1–10 scale.
 - **Threat rating:** what the player sees before a battle: Easy, Even, Dangerous or Madness, from the threat level compared with the party strength.
 - **Daring:** the bonus for winning above your strength.
@@ -69,12 +69,12 @@ The world map is where the player decides what to do next. The story pulls them 
     | +4 or more | Madness |
 
 16. Every activity on the map can be started right away, whatever its rating.
-17. **Daring:** winning at Dangerous or Madness adds 50% to the gold, materials and EXP of the rewards. It does not multiply loot, schematics, unlocks or story progress.
+17. **Daring:** winning at Dangerous pays ×1.5 and at Madness ×2: more EXP, gold and materials, and a better chance of a higher rarity for materials, loot and schematics ([`side-activities.md`](side-activities.md)). It never affects unlocks or story progress.
 
 ### Rewards and results
 
-18. Rewards are listed in the activity's data by kind: materials, gold, loot (equipment), schematics, EXP, unlocks and story progress.
-19. Winning grants all rewards (with Daring when it applies), rerolls the side activities and returns to the world map.
+18. **Every fight gives one reward**, of one kind: EXP, gold, materials, loot (equipment), schematic or unlock. A side activity draws its reward ([`side-activities.md`](side-activities.md)); a story mission has its own unique rewards set in its data and always advances the story. EXP only comes from fights that reward it.
+19. Winning grants the reward (with Daring when it applies), rerolls the side activities and returns to the world map.
 20. **Losing grants nothing**: no rewards and no EXP. The activity stays on the map, and **Retry** starts it again from its preparation screen. Potions used in the lost battle are spent.
 
 ## 4. Edge cases
@@ -98,8 +98,8 @@ The world map is where the player decides what to do next. The story pulls them 
 ## 6. Feedback
 
 - **World map:** every land is shown; locked ones with a lock. An open land shows its 1 to 3 activities as icons by type, and the Main quest icon stands out in the land that holds it. Types are told apart by shape, not only colour.
-- **Tapping an activity** opens its preparation screen: name, type, threat rating, the Law, the rewards (with "+50% Daring" when it applies), the number of waves for a waves fight, and a way to change the party (the Camp) and potions.
-- **Victory screen:** rewards, the Daring bonus when earned, EXP per hero and level-ups. **Defeat screen:** the rating it had, "no rewards", tips to get stronger, Retry and back to the map.
+- **Tapping an activity** opens its preparation screen: name, type, threat rating, the Law, the reward (with the Daring multiplier when it applies), the number of waves for a waves fight, and a way to change the party (the Camp) and potions.
+- **Victory screen:** the reward and the Daring multiplier when earned; EXP per hero and level-ups after a fight that rewards EXP. **Defeat screen:** the rating it had, "no rewards", tips to get stronger, Retry and back to the map.
 - **Returning to the map after a win:** the side activities change with a short shuffle, so the player sees the reroll.
 - **Sacred Oak:** *Story missions n / 25*, missions won per land, and the next story mission.
 - **A land opening** gets a short moment on the map (the land lights up, a sound) the first time the player returns to it.
@@ -112,9 +112,9 @@ The world map is where the player decides what to do next. The story pulls them 
 | Activities per open land | 1–3, the story mission included | `WorldDefinition.activitiesPerLand` |
 | Threat levels | 1–10 | `ActivityDefinition.threat` |
 | Rating thresholds | −2 / +2 / +4 | `WorldDefinition.ratingThresholds` |
-| Daring bonus | +50% | `WorldDefinition.daringBonus` |
+| Daring multiplier | Dangerous ×1.5, Madness ×2 | `WorldDefinition.daringMultipliers` |
 
-The threat level and rewards of each activity are content and come with it.
+The threat level and rewards of each story mission are content and come with it. Side activities follow [`side-activities.md`](side-activities.md).
 
 ## 8. Done when
 
@@ -126,7 +126,7 @@ These become EditMode tests on the world progress model:
 - side activities respect `availableAfter`, never repeat on the map, and include a land's Boss fight only after its boss mission is won;
 - any win rerolls the side activities of all open lands; a loss changes nothing;
 - the threat rating follows the thresholds;
-- Daring adds 50% to gold, materials and EXP only, and only at Dangerous or Madness;
+- every win grants one reward; the Daring multiplier is ×1.5 at Dangerous and ×2 at Madness, and never applies to unlocks;
 - a defeat grants nothing;
 - world progress and the shown side activities are saved and restored, and ones that no longer exist are drawn again.
 
@@ -135,7 +135,7 @@ These become EditMode tests on the world progress model:
 - **MVP scope vs. the story order:** the roadmap plans 3 lands and 15 story missions for the first release, but the first 15 missions of this order already reach 5 lands (the Old Forest at 11 and 14, Nav at 15). Either the MVP keeps fewer missions of the first lands, or its 3 lands are chosen differently.
 - What drives the main story and how it ends (from the GDD), and the boss of Nav.
 - Whether a land's Law grows stronger as the story advances in that land (from the GDD).
-- How the threat levels of story missions and side activities rise through the story, and whether side activities should scale with the party.
+- How the threat levels of story missions rise through the story (side activities follow them, see [`side-activities.md`](side-activities.md)).
 - How equipment and hero choice count in the party strength (rule 14 uses levels only).
 - How a Puzzle fight plays (from the GDD).
 - The names of the ratings: the wireframe's preparation screens say Medium and Hard (from the GDD).
