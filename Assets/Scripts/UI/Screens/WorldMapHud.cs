@@ -23,6 +23,7 @@ namespace Featherguard.UI
         public bool Story;
         public ThreatRating Rating;
         public bool Daring;
+        public int Gold;
         public Action Select;
     }
 
@@ -32,9 +33,9 @@ namespace Featherguard.UI
         const float ColumnGap = 20f;
         const float ColumnTop = -170f;
         const float ColumnHeight = 770f;
-        const float TileHeight = 156f;
-        const float TileGap = 14f;
-        const float TilesTop = -236f;
+        const float TileHeight = 180f;
+        const float TileGap = 12f;
+        const float TilesTop = -200f;
 
         static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
         static readonly Color MutedColor = new(0.62f, 0.63f, 0.68f);
@@ -97,11 +98,20 @@ namespace Featherguard.UI
         {
             var tile = Ui.Rect(activity.Name, column, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(ColumnWidth - 32f, TileHeight));
             Ui.Button(tile, activity.Story ? StoryTileColor : TileColor, () => activity.Select());
-            Text(tile, "Kind", activity.Story ? "Main quest" : ActivityText.Describe(activity.Type, activity.Waves), 20, activity.Story ? StoryColor : MutedColor, -14f, 28f);
-            Ui.Wrapped(Ui.Rect("Name", tile, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(ColumnWidth - 56f, 66f)),
+            Text(tile, "Kind", activity.Story ? "Main quest" : ActivityText.Describe(activity.Type, activity.Waves), 20, activity.Story ? StoryColor : MutedColor, -10f, 26f);
+            Ui.Wrapped(Ui.Rect("Name", tile, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -36f), new Vector2(ColumnWidth - 56f, 56f)),
                 activity.Name, 27, TextAnchor.MiddleCenter, activity.Story ? StoryColor : Color.white);
             Text(tile, "Rating", activity.Daring ? $"{activity.Rating}   ·   Daring +50%" : activity.Rating.ToString(), 22,
-                ActivityText.RatingColor(activity.Rating), -114f, 30f);
+                ActivityText.RatingColor(activity.Rating), -94f, 28f);
+            Reward(tile, activity.Gold, -132f);
+        }
+
+        static void Reward(RectTransform tile, int gold, float y)
+        {
+            var row = Ui.Rect("Reward", tile, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(200f, 34f));
+            Ui.Icon(row, "Coin", new Vector2(16f, 0f), 30f, anchor: new Vector2(0f, 0.5f));
+            Ui.Label(Ui.Rect("Amount", row, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(40f, 0f), new Vector2(160f, 34f)),
+                $"{gold} gold", 24, TextAnchor.MiddleLeft, Ui.GoldColor);
         }
 
         static void Text(RectTransform parent, string name, string text, int size, Color color, float y, float height) =>

@@ -55,6 +55,7 @@ namespace Featherguard.Game
                 Story = world.IsStoryMission(activity),
                 Rating = rating,
                 Daring = world.IsDaring(rating),
+                Gold = ActivityBattle.Gold(activity, world.DaringMultiplier(rating)),
                 Select = () => Prepare(activity),
             };
         }
