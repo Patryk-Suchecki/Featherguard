@@ -88,7 +88,7 @@ namespace Featherguard.Battle.Presentation
             var command = Chosen.Value;
             Chosen = null;
             AcceptingInput = false;
-            RefreshHighlights();
+            RefreshHighlights(command.Hero);
             return command;
         }
 
@@ -158,11 +158,12 @@ namespace Featherguard.Battle.Presentation
             Chosen = new PlayerCommand(hero, ability, target);
         }
 
-        void RefreshHighlights()
+        void RefreshHighlights(BattleUnit acting = null)
         {
+            highlighter.ShowBases(model.Heroes.Where(h => model.CanCommand(h) && h != acting));
             if (!CanCommand) highlighter.Clear();
-            else if (Selected != null) highlighter.Show(Selected, SpecialArmed, DragTarget);
-            else highlighter.ShowReady(model.Heroes.Where(h => model.CanCommand(h) && (!SpecialArmed || h.Definition.special != null)));
+            else if (Selected != null) highlighter.ShowHovered(DragTarget);
+            else highlighter.Clear();
         }
     }
 }

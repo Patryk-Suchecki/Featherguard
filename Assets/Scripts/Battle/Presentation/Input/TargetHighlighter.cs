@@ -1,17 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Featherguard.Battle.Presentation
 {
     public sealed class TargetHighlighter
     {
-        readonly BattleModel model;
         readonly BattlePresenter presenter;
         readonly BattlePresentationConfig config;
 
-        public TargetHighlighter(BattleModel model, BattlePresenter presenter, BattlePresentationConfig config)
+        public TargetHighlighter(BattlePresenter presenter, BattlePresentationConfig config)
         {
-            this.model = model;
             this.presenter = presenter;
             this.config = config;
         }
@@ -22,22 +19,17 @@ namespace Featherguard.Battle.Presentation
                 unit.Ring.Show(null);
         }
 
-        public void ShowReady(IEnumerable<BattleUnit> heroes)
+        public void ShowBases(IEnumerable<BattleUnit> readyHeroes)
         {
-            Clear();
-            foreach (var hero in heroes)
-                presenter.ViewOf(hero)?.Ring.Show(config.BaseColor(hero.Definition));
+            var ready = new HashSet<BattleUnit>(readyHeroes);
+            foreach (var unit in presenter.Views)
+                if (unit.IsAlive)
+                    unit.Ring.ShowBase(unit.Team == Team.Enemies || ready.Contains(unit.Unit));
         }
 
-        public void Show(BattleUnit selected, bool specialArmed, BattleUnit hovered = null)
+        public void ShowHovered(BattleUnit hovered)
         {
             Clear();
-            var definition = selected.Definition;
-            var abilities = specialArmed ? new[] { definition.special } : new[] { definition.attack, definition.support };
-            foreach (var ability in abilities.Where(a => a != null))
-                foreach (var target in model.Candidates(selected, ability))
-                    presenter.ViewOf(target)?.Ring.Show(ability.TargetsEnemies ? config.enemyRing : config.allyRing);
-            presenter.ViewOf(selected)?.Ring.Show(config.selectedRing);
             if (hovered != null)
                 presenter.ViewOf(hovered)?.Ring.Show(config.hoverRing, true);
         }

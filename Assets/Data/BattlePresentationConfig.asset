@@ -107,15 +107,11 @@ MonoBehaviour:
   windupMin: 0.4
   windupMax: 1.2
   blockLead: 0.25
-  selectedRing: {r: 1, g: 0.85, b: 0.2, a: 1}
   warriorBase: {r: 1, g: 0.82, b: 0.15, a: 1}
   defenderBase: {r: 0.3, g: 0.55, b: 1, a: 1}
   mageBase: {r: 0.68, g: 0.38, b: 1, a: 1}
   supportBase: {r: 0.35, g: 0.9, b: 0.4, a: 1}
   enemyBase: {r: 1, g: 0.25, b: 0.2, a: 1}
   noClassBase: {r: 0.85, g: 0.85, b: 0.85, a: 1}
-  baseOpacity: 0.55
   hoverRing: {r: 1, g: 1, b: 1, a: 1}
-  enemyRing: {r: 1, g: 0.3, b: 0.25, a: 0.75}
-  allyRing: {r: 0.35, g: 1, b: 0.5, a: 0.7}
   tapTolerance: 0.12
