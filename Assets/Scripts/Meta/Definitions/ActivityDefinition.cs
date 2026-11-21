@@ -5,6 +5,8 @@ namespace Featherguard.Meta
 {
     public enum ActivityType { SingleFight, WavesFight, PuzzleFight, EliteFight, BossFight }
 
+    public enum RewardKind { None, Exp, Gold, Materials, Loot, Schematic, Unlock }
+
     [CreateAssetMenu(menuName = "Featherguard/Activity")]
     public class ActivityDefinition : ScriptableObject
     {
@@ -17,5 +19,7 @@ namespace Featherguard.Meta
         [Range(1, 10)] public int threat = 1;
         [Tooltip("Side activities only: how many story missions must be won before it can be drawn.")]
         [Min(0)] public int availableAfter;
+        [Tooltip("The one kind of reward winning it gives.")]
+        public RewardKind reward;
     }
 }

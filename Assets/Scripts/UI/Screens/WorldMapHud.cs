@@ -23,7 +23,7 @@ namespace Featherguard.UI
         public bool Story;
         public ThreatRating Rating;
         public bool Daring;
-        public int Gold;
+        public RewardKind Reward;
         public Action Select;
     }
 
@@ -103,15 +103,15 @@ namespace Featherguard.UI
                 activity.Name, 27, TextAnchor.MiddleCenter, activity.Story ? StoryColor : Color.white);
             Text(tile, "Rating", activity.Daring ? $"{activity.Rating}   ·   Daring +50%" : activity.Rating.ToString(), 22,
                 ActivityText.RatingColor(activity.Rating), -94f, 28f);
-            Reward(tile, activity.Gold, -132f);
+            if (activity.Reward != RewardKind.None) Reward(tile, activity.Reward, -132f);
         }
 
-        static void Reward(RectTransform tile, int gold, float y)
+        static void Reward(RectTransform tile, RewardKind reward, float y)
         {
             var row = Ui.Rect("Reward", tile, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(200f, 34f));
-            Ui.Icon(row, "Coin", new Vector2(16f, 0f), 30f, anchor: new Vector2(0f, 0.5f));
-            Ui.Label(Ui.Rect("Amount", row, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(40f, 0f), new Vector2(160f, 34f)),
-                $"{gold} gold", 24, TextAnchor.MiddleLeft, Ui.GoldColor);
+            Ui.Icon(row, ActivityText.RewardIcon(reward), new Vector2(16f, 0f), 30f, anchor: new Vector2(0f, 0.5f));
+            Ui.Label(Ui.Rect("Name", row, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(40f, 0f), new Vector2(160f, 34f)),
+                ActivityText.RewardName(reward), 24, TextAnchor.MiddleLeft, Ui.GoldColor);
         }
 
         static void Text(RectTransform parent, string name, string text, int size, Color color, float y, float height) =>

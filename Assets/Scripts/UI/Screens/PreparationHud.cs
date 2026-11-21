@@ -18,7 +18,7 @@ namespace Featherguard.UI
         public string Law;
         public ThreatRating Rating;
         public bool Daring;
-        public int Gold;
+        public RewardKind Reward;
         public IReadOnlyList<string> Party;
         public bool PartyComplete;
     }
@@ -55,7 +55,7 @@ namespace Featherguard.UI
                 string.IsNullOrEmpty(info.Law) ? "No Law" : $"Law: {info.Law}", 26, TextAnchor.UpperLeft, MutedColor);
             y -= 128f;
             y = Line(panel, info.Daring ? $"Threat: {info.Rating}   ·   Daring +50%" : $"Threat: {info.Rating}", 34, ActivityText.RatingColor(info.Rating), y, 48f);
-            y = Line(panel, $"Reward: {info.Gold} gold", 34, Ui.GoldColor, y, 48f);
+            y = Line(panel, info.Reward == RewardKind.None ? "No reward" : $"Reward: {ActivityText.RewardName(info.Reward)}", 34, Ui.GoldColor, y, 48f);
             y -= 18f;
             y = Line(panel, "Party", 30, TextColor, y, 40f);
             Line(panel, info.PartyComplete ? string.Join(", ", info.Party) : "Pick 3 heroes in the Camp", 28, info.PartyComplete ? Color.white : WarningColor, y, 40f);

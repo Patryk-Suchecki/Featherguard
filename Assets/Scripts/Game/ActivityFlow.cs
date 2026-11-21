@@ -31,13 +31,21 @@ namespace Featherguard.Game
                 yield break;
             }
             var rating = world.Rate(activity);
-            int gold = ActivityBattle.Gold(activity, world.DaringMultiplier(rating));
-            string reward = world.IsDaring(rating) ? $"+{gold} gold (Daring +50%)" : $"+{gold} gold";
+            string reward = Reward(rating);
             bool story = world.IsStoryMission(activity);
             world.Win(activity);
             yield return new WaitForSeconds(afterVictory);
             string progress = !story ? null : world.IsStoryComplete ? "The story is complete" : $"Story missions {world.StoryWon} / {world.StoryCount}";
             ActivityResultScreen.ShowVictory(hud, activity.displayName, reward, progress, () => Load(GameScenes.WorldMap));
+        }
+
+        string Reward(ThreatRating rating)
+        {
+            if (activity.reward == RewardKind.None) return "No reward";
+            string daring = world.IsDaring(rating) ? " (Daring +50%)" : "";
+            return activity.reward == RewardKind.Gold
+                ? $"+{ActivityBattle.Gold(activity, world.DaringMultiplier(rating))} gold{daring}"
+                : $"Reward: {ActivityText.RewardName(activity.reward)}{daring}";
         }
 
         public void Abandon()

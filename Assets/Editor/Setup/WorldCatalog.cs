@@ -53,7 +53,7 @@ namespace Featherguard.EditorTools
                 int threat = 1 + i * 9 / (StoryOrder.Length - 1);
                 var encounter = boss ? encounters[8] : encounters[System.Math.Min(i / 3, 7)];
                 string name = boss ? Bosses[landId] : $"Story {i + 1}";
-                story.Add(Activity($"Story{i + 1:00}", name, boss ? ActivityType.BossFight : ActivityType.SingleFight, lands[landId], encounter, threat, 0));
+                story.Add(Activity($"Story{i + 1:00}", name, boss ? ActivityType.BossFight : ActivityType.SingleFight, lands[landId], encounter, threat, 0, boss ? RewardKind.Loot : RewardKind.Exp));
             }
 
             int firstStory(string landId) => System.Array.IndexOf(StoryOrder, landId);
@@ -62,29 +62,35 @@ namespace Featherguard.EditorTools
                 int opens = firstStory(landId);
                 int baseThreat = 1 + opens * 9 / (StoryOrder.Length - 1);
                 int bossAfter = System.Array.LastIndexOf(StoryOrder, landId) + 1;
-                if (land.sideActivities != null && land.sideActivities.Length > 0) continue;
+                if (land.sideActivities != null && land.sideActivities.Length > 0)
+                {
+                    FillRewards(land.sideActivities);
+                    continue;
+                }
                 land.sideActivities = new[]
                 {
-                    Activity($"{landId}Single", $"{land.displayName} Skirmish", ActivityType.SingleFight, land, encounters[System.Math.Min(opens / 3, 7)], baseThreat, opens),
-                    Activity($"{landId}Waves", $"{land.displayName} Ambush", ActivityType.WavesFight, land, encounters[System.Math.Min(opens / 3 + 2, 7)], baseThreat + 1, opens),
-                    Activity($"{landId}Puzzle", $"{land.displayName} Riddle", ActivityType.PuzzleFight, land, encounters[System.Math.Min(opens / 3 + 1, 7)], baseThreat, opens),
-                    Activity($"{landId}Elite", $"{land.displayName} Elite", ActivityType.EliteFight, land, elite, baseThreat + 2, opens + 1),
-                    Activity($"{landId}Boss", $"{Bosses[landId]} Returns", ActivityType.BossFight, land, encounters[8], System.Math.Min(10, baseThreat + 3), bossAfter),
+                    Activity($"{landId}Single", $"{land.displayName} Skirmish", ActivityType.SingleFight, land, encounters[System.Math.Min(opens / 3, 7)], baseThreat, opens, SideReward(ActivityType.SingleFight)),
+                    Activity($"{landId}Waves", $"{land.displayName} Ambush", ActivityType.WavesFight, land, encounters[System.Math.Min(opens / 3 + 2, 7)], baseThreat + 1, opens, SideReward(ActivityType.WavesFight)),
+                    Activity($"{landId}Puzzle", $"{land.displayName} Riddle", ActivityType.PuzzleFight, land, encounters[System.Math.Min(opens / 3 + 1, 7)], baseThreat, opens, SideReward(ActivityType.PuzzleFight)),
+                    Activity($"{landId}Elite", $"{land.displayName} Elite", ActivityType.EliteFight, land, elite, baseThreat + 2, opens + 1, SideReward(ActivityType.EliteFight)),
+                    Activity($"{landId}Boss", $"{Bosses[landId]} Returns", ActivityType.BossFight, land, encounters[8], System.Math.Min(10, baseThreat + 3), bossAfter, SideReward(ActivityType.BossFight)),
                 };
                 EditorUtility.SetDirty(land);
             }
 
-            ActivityDefinition Activity(string id, string name, ActivityType type, LandDefinition land, EncounterDefinition encounter, int threat, int availableAfter) =>
+            ActivityDefinition Activity(string id, string name, ActivityType type, LandDefinition land, EncounterDefinition encounter, int threat, int availableAfter, RewardKind reward) =>
                 seeder.Seed<ActivityDefinition>($"{ContentPaths.Activities}/{id}.asset", a =>
                 {
                     a.displayName = name;
                     a.type = type;
                     a.threat = threat;
                     a.availableAfter = availableAfter;
+                    a.reward = reward;
                 }, a =>
                 {
                     a.land = land;
                     if (a.encounter == null) a.encounter = encounter;
+                    if (a.reward == RewardKind.None) a.reward = reward;
                 });
 
             return seeder.Seed<WorldDefinition>($"{ContentPaths.World}/WorldDefinition.asset", world =>
@@ -95,5 +101,23 @@ namespace Featherguard.EditorTools
         }
 
         static EncounterDefinition Encounter(string id) => AssetDatabase.LoadAssetAtPath<EncounterDefinition>($"{ContentPaths.Encounters}/{id}.asset");
+
+        static RewardKind SideReward(ActivityType type) => type switch
+        {
+            ActivityType.SingleFight => RewardKind.Gold,
+            ActivityType.WavesFight => RewardKind.Exp,
+            ActivityType.PuzzleFight => RewardKind.Schematic,
+            ActivityType.EliteFight => RewardKind.Materials,
+            _ => RewardKind.Loot,
+        };
+
+        static void FillRewards(IEnumerable<ActivityDefinition> activities)
+        {
+            foreach (var activity in activities.Where(a => a != null && a.reward == RewardKind.None))
+            {
+                activity.reward = SideReward(activity.type);
+                EditorUtility.SetDirty(activity);
+            }
+        }
     }
 }

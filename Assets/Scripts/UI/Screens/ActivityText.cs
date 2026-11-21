@@ -14,6 +14,28 @@ namespace Featherguard.UI
             _ => "Boss fight",
         };
 
+        public static string RewardName(RewardKind reward) => reward switch
+        {
+            RewardKind.Exp => "EXP",
+            RewardKind.Gold => "Gold",
+            RewardKind.Materials => "Materials",
+            RewardKind.Loot => "Loot",
+            RewardKind.Schematic => "Schematic",
+            RewardKind.Unlock => "Unlock",
+            _ => "",
+        };
+
+        public static string RewardIcon(RewardKind reward) => reward switch
+        {
+            RewardKind.Exp => "Empower",
+            RewardKind.Gold => "Coin",
+            RewardKind.Materials => "Gem",
+            RewardKind.Loot => "Chest",
+            RewardKind.Schematic => "Card",
+            RewardKind.Unlock => "Flag",
+            _ => null,
+        };
+
         public static Color RatingColor(ThreatRating rating) => rating switch
         {
             ThreatRating.Easy => new Color(0.55f, 0.85f, 0.5f),
