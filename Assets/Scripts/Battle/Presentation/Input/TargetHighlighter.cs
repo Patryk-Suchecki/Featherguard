@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Featherguard.Battle.Presentation
@@ -21,7 +22,14 @@ namespace Featherguard.Battle.Presentation
                 unit.Ring.Show(null);
         }
 
-        public void Show(BattleUnit selected, bool specialArmed)
+        public void ShowReady(IEnumerable<BattleUnit> heroes)
+        {
+            Clear();
+            foreach (var hero in heroes)
+                presenter.ViewOf(hero)?.Ring.Show(config.readyRing);
+        }
+
+        public void Show(BattleUnit selected, bool specialArmed, BattleUnit hovered = null)
         {
             Clear();
             var definition = selected.Definition;
@@ -30,6 +38,8 @@ namespace Featherguard.Battle.Presentation
                 foreach (var target in model.Candidates(selected, ability))
                     presenter.ViewOf(target)?.Ring.Show(ability.TargetsEnemies ? config.enemyRing : config.allyRing);
             presenter.ViewOf(selected)?.Ring.Show(config.selectedRing);
+            if (hovered != null)
+                presenter.ViewOf(hovered)?.Ring.Show(config.hoverRing, true);
         }
     }
 }

@@ -52,7 +52,10 @@ namespace Featherguard.Battle.Presentation
 
         [Header("Selection")]
         public Color selectedRing = new(1f, 0.85f, 0.2f, 1f);
-        public Color enemyRing = new(1f, 0.3f, 0.25f, 0.75f);
+        [Tooltip("Ring under heroes that can still act this turn.")]
+        public Color readyRing = new(1f, 0.95f, 0.75f, 0.85f);
+        [Tooltip("Ring under the target the dragged hero is over.")]
+        public Color hoverRing = new(1f, 1f, 1f, 1f);        public Color enemyRing = new(1f, 0.3f, 0.25f, 0.75f);
         public Color allyRing = new(0.35f, 1f, 0.5f, 0.7f);
         [Tooltip("Tap tolerance around units as a fraction of screen height.")]
         [Range(0f, 0.3f)] public float tapTolerance = 0.12f;

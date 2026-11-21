@@ -5,9 +5,12 @@ namespace Featherguard.Battle.Presentation
 {
     public class SelectionRing : MonoBehaviour
     {
+        const float StrongScale = 1.3f;
+
         MeshRenderer ring;
         Material material;
         float baseScale;
+        bool strong;
 
         public static SelectionRing Create(Transform parent, float scale, Material template)
         {
@@ -27,9 +30,10 @@ namespace Featherguard.Battle.Presentation
             return selection;
         }
 
-        public void Show(Color? color)
+        public void Show(Color? color, bool emphasised = false)
         {
             ring.enabled = color.HasValue;
+            strong = emphasised;
             if (color.HasValue)
                 material.color = color.Value;
         }
@@ -37,7 +41,8 @@ namespace Featherguard.Battle.Presentation
         void Update()
         {
             if (!ring.enabled) return;
-            transform.localScale = Vector3.one * baseScale * (1f + Mathf.Sin(Time.unscaledTime * 6f) * 0.05f);
+            float pulse = strong ? 1f + Mathf.Sin(Time.unscaledTime * 12f) * 0.08f : 1f + Mathf.Sin(Time.unscaledTime * 6f) * 0.05f;
+            transform.localScale = Vector3.one * baseScale * (strong ? StrongScale : 1f) * pulse;
         }
 
         void OnDestroy()

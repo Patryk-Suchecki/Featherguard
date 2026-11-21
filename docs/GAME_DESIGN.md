@@ -12,7 +12,9 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 ## Battle
 
 - **Turns:** every battle starts with the player's turn, then the enemy turn, and so on.
-  - On the player's turn every living, non-stunned hero acts once, in any order: tap a hero, then tap an enemy to attack or an ally to use the support ability.
+  - On the player's turn every living, non-stunned hero acts once, in any order. Heroes that can still act glow. Drag a hero onto an enemy to attack it, or onto an ally to use the support ability on that ally; tapping a hero uses its support on itself (or on the party, for a party support). While dragging, a dotted arrow follows the finger, valid targets are ringed and the target under the finger is highlighted; the arrow turns red over an enemy and green over an ally. Dropping anywhere else does nothing.
+  - The Rage button arms Rage once the meter is full; the next hero dragged onto a target, or tapped when its Rage hits every enemy or ally, uses its Rage action.
+  - There are no hero cards: each hero has a health and status bar above its head, like the enemies.
   - When the **Rage** meter is full, the selected hero can use its special instead.
   - The turn ends when every hero has acted. Enemies then act one by one in the order they entered the battle (summons last); stunned enemies skip.
 - **Rage (`BattleRules`):**
