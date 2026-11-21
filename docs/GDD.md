@@ -70,7 +70,7 @@ Starting roster (prototype):
 
 Further classes (Paladin, Berserker, Druid, Alchemist, Necromancer, Rogue, Monk, Engineer, Oracle) are planned and are waiting for their Slavic versions.
 
-Character progression: heroes earn EXP in battles, and every hero has its own level (cap 10).
+Character progression: heroes earn EXP from fights that reward it, and every hero has its own level (cap 10).
 
 ## Combat
 
@@ -141,11 +141,11 @@ The game has 5 lands on a single map. At the start only the Rye Fields are open;
 
 **Story missions:** every land has 5 main story missions (25 in total). They appear on the world map as Main quest activities, like the side activities; the Sacred Oak only holds the story scenes between them. The story does not finish one land before moving to the next: consecutive story missions alternate between lands, so the player keeps moving across the map in a non-linear way, even though the story itself is fairly linear. Only the next story mission is available at a time, and a land opens when the story first reaches it. Each land's 5th story mission is its boss; once beaten, the boss can also return in its land as a side activity. The full order of the 25 missions is in [`design/world-progression.md`](design/world-progression.md).
 
-**Side activities:** an open land shows 1 to 3 activities at a time, the next story mission included when it is there; the others are side activities drawn at random from the land's pool, and they are drawn again after every won activity. Each activity has its own rewards. They let the player grow stronger when the next story mission is too hard at the current stage.
+**Side activities:** an open land shows 1 to 3 activities at a time, the next story mission included when it is there; the others are side activities drawn at random from the land's pool, and they are drawn again after every won activity. Their threat follows the story, so every land stays worth visiting ([`design/side-activities.md`](design/side-activities.md)). They let the player grow stronger when the next story mission is too hard at the current stage.
 
 **Activity types** on the world map: Single fight, Waves fight, Puzzle fight, Elite fight (a fight against an Elite enemy), Boss fight and Main quest (a story mission).
 
-**Rewards** of levels are of these kinds: materials, gold, loot (equipment), schematics, EXP, unlocks and story progress.
+**Rewards:** every fight gives one reward, of one kind: materials, gold, loot (equipment), schematic, EXP or unlock. Side activities draw theirs; story missions have their own unique rewards and also advance the story.
 
 A land's **Law** is a combat rule that applies to battles in that land. Every land also has 4 materials (see Materials). The material column is incomplete and will be filled in later; its names are candidates, not yet assigned to a kind:
 
@@ -159,7 +159,7 @@ A land's **Law** is a combat rule that applies to battles in that land. Every la
 
 Progress and forcing:
 - Party strength = party level (the average level of the 3 picked heroes) + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
-- Every unlocked story mission and activity can be attempted right away. Winning above your strength grants **Daring**: +50% rewards.
+- Every unlocked story mission and activity can be attempted right away. Winning above your strength grants **Daring**: the reward is worth ×1.5 at Dangerous and ×2 at Madness (more of it, or a better chance of a higher rarity).
 
 After the MVP: Land Favour (a merchant and a blessing that weakens the Law).
 
@@ -216,7 +216,7 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - What drives the main story and how it ends.
 - The boss of Nav.
 - Whether a land's Law grows stronger as the player progresses through that land.
-- How threat levels (1–10) are assigned to story missions and side activities.
+- How threat levels (1–10) are assigned to story missions (side activities follow them).
 - How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
 - Which story missions and side activities unlock which heroes.
 - Where equipment of each rarity comes from (level loot, forge, shop).
