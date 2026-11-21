@@ -52,17 +52,14 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 | Hero | HP | Attack | Support | Special (full rage) |
 |---|---|---|---|---|
-| Robin (Knight) | 150 | Slash – melee, 30 dmg | Cover – Shield (30) on an ally + Taunt on self | Shield Bash – melee, 85 dmg + Stun, heavy |
-| Jay (Archer) | 105 | Double Shot – 2 arrows × 14 dmg, 30% Poison (5/turn, 2 turns) | Battle Cry – Empower on an ally | Arrow Rain – all enemies, 2 × 24 dmg + Poison (6/turn, 2 turns) |
-| Owl | 115 | Spark – magic bolt, 20 dmg, 35% Weaken | Mend – heal 40 | Forest Renewal – heal all allies 60 |
 | Warrior | 140 | Sword Cut – melee, 30 dmg; perfect: Bleed (5/turn, 3 turns) | War Shout – Empower on the party for 2 turns; perfect: 3 turns | Hero's Blow – melee, 85 dmg, heavy; perfect: Stun |
 | Thorn Warden | 165 | Thorn Lash – melee, 16 dmg + Taunt on self; perfect: Weaken | Thorn Guard – Thorns (8) on an ally for 2 turns; perfect: Shield (20) | Bramble Wall – Thorns (20) on the party + Taunt on self; perfect: party Shield (25) |
 | Healer | 110 | Amber Spark – magic bolt, 14 dmg; perfect: Mark | Oak Blessing – heal 40, overflow becomes Shield; perfect: cleanse | Grace of the Oak – heal 45 and cleanse the party; perfect: party Shield (25) |
 | Thundercaller of Perun | 100 | Chain Lightning – 22 dmg, jumps to every other enemy at 60% each jump; perfect: 50% Stun | Spark Ward – Sparks (8) on an ally for 2 turns; perfect: Empower | Perun's Storm – all enemies, 50 dmg; perfect: Stun all |
 
-Every hero has a class (`UnitDefinition.heroClass`): Robin and the Thorn Warden are Defenders, Jay and the Warrior are Warriors, the Owl and the Healer are Supports, and the Thundercaller is a Mage.
+Every hero has a class (`UnitDefinition.heroClass`): the Warrior is a Warrior, the Thorn Warden a Defender, the Healer a Support and the Thundercaller a Mage.
 
-The Warrior, Thorn Warden, Healer and Thundercaller come from the new roster; they use the Knight, Owl and Archer models and portraits as placeholders until their own art is made. The campfire seats the four of them, Robin and Jay; the Owl keeps its data but has no seat. Each of their actions has its own gesture:
+The four heroes come from the new roster and are the only heroes at the campfire. Until their own art is made they use the bird prototype's Knight, Owl and Archer models, portraits and animators as placeholders; the prototype heroes themselves (Robin, Jay and the Owl) are gone. Each hero action has its own gesture:
 
 | Hero | Attack | Support | Rage |
 |---|---|---|---|
