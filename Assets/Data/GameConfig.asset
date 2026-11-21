@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.BattleConfig
   heroes:
+  - {fileID: 11400000, guid: 0abe54d898a0ecf4b8f7d52cafd21e6e, type: 2}
+  - {fileID: 11400000, guid: 83dd99c2d0b2aeb4488b9425829468a5, type: 2}
+  - {fileID: 11400000, guid: c8675a00bbd4c2349bb9d89faf8112a0, type: 2}
+  - {fileID: 11400000, guid: e63e26f5ccc37434aa9379f83387a633, type: 2}
   - {fileID: 11400000, guid: 4a6a68994a4ffd64bba3de4c60b1f183, type: 2}
   - {fileID: 11400000, guid: 339d6e2d740759a488195f0067661ab7, type: 2}
-  - {fileID: 11400000, guid: 9272fb24a83f0d44faa7fa166f38f5ed, type: 2}
   campSeats: 6
   world: {fileID: 11400000, guid: 25c7db4aef7e110468b43315f3f1c4fe, type: 2}
   rules: {fileID: 11400000, guid: 7a0991bee5cbeae4d81833ee3347dd32, type: 2}

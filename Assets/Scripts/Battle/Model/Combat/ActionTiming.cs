@@ -20,6 +20,15 @@ namespace Featherguard.Battle
         public static ActionTiming ForAttack(TimingResult result) => new(result, TimingResult.Miss);
         public static ActionTiming ForBlock(TimingResult result) => new(TimingResult.Miss, result);
 
+        public bool AttackPerfect => Attack == TimingResult.Perfect;
+
+        public float SupportMultiplier(BattleRules rules) => 1f + Attack switch
+        {
+            TimingResult.Perfect => rules.perfectSupportBonus,
+            TimingResult.Good => rules.goodSupportBonus,
+            _ => 0f,
+        };
+
         public float DamageMultiplier(BattleRules rules)
         {
             float bonus = Attack switch

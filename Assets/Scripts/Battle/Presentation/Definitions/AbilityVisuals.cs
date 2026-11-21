@@ -19,6 +19,8 @@ namespace Featherguard.Battle.Presentation
         [SerializeReference, SubclassSelector] public AbilityDelivery delivery = new InstantDelivery();
         [Tooltip("Optional effect drawn on the target when a hit lands.")]
         [SerializeReference, SubclassSelector] public ImpactEffect impactEffect;
+        [Tooltip("How the player times this ability. Empty: the attack ring.")]
+        [SerializeReference, SubclassSelector] public TimingGesture gesture;
 
         public AbilityDefinition Definition => ability;
     }

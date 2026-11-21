@@ -19,13 +19,31 @@ Timing is what sets the combat apart: the player is not only choosing actions bu
 ### Attack
 
 1. The player picks a hero, an ability and a target.
-2. If the ability deals damage and is not the hero's Rage action, the ring plays and the player taps once, anywhere on the screen or with Space.
-3. The tap is judged: within the perfect window → `Perfect`; within the good window → `Good`; otherwise, or no tap before the ring closes → `Miss`.
+2. If the ability deals damage and is not the hero's Rage action, or the ability is marked as always timed, the ability's gesture plays (the ring when it has none).
+3. The gesture is judged: within the perfect window → `Perfect`; within the good window → `Good`; otherwise, or no input in time → `Miss`. Gestures made of parts (several rings, several steps) are `Perfect` only when every part is, and `Good` when at least 60% of the parts hit.
 4. The model resolves the ability with that result:
-   - `Good`: +25% damage on every hit of the ability;
-   - `Perfect`: +50% damage on every hit, and +10 Rage once for the action;
-   - `Miss`: normal damage, no penalty.
-5. Abilities without damage (support, healing) and the Rage action have no ring and always resolve as `Miss`.
+   - `Good`: +25% damage on every hit of the ability, +20% healing and Shield points;
+   - `Perfect`: +50% damage on every hit, +40% healing and Shield points, the ability's perfect-only effects, and +10 Rage once for the action;
+   - `Miss`: the normal effect, no penalty.
+5. Other abilities without damage (support, healing) and other Rage actions have no gesture and always resolve as `Miss`.
+
+### Gestures
+
+Each hero action can have its own gesture, and the stronger the action, the harder the gesture: attacks take about 1 s with one element, support about 1.5 s with two elements or a longer movement, Rage 2–3 s as a sequence or a sign drawn from memory, with narrower windows.
+
+| Gesture | What the player does |
+|---|---|
+| Ring | taps as a shrinking ring meets the gold circle |
+| Series | taps several numbered rings in turn, each as it closes |
+| Slash | swipes through a gate in the arrow's direction as the ring closes |
+| Charge | holds, then releases with the bar in the gold zone; holding too long is a miss |
+| Trace | draws along a shown line from its start |
+| Guide | holds a moving light and follows it along a path |
+| Spin | circles around the centre a given number of times |
+| Sign | sees a sign briefly, then draws it from memory |
+| Sequence | performs several gestures in a row |
+
+Gestures are presentation: they live on the ability's visuals, are judged by plain classes that can be tested, and only hand the model a `Miss`, `Good` or `Perfect` result.
 
 ### Block
 

@@ -35,10 +35,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 43472a2820f1f884d8589c329990bb67, type: 2}
   - {fileID: 11400000, guid: 85b531df43ae43942bb2c8a84416dc68, type: 2}
   - {fileID: 11400000, guid: 99bf127b935f8c34480bed7612cb7e4f, type: 2}
+  - {fileID: 11400000, guid: 8f53a944a6d0286479337ee585c29479, type: 2}
+  - {fileID: 11400000, guid: 76b7c25a2299e5845baf122008164528, type: 2}
+  - {fileID: 11400000, guid: 6dd94e5f40a41314db18943a118685c9, type: 2}
+  - {fileID: 11400000, guid: c5a187370ff72fe4a92ff76a41af06f7, type: 2}
+  - {fileID: 11400000, guid: 693c2893ed27bfc48bee5144a1e43125, type: 2}
+  - {fileID: 11400000, guid: aca6216543b2de540a54ddea6e56e110, type: 2}
+  - {fileID: 11400000, guid: efcd46b5bb1adb6489bbf9a9c5c327e1, type: 2}
+  - {fileID: 11400000, guid: 54db5b185d872fc48b6539b348201ad9, type: 2}
+  - {fileID: 11400000, guid: c09b4613460cf1042a84c994658edc39, type: 2}
+  - {fileID: 11400000, guid: 17ca894141cd7e84d9bd123df4204a48, type: 2}
+  - {fileID: 11400000, guid: 53a03a17460030e40a0ac5ec3ea8d1d9, type: 2}
+  - {fileID: 11400000, guid: 9dd8878096d7c4d4ca51fccbe25608ff, type: 2}
   units:
   - {fileID: 11400000, guid: 4be8ad472778ee14499739dd03395656, type: 2}
   - {fileID: 11400000, guid: 6185030ef33b36f409ffe48b223e2c24, type: 2}
   - {fileID: 11400000, guid: fd4278ca6572b3c448b8dbf6cfb7101e, type: 2}
+  - {fileID: 11400000, guid: ec46df0be78ae5849913bbff0851dc39, type: 2}
+  - {fileID: 11400000, guid: 766669dfd8a01db4793cd03cfda58257, type: 2}
+  - {fileID: 11400000, guid: 0b796a9c2c1049741aa7a08387067bf6, type: 2}
+  - {fileID: 11400000, guid: 31a1a37cdf753b3478bb2ee44fb4f6ec, type: 2}
   - {fileID: 11400000, guid: 0cf5ffe781d815f459f81a498033ea37, type: 2}
   - {fileID: 11400000, guid: 80a7aa71ae7d6a8478c600630ab3afa3, type: 2}
   - {fileID: 11400000, guid: 3bd3f4b62d2c52d49ae7a5dc840a393f, type: 2}
@@ -59,6 +75,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d391b86a73832143b81351e6cbe5995, type: 2}
   - {fileID: 11400000, guid: 48e2ca7acdf065b4abdf71ba97573ce2, type: 2}
   - {fileID: 11400000, guid: d05d49a148fb71b4daee690a81ea897c, type: 2}
+  - {fileID: 11400000, guid: e6b28056a89f0794f9528032d53bf736, type: 2}
+  - {fileID: 11400000, guid: be08d211d21d6f94f9a125626388ab60, type: 2}
   heroSlots:
   - {x: -2.3, y: 0, z: 0.45}
   - {x: -3.7, y: 0, z: -0.55}

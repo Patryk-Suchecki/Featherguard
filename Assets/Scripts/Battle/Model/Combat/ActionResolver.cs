@@ -12,12 +12,12 @@ namespace Featherguard.Battle
         {
             var targets = Targeting.Resolve(ability, chosen, state.AlliesOf(actor), state.OpponentsOf(actor));
             if (targets.Count == 0) return;
-            if (!ability.IsDamaging) timing = ActionTiming.None;
+            if (!ability.IsDamaging && !ability.alwaysTimed) timing = ActionTiming.None;
 
             var action = new ActionPerformed { Actor = actor, Ability = ability, Targets = targets, Special = ability == actor.Definition.special, Timing = timing };
             state.Log.Emit(action);
 
-            for (int hit = 0; hit < ability.hits; hit++)
+            for (int hit = 0; hit < ability.hits && actor.IsAlive; hit++)
             {
                 foreach (var target in targets.Where(t => t.IsAlive))
                 {

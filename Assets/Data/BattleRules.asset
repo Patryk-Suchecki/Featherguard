@@ -17,6 +17,8 @@ MonoBehaviour:
   enemyRagePerDamage: 0.25
   goodAttackBonus: 0.25
   perfectAttackBonus: 0.5
+  goodSupportBonus: 0.2
+  perfectSupportBonus: 0.4
   goodBlockReduction: 0.3
   perfectBlockReduction: 0.6
   perfectTimingRage: 10

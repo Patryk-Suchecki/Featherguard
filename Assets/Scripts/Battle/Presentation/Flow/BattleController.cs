@@ -25,6 +25,7 @@ namespace Featherguard.Battle.Presentation
     {
         readonly PlayerCommands commands;
         readonly TimingPrompt prompt;
+        readonly BattleVisuals visuals;
         EnemyWindup windup;
 
         public BattleModel Model { get; }
@@ -35,6 +36,7 @@ namespace Featherguard.Battle.Presentation
         public BattleController(BattleModel model, BattleServices services)
         {
             Model = model;
+            visuals = services.Visuals;
             Presenter = new BattlePresenter(services.Config, services.Factory, services.Visuals, services.View, services.Feedback, services.Host, model.Rage);
             var highlighter = new TargetHighlighter(model, Presenter, services.Config);
             commands = new PlayerCommands(model, Presenter, services.UnitPicker, highlighter, services.Feedback, services.View);
@@ -61,7 +63,11 @@ namespace Featherguard.Battle.Presentation
                 var command = commands.TakeChosen();
                 var timing = TimingResult.Miss;
                 if (prompt != null && Model.IsTimed(command.Hero, command.Ability))
-                    yield return prompt.Attack(PointOf(command.Target, Model.Enemies), result => timing = result);
+                {
+                    var gesture = visuals.Abilities.Of(command.Ability).gesture;
+                    var squad = command.Ability.TargetsEnemies ? Model.Enemies : Model.Heroes;
+                    yield return prompt.Perform(gesture, PointOf(command.Target, squad), result => timing = result);
+                }
                 yield return Play(Model.Act(command.Hero, command.Ability, command.Target, timing));
             }
             commands.Close();

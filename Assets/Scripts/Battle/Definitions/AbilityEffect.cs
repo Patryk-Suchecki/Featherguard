@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Featherguard.Core;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -48,10 +50,60 @@ namespace Featherguard.Battle
     public sealed class HealEffect : AbilityEffect
     {
         [Min(0)] public int power = 30;
+        [Tooltip("Optional: healing beyond full health becomes this absorbing status.")]
+        public StatusDefinition overflowShield;
+        [Min(1)] public int overflowShieldTurns = 2;
 
         public override bool Heals => true;
 
-        public override void Apply(in EffectContext context) => context.State.Heal(context.Actor, context.Target, power, context.Ability);
+        public override void Apply(in EffectContext context)
+        {
+            int overflow = context.State.Heal(context.Actor, context.Target, power, context.Ability, context.Timing);
+            if (overflowShield != null)
+                context.State.GrantShield(context.Actor, context.Target, overflowShield, overflowShieldTurns, overflow);
+        }
+    }
+
+    [Serializable]
+    public sealed class ChainDamageEffect : AbilityEffect
+    {
+        [Min(0)] public int power = 20;
+        [Tooltip("Each jump to the next enemy keeps this fraction of the previous hit's power.")]
+        [Range(0f, 1f)] public float falloff = 0.6f;
+
+        public override bool Damages => true;
+        public override int ExpectedDamage => power;
+
+        public override void Apply(in EffectContext context)
+        {
+            var state = context.State;
+            state.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
+            float jump = power;
+            var first = context.Target;
+            var others = state.OpponentsOf(context.Actor).Living.Where(u => u != first).OrderBy(u => u.Slot).ToList();
+            foreach (var next in others)
+            {
+                jump *= falloff;
+                int hit = (int)Math.Round(jump);
+                if (hit <= 0 || !context.Actor.IsAlive) break;
+                state.DealDamage(context.Actor, next, hit, context.Ability, context.Timing);
+            }
+        }
+    }
+
+    [Serializable]
+    public sealed class PerfectTimingEffect : AbilityEffect
+    {
+        [Tooltip("Applied only when the player times the action perfectly.")]
+        [SerializeReference, SubclassSelector] public AbilityEffect effect;
+
+        public override bool AppliesPerTarget => effect == null || effect.AppliesPerTarget;
+
+        public override void Apply(in EffectContext context)
+        {
+            if (effect != null && context.Timing.AttackPerfect)
+                effect.Apply(context);
+        }
     }
 
     [Serializable, MovedFrom(true, sourceAssembly: "Featherguard")]
