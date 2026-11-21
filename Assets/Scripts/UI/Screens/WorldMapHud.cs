@@ -1,143 +1,118 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Featherguard.Feedback;
 using Featherguard.Meta;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Featherguard.UI
 {
-    public readonly struct MapLandLabel
+    public sealed class MapLand
     {
-        public readonly Transform Anchor;
-        public readonly string Name;
-        public readonly bool Open;
-        public readonly int StoryWon;
-        public readonly int StoryTotal;
-
-        public MapLandLabel(Transform anchor, string name, bool open, int storyWon, int storyTotal)
-        {
-            Anchor = anchor;
-            Name = name;
-            Open = open;
-            StoryWon = storyWon;
-            StoryTotal = storyTotal;
-        }
+        public string Name;
+        public string Law;
+        public bool Open;
+        public int StoryWon;
+        public int StoryTotal;
+        public IReadOnlyList<MapActivity> Activities;
     }
 
-    public readonly struct MapMarkerLabel
+    public sealed class MapActivity
     {
-        public readonly Transform Anchor;
-        public readonly string Name;
-        public readonly bool Story;
-        public readonly ThreatRating Rating;
-        public readonly bool Daring;
-
-        public MapMarkerLabel(Transform anchor, string name, bool story, ThreatRating rating, bool daring)
-        {
-            Anchor = anchor;
-            Name = name;
-            Story = story;
-            Rating = rating;
-            Daring = daring;
-        }
+        public string Name;
+        public ActivityType Type;
+        public int Waves;
+        public bool Story;
+        public ThreatRating Rating;
+        public bool Daring;
+        public Action Select;
     }
 
     public class WorldMapHud : MonoBehaviour
     {
-        const float ToastHold = 1.6f;
-        const float ToastFade = 0.4f;
+        const float ColumnWidth = 340f;
+        const float ColumnGap = 20f;
+        const float ColumnTop = -170f;
+        const float ColumnHeight = 770f;
+        const float TileHeight = 156f;
+        const float TileGap = 14f;
+        const float TilesTop = -236f;
 
-        static readonly Color LandColor = new(0.9f, 0.86f, 0.78f);
-        static readonly Color LockedColor = new(0.55f, 0.56f, 0.6f);
+        static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
+        static readonly Color MutedColor = new(0.62f, 0.63f, 0.68f);
+        static readonly Color LockedColor = new(0.45f, 0.46f, 0.5f);
         static readonly Color StoryColor = new(1f, 0.8f, 0.42f);
-        static readonly Color ToastColor = new(0.95f, 0.78f, 0.45f);
+        static readonly Color BackdropColor = new(0.03f, 0.035f, 0.055f, 1f);
+        static readonly Color ColumnColor = new(0.07f, 0.075f, 0.11f, 0.95f);
+        static readonly Color LockedColumnColor = new(0.05f, 0.05f, 0.07f, 0.95f);
+        static readonly Color TileColor = new(0.13f, 0.14f, 0.19f, 1f);
+        static readonly Color StoryTileColor = new(0.3f, 0.22f, 0.08f, 1f);
         static readonly Color ButtonColor = new(0.1f, 0.1f, 0.13f, 0.92f);
 
-        readonly List<(Transform Anchor, RectTransform Label, Vector2 Offset)> labels = new();
-        Camera sceneCamera;
-        Canvas canvas;
-        Text toast;
-        Coroutine toastRoutine;
-
-        public void Init(Camera camera, IReadOnlyList<MapLandLabel> lands, IReadOnlyList<MapMarkerLabel> markers, int storyWon, int storyCount,
-            Action onBack, Action onPrototype)
+        public void Init(IReadOnlyList<MapLand> lands, int storyWon, int storyCount, Action onBack, Action onPrototype)
         {
-            sceneCamera = camera;
             var root = ScreenCanvas.Create("WorldMapHUD");
-            canvas = root.GetComponent<Canvas>();
-
-            var layer = Ui.Stretch("Labels", root);
-            foreach (var land in lands)
-            {
-                var label = Follow(layer, land.Anchor, new Vector2(520f, 80f), Vector2.zero);
-                Ui.Label(Ui.Rect("Name", label, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(520f, 46f)),
-                    land.Name, 40, TextAnchor.MiddleCenter, land.Open ? LandColor : LockedColor);
-                Ui.Label(Ui.Rect("State", label, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), Vector2.zero, new Vector2(520f, 32f)),
-                    land.Open ? $"Story {land.StoryWon} / {land.StoryTotal}" : "Locked", 26, TextAnchor.MiddleCenter, land.Open ? LandColor : LockedColor);
-            }
-            foreach (var marker in markers)
-            {
-                var label = Follow(layer, marker.Anchor, new Vector2(300f, 60f), new Vector2(0f, 60f));
-                var color = marker.Story ? StoryColor : Color.white;
-                Ui.Label(Ui.Rect("Name", label, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(300f, 32f)),
-                    marker.Name, 24, TextAnchor.MiddleCenter, color);
-                Ui.Label(Ui.Rect("Rating", label, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), Vector2.zero, new Vector2(300f, 26f)),
-                    marker.Story ? $"Main quest · {marker.Rating}" : marker.Daring ? $"{marker.Rating} · Daring +50%" : marker.Rating.ToString(), 20, TextAnchor.MiddleCenter, color);
-            }
-
+            Ui.Image(Ui.Stretch("Backdrop", root), BackdropColor);
             var safe = SafeArea.Create(root);
+
+            Ui.Label(Ui.Rect("Title", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -20f), new Vector2(900f, 70f)),
+                "World Map", 60, TextAnchor.MiddleCenter, StoryColor);
+            Ui.Label(Ui.Rect("Story", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -92f), new Vector2(900f, 44f)),
+                storyWon >= storyCount ? "The story is complete" : $"Story missions {storyWon} / {storyCount}", 32, TextAnchor.MiddleCenter, Color.white);
+
+            float first = -(lands.Count - 1) * (ColumnWidth + ColumnGap) / 2f;
+            for (int i = 0; i < lands.Count; i++)
+                Column(safe, lands[i], first + i * (ColumnWidth + ColumnGap));
+
             Button(safe, "Back", new Vector2(0f, 1f), new Vector2(24f, -24f), onBack);
             Button(safe, "Prototype run", new Vector2(0f, 0f), new Vector2(24f, 24f), onPrototype, 320f);
-            Ui.Label(Ui.Rect("Title", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(900f, 70f)),
-                "World Map", 60, TextAnchor.MiddleCenter, StoryColor);
-            Ui.Label(Ui.Rect("Story", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -96f), new Vector2(900f, 44f)),
-                storyWon >= storyCount ? "The story is complete" : $"Story missions {storyWon} / {storyCount}", 32, TextAnchor.MiddleCenter, Color.white);
-            toast = Ui.Label(Ui.Rect("Toast", safe, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 120f), new Vector2(1500f, 70f)),
-                "", 40, TextAnchor.MiddleCenter, ToastColor);
         }
 
-        public void Toast(string text)
+        static void Column(RectTransform parent, MapLand land, float x)
         {
-            FeedbackHub.Ui(SfxId.Click);
-            if (toastRoutine != null) StopCoroutine(toastRoutine);
-            toastRoutine = StartCoroutine(ShowToast(text));
-        }
+            var column = Ui.Rect(land.Name, parent, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(x, ColumnTop), new Vector2(ColumnWidth, ColumnHeight));
+            Ui.Panel(column, land.Open ? ColumnColor : LockedColumnColor);
+            Text(column, "Name", land.Name, 36, land.Open ? TextColor : LockedColor, -18f, 46f);
 
-        void LateUpdate()
-        {
-            if (sceneCamera == null) return;
-            float scale = canvas.scaleFactor;
-            foreach (var (anchor, label, offset) in labels)
+            if (!land.Open)
             {
-                if (anchor == null) continue;
-                var screen = sceneCamera.WorldToScreenPoint(anchor.position);
-                label.gameObject.SetActive(screen.z > 0f);
-                label.anchoredPosition = new Vector2(screen.x, screen.y) / scale + offset;
+                Text(column, "State", "Locked", 28, LockedColor, -74f, 36f);
+                Ui.Wrapped(Ui.Rect("Hint", column, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -124f), new Vector2(ColumnWidth - 40f, 80f)),
+                    "Not reached by the story yet", 22, TextAnchor.UpperCenter, LockedColor);
+                return;
             }
+
+            Text(column, "State", $"Story {land.StoryWon} / {land.StoryTotal}", 24, StoryColor, -66f, 32f);
+            Ui.Wrapped(Ui.Rect("Law", column, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -104f), new Vector2(ColumnWidth - 36f, 120f)),
+                string.IsNullOrEmpty(land.Law) ? "No Law" : land.Law, 19, TextAnchor.UpperCenter, MutedColor);
+
+            if (land.Activities.Count == 0)
+            {
+                Text(column, "Empty", "Nothing here for now", 22, MutedColor, TilesTop - 20f, 32f);
+                return;
+            }
+            for (int i = 0; i < land.Activities.Count; i++)
+                Tile(column, land.Activities[i], TilesTop - i * (TileHeight + TileGap));
         }
 
-        RectTransform Follow(RectTransform layer, Transform anchor, Vector2 size, Vector2 offset)
+        static void Tile(RectTransform column, MapActivity activity, float y)
         {
-            var label = Ui.Rect("Label", layer, Vector2.zero, new Vector2(0.5f, 0f), Vector2.zero, size);
-            labels.Add((anchor, label, offset));
-            return label;
+            var tile = Ui.Rect(activity.Name, column, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(ColumnWidth - 32f, TileHeight));
+            Ui.Button(tile, activity.Story ? StoryTileColor : TileColor, () => activity.Select());
+            Text(tile, "Kind", activity.Story ? "Main quest" : ActivityText.Describe(activity.Type, activity.Waves), 20, activity.Story ? StoryColor : MutedColor, -14f, 28f);
+            Ui.Wrapped(Ui.Rect("Name", tile, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(ColumnWidth - 56f, 66f)),
+                activity.Name, 27, TextAnchor.MiddleCenter, activity.Story ? StoryColor : Color.white);
+            Text(tile, "Rating", activity.Daring ? $"{activity.Rating}   ·   Daring +50%" : activity.Rating.ToString(), 22,
+                ActivityText.RatingColor(activity.Rating), -114f, 30f);
         }
 
-        IEnumerator ShowToast(string text)
-        {
-            toast.text = text;
-            toast.color = ToastColor;
-            yield return new WaitForSecondsRealtime(ToastHold);
-            yield return Tweens.Fade(toast, ToastFade);
-        }
+        static void Text(RectTransform parent, string name, string text, int size, Color color, float y, float height) =>
+            Ui.Label(Ui.Rect(name, parent, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(parent.sizeDelta.x - 24f, height)),
+                text, size, TextAnchor.MiddleCenter, color);
 
         static void Button(RectTransform parent, string label, Vector2 anchor, Vector2 position, Action onClick, float width = 240f)
         {
             var rect = Ui.Rect(label, parent, anchor, anchor, position, new Vector2(width, 84f));
             Ui.Button(rect, ButtonColor, () => onClick());
-            Ui.Label(Ui.Stretch("Label", rect), label, 34, TextAnchor.MiddleCenter, LandColor);
+            Ui.Label(Ui.Stretch("Label", rect), label, 34, TextAnchor.MiddleCenter, TextColor);
         }
     }
 }

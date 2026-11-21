@@ -5,8 +5,6 @@ using Featherguard.Feedback;
 using Featherguard.Meta;
 using Featherguard.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace Featherguard.Game
@@ -15,81 +13,55 @@ namespace Featherguard.Game
     {
         [SerializeField] GameConfig config;
         [SerializeField] Camera sceneCamera;
-        [SerializeField] WorldMapLand[] lands;
-        [Tooltip("One marker per ActivityType, in the enum's order.")]
-        [SerializeField] GameObject[] markerTemplates;
-        [SerializeField] GameObject mainQuestTemplate;
 
-        readonly List<RaycastResult> uiHits = new();
         WorldProgress world;
-        WorldMapHud hud;
         bool leaving;
 
         void Start()
         {
             GameClock.Paused = false;
-            DynamicGI.UpdateEnvironment();
             var feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
             world = SavedGame.World(config);
             if (world.Chosen != null) world.ClearChoice();
 
-            var markers = new List<MapMarkerLabel>();
-            foreach (var land in lands)
-            {
-                bool open = world.IsOpen(land.Land);
-                land.SetOpen(open);
-                if (!open) continue;
-                var activities = world.ActivitiesIn(land.Land);
-                for (int i = 0; i < activities.Count && i < land.SlotCount; i++)
-                    markers.Add(SpawnMarker(activities[i], land.Slot(i)));
-            }
-
-            hud = gameObject.AddComponent<WorldMapHud>();
-            hud.Init(sceneCamera,
-                lands.Select(l => new MapLandLabel(l.LabelAnchor, l.Land.displayName, world.IsOpen(l.Land), world.StoryWonIn(l.Land), world.StoryCountIn(l.Land))).ToList(),
-                markers,
-                world.StoryWon, world.StoryCount,
-                Back, Prototype);
+            var lands = config.world.lands.Select(DescribeLand).ToList();
+            gameObject.AddComponent<WorldMapHud>().Init(lands, world.StoryWon, world.StoryCount, Back, Prototype);
         }
 
-        void Update()
+        MapLand DescribeLand(LandDefinition land)
         {
-            if (leaving) return;
-            var pointer = Pointer.current;
-            if (pointer == null || !pointer.press.wasPressedThisFrame) return;
-            var position = pointer.position.ReadValue();
-            if (OverUi(position)) return;
-            if (!Physics.Raycast(sceneCamera.ScreenPointToRay(position), out var hit, 300f)) return;
-
-            var marker = hit.collider.GetComponentInParent<MapMarker>();
-            if (marker != null)
+            bool open = world.IsOpen(land);
+            return new MapLand
             {
-                Prepare(marker.Activity);
-                return;
-            }
-            var land = hit.collider.GetComponentInParent<WorldMapLand>();
-            if (land == null) return;
-            hud.Toast(world.IsOpen(land.Land)
-                ? $"{land.Land.displayName}: {land.Land.law}"
-                : $"{land.Land.displayName} is locked: the story has not reached it yet");
+                Name = land.displayName,
+                Law = land.law,
+                Open = open,
+                StoryWon = world.StoryWonIn(land),
+                StoryTotal = world.StoryCountIn(land),
+                Activities = open ? world.ActivitiesIn(land).Select(DescribeActivity).ToList() : new List<MapActivity>(),
+            };
         }
 
-        MapMarkerLabel SpawnMarker(ActivityDefinition activity, Transform slot)
+        MapActivity DescribeActivity(ActivityDefinition activity)
         {
-            bool story = world.IsStoryMission(activity);
-            var template = story ? mainQuestTemplate : markerTemplates[(int)activity.type];
-            var marker = Instantiate(template, slot.position, slot.rotation, slot);
-            marker.SetActive(true);
-            marker.AddComponent<MapMarker>().Bind(activity);
             var rating = world.Rate(activity);
-            return new MapMarkerLabel(marker.transform, activity.displayName, story, rating, world.IsDaring(rating));
+            return new MapActivity
+            {
+                Name = activity.displayName,
+                Type = activity.type,
+                Waves = ActivityBattle.Waves(activity),
+                Story = world.IsStoryMission(activity),
+                Rating = rating,
+                Daring = world.IsDaring(rating),
+                Select = () => Prepare(activity),
+            };
         }
 
         void Prepare(ActivityDefinition activity)
         {
-            if (!world.Choose(activity)) return;
+            if (leaving || !world.Choose(activity)) return;
             leaving = true;
             FeedbackHub.Ui(SfxId.Whoosh);
             SceneManager.LoadScene(GameScenes.Preparation);
@@ -97,6 +69,7 @@ namespace Featherguard.Game
 
         void Back()
         {
+            if (leaving) return;
             leaving = true;
             FeedbackHub.Ui(SfxId.Whoosh);
             SceneManager.LoadScene(GameScenes.Stronghold);
@@ -104,17 +77,10 @@ namespace Featherguard.Game
 
         void Prototype()
         {
+            if (leaving) return;
             leaving = true;
             FeedbackHub.Ui(SfxId.Rage);
             SceneManager.LoadScene(GameScenes.Battle);
-        }
-
-        bool OverUi(Vector2 position)
-        {
-            if (EventSystem.current == null) return false;
-            uiHits.Clear();
-            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = position }, uiHits);
-            return uiHits.Count > 0;
         }
     }
 }
