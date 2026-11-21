@@ -28,6 +28,7 @@ namespace Featherguard.Game
             var feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
+            DebugTools.Install(config);
             world = SavedGame.World(config);
             var activity = world.Chosen;
             if (activity == null)

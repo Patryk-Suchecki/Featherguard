@@ -31,6 +31,7 @@ namespace Featherguard.Game
             feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, battleCamera, cameraShake, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
+            DebugTools.Install(config);
             hud = gameObject.AddComponent<BattleHud>();
             visuals = new BattleVisuals(config.presentation);
 

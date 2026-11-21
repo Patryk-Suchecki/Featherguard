@@ -19,7 +19,7 @@ Every layer is its own assembly, so the compiler rejects a reference that goes t
 | Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
 | Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, hero roster, world progress (`WorldProgress`), `ISaveStore` | Run, Battle, Core |
 | UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feedback, Core |
-| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen), `WorldMapBootstrap` (world map) and `PreparationBootstrap` (battle preparation) composition roots, `ActivityFlow` (the result of an activity battle), `RunFlow` (victory, rewards, abandoning a run), `GameScenes`, `GameConfig` | everything above |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen), `WorldMapBootstrap` (world map) and `PreparationBootstrap` (battle preparation) composition roots, `ActivityFlow` (the result of an activity battle), `DebugTools` (the options of the debug menu), `RunFlow` (victory, rewards, abandoning a run), `GameScenes`, `GameConfig` | everything above |
 
 `Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
@@ -117,6 +117,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
   - push to `main`, force-push, rewrite history or delete branches you did not create;
   - change GitHub repository settings, rulesets, collaborators or labels;
   - run **Reset Data To Defaults**, regenerate art or audio, or change `ProjectSettings`, `Packages/manifest.json` or the Unity version.
+- **Debug menu:** in development builds and the editor, the faint "dbg" button in the top-left corner of every screen opens it. Add a new debug option as one `DebugAction` in `DebugTools.Install`; options that wipe or change progress ask for a second tap (`confirm: true`).
 - Before ending a task, check `git status`: commit only files that belong to the task and discard Rebuild noise.
 - Write in English in the repo; reply to your developer in whatever language they use.
 
@@ -124,7 +125,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 - Everything is in English: code, identifiers, file names, in-game text, data assets, docs, commits, branches and PRs.
 - Avoid unnecessary comments; names should explain the code.
-- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance`, `RunSession.Current` and `SavedGame`.
+- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance`, `RunSession.Current`, `SavedGame` and the debug menu in `DebugTools`.
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
 - Names say what the work does, not which issue it is: no issue numbers in branch names, commit messages or PR titles. The issue number appears only in the PR description, so GitHub links and closes the issue.
 - Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/slot-machine-sounds` or `fix/double-kill-gold`.

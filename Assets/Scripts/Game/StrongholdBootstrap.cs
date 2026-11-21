@@ -38,6 +38,7 @@ namespace Featherguard.Game
             var feedback = gameObject.AddComponent<FeedbackHub>();
             feedback.Init(config.sounds, sceneCamera, null, config.particleMaterial, config.feedback);
             Ui.Sprites = config.ui;
+            DebugTools.Install(config);
             overview = new Pose(sceneCamera.transform.position, sceneCamera.transform.rotation);
             gestures = new PointerGestures(HoldTime);
             flight = gameObject.AddComponent<CameraFlight>();
