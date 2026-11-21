@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae8ff64d4db43e2bce311b451f0bd10, type: 3}
+  m_Name: HealerSpecial
+  m_EditorClassIdentifier: Featherguard.Battle.Presentation::Featherguard.Battle.Presentation.AbilityVisuals
+  ability: {fileID: 11400000, guid: 677fe4b713df258468c2c52a6be37b82, type: 2}
+  animationState: Cast
+  heavy: 1
+  fxColor: {r: 0.45, g: 0.95, b: 0.45, a: 1}
+  castSound: 0
+  impactSound: 6
+  delivery:
+    rid: 2988852411375026230
+  impactEffect:
+    rid: -2
+  gesture:
+    rid: 2988852411375026231
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2988852411375026230
+      type: {class: InstantDelivery, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
+      data: 
+    - rid: 2988852411375026231
+      type: {class: SignGesture, ns: Featherguard.Battle.Presentation, asm: Featherguard.Battle.Presentation}
+      data:
+        windowScale: 1
+        shape: 0
+        size: 230
+        showTime: 0.9
+        drawTime: 2.5
+        goodScore: 0.8
+        perfectScore: 0.9

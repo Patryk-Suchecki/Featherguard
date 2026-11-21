@@ -5,6 +5,8 @@ namespace Featherguard.Battle
 {
     public enum Team { Heroes, Enemies }
 
+    public enum HeroClass { None, Warrior, Defender, Mage, Support }
+
     [Serializable]
     public class EnemyAiProfile
     {
@@ -37,6 +39,8 @@ namespace Featherguard.Battle
     {
         public string displayName;
         public Team team;
+        [Tooltip("The hero's class (Warrior, Defender, Mage or Support); None for enemies.")]
+        public HeroClass heroClass;
         [Min(1)] public int maxHealth = 100;
         public AbilityDefinition attack;
         public AbilityDefinition support;

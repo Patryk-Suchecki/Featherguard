@@ -87,14 +87,16 @@ Round flow:
 
 | Moment | How it works | Good | Perfect |
 |---|---|---|---|
-| Attack | a white ring shrinks onto a gold circle; click or Space | +25% damage | +50% damage and extra Rage |
+| Attack | the hero's own gesture (a ring, a slash, a series of rings, a charge) | +25% damage | +50% damage, extra Rage and the ability's perfect effect |
+| Support | a harder gesture (tracing a line, guiding a light, spinning) | +20% healing and Shield | +40%, extra Rage and the ability's perfect effect |
+| Rage | the hardest gesture (a sequence, or a sign drawn from memory) | +25% damage, +20% healing and Shield | +50% / +40%, extra Rage and the ability's perfect effect |
 | Block | a BLOCK! flash just before the hit; clicking before the flash is wasted | −30% damage | −60% damage and extra Rage |
 
-The enemy wind-up has a random length, so the rhythm cannot be memorised. The auto-timing accessibility option always gives "good", never "perfect". Some effects only work with perfect timing (for example an extra Burn stack or a guaranteed Stun).
+Every hero has its own gestures, and the stronger the action, the harder the gesture; a miss always gives the normal effect. The gestures are listed in the [timing spec](design/combat/timing.md). The enemy wind-up has a random length, so the rhythm cannot be memorised. The auto-timing accessibility option always gives "good", never "perfect". Some effects only work with perfect timing (for example an extra Burn stack or a guaranteed Stun).
 
 ### Party Rage
 
-A shared meter filled by hits dealt and taken and by perfect timings. A full meter lets one character use its special action. Rage does not use up that character's move, affects the whole side and has no timing ring.
+A shared meter filled by hits dealt and taken and by perfect timings. A full meter lets one character use its special action. Rage does not use up that character's move, affects the whole side and is timed with the character's hardest gesture.
 
 ### Statuses
 

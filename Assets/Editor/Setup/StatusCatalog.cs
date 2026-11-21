@@ -47,6 +47,11 @@ namespace Featherguard.EditorTools
             Add("Freeze", "Freeze", "Frozen", new Color(0.55f, 0.85f, 1f), "Defense", true, Modify(StatType.DamageTaken, multiply: 0.3f), new ActLast());
             Add("Curse", "Curse", "Cursed", new Color(0.45f, 0.2f, 0.55f), "Weaken", true, Modify(StatType.Damage, multiply: -0.3f));
             Add("Mark", "Mark", "Marked", new Color(1f, 0.8f, 0.25f), "Crit", true, Modify(StatType.CritChanceTaken, add: 0.5f), new ConsumeOnCriticalHit());
+            Add("Thorns", "Thorns", "Thorns!", new Color(0.45f, 0.72f, 0.28f), "Defense", false, new Retaliate());
+            Add("Sparks", "Sparks", "Sparking!", new Color(0.6f, 0.82f, 1f), "Stun", false, new Retaliate
+            {
+                onAttacker = new StatusApplication { status = statuses["Stun"], turns = 1, chance = 0.3f },
+            });
             return (statuses, visuals.ToArray());
         }
     }
