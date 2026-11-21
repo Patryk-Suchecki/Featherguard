@@ -8,9 +8,14 @@ namespace Featherguard.Battle.Presentation
 {
     public sealed class PointerUnitPicker : IUnitPicker
     {
+        const float DragThreshold = 0.035f;
+
         readonly Camera camera;
         readonly float tolerance;
         readonly List<RaycastResult> uiHits = new();
+        bool tracking;
+        bool moved;
+        Vector2 pressedAt;
 
         public PointerUnitPicker(Camera camera, float tolerance)
         {
@@ -18,15 +23,29 @@ namespace Featherguard.Battle.Presentation
             this.tolerance = tolerance;
         }
 
-        public bool TryPick(IEnumerable<UnitView> candidates, out UnitView unit)
+        public UnitPointer Read(IEnumerable<UnitView> candidates)
         {
-            unit = null;
             var pointer = Pointer.current;
-            if (pointer == null || !pointer.press.wasPressedThisFrame) return false;
+            if (pointer == null) return default;
             var position = pointer.position.ReadValue();
-            if (OverUi(position)) return false;
-            unit = Pick(position, candidates);
-            return unit != null;
+
+            if (pointer.press.wasPressedThisFrame)
+            {
+                if (OverUi(position)) return default;
+                tracking = true;
+                moved = false;
+                pressedAt = position;
+                return new UnitPointer(true, true, false, false, Pick(position, candidates), position);
+            }
+            if (!tracking) return default;
+
+            moved |= Vector2.Distance(position, pressedAt) > Screen.height * DragThreshold;
+            if (pointer.press.wasReleasedThisFrame || !pointer.press.isPressed)
+            {
+                tracking = false;
+                return new UnitPointer(false, false, true, moved, Pick(position, candidates), position);
+            }
+            return new UnitPointer(false, true, false, moved, Pick(position, candidates), position);
         }
 
         bool OverUi(Vector2 position)

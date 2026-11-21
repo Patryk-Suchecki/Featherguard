@@ -38,7 +38,7 @@ namespace Featherguard.Battle.Presentation
             Model = model;
             visuals = services.Visuals;
             Presenter = new BattlePresenter(services.Config, services.Factory, services.Visuals, services.View, services.Feedback, services.Host, model.Rage);
-            var highlighter = new TargetHighlighter(model, Presenter, services.Config);
+            var highlighter = new TargetHighlighter(Presenter, services.Config);
             commands = new PlayerCommands(model, Presenter, services.UnitPicker, highlighter, services.Feedback, services.View);
             if (services.Config.timingPrompts)
                 prompt = new TimingPrompt(services.Config, new TimingJudge(model.State.Rules), services.TimingCues, services.View, services.Feedback, services.TimingInput, services.Random);

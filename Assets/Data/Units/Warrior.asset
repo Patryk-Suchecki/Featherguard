@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.UnitDefinition
   displayName: Warrior
   team: 0
+  heroClass: 1
   maxHealth: 140
   attack: {fileID: 11400000, guid: 6fcc154d175004540b3f3b36deda8170, type: 2}
   support: {fileID: 11400000, guid: fcaf2ffca64e6e94fa7429def6d31596, type: 2}

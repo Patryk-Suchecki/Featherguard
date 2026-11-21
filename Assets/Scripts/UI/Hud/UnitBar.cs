@@ -8,6 +8,7 @@ namespace Featherguard.UI
     public class UnitBar : MonoBehaviour
     {
         static readonly Color EnemyFill = new(0.92f, 0.32f, 0.26f);
+        static readonly Color HeroFill = new(0.35f, 0.85f, 0.4f);
 
         UnitView unit;
         Camera view;
@@ -31,7 +32,7 @@ namespace Featherguard.UI
 
             var name = Ui.Rect("Name", rect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 30f), new Vector2(220f, 30f));
             Ui.Label(name, unit.Definition.displayName, 26, TextAnchor.LowerCenter, Color.white);
-            Ui.Bar(rect, Vector2.zero, new Vector2(200f, 30f), EnemyFill, out bar.fill);
+            Ui.Bar(rect, Vector2.zero, new Vector2(200f, 30f), unit.Team == Team.Heroes ? HeroFill : EnemyFill, out bar.fill);
             var background = (RectTransform)bar.fill.parent;
             background.anchorMin = background.anchorMax = new Vector2(0.5f, 0f);
             background.pivot = new Vector2(0.5f, 0f);

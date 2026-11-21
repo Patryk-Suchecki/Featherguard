@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.UnitDefinition
   displayName: Thorn Warden
   team: 0
+  heroClass: 2
   maxHealth: 165
   attack: {fileID: 11400000, guid: 0d122d7bba4a04449b278effb892932d, type: 2}
   support: {fileID: 11400000, guid: 41b08adf1dcd323458de42117759ac79, type: 2}
