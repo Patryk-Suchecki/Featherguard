@@ -43,7 +43,7 @@ namespace Featherguard.EditorTools
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
             {
-                c.heroes = new[] { units["Warrior"], units["ThornWarden"], units["Healer"], units["Thundercaller"], units["Knight"], units["Archer"] };
+                c.heroes = new[] { units["Warrior"], units["ThornWarden"], units["Healer"], units["Thundercaller"] };
             }, c =>
             {
                 c.rules = rules;

@@ -44,9 +44,6 @@ namespace Featherguard.EditorTools
                 }));
             }
 
-            Add("Knight", "Robin", Team.Heroes, 150, 1.4f, 1f, "KnightAttack", "KnightSupport", "KnightSpecial", heroClass: HeroClass.Defender);
-            Add("Archer", "Jay", Team.Heroes, 105, 1.4f, 1f, "ArcherAttack", "ArcherSupport", "ArcherSpecial", heroClass: HeroClass.Warrior);
-            Add("Owl", "Owl", Team.Heroes, 115, 1.4f, 1f, "OwlAttack", "OwlSupport", "OwlSpecial", heroClass: HeroClass.Support);
             Add("Warrior", "Warrior", Team.Heroes, 140, 1.4f, 1f, "WarriorAttack", "WarriorSupport", "WarriorSpecial", model: "Knight", heroClass: HeroClass.Warrior);
             Add("ThornWarden", "Thorn Warden", Team.Heroes, 165, 1.4f, 1.15f, "ThornWardenAttack", "ThornWardenSupport", "ThornWardenSpecial", model: "Knight", heroClass: HeroClass.Defender);
             Add("Healer", "Healer", Team.Heroes, 110, 1.4f, 1f, "HealerAttack", "HealerSupport", "HealerSpecial", model: "Owl", heroClass: HeroClass.Support);
