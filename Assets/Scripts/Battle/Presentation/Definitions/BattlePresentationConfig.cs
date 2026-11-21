@@ -52,13 +52,30 @@ namespace Featherguard.Battle.Presentation
 
         [Header("Selection")]
         public Color selectedRing = new(1f, 0.85f, 0.2f, 1f);
-        [Tooltip("Ring under heroes that can still act this turn.")]
-        public Color readyRing = new(1f, 0.82f, 0.15f, 1f);
+        [Tooltip("Base under every unit by class; heroes that can still act also get a ring in this colour.")]
+        public Color warriorBase = new(1f, 0.82f, 0.15f, 1f);
+        public Color defenderBase = new(0.3f, 0.55f, 1f, 1f);
+        public Color mageBase = new(0.68f, 0.38f, 1f, 1f);
+        public Color supportBase = new(0.35f, 0.9f, 0.4f, 1f);
+        public Color enemyBase = new(1f, 0.25f, 0.2f, 1f);
+        [Tooltip("Base for a hero without a class.")]
+        public Color noClassBase = new(0.85f, 0.85f, 0.85f, 1f);
+        [Tooltip("Opacity of the base disc; the ring uses the full colour.")]
+        [Range(0f, 1f)] public float baseOpacity = 0.55f;
         [Tooltip("Ring under the target the dragged hero is over.")]
         public Color hoverRing = new(1f, 1f, 1f, 1f);        public Color enemyRing = new(1f, 0.3f, 0.25f, 0.75f);
         public Color allyRing = new(0.35f, 1f, 0.5f, 0.7f);
         [Tooltip("Tap tolerance around units as a fraction of screen height.")]
         [Range(0f, 0.3f)] public float tapTolerance = 0.12f;
+
+        public Color BaseColor(UnitDefinition unit) => unit.team == Team.Enemies ? enemyBase : unit.heroClass switch
+        {
+            HeroClass.Warrior => warriorBase,
+            HeroClass.Defender => defenderBase,
+            HeroClass.Mage => mageBase,
+            HeroClass.Support => supportBase,
+            _ => noClassBase,
+        };
 
         public Vector3 SlotPosition(Team team, int slot)
         {

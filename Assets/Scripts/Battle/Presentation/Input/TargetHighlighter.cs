@@ -26,7 +26,7 @@ namespace Featherguard.Battle.Presentation
         {
             Clear();
             foreach (var hero in heroes)
-                presenter.ViewOf(hero)?.Ring.Show(config.readyRing);
+                presenter.ViewOf(hero)?.Ring.Show(config.BaseColor(hero.Definition));
         }
 
         public void Show(BattleUnit selected, bool specialArmed, BattleUnit hovered = null)

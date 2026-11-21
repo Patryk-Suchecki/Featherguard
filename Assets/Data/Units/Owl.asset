@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
   displayName: Owl
   team: 0
+  heroClass: 4
   maxHealth: 115
   attack: {fileID: 11400000, guid: 109f7cf0ad8137046b27de635979bae9, type: 2}
   support: {fileID: 11400000, guid: 35713397f9ca47649b7806b0a5b9f751, type: 2}

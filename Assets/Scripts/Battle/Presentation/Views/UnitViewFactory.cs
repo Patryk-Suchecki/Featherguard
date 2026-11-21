@@ -46,7 +46,9 @@ namespace Featherguard.Battle.Presentation
             var view = root.AddComponent<UnitView>();
             var reaction = root.AddComponent<HitReaction>();
             reaction.Init(flashMaterial, model.transform);
-            var ring = SelectionRing.Create(root.transform, look.Radius * 3.4f, ringMaterial);
+            var baseColor = config.BaseColor(definition);
+            baseColor.a *= config.baseOpacity;
+            var ring = SelectionRing.Create(root.transform, look.Radius * 3.4f, ringMaterial, baseColor);
             view.Bind(unit, look, state, model.AddComponent<UnitAnimator>(), reaction, ring);
             view.HomePosition = position;
 

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Featherguard.Battle.UnitDefinition
   displayName: Robin
   team: 0
+  heroClass: 2
   maxHealth: 150
   attack: {fileID: 11400000, guid: 8706b0d8b5ff12d42a883f475fb48606, type: 2}
   support: {fileID: 11400000, guid: 129590adfcc2f8744acae262e78dd830, type: 2}

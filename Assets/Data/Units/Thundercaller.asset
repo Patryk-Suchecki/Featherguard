@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.UnitDefinition
   displayName: Thundercaller of Perun
   team: 0
+  heroClass: 3
   maxHealth: 100
   attack: {fileID: 11400000, guid: 61f0733b49a97c643b1caa75bfb0de54, type: 2}
   support: {fileID: 11400000, guid: 18f2620cc287cb34e9375e4dd3ce8329, type: 2}
