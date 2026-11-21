@@ -30,6 +30,8 @@ namespace Featherguard.Battle
         public bool ActsLast => Any(b => b.ActsLast);
         public bool ConsumedOnAttack => Any(b => b.ConsumedOnAttack);
         public bool ConsumedByCriticalHit => Any(b => b.ConsumedByCriticalHit);
+        public bool Retaliates => Any(b => b.Retaliates);
+        public IEnumerable<StatusApplication> RetaliationStatuses => behaviours.Where(b => b != null).SelectMany(b => b.RetaliationStatuses);
         public int StackLimit => stacking == StatusStacking.Stack ? Math.Max(1, maxStacks) : 1;
 
         bool Any(Func<StatusBehaviour, bool> predicate) => behaviours.Any(b => b != null && predicate(b));
@@ -40,7 +42,7 @@ namespace Featherguard.Battle
     {
         public StatusDefinition status;
         [Min(1)] public int turns = 1;
-        [Tooltip("Damage per turn for damage over time; base points for an absorbing Shield.")]
+        [Tooltip("Damage per turn for damage over time; base points for an absorbing Shield; damage returned to each attacker for retaliation.")]
         [Min(0)] public int potency;
         [Range(0f, 1f)] public float chance = 1f;
         public bool onSelf;

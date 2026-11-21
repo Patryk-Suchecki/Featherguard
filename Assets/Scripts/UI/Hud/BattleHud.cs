@@ -20,6 +20,7 @@ namespace Featherguard.UI
         RectTransform popupLayer;
         TopBar topBar;
         TimingCueView timingCue;
+        DragArrowView dragArrow;
         RageButtonView rageButton;
         PauseMenu pauseMenu;
         BannerView banners;
@@ -27,7 +28,6 @@ namespace Featherguard.UI
         IPlayerCommands commands;
         RageMeter rage;
         readonly Dictionary<UnitView, UnitBar> bars = new();
-        readonly List<HeroCardView> cards = new();
 
         public RectTransform Canvas => canvas;
         public int OverlayIndex => safe.GetSiblingIndex() + 1;
@@ -43,6 +43,7 @@ namespace Featherguard.UI
                 new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
 
             barLayer = Ui.Stretch("Bars", canvas);
+            dragArrow = new DragArrowView(canvas, camera);
             popupLayer = Ui.Stretch("Popups", canvas);
             timingCue = new TimingCueView(Ui.Stretch("Timing", canvas), camera);
             safe = SafeArea.Create(canvas);
@@ -103,7 +104,7 @@ namespace Featherguard.UI
 
         public void SetProgress(int encounter, int encounters, int wave, int waves) => topBar.SetProgress(encounter, encounters, wave, waves);
 
-        public void ShowAttackRing(Vector3 world, float closing) => timingCue.ShowAttackRing(world, closing);
+        public void ShowGesture(GestureSketch sketch) => timingCue.ShowGesture(sketch);
 
         public void ShowBlockCue(Vector3 world) => timingCue.ShowBlockCue(world);
 
@@ -111,10 +112,7 @@ namespace Featherguard.UI
 
         public void UnitAdded(UnitView unit)
         {
-            if (unit.Team == Team.Enemies)
-                bars[unit] = UnitBar.Create(unit, barLayer, view, Visuals.Statuses);
-            else
-                cards.Add(new HeroCardView(safe, unit, cards.Count, hero => commands?.Select(hero), Visuals.Statuses));
+            bars[unit] = UnitBar.Create(unit, barLayer, view, Visuals.Statuses);
         }
 
         public void UnitRemoved(UnitView unit)
@@ -126,8 +124,6 @@ namespace Featherguard.UI
         void OnDestroy()
         {
             topBar?.Unbind();
-            foreach (var card in cards)
-                card.Unbind();
         }
 
         void Update()
@@ -139,8 +135,7 @@ namespace Featherguard.UI
 
             if (commands == null) return;
             rageButton.Update(rage, commands);
-            foreach (var card in cards)
-                card.Animate(commands);
+            dragArrow.Update(commands);
             hint.text = HintText();
         }
 
@@ -148,13 +143,14 @@ namespace Featherguard.UI
         {
             if (!commands.AcceptingInput) return "";
             var selected = commands.Selected;
-            if (selected == null) return "Tap a hero";
+            if (selected == null)
+                return commands.SpecialArmed ? "Rage: drag or tap a glowing hero" : "Drag a glowing hero: enemy = attack, ally or tap = skill";
             var definition = selected.Definition;
             if (commands.SpecialArmed)
-                return $"{definition.special.displayName}: tap a target";
+                return definition.special.TargetsAll ? $"{definition.special.displayName}: let go" : $"{definition.special.displayName}: drop on a target";
             if (definition.support == null)
                 return $"Enemy: {definition.attack.displayName}";
-            return $"Enemy: {definition.attack.displayName}  ·  Ally: {definition.support.displayName}";
+            return $"Enemy: {definition.attack.displayName}  ·  Ally or tap: {definition.support.displayName}";
         }
     }
 }

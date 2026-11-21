@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e508365d0537e41bd2ac8424c2efed, type: 3}
+  m_Name: HealerSpecial
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.AbilityDefinition
+  displayName: Grace of the Oak
+  target: 3
+  hits: 1
+  effects:
+  - rid: 2988852411375026196
+  - rid: 2988852411375026197
+  - rid: 2988852411375026198
+  alwaysTimed: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 2988852411375026196
+      type: {class: HealEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        power: 45
+        overflowShield: {fileID: 0}
+        overflowShieldTurns: 2
+    - rid: 2988852411375026197
+      type: {class: CleanseEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data: 
+    - rid: 2988852411375026198
+      type: {class: ApplyStatusEffect, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 18cac823a50c7f646be33497964a8a92, type: 2}
+          turns: 1
+          potency: 25
+          chance: 1
+          onSelf: 0
+          condition: 1

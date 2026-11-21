@@ -17,6 +17,10 @@ namespace Featherguard.Battle
         [Min(0f)] public float goodAttackBonus = 0.25f;
         [Tooltip("Extra damage for a perfect attack timing.")]
         [Min(0f)] public float perfectAttackBonus = 0.5f;
+        [Tooltip("Extra healing and Shield for a good timing of a support or Rage action.")]
+        [Min(0f)] public float goodSupportBonus = 0.2f;
+        [Tooltip("Extra healing and Shield for a perfect timing of a support or Rage action.")]
+        [Min(0f)] public float perfectSupportBonus = 0.4f;
         [Tooltip("Damage removed by a good block.")]
         [Range(0f, 1f)] public float goodBlockReduction = 0.3f;
         [Tooltip("Damage removed by a perfect block.")]

@@ -38,6 +38,7 @@ namespace Featherguard.Battle
         public int Potency(Func<StatusDefinition, bool> predicate) => statuses.Where(s => predicate(s.Definition)).Sum(s => s.DamagePerTurn);
 
         public IEnumerable<StatModifier> Modifiers => statuses.SelectMany(s => s.Definition.Modifiers);
+        public IEnumerable<StatusApplication> RetaliationStatuses => statuses.SelectMany(s => s.Definition.RetaliationStatuses).ToList();
 
         public void Apply(StatusApplication application, bool duringOwnTurn, Team source = Team.Heroes, int points = 0)
         {

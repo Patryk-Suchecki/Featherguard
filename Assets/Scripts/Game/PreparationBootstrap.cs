@@ -52,7 +52,7 @@ namespace Featherguard.Game
                 Law = activity.land.law,
                 Rating = rating,
                 Daring = world.IsDaring(rating),
-                Gold = ActivityBattle.Gold(activity, world.DaringMultiplier(rating)),
+                Reward = activity.reward,
                 Party = roster.Party.Select(h => h.displayName).ToList(),
                 PartyComplete = roster.IsPartyComplete,
             }, Back, ChangeParty, () => hud.Toast("Potions: coming soon"), Fight);

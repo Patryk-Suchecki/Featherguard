@@ -12,7 +12,9 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 ## Battle
 
 - **Turns:** every battle starts with the player's turn, then the enemy turn, and so on.
-  - On the player's turn every living, non-stunned hero acts once, in any order: tap a hero, then tap an enemy to attack or an ally to use the support ability.
+  - On the player's turn every living, non-stunned hero acts once, in any order. Units stand on a ring coloured by their class: Warrior yellow, Defender blue, Mage purple, Support green, enemies red (`BattlePresentationConfig`). Enemies always have theirs; a hero shows its ring only while it can still act this turn and loses it as soon as its action is chosen. Drag a hero onto an enemy to attack it, or onto an ally to use the support ability on that ally; tapping a hero uses its support on itself (or on the party, for a party support). While dragging, a dotted arrow follows the finger; only the valid target under the finger is highlighted, with a white ring, and the arrow turns red over an enemy and green over an ally. Dropping anywhere else does nothing.
+  - The Rage button arms Rage once the meter is full; the next hero dragged onto a target, or tapped when its Rage hits every enemy or ally, uses its Rage action.
+  - There are no hero cards: each hero has a health and status bar above its head, like the enemies.
   - When the **Rage** meter is full, the selected hero can use its special instead.
   - The turn ends when every hero has acted. Enemies then act one by one in the order they entered the battle (summons last); stunned enemies skip.
 - **Rage (`BattleRules`):**
@@ -31,7 +33,10 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - an application can require a perfect attack timing (`StatusCondition.PerfectTiming`);
   - a cleanse (`CleanseEffect`) removes harmful statuses; death clears all statuses; heroes keep theirs between waves;
   - enemies with an act-last status (Freeze) act after the other enemies.
-- **Attack timing:** an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it. A temporary ring asks for it (see Presentation) until #19 brings the final battle screen.
+- **Attack timing:** an attack can carry a timing result. Good gives +25% damage and Perfect +50% damage on every hit plus +10 Rage once for the action (`BattleRules`); Miss is normal damage. Support, healing and the Rage action ignore it unless the ability is `alwaysTimed`; then Good adds +20% and Perfect +40% to its healing and Shield points, and its damage gets the attack bonus. Effects wrapped in `PerfectTimingEffect` (or status applications with `PerfectTiming`) only happen on a perfect result. A gesture asks for the timing (see Presentation) until #19 brings the final battle screen.
+- **Retaliation:** a status with `Retaliate` (Thorns, Sparks) returns its potency as damage to every opponent hit that lands on its owner, and can put a status on the attacker (Sparks: 30% Stun). An attacker killed this way stops its remaining hits.
+- **Chain damage:** `ChainDamageEffect` hits the target, then every other enemy in slot order, each jump keeping 60% of the previous hit.
+- **Overflow healing:** a `HealEffect` with `overflowShield` turns healing beyond full health into Shield points for 2 turns.
 - **Block timing:** with `BattleSetup.AwaitBlocks` the enemy turn stops before each damaging enemy action (an `EnemyWindup` event) and `Block` resolves it: Good removes 30% and Perfect 60% of the damage for every hero hit, and Perfect adds +10 Rage once. Enemy actions without damage resolve at once. The game turns it on together with the temporary timing prompts.
 - **Taunt** only redirects single-target abilities; abilities that hit all enemies are unaffected.
 - **Waves:** an encounter can have several waves. When the last enemy of a wave falls, the next wave enters and a new player turn starts.
@@ -47,9 +52,21 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 | Hero | HP | Attack | Support | Special (full rage) |
 |---|---|---|---|---|
-| Robin (Knight) | 150 | Slash – melee, 30 dmg | Cover – Shield (30) on an ally + Taunt on self | Shield Bash – melee, 85 dmg + Stun, heavy |
-| Jay (Archer) | 105 | Double Shot – 2 arrows × 14 dmg, 30% Poison (5/turn, 2 turns) | Battle Cry – Empower on an ally | Arrow Rain – all enemies, 2 × 24 dmg + Poison (6/turn, 2 turns) |
-| Owl | 115 | Spark – magic bolt, 20 dmg, 35% Weaken | Mend – heal 40 | Forest Renewal – heal all allies 60 |
+| Warrior | 140 | Sword Cut – melee, 30 dmg; perfect: Bleed (5/turn, 3 turns) | War Shout – Empower on the party for 2 turns; perfect: 3 turns | Hero's Blow – melee, 85 dmg, heavy; perfect: Stun |
+| Thorn Warden | 165 | Thorn Lash – melee, 16 dmg + Taunt on self; perfect: Weaken | Thorn Guard – Thorns (8) on an ally for 2 turns; perfect: Shield (20) | Bramble Wall – Thorns (20) on the party + Taunt on self; perfect: party Shield (25) |
+| Healer | 110 | Amber Spark – magic bolt, 14 dmg; perfect: Mark | Oak Blessing – heal 40, overflow becomes Shield; perfect: cleanse | Grace of the Oak – heal 45 and cleanse the party; perfect: party Shield (25) |
+| Thundercaller of Perun | 100 | Chain Lightning – 22 dmg, jumps to every other enemy at 60% each jump; perfect: 50% Stun | Spark Ward – Sparks (8) on an ally for 2 turns; perfect: Empower | Perun's Storm – all enemies, 50 dmg; perfect: Stun all |
+
+Every hero has a class (`UnitDefinition.heroClass`): the Warrior is a Warrior, the Thorn Warden a Defender, the Healer a Support and the Thundercaller a Mage.
+
+The four heroes come from the new roster and are the only heroes at the campfire. Until their own art is made they use the bird prototype's Knight, Owl and Archer models, portraits and animators as placeholders; the prototype heroes themselves (Robin, Jay and the Owl) are gone. Each hero action has its own gesture:
+
+| Hero | Attack | Support | Rage |
+|---|---|---|---|
+| Warrior | Slash to the right | Series of 2 rings | 3 Slashes: right, up-left, down |
+| Thorn Warden | Ring | Trace a thorn line | Trace a shield, then a Ring |
+| Healer | Charge: hold, release in the gold | Guide the light along a wave | Draw a circle from memory |
+| Thundercaller | Series of 3 rings | Spin twice | Draw a lightning sign from memory |
 
 ### Enemies
 
@@ -89,6 +106,8 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 | Freeze | +30% damage taken; an enemy acts last (harmful) |
 | Curse | −30% damage (harmful) |
 | Mark | +50 points of crit chance against the owner, gone after the first crit it takes (harmful) |
+| Thorns | Every hit the owner takes returns the potency as damage to the attacker |
+| Sparks | Like Thorns, plus a 30% chance to Stun the attacker |
 
 The default duration is 1 turn unless stated otherwise. Bleed is used by the Bies; Burn, Freeze, Curse and Mark exist for the reworked heroes and enemies and use placeholder icons until their own are drawn. The rules follow `docs/design/combat/statuses.md`.
 
@@ -111,9 +130,9 @@ Nine encounters (`RunDefinition.asset`):
 - **Start:** the game opens on the Stronghold, its own scene (`Stronghold.unity`, the main screen). It is a 3D camp at night in a light top-down view, seen through mist, with dead trees and graves. Lanterns, glowing windows, the forge fire, a green glow at the Wise Woman's Hut, candles under the Sacred Oak and wisps over the graves light it, and the party stands around the campfire. The player taps a place: the Forge, Wise Woman's Hut, Sacred Oak, Tavern and Shop say "coming soon" for now, as does the Settings button. Tapping the signpost (**Embark**) opens the world map; Embark needs a full party.
 - **Debug menu:** in development builds and the editor, a faint "dbg" button in the top-left corner of every screen opens a debug menu: **Win battle** (only during a battle) ends the battle at once as a victory, **Reroll side activities** draws the map's side activities again, and **Reset all progress** (a second tap confirms) wipes the save and returns to the Stronghold. Release builds have no debug menu.
 - **Camp:** tapping the campfire (or a hero at it) flies the camera to the fire. Six fixed seats (`GameConfig.campSeats`) hold the heroes of `GameConfig.heroes` in order; the other seats are empty, "not joined yet". Tapping a hero moves them into or out of the party of 3; a fourth is refused. Holding a hero shows their abilities, with level and equipment "coming soon"; Storage and Potions are "coming soon" too. The party is saved with the feathers and perks (first 3 heroes by default) and starts the next run. **Back** returns to the Stronghold. Rules: [`design/party.md`](design/party.md). When a run ends or is abandoned, the game returns to the Stronghold. The buildings are code-built placeholders until their models exist.
-- **World map:** its own scene (`WorldMap.unity`), a tabletop map at night seen from above. The Stronghold sits in the middle, with roads to five lands: Rye Fields, Marshes, Bald Mountain, Old Forest and, beyond the river, Nav. A land opens when the story reaches it; until then mist covers it and tapping it says it is locked, while tapping an open land shows its law. Each open land shows 1 to 3 activities as markers, one shape per kind (single fight, waves, puzzle, elite, boss); the next story mission takes one of those places and is marked **Main quest**. Each marker shows its threat rating against the party. Side activities are drawn again after every won mission. Tapping an activity opens its battle preparation. **Prototype run** loads the old battle scene, where the camp screen spends feathers on perks and "Set out!" starts the run with the party. **Back** returns to the Stronghold. Lands and activities live in `Assets/Data/World` with placeholder encounters. Rules: [`design/world-progression.md`](design/world-progression.md).
+- **World map:** its own scene (`WorldMap.unity`), a tabletop map at night seen from above. The Stronghold sits in the middle, with roads to five lands: Rye Fields, Marshes, Bald Mountain, Old Forest and, beyond the river, Nav. A land opens when the story reaches it; until then mist covers it and its name says Locked, while an open land shows its story progress. Each open land shows its 1 to 3 activities as buttons under its name: the border colour tells the reward (blue EXP, yellow gold, green materials, red loot, cyan schematic, purple unlock, brown the Main quest) and the icon the kind of fight (circle single, two circles waves, clover puzzle, elite, crown boss, flag Main quest), with the threat rating against the party under it; a legend in the corner lists the colours. The next story mission takes one of those places as the **Main quest**. Reward kinds are placeholders set per activity in `WorldCatalog`. Side activities are drawn again after every won mission. Tapping an activity opens its battle preparation. **Prototype run** loads the old battle scene, where the camp screen spends feathers on perks and "Set out!" starts the run with the party. **Back** returns to the Stronghold. Lands and activities live in `Assets/Data/World` with placeholder encounters. Rules: [`design/world-progression.md`](design/world-progression.md).
 - **Battle preparation:** its own scene (`Preparation.unity`): the party stands on a night road facing the first wave of the activity. A panel shows the activity, its kind (with the number of waves for a waves fight), the land and its Law, the threat rating with Daring, the gold reward and the party. **Change party** opens the Camp straight away, and **Back** in the Camp returns to the same preparation. Potions are "coming soon". **Fight** needs a full party and starts the battle with the activity's encounter and the party, without the bird run's camp, rewards or slot machine. **Back** returns to the map. The chosen activity is saved, so the flow survives a restart.
-- **Activity battles:** a win advances the story when it was the Main quest, draws the side activities again and shows the victory screen with the gold reward (with Daring); gold is not kept yet. A loss grants nothing; **Retry** returns to the preparation and **World map** to the map. Leaving from the pause menu returns to the map. The Law is not applied in combat yet.
+- **Activity battles:** a win advances the story when it was the Main quest, draws the side activities again and shows the victory screen with the reward: the gold amount (with Daring) for a gold activity, otherwise its kind. Nothing is kept yet. A loss grants nothing; **Retry** returns to the preparation and **World map** to the map. Leaving from the pause menu returns to the map. The Law is not applied in combat yet.
 - **Hero HP between battles:** heroes keep their HP from battle to battle. After a win, survivors heal 20% of max HP and fallen heroes return with 30%.
 - **Gold bonus:** kill gold, encounter gold and gold from the slot machine are multiplied by the run's gold bonus (Lucky Penny, Treasurer, Leaky Purse). Losses, purchases and double-or-nothing are not.
 - **Losing:** in the prototype run, a lost battle ends the run. Abandoning the run from the pause menu counts as a loss. Either way the game returns to the Stronghold.
@@ -182,7 +201,19 @@ Each card targets one hero (Hero), the whole party (Party) or the run (Run). A H
 - **Visuals:** low-poly characters, generated procedurally in Blender (`Art/Blender`), with animations Idle, Attack, Cast, Hit, Death and Victory. Portraits are rendered from the same models.
 - **Toon shading:** every unit is drawn with the `Featherguard/Toon` shader: flat light bands, a cool shadow colour and a dark outline. The settings live in `Assets/Art/Materials/Toon.mat`; each unit keeps its own texture and colour.
 - **Impact effects:** an ability can draw an extra effect on the target when its hit lands (`AbilityVisuals.impactEffect`). The Bies' Rending Claws draws three ember claw slashes with a dark outline that cut in, hold and fade within about 0.35 s; their shape and colours are tuned on its AbilityVisuals asset.
-- **Timing prompts (temporary, `BattlePresentationConfig.timingPrompts`):** a damaging hero attack (not the Rage action) shows a white ring shrinking onto a gold circle on the target for 0.8 s; a tap anywhere or Space is judged against the moment they meet: within 0.06 s Perfect, within 0.15 s Good, otherwise Miss (windows in `BattleRules`). Before each damaging enemy action the game waits a random 0.4–1.2 s, then flashes BLOCK! over the hero 0.25 s before the hit; a tap before the flash is wasted. GOOD / PERFECT! (or BLOCK / PERFECT BLOCK!) pops up over the unit. The enemy only moves and strikes after the block is judged; matching the cue to the animation comes with #19. With the switch off, every attack and block is a Miss and enemy turns don't wait.
+- **Timing prompts (temporary, `BattlePresentationConfig.timingPrompts`):** every timed hero action plays the gesture on its `AbilityVisuals.gesture`. Without one, it shows a white ring shrinking onto a gold circle on the target for 0.8 s; a tap anywhere or Space is judged against the moment they meet: within 0.06 s Perfect, within 0.15 s Good, otherwise Miss (windows in `BattleRules`, scaled by the gesture's `windowScale`). The other gestures play in a panel in the middle of the screen:
+  - **Ring:** the ring above.
+  - **Series:** numbered rings at different places, each tapped as it closes; Space works too.
+  - **Slash:** swipe through the gold gate in the arrow's direction as the ring closes.
+  - **Charge:** hold (or hold Space), release with the bar in the gold zone; holding too long is a Miss.
+  - **Trace:** draw along the shown line from the gold dot; judged by how much of the line is covered and how far the stroke strays.
+  - **Guide:** hold the light and follow it along the path; judged by the share of time the finger stays on it.
+  - **Spin:** circle around the centre the given number of times; Perfect within 65% of the time limit.
+  - **Sign:** a sign is shown, then drawn from memory; judged by a stroke matcher against the sign.
+  - **Sequence:** several gestures in a row; Perfect only if every step is Perfect, Good if at least 60% of the steps hit.
+  - Series and Sequence are judged the same way over their parts. Gesture logic is plain C# (`GestureRun` subclasses) drawn through a `GestureSketch` by the HUD.
+
+  Before each damaging enemy action the game waits a random 0.4–1.2 s, then flashes BLOCK! over the hero 0.25 s before the hit; a tap before the flash is wasted. GOOD / PERFECT! (or BLOCK / PERFECT BLOCK!) pops up over the unit. The enemy only moves and strikes after the block is judged; matching the cue to the animation comes with #19. With the switch off, every attack and block is a Miss and enemy turns don't wait.
 - **Icons and sounds:** procedural, generated by `IconFactory` and `SfxSynth`.
 - **Timing:** feedback timings live in `BattlePresentationConfig.asset`. Hitstop, camera shake and popups are configured in `GameConfig.feedback`.
 - **UI:** landscape, 1920×1080 reference resolution, safe area, generous tap tolerance, pause menu with sound toggle and an option to abandon the run.

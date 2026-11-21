@@ -66,7 +66,7 @@ namespace Featherguard.Battle.Presentation
             var unit = ViewOf(e.Unit);
             if (unit == null) return;
             unit.Animator.Play("Death", 0.04f);
-            unit.Ring.Show(null);
+            unit.Ring.Hide();
             sounds.Play(SfxId.Death);
             UnitDefeated?.Invoke(unit);
         }
