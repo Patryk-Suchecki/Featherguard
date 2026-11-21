@@ -6,15 +6,13 @@ namespace Featherguard.Game
     public class WorldMapLand : MonoBehaviour
     {
         [SerializeField] LandDefinition land;
-        [SerializeField] Transform[] slots;
         [SerializeField] Transform labelAnchor;
+        [SerializeField] Transform activitiesAnchor;
         [SerializeField] GameObject lockedCover;
 
         public LandDefinition Land => land;
         public Transform LabelAnchor => labelAnchor != null ? labelAnchor : transform;
-        public int SlotCount => slots.Length;
-
-        public Transform Slot(int index) => slots[Mathf.Clamp(index, 0, slots.Length - 1)];
+        public Transform ActivitiesAnchor => activitiesAnchor != null ? activitiesAnchor : transform;
 
         public void SetOpen(bool open)
         {

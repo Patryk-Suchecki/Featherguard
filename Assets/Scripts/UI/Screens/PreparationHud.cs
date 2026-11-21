@@ -18,7 +18,7 @@ namespace Featherguard.UI
         public string Law;
         public ThreatRating Rating;
         public bool Daring;
-        public int Gold;
+        public RewardKind Reward;
         public IReadOnlyList<string> Party;
         public bool PartyComplete;
     }
@@ -48,14 +48,14 @@ namespace Featherguard.UI
             if (info.Story)
                 y = Line(panel, "Main quest", 28, StoryColor, y, 36f);
             y = Line(panel, info.Name, 52, info.Story ? StoryColor : Color.white, y, 64f);
-            y = Line(panel, Describe(info.Type, info.Waves), 30, TextColor, y, 44f);
+            y = Line(panel, ActivityText.Describe(info.Type, info.Waves), 30, TextColor, y, 44f);
             y -= 18f;
             y = Line(panel, info.Land, 34, TextColor, y, 44f);
             Ui.Wrapped(Ui.Rect("Law", panel, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(32f, y), new Vector2(596f, 110f)),
                 string.IsNullOrEmpty(info.Law) ? "No Law" : $"Law: {info.Law}", 26, TextAnchor.UpperLeft, MutedColor);
             y -= 128f;
-            y = Line(panel, info.Daring ? $"Threat: {info.Rating}   ·   Daring +50%" : $"Threat: {info.Rating}", 34, RatingColor(info.Rating), y, 48f);
-            y = Line(panel, $"Reward: {info.Gold} gold", 34, Ui.GoldColor, y, 48f);
+            y = Line(panel, info.Daring ? $"Threat: {info.Rating}   ·   Daring +50%" : $"Threat: {info.Rating}", 34, ActivityText.RatingColor(info.Rating), y, 48f);
+            y = Line(panel, info.Reward == RewardKind.None ? "No reward" : $"Reward: {ActivityText.RewardName(info.Reward)}", 34, Ui.GoldColor, y, 48f);
             y -= 18f;
             y = Line(panel, "Party", 30, TextColor, y, 40f);
             Line(panel, info.PartyComplete ? string.Join(", ", info.Party) : "Pick 3 heroes in the Camp", 28, info.PartyComplete ? Color.white : WarningColor, y, 40f);
@@ -82,23 +82,6 @@ namespace Featherguard.UI
             yield return new WaitForSecondsRealtime(ToastHold);
             yield return Tweens.Fade(toast, ToastFade);
         }
-
-        static string Describe(ActivityType type, int waves) => type switch
-        {
-            ActivityType.SingleFight => "Single fight",
-            ActivityType.WavesFight => $"Waves fight   ·   {waves} waves",
-            ActivityType.PuzzleFight => "Puzzle fight",
-            ActivityType.EliteFight => "Elite fight",
-            _ => "Boss fight",
-        };
-
-        static Color RatingColor(ThreatRating rating) => rating switch
-        {
-            ThreatRating.Easy => new Color(0.55f, 0.85f, 0.5f),
-            ThreatRating.Even => Color.white,
-            ThreatRating.Dangerous => new Color(1f, 0.62f, 0.3f),
-            _ => new Color(1f, 0.35f, 0.3f),
-        };
 
         static float Line(RectTransform panel, string text, int size, Color color, float y, float height)
         {

@@ -1,4 +1,3 @@
-using System.Linq;
 using Featherguard.Game;
 using Featherguard.Meta;
 using UnityEditor;
@@ -12,7 +11,6 @@ namespace Featherguard.EditorTools
         static readonly Vector3[] LandSpots = { new(-11f, 0f, -1f), new(11f, 0f, -1f), new(-11f, 0f, 8f), new(11f, 0f, 8f), new(0f, 0f, 16.5f) };
         static readonly Vector3 StrongholdSpot = new(0f, 0f, 3.5f);
         static readonly Vector3 AreaSize = new(8.5f, 0.02f, 7f);
-        static readonly Vector3[] SlotOffsets = { new(-2.8f, 0.3f, -1f), new(2.8f, 0.3f, -1f), new(0f, 0.3f, 1.9f) };
 
         NightPalette palette;
 
@@ -58,20 +56,11 @@ namespace Featherguard.EditorTools
                 Land(map, lands[3], LandSpots[3], palette.Withered, OldForest),
                 Land(map, lands[4], LandSpots[4], palette.Ash, Nav),
             };
-            var templates = new GameObject("Marker Templates").transform;
-            var markers = new[]
-            {
-                SingleFightMarker(templates), WavesFightMarker(templates), PuzzleFightMarker(templates), EliteFightMarker(templates), BossFightMarker(templates),
-            };
-            var mainQuest = MainQuestMarker(templates);
-
             var bootstrap = new GameObject("Game").AddComponent<WorldMapBootstrap>();
             var serialized = new SerializedObject(bootstrap);
             serialized.FindProperty("config").objectReferenceValue = config;
             serialized.FindProperty("sceneCamera").objectReferenceValue = camera;
             SerializedArray.Set(serialized.FindProperty("lands"), built);
-            SerializedArray.Set(serialized.FindProperty("markerTemplates"), markers);
-            serialized.FindProperty("mainQuestTemplate").objectReferenceValue = mainQuest;
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
             EditorSceneManager.SaveScene(scene, ContentPaths.WorldMapScene);
@@ -90,27 +79,23 @@ namespace Featherguard.EditorTools
 
             var cover = NightScene.Decoration(PrimitiveType.Sphere, "Locked Mist", root, new Vector3(0f, 0f, 0f), new Vector3(9.2f, 3.5f, 7.8f), palette.Mist);
 
-            var slots = SlotOffsets.Select((offset, i) =>
-            {
-                var slot = new GameObject($"Slot {i + 1}").transform;
-                slot.SetParent(root, false);
-                slot.localPosition = offset;
-                return slot;
-            }).ToArray();
-            var label = new GameObject("Label").transform;
-            label.SetParent(root, false);
-            label.localPosition = new Vector3(0f, 0.5f, -3.9f);
-
-            var area = root.gameObject.AddComponent<BoxCollider>();
-            area.center = new Vector3(0f, 0.1f, 0f);
-            area.size = new Vector3(AreaSize.x, 0.2f, AreaSize.z);
+            var label = Anchor(root, "Label", new Vector3(0f, 0.5f, 3.4f));
+            var buttons = Anchor(root, "Activities", new Vector3(0f, 0.5f, 0.2f));
             var land = new SerializedObject(root.gameObject.AddComponent<WorldMapLand>());
             land.FindProperty("land").objectReferenceValue = definition;
-            SerializedArray.Set(land.FindProperty("slots"), slots);
+            land.FindProperty("activitiesAnchor").objectReferenceValue = buttons;
             land.FindProperty("labelAnchor").objectReferenceValue = label;
             land.FindProperty("lockedCover").objectReferenceValue = cover;
             land.ApplyModifiedPropertiesWithoutUndo();
             return root.GetComponent<WorldMapLand>();
+        }
+
+        static Transform Anchor(Transform root, string name, Vector3 position)
+        {
+            var anchor = new GameObject(name).transform;
+            anchor.SetParent(root, false);
+            anchor.localPosition = position;
+            return anchor;
         }
 
         void RyeFields(Transform land)
@@ -178,72 +163,6 @@ namespace Featherguard.EditorTools
             NightScene.Decoration(PrimitiveType.Cube, "Hall", stronghold, new Vector3(0f, 1f, 0f), new Vector3(1.4f, 1.2f, 1f), palette.Wood);
             NightScene.Decoration(PrimitiveType.Cube, "Roof", stronghold, new Vector3(0f, 1.8f, 0f), new Vector3(1.1f, 1.1f, 1.1f), palette.RoofDark, new Vector3(0f, 0f, 45f));
             NightScene.Lamp(stronghold, "Hearth", new Vector3(0f, 1.2f, -1f), NightScene.WarmLight, 10f, 7f, palette.Flame, 0.2f, scale: Vector3.one * 0.3f);
-        }
-
-        GameObject SingleFightMarker(Transform templates)
-        {
-            var marker = Template(templates, "Single Fight");
-            NightScene.Part(PrimitiveType.Cylinder, "Token", marker.transform, Vector3.zero, new Vector3(0.9f, 0.08f, 0.9f), palette.Stone);
-            NightScene.Part(PrimitiveType.Cube, "Blade", marker.transform, new Vector3(0f, 0.6f, 0f), new Vector3(0.12f, 1.1f, 0.05f), palette.Bone);
-            return Finish(marker);
-        }
-
-        GameObject WavesFightMarker(Transform templates)
-        {
-            var marker = Template(templates, "Waves Fight");
-            for (int i = 0; i < 3; i++)
-                NightScene.Part(PrimitiveType.Cylinder, "Token", marker.transform, new Vector3(0f, i * 0.2f, 0f), new Vector3(0.9f - i * 0.15f, 0.08f, 0.9f - i * 0.15f), i % 2 == 0 ? palette.Iron : palette.Bone);
-            return Finish(marker);
-        }
-
-        GameObject PuzzleFightMarker(Transform templates)
-        {
-            var marker = Template(templates, "Puzzle Fight");
-            NightScene.Part(PrimitiveType.Cube, "Rune Stone", marker.transform, new Vector3(0f, 0.5f, 0f), Vector3.one * 0.6f, palette.Stone, new Vector3(45f, 0f, 45f));
-            NightScene.Part(PrimitiveType.Sphere, "Rune", marker.transform, new Vector3(0f, 0.5f, -0.3f), Vector3.one * 0.18f, palette.Spirit);
-            return Finish(marker);
-        }
-
-        GameObject EliteFightMarker(Transform templates)
-        {
-            var marker = Template(templates, "Elite Fight");
-            NightScene.Part(PrimitiveType.Cube, "Spike", marker.transform, new Vector3(0f, 0.7f, 0f), new Vector3(0.25f, 1.4f, 0.25f), palette.Iron);
-            NightScene.Part(PrimitiveType.Sphere, "Skull", marker.transform, new Vector3(0f, 1.55f, 0f), Vector3.one * 0.4f, palette.Bone);
-            return Finish(marker);
-        }
-
-        GameObject BossFightMarker(Transform templates)
-        {
-            var marker = Template(templates, "Boss Fight");
-            NightScene.Part(PrimitiveType.Sphere, "Skull", marker.transform, new Vector3(0f, 0.8f, 0f), Vector3.one * 0.8f, palette.Bone);
-            NightScene.Part(PrimitiveType.Cylinder, "Horn", marker.transform, new Vector3(-0.45f, 1.3f, 0f), new Vector3(0.12f, 0.35f, 0.12f), palette.Cloth, new Vector3(0f, 0f, 30f));
-            NightScene.Part(PrimitiveType.Cylinder, "Horn", marker.transform, new Vector3(0.45f, 1.3f, 0f), new Vector3(0.12f, 0.35f, 0.12f), palette.Cloth, new Vector3(0f, 0f, -30f));
-            NightScene.Part(PrimitiveType.Sphere, "Eyes", marker.transform, new Vector3(0f, 0.85f, -0.36f), new Vector3(0.45f, 0.12f, 0.1f), palette.Ember);
-            return Finish(marker);
-        }
-
-        GameObject MainQuestMarker(Transform templates)
-        {
-            var marker = Template(templates, "Main Quest");
-            NightScene.Part(PrimitiveType.Cylinder, "Pole", marker.transform, new Vector3(0f, 1.2f, 0f), new Vector3(0.1f, 1.2f, 0.1f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Cube, "Banner", marker.transform, new Vector3(0.45f, 1.9f, 0f), new Vector3(0.8f, 0.6f, 0.05f), palette.Lantern);
-            NightScene.Lamp(marker.transform, "Glow", new Vector3(0f, 2.4f, 0f), NightScene.WarmLight, 6f, 6f, palette.Lantern, 0.1f, scale: Vector3.one * 0.2f);
-            return Finish(marker);
-        }
-
-        static GameObject Template(Transform templates, string name)
-        {
-            var marker = new GameObject(name);
-            marker.transform.SetParent(templates, false);
-            marker.transform.localScale = Vector3.one * 1.5f;
-            return marker;
-        }
-
-        static GameObject Finish(GameObject marker)
-        {
-            NightScene.FitCollider(marker.transform, 1.2f);
-            marker.SetActive(false);
-            return marker;
         }
     }
 }

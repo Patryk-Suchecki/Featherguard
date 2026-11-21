@@ -18,3 +18,4 @@ MonoBehaviour:
   encounter: {fileID: 11400000, guid: ca45297fdcb387148b2ed511b8cfbae9, type: 2}
   threat: 7
   availableAfter: 14
+  reward: 1
