@@ -1,3 +1,4 @@
+using Featherguard.Battle.Presentation;
 using Featherguard.Core;
 using Featherguard.Run;
 using Featherguard.UI;
@@ -9,16 +10,22 @@ namespace Featherguard.Game
     public static class DebugTools
     {
         static DebugMenu menu;
+        static BattleController battle;
 
         public static void Install(GameConfig config)
         {
             if (menu != null || !Debug.isDebugBuild) return;
             menu = DebugMenu.Create(new[]
             {
-                new DebugAction("Reset all progress", () => ResetProgress(config), confirm: true),
+                new DebugAction("Win battle", () => battle.End(true), available: InBattle),
                 new DebugAction("Reroll side activities", () => RerollSideActivities(config)),
+                new DebugAction("Reset all progress", () => ResetProgress(config), confirm: true),
             });
         }
+
+        public static void Track(BattleController controller) => battle = controller;
+
+        static bool InBattle() => battle != null && !battle.Model.IsFinished;
 
         static void ResetProgress(GameConfig config)
         {
@@ -38,5 +45,8 @@ namespace Featherguard.Game
             GameClock.Paused = false;
             SceneManager.LoadScene(scene);
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetOnLoad() => battle = null;
     }
 }

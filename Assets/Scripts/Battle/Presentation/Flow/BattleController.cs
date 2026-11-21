@@ -26,6 +26,7 @@ namespace Featherguard.Battle.Presentation
         readonly PlayerCommands commands;
         readonly TimingPrompt prompt;
         EnemyWindup windup;
+        IReadOnlyList<BattleEvent> forcedEnd;
 
         public BattleModel Model { get; }
         public BattlePresenter Presenter { get; }
@@ -44,6 +45,11 @@ namespace Featherguard.Battle.Presentation
 
         public void Tick() => commands.Tick();
 
+        public void End(bool victory)
+        {
+            if (!Model.IsFinished) forcedEnd = Model.End(victory);
+        }
+
         public IEnumerator Run()
         {
             yield return Play(Model.Start());
@@ -56,8 +62,9 @@ namespace Featherguard.Battle.Presentation
                 }
 
                 commands.Open();
-                while (commands.Chosen == null)
+                while (commands.Chosen == null && forcedEnd == null)
                     yield return null;
+                if (forcedEnd != null) break;
                 var command = commands.TakeChosen();
                 var timing = TimingResult.Miss;
                 if (prompt != null && Model.IsTimed(command.Hero, command.Ability))
@@ -65,6 +72,7 @@ namespace Featherguard.Battle.Presentation
                 yield return Play(Model.Act(command.Hero, command.Ability, command.Target, timing));
             }
             commands.Close();
+            if (forcedEnd != null) yield return Play(forcedEnd);
         }
 
         IEnumerator Block()

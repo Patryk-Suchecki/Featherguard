@@ -106,6 +106,13 @@ namespace Featherguard.Battle
             return log.Flush();
         }
 
+        public IReadOnlyList<BattleEvent> End(bool victory)
+        {
+            if (IsFinished || Phase == BattlePhase.NotStarted) return Array.Empty<BattleEvent>();
+            Finish(victory);
+            return log.Flush();
+        }
+
         void Advance()
         {
             for (int step = 0; step < MaxSteps; step++)
@@ -158,10 +165,15 @@ namespace Featherguard.Battle
             bool defeat = !Heroes.AnyAlive;
             bool victory = !defeat && !Enemies.AnyAlive && !waves.HasNextWave;
             if (!defeat && !victory) return false;
+            Finish(victory);
+            return true;
+        }
+
+        void Finish(bool victory)
+        {
             Phase = BattlePhase.Finished;
             Result = new BattleResult { Victory = victory, Heroes = Heroes.Snapshot() };
             log.Emit(new BattleEnded { Victory = victory });
-            return true;
         }
     }
 }

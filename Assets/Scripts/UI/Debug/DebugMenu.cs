@@ -10,13 +10,17 @@ namespace Featherguard.UI
         public readonly string Label;
         public readonly Action Run;
         public readonly bool Confirm;
+        readonly Func<bool> available;
 
-        public DebugAction(string label, Action run, bool confirm = false)
+        public DebugAction(string label, Action run, bool confirm = false, Func<bool> available = null)
         {
             Label = label;
             Run = run;
             Confirm = confirm;
+            this.available = available;
         }
+
+        public bool IsAvailable => available == null || available();
     }
 
     public class DebugMenu : MonoBehaviour
@@ -32,8 +36,9 @@ namespace Featherguard.UI
         static readonly Color ButtonColor = new(0.16f, 0.17f, 0.22f, 1f);
         static readonly Color ConfirmColor = new(0.62f, 0.18f, 0.14f, 1f);
         static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
+        static readonly Color UnavailableColor = new(0.5f, 0.5f, 0.55f);
 
-        readonly List<(DebugAction Action, Image Background, Text Label)> rows = new();
+        readonly List<(DebugAction Action, Button Button, Text Label)> rows = new();
         GameObject panel;
         DebugAction pending;
 
@@ -71,17 +76,29 @@ namespace Featherguard.UI
             var rect = Ui.Rect(action.Label, parent, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y), new Vector2(520f, RowHeight));
             var button = Ui.Button(rect, ButtonColor, () => Press(action));
             var label = Ui.Label(Ui.Stretch("Label", rect), action.Label, 30, TextAnchor.MiddleCenter, TextColor);
-            rows.Add((action, button.GetComponent<Image>(), label));
+            rows.Add((action, button, label));
         }
 
         void Toggle()
         {
             Disarm();
             panel.SetActive(!panel.activeSelf);
+            if (panel.activeSelf) Refresh();
+        }
+
+        void Refresh()
+        {
+            foreach (var row in rows)
+            {
+                bool available = row.Action.IsAvailable;
+                row.Button.interactable = available;
+                row.Label.color = available ? TextColor : UnavailableColor;
+            }
         }
 
         void Press(DebugAction action)
         {
+            if (!action.IsAvailable) return;
             if (action.Confirm && pending != action)
             {
                 Disarm();
@@ -106,7 +123,7 @@ namespace Featherguard.UI
             {
                 if (row.Action != action) continue;
                 row.Label.text = text;
-                row.Background.color = color;
+                row.Button.image.color = color;
             }
         }
     }
