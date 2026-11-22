@@ -8,7 +8,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 
 ## 2. Concepts
 
-- **Potion** (`PotionDefinition`): a single-use item with an effect, a target and a recipe.
+- **Potion** (`PotionDefinition`): a single-use item with an effect, a target and a recipe. Potions have no rarity; only materials do.
 - **Recipe:** the materials and gold one potion costs to brew.
 - **Schematic** (`SchematicDefinition`): unlocks one potion's recipe for good. A recipe without its schematic cannot be brewed.
 - **Schematic fight:** a side activity template whose fixed reward is one schematic.
@@ -34,11 +34,11 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
     | Storm Draught | immune to Stun and to the Bald Mountain's lightning for 3 turns | one hero | Thunderstone ×1, Marsh Herbs ×1 |
     | Heartwood Brew | +30% damage for 3 turns | one hero | Old Oak Heartwood ×1, Tinder Fungus ×1 |
     | Gromnica Light | for 3 turns the party's healing is not halved and fallen enemies do not rise (Nav's Chill of Nav) | the party | Gromnica Wax ×1, Bone Ash ×2 |
-    | Firebird Draught (Epic) | a fallen hero returns with 40% of max health | one fallen hero | Firebird Feather ×1, Brimstone ×2 |
-    | Dead Water Tincture (Epic) | heals to full and removes Bleed | one hero | Dead Water ×1, Marsh Herbs ×2 |
-    | Kupala Dew Elixir (Epic) | heals 30% of max health and removes every harmful status | every hero | Kupala Dew ×1, Marsh Herbs ×2 |
-    | Living Water (Legendary) | every fallen hero returns with 50% of max health; living heroes heal 50% | the party | Living Water ×1, Dead Water ×1 |
-    | Fern Flower Elixir (Legendary) | fills the Rage meter; +30% damage for 2 turns | the party | Fern Flower ×1, Kupala Dew ×1 |
+    | Firebird Draught | a fallen hero returns with 40% of max health | one fallen hero | Firebird Feather ×1, Brimstone ×2 |
+    | Dead Water Tincture | heals to full and removes Bleed | one hero | Dead Water ×1, Marsh Herbs ×2 |
+    | Kupala Dew Elixir | heals 30% of max health and removes every harmful status | every hero | Kupala Dew ×1, Marsh Herbs ×2 |
+    | Living Water | every fallen hero returns with 50% of max health; living heroes heal 50% | the party | Living Water ×1, Dead Water ×1 |
+    | Fern Flower Elixir | fills the Rage meter; +30% damage for 2 turns | the party | Fern Flower ×1, Kupala Dew ×1 |
 
 2. Mountain Ore, Yew Wood, Serpent King's Crown and Alatyr Stone are in no recipe; they are left for the forge.
 3. Every recipe also costs gold.
@@ -61,7 +61,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
     |---|---|---|---|---|
     | Cleansing Brew, Wolf's Fury, Sheaf Ward | Wisp Oil, Bog Mist | Fire Flask, Storm Draught | Heartwood Brew | Gromnica Light |
 
-    The Epic and Legendary schematics follow the bosses: Firebird Draught after mission 12 (Lady Midday), Dead Water Tincture after 17 (the Water Maiden), Kupala Dew Elixir after 21 (Zmey), Living Water after 23 (the Leshy) and Fern Flower Elixir after 25 (the end of the story).
+    The schematics for the potions brewed from Epic and Legendary materials follow the bosses: Firebird Draught after mission 12 (Lady Midday), Dead Water Tincture after 17 (the Water Maiden), Kupala Dew Elixir after 21 (Zmey), Living Water after 23 (the Leshy) and Fern Flower Elixir after 25 (the end of the story).
 12. A schematic the player already owns never appears again.
 
 ### Using potions in battle
