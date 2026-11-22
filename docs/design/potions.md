@@ -53,7 +53,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 ### Schematics
 
 8. Every potion except the Healing Draught has one schematic, and one schematic fight in the pool of the land of its main ingredient.
-9. A schematic fight is drawn onto the map like any side activity. Its marker shows the schematic reward, and its preparation names the potion.
+9. A schematic fight is drawn onto the map like any side activity. Its marker and its preparation show only that the reward is a schematic, never which potion it teaches; the victory screen reveals it.
 10. Winning it unlocks the recipe for good, and the fight leaves the pool. (Later more fights can award the same schematic; winning any of them removes all of them: #188.)
 11. A schematic fight enters the pool at a story threshold (its `availableAfter`):
 
@@ -69,7 +69,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 13. In the battle preparation, **Potions** picks up to 3 potions from the bag for the fight.
 14. In battle, the picked potions sit in a tile in the lower left corner of the screen, each with its count.
 15. A potion is used like a hero's action: the player drags it from the tile onto its target, with the same arrow as when dragging a hero. Valid targets light up while dragging; letting go elsewhere cancels.
-16. Potions can only be used during the player's turn. There is no timing QTE.
+16. Potions can only be used during the player's turn. Using one is an extra action: it uses up no hero's action and does not end the turn, so the player can use several in one turn. There is no timing QTE.
 17. A used potion is gone, also when the battle is lost ([`world-progression.md`](world-progression.md) rule 20). Picked potions that were not used go back to the bag.
 
 ## 4. Edge cases
@@ -92,7 +92,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 ## 6. Feedback
 
 - **Hut:** the grid of potions with owned counts; locked recipes show a lock and the schematic icon; the selected potion's panel shows the effect, ingredients as owned / needed (short ones in a warning colour) and the brew count.
-- **Map and preparation:** a schematic fight's marker uses the schematic reward colour; its preparation shows the potion it teaches.
+- **Map and preparation:** a schematic fight's marker uses the schematic reward colour, and its preparation says "Reward: Schematic" without naming the potion.
 - **Battle:** the potion tile in the lower left corner with counts; while dragging, the arrow and the valid targets light up; using a potion plays its sound and effect over the targets, and the count drops.
 - **Victory:** a won schematic shows "New recipe: <potion>".
 
@@ -113,12 +113,12 @@ EditMode tests:
 - winning a schematic fight unlocks its recipe and removes the fight from the pool; an owned schematic is never drawn again;
 - schematic fights respect their story threshold;
 - at most 3 potions are picked for a battle, and unused ones return to the bag;
-- a potion can only be used in the player's turn and only on a valid target, and it is spent when used, also in a lost battle;
+- a potion can only be used in the player's turn and only on a valid target, uses up no hero's action, and is spent when used, also in a lost battle;
+- a schematic fight does not tell which schematic it gives until it is won;
 - each potion's effect matches rule 1 (heal, statuses, Rage, revive, damage).
 
 ## 9. Open questions
 
-- Whether using a potion also uses up a hero's action, as the GDD says today, or is an extra action in the player's turn (and if so, how many per turn).
 - Gold costs, and the balance of effects and recipes (playtests).
 - Whether the shop sells schematics and potions, as the GDD says.
 - More fights per schematic (#188).
