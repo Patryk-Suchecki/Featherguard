@@ -1,7 +1,7 @@
 #target illustrator
 
 // Draws every potion icon as editable vectors in a new document and exports 256 px PNGs to Assets/Art/UI/Potions.
-// A potion's frame takes the rarity of its rarest ingredient; the bottle shape, liquid colour and label sign tell potions apart.
+// Potions have no rarity, so their icons have no frame; the bottle shape, liquid colour and label sign tell them apart.
 var OUT = new File($.fileName).parent.parent.parent.fsName.replace(/\\/g, "/") + "/Assets/Art/UI/Potions/";
 #include "icon_kit.jsx"
 
@@ -10,10 +10,10 @@ var LABEL = "#E9DFC4";
 var CORK = "#8A6A48";
 
 var ROWS = [
-    [["HealingDraught", "common", drawHealingDraught], ["CleansingBrew", "uncommon", drawCleansingBrew], ["WolfsFury", "uncommon", drawWolfsFury], ["SheafWard", "rare", drawSheafWard], ["BogMist", "uncommon", drawBogMist]],
-    [["WispOil", "rare", drawWispOil], ["FireFlask", "common", drawFireFlask], ["StormDraught", "rare", drawStormDraught], ["HeartwoodBrew", "rare", drawHeartwoodBrew], ["GromnicaLight", "uncommon", drawGromnicaLight]],
-    [["FirebirdDraught", "epic", drawFirebirdDraught], ["DeadWaterTincture", "epic", drawDeadWaterTincture], ["KupalaDewElixir", "epic", drawKupalaDewElixir]],
-    [["LivingWaterElixir", "legendary", drawLivingWaterElixir], ["FernFlowerElixir", "legendary", drawFernFlowerElixir]]
+    [["HealingDraught", null, drawHealingDraught], ["CleansingBrew", null, drawCleansingBrew], ["WolfsFury", null, drawWolfsFury], ["SheafWard", null, drawSheafWard], ["BogMist", null, drawBogMist]],
+    [["WispOil", null, drawWispOil], ["FireFlask", null, drawFireFlask], ["StormDraught", null, drawStormDraught], ["HeartwoodBrew", null, drawHeartwoodBrew], ["GromnicaLight", null, drawGromnicaLight]],
+    [["FirebirdDraught", null, drawFirebirdDraught], ["DeadWaterTincture", null, drawDeadWaterTincture], ["KupalaDewElixir", null, drawKupalaDewElixir]],
+    [["LivingWaterElixir", null, drawLivingWaterElixir], ["FernFlowerElixir", null, drawFernFlowerElixir]]
 ];
 
 buildIcons(ROWS, OUT);

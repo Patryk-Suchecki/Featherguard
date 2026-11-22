@@ -1,4 +1,4 @@
-// Shared by the icon scripts: colours, rarity frames, drawing helpers and the artboard and PNG export.
+// Shared by the icon scripts: colours, rarity frames, drawing helpers and the artboard and PNG export. An entry without a rarity gets no frame.
 
 var SIZE = 256;
 var GAP = 64;
@@ -36,7 +36,7 @@ function buildIcons(rows, out) {
             var layer = doc.layers.add();
             layer.name = entry[0];
             var c = { x: (rect[0] + rect[2]) / 2, y: (rect[1] + rect[3]) / 2, layer: layer };
-            drawFrame(c, entry[1]);
+            if (entry[1]) drawFrame(c, entry[1]);
             if (entry[2]) entry[2](c);
             names.push(entry[0]);
         }

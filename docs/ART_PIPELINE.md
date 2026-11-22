@@ -172,7 +172,7 @@ The whole Stronghold is on screen at once, so the budget is shared.
 
 The material icons, the potion icons and the rarity frames are vector art drawn by Illustrator scripts, so each set stays consistent and can be redrawn at once.
 
-- **Source:** `Art/Illustrator/icon_kit.jsx` holds the colours, the frame per rarity, the drawing helpers and the export; `material_icons.jsx` and `potion_icons.jsx` hold one drawing function per icon and write to `Assets/Art/UI/Materials` and `Assets/Art/UI/Potions`. A potion takes the frame of its rarest ingredient.
+- **Source:** `Art/Illustrator/icon_kit.jsx` holds the colours, the frame per rarity, the drawing helpers and the export; `material_icons.jsx` and `potion_icons.jsx` hold one drawing function per icon and write to `Assets/Art/UI/Materials` and `Assets/Art/UI/Potions`. Potions have no rarity, so their icons have no frame.
 - **Run it:** in Illustrator, File > Scripts > Other Script..., or `Illustrator.exe Art/Illustrator/material_icons.jsx`. It opens a new document with one artboard and layer per icon (editable vectors) and exports a 256 × 256 PNG per artboard to `Assets/Art/UI/Materials` (`Frame_<Rarity>.png` for the empty frames, `<Material>.png` for the icons).
 - **Redrawing:** the PNGs are lockable LFS files and read-only until locked; lock them (`git lfs lock`) before running a script again, or Illustrator cannot overwrite them.
 - **Import:** the PNGs are sprites (`TextureImporterType.Sprite`, single, no mipmaps, alpha is transparency), like the generated icons.
