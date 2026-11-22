@@ -35,6 +35,7 @@ namespace Featherguard.Battle
 
         public bool Has(StatusDefinition definition) => statuses.Any(s => s.Definition == definition);
         public bool Any(Func<StatusDefinition, bool> predicate) => statuses.Any(s => predicate(s.Definition));
+        public bool Blocks(StatusDefinition definition) => statuses.Any(s => s.Definition.Blocks(definition));
         public int Potency(Func<StatusDefinition, bool> predicate) => statuses.Where(s => predicate(s.Definition)).Sum(s => s.DamagePerTurn);
 
         public IEnumerable<StatModifier> Modifiers => statuses.SelectMany(s => s.Definition.Modifiers);

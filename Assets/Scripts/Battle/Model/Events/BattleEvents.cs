@@ -110,6 +110,11 @@ namespace Featherguard.Battle
         public BattleUnit Unit;
     }
 
+    public sealed class Revived : BattleEvent
+    {
+        public BattleUnit Unit;
+    }
+
     public sealed class Enraged : BattleEvent
     {
         public BattleUnit Boss;

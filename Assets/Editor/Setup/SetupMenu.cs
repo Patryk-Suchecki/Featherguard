@@ -41,6 +41,7 @@ namespace Featherguard.EditorTools
             EncounterCatalog.Build(seeder, units);
             var world = WorldCatalog.Build(seeder);
             var materials = MaterialCatalog.Build(seeder, world);
+            var potions = PotionCatalog.Build(seeder, statuses, materials, world);
             var meta = seeder.Seed<MetaConfig>($"{ContentPaths.Data}/MetaConfig.asset", null);
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
@@ -53,6 +54,7 @@ namespace Featherguard.EditorTools
                 c.meta = meta;
                 c.world = world;
                 c.materials = materials;
+                c.potions = potions;
                 c.flashMaterial = art.Flash;
                 c.particleMaterial = art.Particle;
                 c.ringMaterial = art.Ring;

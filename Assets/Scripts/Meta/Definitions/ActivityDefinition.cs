@@ -21,5 +21,7 @@ namespace Featherguard.Meta
         [Min(0)] public int availableAfter;
         [Tooltip("The one kind of reward winning it gives.")]
         public RewardKind reward;
+        [Tooltip("Schematic fights only: the recipe winning it teaches. Hidden until the fight is won.")]
+        public RecipeDefinition schematic;
     }
 }

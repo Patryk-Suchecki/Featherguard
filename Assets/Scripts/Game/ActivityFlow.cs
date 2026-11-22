@@ -17,8 +17,9 @@ namespace Featherguard.Game
         readonly MaterialStorage storage;
         readonly MaterialConfig materials;
         readonly IRandomSource random;
+        readonly RecipeBook recipes;
 
-        public ActivityFlow(BattleHud hud, WorldProgress world, ActivityDefinition activity, float afterVictory, MaterialStorage storage, MaterialConfig materials, IRandomSource random)
+        public ActivityFlow(BattleHud hud, WorldProgress world, ActivityDefinition activity, float afterVictory, MaterialStorage storage, MaterialConfig materials, IRandomSource random, RecipeBook recipes)
         {
             this.hud = hud;
             this.world = world;
@@ -27,6 +28,7 @@ namespace Featherguard.Game
             this.storage = storage;
             this.materials = materials;
             this.random = random;
+            this.recipes = recipes;
         }
 
         public IEnumerator Conclude(BattleResult result)
@@ -39,6 +41,7 @@ namespace Featherguard.Game
             var rating = world.Rate(activity);
             var drops = MaterialRewards.Roll(activity, world.DaringMultiplier(rating), materials, random);
             storage.Add(drops);
+            if (activity.reward == RewardKind.Schematic) recipes.Learn(activity.schematic);
             string reward = Reward(rating);
             bool story = world.IsStoryMission(activity);
             world.Win(activity);
@@ -50,6 +53,8 @@ namespace Featherguard.Game
         string Reward(ThreatRating rating)
         {
             if (activity.reward == RewardKind.None) return "No reward";
+            if (activity.reward == RewardKind.Schematic && activity.schematic != null && activity.schematic.potion != null)
+                return $"Schematic learned: {activity.schematic.potion.displayName}";
             string daring = world.IsDaring(rating) ? " (Daring +50%)" : "";
             return activity.reward == RewardKind.Gold
                 ? $"+{ActivityBattle.Gold(activity, world.DaringMultiplier(rating))} gold{daring}"

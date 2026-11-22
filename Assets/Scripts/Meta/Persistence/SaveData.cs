@@ -8,7 +8,9 @@ namespace Featherguard.Meta
     {
         public List<string> party = new();
         public WorldSave world = new();
-        public List<MaterialCount> materials = new();
+        public List<ItemCount> materials = new();
+        public List<ItemCount> potions = new();
+        public List<string> schematics = new();
     }
 
     [Serializable]
@@ -20,7 +22,7 @@ namespace Featherguard.Meta
     }
 
     [Serializable]
-    public class MaterialCount
+    public class ItemCount
     {
         public string id;
         public int count;

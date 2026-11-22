@@ -65,6 +65,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d05d49a148fb71b4daee690a81ea897c, type: 2}
   - {fileID: 11400000, guid: e6b28056a89f0794f9528032d53bf736, type: 2}
   - {fileID: 11400000, guid: be08d211d21d6f94f9a125626388ab60, type: 2}
+  - {fileID: 11400000, guid: b985f469fd0fcf8498bb9fc529cade84, type: 2}
+  - {fileID: 11400000, guid: b6a1f9862eb2dae49b09a48ee626c7a9, type: 2}
+  - {fileID: 11400000, guid: 0010937b964dce74a867d7822b992164, type: 2}
+  - {fileID: 11400000, guid: 5d20f1e72a00cf745bfd88a5b50b971e, type: 2}
   heroSlots:
   - {x: -2.3, y: 0, z: 0.45}
   - {x: -3.7, y: 0, z: -0.55}

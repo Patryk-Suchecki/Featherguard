@@ -32,6 +32,7 @@ namespace Featherguard.Battle
         public bool ConsumedByCriticalHit => Any(b => b.ConsumedByCriticalHit);
         public bool Retaliates => Any(b => b.Retaliates);
         public IEnumerable<StatusApplication> RetaliationStatuses => behaviours.Where(b => b != null).SelectMany(b => b.RetaliationStatuses);
+        public bool Blocks(StatusDefinition status) => Any(b => b.Blocks(status));
         public int StackLimit => stacking == StatusStacking.Stack ? Math.Max(1, maxStacks) : 1;
 
         bool Any(Func<StatusBehaviour, bool> predicate) => behaviours.Any(b => b != null && predicate(b));

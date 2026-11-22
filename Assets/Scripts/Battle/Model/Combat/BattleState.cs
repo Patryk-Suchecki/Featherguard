@@ -93,7 +93,7 @@ namespace Featherguard.Battle
 
         public void TryApplyStatus(BattleUnit actor, BattleUnit target, StatusApplication application, ActionTiming timing = default)
         {
-            if (application.status == null || !target.IsAlive) return;
+            if (application.status == null || !target.IsAlive || target.Statuses.Blocks(application.status)) return;
             if (application.condition == StatusCondition.PerfectTiming && timing.Attack != TimingResult.Perfect) return;
             if (Random.Value > application.chance) return;
             int points = application.status.AbsorbsDamage ? (int)Math.Round(application.potency * actor.Stat(StatType.Healing) * timing.SupportMultiplier(Rules)) : 0;
@@ -101,12 +101,45 @@ namespace Featherguard.Battle
             Log.Emit(new StatusApplied { Target = target, Status = application.status });
         }
 
-        public void GrantShield(BattleUnit actor, BattleUnit target, StatusDefinition shield, int turns, int points)
+        public void GrantShield(BattleUnit actor, BattleUnit target, StatusDefinition shield, int turns, int points) =>
+            GrantShield(actor.Team, target, shield, turns, points);
+
+        public void GrantShield(Team source, BattleUnit target, StatusDefinition shield, int turns, int points)
         {
             if (shield == null || points <= 0 || !target.IsAlive) return;
             var application = new StatusApplication { status = shield, turns = turns };
-            target.Statuses.Apply(application, target.Team == actor.Team, actor.Team, points);
+            target.Statuses.Apply(application, target.Team == source, source, points);
             Log.Emit(new StatusApplied { Target = target, Status = shield });
+        }
+
+        public void ApplyStatus(Team source, BattleUnit target, StatusApplication application)
+        {
+            if (application.status == null || !target.IsAlive || target.Statuses.Blocks(application.status)) return;
+            target.Statuses.Apply(application, target.Team == source, source, application.potency);
+            Log.Emit(new StatusApplied { Target = target, Status = application.status });
+        }
+
+        public void DealDamage(Team source, BattleUnit target, int power)
+        {
+            if (!target.IsAlive) return;
+            var outcome = target.TakeDamage(power);
+            Log.Emit(new Damaged { Target = target, Amount = outcome.Dealt, Absorbed = outcome.Absorbed });
+            AddRage(outcome.Dealt * (source == Team.Heroes ? Rules.heroRagePerDamage : Rules.enemyRagePerDamage));
+            KillIfDead(target);
+        }
+
+        public void HealPercent(BattleUnit target, float fraction)
+        {
+            if (!target.IsAlive) return;
+            int healed = target.ApplyHeal((int)Math.Round(target.MaxHealth * fraction));
+            Log.Emit(new Healed { Target = target, Amount = healed });
+        }
+
+        public void Revive(BattleUnit unit, float fraction)
+        {
+            if (unit.IsAlive) return;
+            unit.SetHealth(Math.Max(1, (int)Math.Round(unit.MaxHealth * fraction)));
+            Log.Emit(new Revived { Unit = unit });
         }
 
         void Retaliate(BattleUnit holder, BattleUnit attacker)
@@ -117,7 +150,7 @@ namespace Featherguard.Battle
             Log.Emit(new Damaged { Source = holder, Target = attacker, Amount = outcome.Dealt, Absorbed = outcome.Absorbed });
             foreach (var application in holder.Statuses.RetaliationStatuses)
             {
-                if (!attacker.IsAlive || application.status == null || Random.Value > application.chance) continue;
+                if (!attacker.IsAlive || application.status == null || attacker.Statuses.Blocks(application.status) || Random.Value > application.chance) continue;
                 attacker.Statuses.Apply(application, true, holder.Team);
                 Log.Emit(new StatusApplied { Target = attacker, Status = application.status });
             }
@@ -131,6 +164,13 @@ namespace Featherguard.Battle
             Log.Emit(new StatusTicked { Unit = unit, Status = status.Definition, Amount = outcome.Dealt, Absorbed = outcome.Absorbed });
             AddRage(outcome.Dealt * (status.Source == Team.Heroes ? Rules.heroRagePerDamage : Rules.enemyRagePerDamage));
             KillIfDead(unit);
+        }
+
+        public void RemoveStatus(BattleUnit unit, StatusDefinition status)
+        {
+            if (status == null || !unit.IsAlive || !unit.Statuses.Has(status)) return;
+            unit.Statuses.RemoveWhere(s => s == status);
+            Log.Emit(new Cleansed { Unit = unit });
         }
 
         public void Cleanse(BattleUnit unit)

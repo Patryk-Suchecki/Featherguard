@@ -106,14 +106,14 @@ namespace Featherguard.EditorTools
         {
             ActivityType.SingleFight => RewardKind.Gold,
             ActivityType.WavesFight => RewardKind.Exp,
-            ActivityType.PuzzleFight => RewardKind.Schematic,
+            ActivityType.PuzzleFight => RewardKind.Exp,
             ActivityType.EliteFight => RewardKind.Materials,
             _ => RewardKind.Loot,
         };
 
         static void FillRewards(IEnumerable<ActivityDefinition> activities)
         {
-            foreach (var activity in activities.Where(a => a != null && a.reward == RewardKind.None))
+            foreach (var activity in activities.Where(a => a != null && (a.reward == RewardKind.None || a.reward == RewardKind.Schematic && a.schematic == null)))
             {
                 activity.reward = SideReward(activity.type);
                 EditorUtility.SetDirty(activity);
