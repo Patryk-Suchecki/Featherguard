@@ -10,7 +10,7 @@ namespace Featherguard.Game
 {
     public static class DebugTools
     {
-        const int MaterialsPerTap = 5;
+        static readonly int[] MaterialAmounts = { 1, 5, 10 };
 
         static DebugMenu menu;
         static BattleController battle;
@@ -30,7 +30,7 @@ namespace Featherguard.Game
 
         static DebugAction[] AddMaterials(GameConfig config) =>
             SavedGame.Storage(config).All
-                .Select(m => new DebugAction($"+{MaterialsPerTap} {m.displayName}", () => SavedGame.Storage(config).Add(m, MaterialsPerTap), keepOpen: true, icon: Ui.Sprite(m.name)))
+                .Select(m => new DebugAction(m.displayName, MaterialAmounts, amount => SavedGame.Storage(config).Add(m, amount), Ui.Sprite(m.name)))
                 .ToArray();
 
         public static void Track(BattleController controller) => battle = controller;

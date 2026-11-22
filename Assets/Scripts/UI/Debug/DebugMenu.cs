@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ namespace Featherguard.UI
         public readonly bool KeepOpen;
         public readonly Sprite Icon;
         public readonly IReadOnlyList<DebugAction> Children;
+        public readonly IReadOnlyList<int> Amounts;
+        public readonly Action<int> RunAmount;
         readonly Func<bool> available;
 
         public DebugAction(string label, Action run, bool confirm = false, Func<bool> available = null, bool keepOpen = false, Sprite icon = null)
@@ -29,6 +32,15 @@ namespace Featherguard.UI
         {
             Label = label;
             Children = children;
+        }
+
+        public DebugAction(string label, IReadOnlyList<int> amounts, Action<int> runAmount, Sprite icon = null)
+        {
+            Label = label;
+            Amounts = amounts;
+            RunAmount = runAmount;
+            KeepOpen = true;
+            Icon = icon;
         }
 
         public bool IsAvailable => available == null || available();
@@ -51,6 +63,7 @@ namespace Featherguard.UI
         static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
         static readonly Color UnavailableColor = new(0.5f, 0.5f, 0.55f);
         static readonly Color StatusColor = new(0.6f, 0.86f, 0.5f);
+        static readonly Color RowColor = new(0.1f, 0.11f, 0.15f, 1f);
 
         readonly List<(DebugAction Action, Button Button, Text Label)> rows = new();
         readonly DebugAction back = new("< Back", (Action)null);
@@ -101,7 +114,7 @@ namespace Featherguard.UI
             bool grid = actions.Count >= GridFrom;
             int columns = grid ? 2 : 1;
             float rowHeight = grid ? GridRowHeight : RowHeight;
-            float width = grid ? 780f : 560f;
+            float width = grid ? (actions.Any(a => a.Amounts != null) ? 1080f : 780f) : 560f;
             int lines = (actions.Count + columns - 1) / columns + (group != null ? 1 : 0);
 
             var rect = Ui.Rect("Panel", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(IconSize + 10f, -2f),
@@ -132,7 +145,8 @@ namespace Featherguard.UI
         void Row(RectTransform parent, DebugAction action, float x, float y, float width, float height)
         {
             var rect = Ui.Rect(action.Label, parent, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(x, y), new Vector2(width, height));
-            var button = Ui.Button(rect, ButtonColor, () => Press(action));
+            var button = action.Amounts == null ? Ui.Button(rect, ButtonColor, () => Press(action)) : null;
+            if (button == null) Ui.Panel(rect, RowColor);
             var label = Ui.Label(Ui.Stretch("Label", rect), action.Children != null ? $"{action.Label} >" : action.Label,
                 height < RowHeight ? 24 : 30, action.Icon != null ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter, TextColor);
             if (action.Icon != null)
@@ -142,7 +156,39 @@ namespace Featherguard.UI
                 icon.preserveAspect = true;
                 label.rectTransform.offsetMin = new Vector2(height + 6f, 0f);
             }
+            if (button == null)
+            {
+                AmountButtons(rect, action, height, label);
+                return;
+            }
             rows.Add((action, button, label));
+        }
+
+        void AmountButtons(RectTransform row, DebugAction action, float height, Text label)
+        {
+            const float width = 68f;
+            const float gap = 6f;
+            int count = action.Amounts.Count;
+            for (int i = 0; i < count; i++)
+            {
+                int amount = action.Amounts[i];
+                var rect = Ui.Rect($"x{amount}", row, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-gap - (count - 1 - i) * (width + gap), 0f), new Vector2(width, height - 12f));
+                var button = Ui.Button(rect, ButtonColor, () => PressAmount(action, amount));
+                rows.Add((action, button, Ui.Label(Ui.Stretch("Label", rect), $"x{amount}", 22, TextAnchor.MiddleCenter, TextColor)));
+            }
+            label.rectTransform.offsetMax = new Vector2(-(count * (width + gap) + gap), 0f);
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.resizeTextForBestFit = true;
+            label.resizeTextMinSize = 16;
+            label.resizeTextMaxSize = label.fontSize;
+        }
+
+        void PressAmount(DebugAction action, int amount)
+        {
+            Disarm();
+            status.text = $"Done: +{amount} {action.Label}";
+            action.RunAmount(amount);
         }
 
         void Refresh()
