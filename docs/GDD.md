@@ -189,11 +189,11 @@ The shop can also offer equipment.
 | Epic | Firebird Feather, Dead Water, Serpent King's Crown, Kupala Dew |
 | Legendary | Fern Flower, Living Water, Alatyr Stone |
 
-**Schematics** are a kind of level reward and can also be bought in the shop. A schematic unlocks a recipe: without it the matching item cannot be forged, or the matching potion brewed.
+**Schematics** are a kind of level reward and can also be bought in the shop. A schematic unlocks a recipe: without it the matching item cannot be forged, or the matching potion brewed. A schematic is the fixed reward of predefined side activities; once it is won, they leave the pool. The map and the preparation only show that a fight rewards a schematic, not which one. Some schematics are in the pool from the start, others join at a story threshold.
 
 **Forge:** the player picks a recipe unlocked by a schematic, puts in materials and gold, and plays a forging minigame. The forged item goes to the Storage. *TODO:* the minigame; the current proposal is a timing ring like the attack's, with three strikes (see Open questions).
 
-**Potions** (healing, cleansing, Rage) are brewed at the Wise Woman's Hut from a schematic, materials and gold. They are single-use. The player takes at most 3 potions into a battle, chosen beforehand from the potion bag. In battle, using a potion replaces a hero's action.
+**Potions** (healing, cleansing, Rage, protection, thrown potions against enemies, and rare ones that revive; the list and recipes are in [`design/potions.md`](design/potions.md)) are brewed at the Wise Woman's Hut from a schematic, materials and gold; the Healing Draught needs no schematic. They are single-use. The player takes at most 3 potions into a battle, chosen beforehand from the potion bag. In battle the picked potions sit in a tile in the lower left corner, and during the player's turn the player drags a potion onto its target with no timing QTE; it is an extra action that uses up no hero's action.
 
 **Shop:** a merchant with 3 slots, each holding a random item from the shop's pool: materials, schematics, equipment or potions. The offer changes on a timer, for now every 24 hours.
 
