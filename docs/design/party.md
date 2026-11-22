@@ -35,8 +35,8 @@ The player builds a party for each fight from the heroes they have collected. Th
 
 ## 5. Connections
 
-- **Run:** `RunSession.Start` receives the party.
-- **Save:** the party lives in the same `SaveData` as feathers and perks (`MetaProgression.CreateRoster`), so one save file holds everything. Both scenes share one `MetaProgression` (`SavedGame`).
+- **Battles:** every activity battle takes the party (`ActivityBattle.CreateSetup`); the preparation screen leads to the Camp to change it.
+- **Save:** the party lives in the same `SaveData` as the world progress (`MetaProgression.CreateRoster`), so one save file holds everything. All scenes share one `MetaProgression` (`SavedGame`).
 - **Stronghold:** only party members stand at the fire in the Stronghold view; all joined heroes sit in the Camp view.
 - **Later:** levels, equipment, Storage and potions plug into the hero details and the Camp buttons.
 

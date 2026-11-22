@@ -21,8 +21,6 @@ namespace Featherguard.EditorTools
         public const string StatusVisuals = "Assets/Data/StatusVisuals";
         public const string Encounters = "Assets/Data/Encounters";
         public const string MaterialData = "Assets/Data/Materials";
-        public const string Upgrades = "Assets/Data/Upgrades";
-        public const string Perks = "Assets/Data/Perks";
         public const string PostProfile = "Assets/Settings/BattlePostFX.asset";
         public const string Scene = "Assets/Scenes/Battle.unity";
         public const string StrongholdScene = "Assets/Scenes/Stronghold.unity";

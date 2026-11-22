@@ -20,7 +20,6 @@ MonoBehaviour:
   campSeats: 6
   world: {fileID: 11400000, guid: 25c7db4aef7e110468b43315f3f1c4fe, type: 2}
   rules: {fileID: 11400000, guid: 7a0991bee5cbeae4d81833ee3347dd32, type: 2}
-  run: {fileID: 11400000, guid: e67e2518bf9368a40b5516fbf02a1ed4, type: 2}
   meta: {fileID: 11400000, guid: 37228b4d9e980d24baf325b02f23db28, type: 2}
   materials: {fileID: 11400000, guid: 9c702d17526b32549812a250aba73c99, type: 2}
   presentation: {fileID: 11400000, guid: 0aea73a07171c0344910f9e9aebc697a, type: 2}

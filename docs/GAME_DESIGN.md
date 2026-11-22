@@ -4,9 +4,8 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
 
 ## Pillars
 
-- Short turn-based battles: a party of three birds against waves of lizards.
-- A run of 9 battles ending with a boss. Between battles the player gambles for power.
-- Gambling uses in-game currency only: gold during a run, feathers between runs. No real money.
+- Short turn-based battles: a party of three heroes against waves of enemies (the bird and lizard art of the prototype stands in until their own is made).
+- A loop of Stronghold → world map → battle preparation → battle, following the story across the lands (see Game flow).
 - Built for mobile: landscape, touch, one-handed tapping.
 
 ## Battle
@@ -19,7 +18,7 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - The turn ends when every hero has acted. Enemies then act one by one in the order they entered the battle (summons last); stunned enemies skip.
 - **Rage (`BattleRules`):**
   - one meter shared by the party, max 100;
-  - it starts every battle at 0, unless a Rage slot reward set a starting value;
+  - it starts every battle at 0;
   - it fills by 0.45 per point of damage a hero deals (× that hero's RageGain) and by 0.25 per point of damage the enemies deal to the party;
   - a hero special consumes the whole meter. Enemy specials do not use the meter.
 - **Damage:** power × attacker's Damage stat × timing × random 90–110%, then crit (15% base chance plus the target's CritChanceTaken, ×1.5 base damage), then × the target's DamageTaken stat, rounded once. A Shield soaks what it can; the rest is taken from health. Lifesteal heals the attacker by that share of the damage that reached health. Rage only counts damage that reached health.
@@ -46,7 +45,6 @@ Source of truth for what is in the game **now**. The agreed target design is [`G
   - heals the most wounded ally below 60% HP (75% chance) or buffs an ally that lacks the buff (45% chance);
   - otherwise attacks, preferring wounded heroes and heroes it can finish;
   - must attack a taunting hero.
-- **Gold in battle:** 3 gold per kill, multiplied by the run's gold bonus.
 
 ### Heroes
 
@@ -78,11 +76,11 @@ The four heroes come from the new roster and are the only heroes at the campfire
 | Spitter | 65 | Venom – bolt 9, 70% Poison (6/turn, 2 turns) |
 | Shieldbearer (Guard) | 110 | Spear Thrust – melee 14; Shield Wall – Shield (30) on an ally + Taunt on self |
 
-Each encounter also scales enemy HP and damage, as listed in the Run section.
+Each encounter also scales enemy HP and damage, as listed in the Encounters section.
 
-**Bies (test only, not in the run):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy, Bleed (6 per turn, 3 turns). On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. Howl is a placeholder until Sic the Pack and the Wolves exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
+**Bies (test encounters and the map's Elite fights):** the first hand-made 3D character, the Rye Fields elite of the target design. 260 HP. An Elite: two actions per enemy turn. Rending Claws – melee 24, heavy, Bleed (6 per turn, 3 turns). On its first turn and every 3rd turn after, Howl (Weaken on all heroes) replaces its second action. Howl is a placeholder until Sic the Pack and the Wolves exist. It only appears in the `BiesTest` encounter; to fight it in the editor, select `Assets/Data/Encounters/BiesTest` and run **Featherguard > Test Encounter > Use Selected**; every battle in the editor then uses that encounter until **Featherguard > Test Encounter > Clear**. The choice is stored only on your machine, never in the repo, and builds ignore it.
 
-**Wolf (test only, not in the run):** the Bies' pack and the first hand-made quadruped. 70 HP. Bite – melee 14. On its first turn and every 3rd turn after, Pack Howl (Empower on all its allies, the Bies included) replaces the Bite. Placeholders until Sic the Pack and the enemy archetypes exist. The `BiesPack` encounter puts the Bies in the middle slot with a Wolf on each side (wave order Wolf, Bies, Wolf); pick it the same way as `BiesTest`.
+**Wolf (test encounters and the map's Elite fights):** the Bies' pack and the first hand-made quadruped. 70 HP. Bite – melee 14. On its first turn and every 3rd turn after, Pack Howl (Empower on all its allies, the Bies included) replaces the Bite. Placeholders until Sic the Pack and the enemy archetypes exist. The `BiesPack` encounter puts the Bies in the middle slot with a Wolf on each side (wave order Wolf, Bies, Wolf); pick it the same way as `BiesTest`.
 
 ### Boss: Chieftain
 
@@ -111,9 +109,9 @@ Each encounter also scales enemy HP and damage, as listed in the Run section.
 
 The default duration is 1 turn unless stated otherwise. Bleed is used by the Bies; Burn, Freeze, Curse and Mark exist for the reworked heroes and enemies and use placeholder icons until their own are drawn. The rules follow `docs/design/combat/statuses.md`.
 
-## Run
+## Encounters
 
-Nine encounters (`RunDefinition.asset`):
+Nine encounters (`Assets/Data/Encounters`, seeded by `EncounterCatalog`); the activities on the world map use them as placeholders:
 
 | # | Name | Waves | Enemy HP × / dmg × | Gold |
 |---|---|---|---|---|
@@ -127,75 +125,17 @@ Nine encounters (`RunDefinition.asset`):
 | 8 | Lizard Camp | Shieldbearer, Shaman, Brute → Spitter, Brute, Thug | 1.3 / 1.15 | 25 |
 | 9 | Chieftain (boss) | Thug, Shieldbearer, Thug → Spitter, Chieftain, Shaman | 1.3 / 1.15 | 40 |
 
+## Game flow
+
 - **Start:** the game opens on the Stronghold, its own scene (`Stronghold.unity`, the main screen). It is a 3D camp at night in a light top-down view, seen through mist, with dead trees and graves. Lanterns, glowing windows, the forge fire, a green glow at the Wise Woman's Hut, candles under the Sacred Oak and wisps over the graves light it, and the party stands around the campfire. The player taps a place: the Forge, Wise Woman's Hut, Sacred Oak, Tavern and Shop say "coming soon" for now, as does the Settings button. Tapping the signpost (**Embark**) opens the world map; Embark needs a full party.
 - **Debug menu:** in development builds and the editor, a faint "dbg" button in the top-left corner of every screen opens a debug menu: **Win battle** (only during a battle) ends the battle at once as a victory, **Add materials** opens a list of every material with its icon and x1, x5 and x10 buttons that add that many to the Storage, **Wipe storage** (a second tap confirms) empties it, **Reroll side activities** draws the map's side activities again, and **Reset all progress** (a second tap confirms) wipes the save and returns to the Stronghold. Release builds have no debug menu.
-- **Camp:** tapping the campfire (or a hero at it) flies the camera to the fire. Six fixed seats (`GameConfig.campSeats`) hold the heroes of `GameConfig.heroes` in order; the other seats are empty, "not joined yet". Tapping a hero moves them into or out of the party of 3; a fourth is refused. Holding a hero shows their abilities, with level and equipment "coming soon"; Potions are "coming soon" too. **Storage** opens the materials the player owns, with their icons, counts and names, in the order of `MaterialConfig`. The party is saved with the feathers and perks (first 3 heroes by default) and starts the next run. **Back** returns to the Stronghold. Rules: [`design/party.md`](design/party.md). When a run ends or is abandoned, the game returns to the Stronghold. The buildings are code-built placeholders until their models exist.
-- **World map:** its own scene (`WorldMap.unity`), a tabletop map at night seen from above. The Stronghold sits in the middle, with roads to five lands: Rye Fields, Marshes, Bald Mountain, Old Forest and, beyond the river, Nav. A land opens when the story reaches it; until then mist covers it and its name says Locked, while an open land shows its story progress. Each open land shows its 1 to 3 activities as buttons under its name: the border colour tells the reward (blue EXP, yellow gold, green materials, red loot, cyan schematic, purple unlock, brown the Main quest) and the icon the kind of fight (circle single, two circles waves, clover puzzle, elite, crown boss, flag Main quest), with the threat rating against the party under it; a legend in the corner lists the colours. The next story mission takes one of those places as the **Main quest**. Reward kinds are placeholders set per activity in `WorldCatalog`. Side activities are drawn again after every won mission. Tapping an activity opens its battle preparation. **Prototype run** loads the old battle scene, where the camp screen spends feathers on perks and "Set out!" starts the run with the party. **Back** returns to the Stronghold. Lands and activities live in `Assets/Data/World` with placeholder encounters. Rules: [`design/world-progression.md`](design/world-progression.md).
-- **Battle preparation:** its own scene (`Preparation.unity`): the party stands on a night road facing the first wave of the activity. A panel shows the activity, its kind (with the number of waves for a waves fight), the land and its Law, the threat rating with Daring, the gold reward and the party. **Change party** opens the Camp straight away, and **Back** in the Camp returns to the same preparation. Potions are "coming soon". **Fight** needs a full party and starts the battle with the activity's encounter and the party, without the bird run's camp, rewards or slot machine. **Back** returns to the map. The chosen activity is saved, so the flow survives a restart.
+- **Camp:** tapping the campfire (or a hero at it) flies the camera to the fire. Six fixed seats (`GameConfig.campSeats`) hold the heroes of `GameConfig.heroes` in order; the other seats are empty, "not joined yet". Tapping a hero moves them into or out of the party of 3; a fourth is refused. Holding a hero shows their abilities, with level and equipment "coming soon"; Potions are "coming soon" too. **Storage** opens the materials the player owns, with their icons, counts and names, in the order of `MaterialConfig`. The party is saved (first 3 heroes by default) and goes into every activity battle. **Back** returns to the Stronghold. Rules: [`design/party.md`](design/party.md). The buildings are code-built placeholders until their models exist.
+- **World map:** its own scene (`WorldMap.unity`), a tabletop map at night seen from above. The Stronghold sits in the middle, with roads to five lands: Rye Fields, Marshes, Bald Mountain, Old Forest and, beyond the river, Nav. A land opens when the story reaches it; until then mist covers it and its name says Locked, while an open land shows its story progress. Each open land shows its 1 to 3 activities as buttons under its name: the border colour tells the reward (blue EXP, yellow gold, green materials, red loot, cyan schematic, purple unlock, brown the Main quest) and the icon the kind of fight (circle single, two circles waves, clover puzzle, elite, crown boss, flag Main quest), with the threat rating against the party under it; a legend in the corner lists the colours. The next story mission takes one of those places as the **Main quest**. Reward kinds are placeholders set per activity in `WorldCatalog`. Side activities are drawn again after every won mission. Tapping an activity opens its battle preparation. **Back** returns to the Stronghold. Lands and activities live in `Assets/Data/World` with placeholder encounters. Rules: [`design/world-progression.md`](design/world-progression.md).
+- **Battle preparation:** its own scene (`Preparation.unity`): the party stands on a night road facing the first wave of the activity. A panel shows the activity, its kind (with the number of waves for a waves fight), the land and its Law, the threat rating with Daring, the gold reward and the party. **Change party** opens the Camp straight away, and **Back** in the Camp returns to the same preparation. Potions are "coming soon". **Fight** needs a full party and starts the battle with the activity's encounter and the party. **Back** returns to the map. The chosen activity is saved, so the flow survives a restart.
 - **Activity battles:** a win advances the story when it was the Main quest, draws the side activities again and shows the victory screen with the reward: the gold amount (with Daring) for a gold activity, the materials won for a materials activity, otherwise its kind. Materials are kept in the Storage; gold and the other kinds are not kept yet. A loss grants nothing; **Retry** returns to the preparation and **World map** to the map. Leaving from the pause menu returns to the map. The Law is not applied in combat yet.
 - **Materials:** 22 materials (`Assets/Data/Materials`, seeded by `MaterialCatalog`), each with its icon in its rarity frame: three per land (Common, Uncommon, Rare) and four Epic and three Legendary ones that drop in any land. Winning an activity that rewards materials gives the land's materials: 2 for a single or puzzle fight, 3 for waves or an Elite, 4 for a boss, more with Daring; each is Common, Uncommon or Rare by weight (70 / 25 / 5, Uncommon and Rare rising with the threat level), and the win also has a 2% chance of a universal Epic and a 0.3% chance of a Legendary one. The numbers live in `MaterialConfig`.
-- **Hero HP between battles:** heroes keep their HP from battle to battle. After a win, survivors heal 20% of max HP and fallen heroes return with 30%.
-- **Gold bonus:** kill gold, encounter gold and gold from the slot machine are multiplied by the run's gold bonus (Lucky Penny, Treasurer, Leaky Purse). Losses, purchases and double-or-nothing are not.
-- **Losing:** in the prototype run, a lost battle ends the run. Abandoning the run from the pause menu counts as a loss. Either way the game returns to the Stronghold.
-
-### Reward sequence after a win
-
-1. **Encounter gold:** the value from the table, ×2 after an elite battle, × the gold bonus.
-2. **Slot machine:**
-   - three reels; each reel copies the previous one with a 30% chance, +4% per luck, max 60%;
-   - a pair or triple of a symbol grants its reward, otherwise "Nothing... +5 gold";
-   - symbols:
-
-   | Symbol | Weight | Pair | Triple |
-   |---|---|---|---|
-   | Gold | 30 | +20 gold | +60 gold |
-   | Heart | 20 | heal 25% | full heal |
-   | Card | 18 (+1/luck) | extra card | extra Epic+ card |
-   | Rage | 14 | +40 rage at next battle start | full rage |
-   | Bad luck (skull) | 13 (−2/luck, min 3) | −10 gold | −15% HP, −20 gold |
-   | Gem (needs the Gems perk) | 6 (+1/luck) | +50 gold | MEGA JACKPOT +150 gold |
-3. **Double or nothing:** the stake is the encounter gold (before the gold bonus). It is only offered when the wallet holds at least the stake. Win chance 50%, +3% per luck, max 65%: a win adds the stake again, a loss removes it.
-4. **Card pick:**
-   - three upgrade cards; pick one;
-   - reroll costs 10 gold, +5 for each further reroll in the same reward phase;
-   - after an elite battle this pick is Rare or better;
-   - extra cards won on the slot machine follow, each with its own minimum rarity (Common for a pair, Epic for a triple).
-5. **Path choice:** two of Path (normal battle), Elite, Shop, Chest, Campfire. Before the boss the choice is always Shop or Campfire.
-   - **Elite:** the next battle has enemies ×1.35 stronger, gives double gold and a Rare+ card.
-   - **Shop:** 3 cards, each bought once with gold (Common 25, Rare 45, Epic 80, Legendary 130) or with blood (−10/18/28/40% of current HP for the whole party; blood never drops a hero below 1 HP); healing 30% of max HP for 20 gold, repeatable.
-   - **Chest:** one Epic+ card (Legendary only with the Legends perk) plus a random curse, both applied immediately.
-   - **Campfire:** the party heals 35%.
-
-### Upgrade cards
-
-Each card targets one hero (Hero), the whole party (Party) or the run (Run). A Hero card names its hero when it is drawn, at random. A max HP increase also heals the hero by the HP gained.
-
-**Rarity roll:** base weights Common 60, Rare 28, Epic 10, Legendary 2. Each luck point moves them by −6 / +3 / +2 / +1, and Common never drops below 10. Legendary cards only appear with the Legends perk.
-
-| Rarity | Cards |
-|---|---|
-| Common | Sharp Feathers +15% dmg; Thick Plumage +15% max HP; Keen Eye +6% crit; Warm Nest +20% healing; Down Jacket −10% damage taken; Lucky Penny +15% gold (run); Horseshoe +1 luck (run) |
-| Rare | Fury Blade +25% dmg; Cruel Talons +30% crit damage; Vampire Beak 15% lifesteal; Hot Blood +30% rage gain; Steel Feathers +25% max HP; Four-Leaf Clover +2 luck (run) |
-| Epic | Frenzy +20% dmg, +12% crit; Flock +12% dmg (party); Bastion −20% damage taken (party); Treasurer +40% gold (run) |
-| Legendary | Phoenix +40% max HP, +30% healing; Jackpot +4 luck (run); Forest Wrath +25% dmg, +10% crit (party) |
-| Curses | Frailty −12% max HP (party); Dull Beaks −10% dmg (party); Exposed +15% damage taken (party); Leaky Purse −25% gold (run) |
-
-**Luck** improves slot matches, symbol weights, card rarity and gamble odds.
-
-## Meta progression (Camp)
-
-- **Feathers per run:** 1 per battle won, plus 1 per 50 gold earned, plus 10 for completing the run. Earned gold counts kills, encounters and slot machine gold; double-or-nothing winnings and starting gold from Purse do not count. Feathers are awarded for losses and abandoned runs too.
-- **Perk costs:** a perk costs its base cost × (current level + 1).
-- **Save file:** `featherguard_save.json` in the persistent data path.
-
-| Perk | Effect per level | Max level | Base cost |
-|---|---|---|---|
-| Tough Feathers | +6% party max HP | 5 | 3 |
-| Sharp Beaks | +5% party damage | 5 | 3 |
-| Horseshoe | +1 starting luck | 3 | 5 |
-| Purse | +15 starting gold | 4 | 2 |
-| Gems | Adds the Gem slot symbol | 1 | 8 |
-| Legends | Adds Legendary cards | 1 | 10 |
+- **Battle without an activity:** pressing Play in the Battle scene with no chosen activity opens the world map, unless a test encounter is set (**Featherguard > Test Encounter**), which the battle then fights. A test encounter also replaces the encounter of any activity battle in the editor.
+- **Save:** `featherguard_save.json` in the persistent data path keeps the party, the story progress, the chosen activity, the map's side activities and the materials in the Storage.
 
 ## Presentation
 
@@ -217,5 +157,5 @@ Each card targets one hero (Hero), the whole party (Party) or the run (Run). A H
   Before each damaging enemy action the game waits a random 0.4–1.2 s, then flashes BLOCK! over the hero 0.25 s before the hit; a tap before the flash is wasted. GOOD / PERFECT! (or BLOCK / PERFECT BLOCK!) pops up over the unit, with a placeholder sound from `SfxSynth`: a click for a good action, a metal clank for any block, and a bright chime on top of either for a perfect result. The enemy only moves and strikes after the block is judged; matching the cue to the animation comes with #19. With the switch off, every attack and block is a Miss and enemy turns don't wait.
 - **Icons and sounds:** procedural, generated by `IconFactory` and `SfxSynth`.
 - **Timing:** feedback timings live in `BattlePresentationConfig.asset`. Hitstop, camera shake and popups are configured in `GameConfig.feedback`.
-- **UI:** landscape, 1920×1080 reference resolution, safe area, generous tap tolerance, pause menu with sound toggle and an option to abandon the run.
+- **UI:** landscape, 1920×1080 reference resolution, safe area, generous tap tolerance, pause menu with sound toggle and an option to leave the battle for the world map.
 

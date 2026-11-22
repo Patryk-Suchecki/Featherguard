@@ -2,7 +2,6 @@ using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Feedback;
 using Featherguard.Meta;
-using Featherguard.Run;
 using Featherguard.UI;
 using UnityEngine;
 
@@ -19,7 +18,6 @@ namespace Featherguard.Game
         [Tooltip("Lands, story order and side activities of the world map.")]
         public WorldDefinition world;
         public BattleRules rules;
-        public RunDefinition run;
         public MetaConfig meta;
         [Tooltip("Every material, and how fights reward them.")]
         public MaterialConfig materials;
