@@ -4,7 +4,6 @@
     "references": [
         "Featherguard.UI",
         "Featherguard.Battle.Presentation",
-        "Featherguard.Run",
         "Featherguard.Meta",
         "Featherguard.Battle",
         "Featherguard.Feedback",

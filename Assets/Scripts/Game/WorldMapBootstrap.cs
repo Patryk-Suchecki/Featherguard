@@ -31,7 +31,7 @@ namespace Featherguard.Game
 
             foreach (var land in lands)
                 land.SetOpen(world.IsOpen(land.Land));
-            gameObject.AddComponent<WorldMapHud>().Init(sceneCamera, lands.Select(DescribeLand).ToList(), world.StoryWon, world.StoryCount, Back, Prototype);
+            gameObject.AddComponent<WorldMapHud>().Init(sceneCamera, lands.Select(DescribeLand).ToList(), world.StoryWon, world.StoryCount, Back);
         }
 
         MapLand DescribeLand(WorldMapLand land)
@@ -73,14 +73,6 @@ namespace Featherguard.Game
             leaving = true;
             FeedbackHub.Ui(SfxId.Whoosh);
             SceneManager.LoadScene(GameScenes.Stronghold);
-        }
-
-        void Prototype()
-        {
-            if (leaving) return;
-            leaving = true;
-            FeedbackHub.Ui(SfxId.Rage);
-            SceneManager.LoadScene(GameScenes.Battle);
         }
     }
 }

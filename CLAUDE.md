@@ -1,6 +1,6 @@
 # Featherguard
 
-Original turn-based mobile RPG in a dark Slavic folklore setting, fully 3D; the target design is `docs/GDD.md`. The current build is an earlier prototype (a squad of birds fights lizards, with gambling rewards between battles) described in `docs/GAME_DESIGN.md`. Its setting and gambling layer will be removed entirely as the game is reworked. Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
+Original turn-based mobile RPG in a dark Slavic folklore setting, fully 3D; the target design is `docs/GDD.md`. The current build is an earlier prototype being reworked towards it, described in `docs/GAME_DESIGN.md`: the Stronghold → world map → battle loop with the new heroes, while the bird and lizard art of the prototype stands in until their own is made. The gambling layer is gone, and the bird setting will be removed entirely as the game is reworked. Unity 6000.6.2f1, URP, uGUI built from code, Input System, landscape mobile.
 
 Two people develop this repo, each with their own Claude. These rules are shared; follow them even when a request seems to imply otherwise, and say so if a request conflicts with them.
 
@@ -16,31 +16,30 @@ Every layer is its own assembly, so the compiler rejects a reference that goes t
 | Battle model | `Featherguard.Battle` | Scripts/Battle/Definitions, Scripts/Battle/Model | Pure C# battle: `BattleModel` resolves synchronously and returns `BattleEvent` lists. Definitions hold rules only. | Core |
 | Feedback | `Featherguard.Feedback` | Scripts/Feedback | Combat feedback: audio, VFX, hitstop, camera shake | Core |
 | Battle presentation | `Featherguard.Battle.Presentation` | Scripts/Battle/Presentation | `BattlePresenter` routes events to handlers (`UnitStage`, `BattleAnnouncer`, `ActionPlayback`) that play them through `UnitView`s, `PlayerCommands` handles input, `BattleController` glues model and presenter. `AbilityVisuals`, `UnitVisuals` and `StatusVisuals` hold how abilities, units and statuses look and sound; `BattleVisuals` finds them. | Battle, Feedback, Core |
-| Run | `Featherguard.Run` | Scripts/Run | `RunSession`, party, wallet, upgrade deck; `Run/Rewards` holds reward logic | Battle, Core |
-| Meta | `Featherguard.Meta` | Scripts/Meta | Perks and feathers, hero roster, world progress (`WorldProgress`), `ISaveStore` | Run, Battle, Core |
-| UI | `Featherguard.UI` | Scripts/UI | HUD, reward screens and camp, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Run, Meta, Battle, Feedback, Core |
-| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen), `WorldMapBootstrap` (world map) and `PreparationBootstrap` (battle preparation) composition roots, `ActivityFlow` (the result of an activity battle), `DebugTools` (the options of the debug menu), `RunFlow` (victory, rewards, abandoning a run), `GameScenes`, `GameConfig` | everything above |
+| Meta | `Featherguard.Meta` | Scripts/Meta | Hero roster, world progress (`WorldProgress`), activity battles (`ActivityBattle`), `ISaveStore` | Battle, Core |
+| UI | `Featherguard.UI` | Scripts/UI | Battle HUD, the Stronghold, Camp, world map, preparation and result screens, and the debug menu, all built in code. UI only displays and forwards input; it never contains game rules. | Battle.Presentation, Meta, Battle, Feedback, Core |
+| Game | `Featherguard.Game` | Scripts/Game | `GameBootstrap` (battle scene), `StrongholdBootstrap` (Stronghold scene, the main screen), `WorldMapBootstrap` (world map) and `PreparationBootstrap` (battle preparation) composition roots, `ActivityFlow` (the result of an activity battle), `DebugTools` (the options of the debug menu), `GameScenes`, `GameConfig` | everything above |
 
 `Featherguard.Editor` (Assets/Editor) and `Featherguard.Tests.EditMode` (Assets/Tests/EditMode) reference the layers they need.
 
 Layer rules:
 - References only go down the table: a layer never references one below it in the table or beside it unless listed. Never add a reference to work around this; move the type to the right layer instead.
 - Model code never references Presentation, UI, `MonoBehaviour`, `Transform` or `WaitForSeconds`. Definitions (`UnitDefinition`, `AbilityDefinition`, `StatusDefinition`, ...) hold rules and numbers only; animation, colours, sounds, VFX and delivery live in presentation assets such as `AbilityVisuals`.
-- New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it; the presenter shows it through a handler registered on `BattleEventRouter`, not a new branch in existing code. Reward or economy logic goes into `Run/Rewards`, not into UI steps.
-- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `ImpactEffect`, `SlotReward`, `PerkEffect`, `IEnemyBrain`) instead of adding switch statements.
+- New gameplay goes into the model plus a new `BattleEvent` if the presenter must show it; the presenter shows it through a handler registered on `BattleEventRouter`, not a new branch in existing code. Reward or economy logic goes into the Meta model (such as `WorldProgress`), not into UI steps.
+- Extend behaviour through the existing strategies (`AbilityEffect`, `AbilityDelivery`, `ImpactEffect`, `IEnemyBrain`) instead of adding switch statements.
 
 SOLID rules:
 - **One job per class.** A class that decides something (rules, judging, scoring) does not also read input, draw, or play sound; split it so the decision is plain C# with EditMode tests. When a class keeps growing a second concern (a state machine, a cache), move it into its own class.
 - **Open for extension.** New kinds of behaviour are new strategy classes, not new branches in existing code.
 - **Substitutable strategies.** Every implementation of a strategy works wherever the base type is used, with no type checks on the caller's side.
 - **Small interfaces.** Split an interface by its users: a caller depends only on the methods it needs (for example timing cues apart from banners and popups).
-- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `RunFlow` it drives, `StrongholdBootstrap`, `WorldMapBootstrap` or `PreparationBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`, or `PointerGestures` behind `IScreenGestures`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it. `SavedGame` keeps the one `MetaProgression` across scene loads; only composition roots call it, and they pass the progression, roster or world on.
+- **Dependencies come in.** Classes get their collaborators through the constructor or `BattleServices`, created in a composition root (`GameBootstrap` and the `ActivityFlow` it drives, `StrongholdBootstrap`, `WorldMapBootstrap` or `PreparationBootstrap`). Only the composition root, views (MonoBehaviours and code-built UI such as `PauseMenu`) and input adapters behind an interface (such as `PointerUnitPicker` behind `IUnitPicker`, or `PointerGestures` behind `IScreenGestures`) reach static state (`Camera.main`, `Pointer.current`, `Keyboard.current`, `GameClock`, `UnityRandomSource.Shared`); everything else receives it. `SavedGame` keeps the one `MetaProgression` across scene loads; only composition roots call it, and they pass the progression, roster or world on.
 
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
-- Units, UnitVisuals, Abilities, AbilityVisuals, Statuses, StatusVisuals, Encounters, Upgrades, Perks, World/Lands, World/Activities.
-- Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `EconomyConfig`, `SlotConfig`, `RunDefinition`, `MetaConfig`, `GameConfig`, `World/WorldDefinition`.
+- Units, UnitVisuals, Abilities, AbilityVisuals, Statuses, StatusVisuals, Encounters, World/Lands, World/Activities.
+- Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `MetaConfig`, `GameConfig`, `World/WorldDefinition`.
 
 Change balance by editing those assets, not code.
 
@@ -75,7 +74,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 ## Tests
 
-- **EditMode tests** live in `Assets/Tests/EditMode/{Battle,Run,Meta,Support}`. They cover the battle model (full headless simulations), economy, rewards and meta.
+- **EditMode tests** live in `Assets/Tests/EditMode/{Battle,Meta,Support}`. They cover the battle model (full headless simulations), world progress and the rest of the meta model.
 - **Running them** (use whichever is available):
   - In the editor: Window → General → Test Runner → EditMode → Run All.
   - With the optional Unity CLI connected to an open editor: `unity command test run --mode EditMode --filter Featherguard`.
@@ -93,7 +92,7 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 - One main type per file, file named after it. Small closely related types may share a file (event classes, strategy variants such as `DamageEffect`/`HealEffect`, small data structs).
 - Naming: types, methods, properties, events, constants and `static readonly` fields in `PascalCase`; other fields, locals and parameters in `camelCase`; interfaces start with `I`. No `_` prefix and no Hungarian notation.
 - Omit the default `private` modifier on fields and methods. Mark fields `readonly` when possible.
-- Plain C# classes are `sealed` unless designed for inheritance. Strategies (`AbilityEffect`, `SlotReward`, ...) are `[Serializable]` abstract base classes with `sealed` implementations.
+- Plain C# classes are `sealed` unless designed for inheritance. Strategies (`AbilityEffect`, `ImpactEffect`, ...) are `[Serializable]` abstract base classes with `sealed` implementations.
 - ScriptableObject data uses public `camelCase` fields with `[Tooltip]`, `[Range]`, `[Min]` and `[Header]` where they help the inspector.
 - MonoBehaviours use `[SerializeField]` private fields, never public fields, for scene references.
 - Use `var` when the type is obvious, expression-bodied members for one-liners, target-typed `new()`.
@@ -125,12 +124,12 @@ There is no separate decision log. Apply an agreed decision directly in the one 
 
 - Everything is in English: code, identifiers, file names, in-game text, data assets, docs, commits, branches and PRs.
 - Avoid unnecessary comments; names should explain the code.
-- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance`, `RunSession.Current`, `SavedGame` and the debug menu in `DebugTools`.
+- Small, focused classes; constructor injection; configuration in ScriptableObjects; no singletons beyond `FeedbackHub.Instance`, `SavedGame` and the debug menu in `DebugTools`.
 - Every piece of work starts from a GitHub issue. One issue → one branch → one small PR. Never push directly to `main`.
 - Names say what the work does, not which issue it is: no issue numbers in branch names, commit messages or PR titles. The issue number appears only in the PR description, so GitHub links and closes the issue.
-- Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/slot-machine-sounds` or `fix/double-kill-gold`.
-- Commit messages: one short imperative line (max ~60 characters) naming the exact task, for example `Add jackpot sound to slot machine`. No body unless something is surprising.
-- PR title: the task, for example `Add slot machine sounds`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
+- Branch names: `<type>/<short-task>`, where type is `feature`, `fix`, `balance`, `art` or `chore`, for example `feature/block-sounds` or `fix/double-rage-gain`.
+- Commit messages: one short imperative line (max ~60 characters) naming the exact task, for example `Add perfect block sound to the battle`. No body unless something is surprising.
+- PR title: the task, for example `Add block sounds`; the description starts with `Closes #<issue>`. PRs are squash-merged after one approval from the other developer.
 - Issue labels: `gameplay`, `art`, `audio`, `UI`, `bug`, `balance`. Docs and tooling work (`chore/` branches) needs no label.
 - Never add AI attribution: no `Co-Authored-By` trailers, no "Generated with Claude Code" lines, no mention of AI tools in commits, branches or PRs. `.claude/settings.json` disables it; keep it that way.
 

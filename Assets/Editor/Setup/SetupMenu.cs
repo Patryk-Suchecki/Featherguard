@@ -2,6 +2,7 @@ using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
 using Featherguard.Feedback;
 using Featherguard.Game;
+using Featherguard.Meta;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,9 +38,9 @@ namespace Featherguard.EditorTools
                 p.units = unitVisuals;
                 p.statuses = statusVisuals;
             });
-            var run = RunCatalog.Build(seeder, units, art);
+            EncounterCatalog.Build(seeder, units);
             var world = WorldCatalog.Build(seeder);
-            var meta = MetaCatalog.Build(seeder, art);
+            var meta = seeder.Seed<MetaConfig>($"{ContentPaths.Data}/MetaConfig.asset", null);
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
             {
@@ -48,7 +49,6 @@ namespace Featherguard.EditorTools
             {
                 c.rules = rules;
                 c.presentation = presentation;
-                c.run = run;
                 c.meta = meta;
                 c.world = world;
                 c.flashMaterial = art.Flash;
@@ -61,12 +61,14 @@ namespace Featherguard.EditorTools
             });
             AssetDatabase.SaveAssets();
 
-            StrongholdSceneBuilder.Build(config);
-            WorldMapSceneBuilder.Build(config);
-            PreparationSceneBuilder.Build(config);
-            SceneBuilder.Build(config);
+            StrongholdSceneBuilder.Build(LoadConfig());
+            WorldMapSceneBuilder.Build(LoadConfig());
+            PreparationSceneBuilder.Build(LoadConfig());
+            SceneBuilder.Build(LoadConfig());
             MobileSettings.Apply();
             Debug.Log(resetToDefaults ? "Featherguard: data reset to defaults and scene rebuilt." : "Featherguard: scene rebuilt.");
         }
+
+        static GameConfig LoadConfig() => AssetDatabase.LoadAssetAtPath<GameConfig>($"{ContentPaths.Data}/GameConfig.asset");
     }
 }

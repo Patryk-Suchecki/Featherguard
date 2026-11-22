@@ -1,6 +1,5 @@
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
-using Featherguard.Run;
 using Featherguard.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,7 +29,6 @@ namespace Featherguard.Game
         static void ResetProgress(GameConfig config)
         {
             SavedGame.ResetProgress(config);
-            RunSession.End();
             Load(GameScenes.Stronghold);
         }
 

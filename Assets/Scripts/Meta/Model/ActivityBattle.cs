@@ -6,13 +6,16 @@ namespace Featherguard.Meta
 {
     public static class ActivityBattle
     {
-        public static BattleSetup CreateSetup(ActivityDefinition activity, IEnumerable<UnitDefinition> party) => new()
+        public static BattleSetup CreateSetup(ActivityDefinition activity, IEnumerable<UnitDefinition> party) =>
+            CreateSetup(activity.encounter, party, activity.type == ActivityType.EliteFight);
+
+        public static BattleSetup CreateSetup(EncounterDefinition encounter, IEnumerable<UnitDefinition> party, bool elite = false) => new()
         {
-            Encounter = activity.encounter,
+            Encounter = encounter,
             Heroes = party.Select(hero => new HeroLoadout { Definition = hero }).ToList(),
-            EnemyHealthScale = activity.encounter.enemyHealth,
-            EnemyDamageScale = activity.encounter.enemyDamage,
-            Elite = activity.type == ActivityType.EliteFight,
+            EnemyHealthScale = encounter.enemyHealth,
+            EnemyDamageScale = encounter.enemyDamage,
+            Elite = elite,
         };
 
         public static int Waves(ActivityDefinition activity) => activity.encounter != null && activity.encounter.waves != null ? activity.encounter.waves.Length : 0;
