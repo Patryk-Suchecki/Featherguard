@@ -44,7 +44,7 @@ namespace Featherguard.Battle.Presentation
                 yield return null;
             }
             cues.HideTimingCue();
-            Announce(world, run.Result, "PERFECT!", "GOOD");
+            Announce(world, run.Result, "PERFECT!", "GOOD", SfxId.Click);
             done(run.Result);
         }
 
@@ -76,16 +76,17 @@ namespace Featherguard.Battle.Presentation
                 yield return null;
             }
             cues.HideTimingCue();
-            Announce(world, result, "PERFECT BLOCK!", "BLOCK");
+            Announce(world, result, "PERFECT BLOCK!", "BLOCK", SfxId.Block);
             done(result);
         }
 
-        void Announce(Vector3 world, TimingResult result, string perfect, string good)
+        void Announce(Vector3 world, TimingResult result, string perfect, string good, SfxId success)
         {
             if (result == TimingResult.Miss) return;
             bool isPerfect = result == TimingResult.Perfect;
             view.Popup(world, isPerfect ? perfect : good, isPerfect ? PopupKind.Crit : PopupKind.Buff);
-            sounds.Play(isPerfect ? SfxId.Buff : SfxId.Click);
+            sounds.Play(success);
+            if (isPerfect) sounds.Play(SfxId.Perfect, 1f, 0f);
         }
     }
 }
