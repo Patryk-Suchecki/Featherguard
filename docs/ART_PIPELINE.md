@@ -168,6 +168,15 @@ The whole Stronghold is on screen at once, so the budget is shared.
 - Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); it can reuse `export_static_fbx` in `Art/Blender/featherkit.py`. Until then, export by hand with the same settings: **Selected Objects**, Apply Scalings **FBX All**, Forward **−Z**, Up **Y**, Smoothing **Face**, no animation.
 - Lock and commit exactly as for characters (see [Version control](#version-control)): one `art/` PR per model or kit.
 
+## Material icons
+
+The material icons and the rarity frames are vector art drawn by an Illustrator script, so the whole set stays consistent and can be redrawn at once.
+
+- **Source:** `Art/Illustrator/material_icons.jsx`. It holds the frame per rarity, one drawing function per material and the colours.
+- **Run it:** in Illustrator, File > Scripts > Other Script..., or `Illustrator.exe Art/Illustrator/material_icons.jsx`. It opens a new document with one artboard and layer per icon (editable vectors) and exports a 256 × 256 PNG per artboard to `Assets/Art/UI/Materials` (`Frame_<Rarity>.png` for the empty frames, `<Material>.png` for the icons).
+- **Import:** the PNGs are sprites (`TextureImporterType.Sprite`, single, no mipmaps, alpha is transparency), like the generated icons.
+- **Change a look:** change the script and run it again rather than editing a PNG, so the next run keeps the change. A new material is a new drawing function and a row entry.
+
 ## Character workflow
 
 What worked for the Bies, the first hand-made character. Follow it for every new character; the Wolf, the first quadruped, added step 6b and the quadruped notes in step 7.
