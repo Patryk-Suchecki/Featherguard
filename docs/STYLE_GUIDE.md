@@ -228,6 +228,7 @@ The battle scene still uses the bright prototype lighting and sky; matching it t
 - **Readable first:** large, high-contrast text on flat dark or light panels, never over busy art.
 - **Never colour alone:** every state also has a shape, icon or sound (accessibility rule from the GDD).
 - **Icons:** one clear silhouette with an outline, the same light direction as the characters.
+- **Rarity frames:** square slots for items and materials, coloured by rarity (Common grey, Uncommon green, Rare blue, Epic purple, Legendary yellow) and told apart by their corner ornaments too: none, round studs, diamonds, diamonds with a top gem, stars with a crown.
 
 ## Checklist for a new character
 

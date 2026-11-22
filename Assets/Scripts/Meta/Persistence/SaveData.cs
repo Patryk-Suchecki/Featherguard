@@ -8,6 +8,7 @@ namespace Featherguard.Meta
     {
         public List<string> party = new();
         public WorldSave world = new();
+        public List<MaterialCount> materials = new();
     }
 
     [Serializable]
@@ -16,6 +17,13 @@ namespace Featherguard.Meta
         public int storyWon;
         public string chosen = "";
         public List<LandOffer> offers = new();
+    }
+
+    [Serializable]
+    public class MaterialCount
+    {
+        public string id;
+        public int count;
     }
 
     [Serializable]

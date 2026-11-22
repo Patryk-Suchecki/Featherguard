@@ -1,3 +1,4 @@
+using System.Linq;
 using Featherguard.Battle.Presentation;
 using Featherguard.Core;
 using Featherguard.UI;
@@ -8,6 +9,8 @@ namespace Featherguard.Game
 {
     public static class DebugTools
     {
+        static readonly int[] MaterialAmounts = { 1, 5, 10 };
+
         static DebugMenu menu;
         static BattleController battle;
 
@@ -17,10 +20,17 @@ namespace Featherguard.Game
             menu = DebugMenu.Create(new[]
             {
                 new DebugAction("Win battle", () => battle.End(true), available: InBattle),
+                new DebugAction("Add materials", AddMaterials(config)),
+                new DebugAction("Wipe storage", () => SavedGame.Storage(config).Clear(), confirm: true, keepOpen: true),
                 new DebugAction("Reroll side activities", () => RerollSideActivities(config)),
                 new DebugAction("Reset all progress", () => ResetProgress(config), confirm: true),
             });
         }
+
+        static DebugAction[] AddMaterials(GameConfig config) =>
+            SavedGame.Storage(config).All
+                .Select(m => new DebugAction(m.displayName, MaterialAmounts, amount => SavedGame.Storage(config).Add(m, amount), Ui.Sprite(m.name)))
+                .ToArray();
 
         public static void Track(BattleController controller) => battle = controller;
 

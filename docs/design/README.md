@@ -56,3 +56,4 @@ Specified after combat, in this order. Each follows the same structure on a smal
 | 4 | Economy | Currencies, where they come from, what they are spent on and how fast | – |
 | 5 | Stronghold | Buildings, what they offer, how they grow | – |
 | 6 | Screen flow and UI | How the player moves between all of the above | [`screen-flow.md`](screen-flow.md) |
+| 7 | Potions and schematics | Potions, recipes, brewing at the Wise Woman's Hut, schematics, potions in battle | [`potions.md`](potions.md) |

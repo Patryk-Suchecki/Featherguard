@@ -19,6 +19,8 @@ namespace Featherguard.Game
         public WorldDefinition world;
         public BattleRules rules;
         public MetaConfig meta;
+        [Tooltip("Every material, and how fights reward them.")]
+        public MaterialConfig materials;
 
         [Header("Presentation")]
         public BattlePresentationConfig presentation;

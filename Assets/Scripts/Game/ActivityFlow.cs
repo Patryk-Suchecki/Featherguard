@@ -14,13 +14,19 @@ namespace Featherguard.Game
         readonly WorldProgress world;
         readonly ActivityDefinition activity;
         readonly float afterVictory;
+        readonly MaterialStorage storage;
+        readonly MaterialConfig materials;
+        readonly IRandomSource random;
 
-        public ActivityFlow(BattleHud hud, WorldProgress world, ActivityDefinition activity, float afterVictory)
+        public ActivityFlow(BattleHud hud, WorldProgress world, ActivityDefinition activity, float afterVictory, MaterialStorage storage, MaterialConfig materials, IRandomSource random)
         {
             this.hud = hud;
             this.world = world;
             this.activity = activity;
             this.afterVictory = afterVictory;
+            this.storage = storage;
+            this.materials = materials;
+            this.random = random;
         }
 
         public IEnumerator Conclude(BattleResult result)
@@ -31,12 +37,14 @@ namespace Featherguard.Game
                 yield break;
             }
             var rating = world.Rate(activity);
+            var drops = MaterialRewards.Roll(activity, world.DaringMultiplier(rating), materials, random);
+            storage.Add(drops);
             string reward = Reward(rating);
             bool story = world.IsStoryMission(activity);
             world.Win(activity);
             yield return new WaitForSeconds(afterVictory);
             string progress = !story ? null : world.IsStoryComplete ? "The story is complete" : $"Story missions {world.StoryWon} / {world.StoryCount}";
-            ActivityResultScreen.ShowVictory(hud, activity.displayName, reward, progress, () => Load(GameScenes.WorldMap));
+            ActivityResultScreen.ShowVictory(hud, activity.displayName, reward, progress, drops, () => Load(GameScenes.WorldMap));
         }
 
         string Reward(ThreatRating rating)

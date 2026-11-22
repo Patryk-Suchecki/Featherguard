@@ -147,15 +147,15 @@ The game has 5 lands on a single map. At the start only the Rye Fields are open;
 
 **Rewards:** every fight gives one reward, of one kind: materials, gold, loot (equipment), schematic, EXP or unlock. Side activities draw theirs; story missions have their own unique rewards and also advance the story.
 
-A land's **Law** is a combat rule that applies to battles in that land. Every land also has 4 materials (see Materials). The material column is incomplete and will be filled in later; its names are candidates, not yet assigned to a kind:
+A land's **Law** is a combat rule that applies to battles in that land. Every land also has 3 materials of its own, one of each rarity (see Materials):
 
-| Land | Law | Who shines | Material candidates |
+| Land | Law | Who shines | Materials (Common · Uncommon · Rare) |
 |---|---|---|---|
-| Rye Fields | Noon Heat: every 3rd turn, characters without a Shield lose part of their HP | Shields, tempo | iron, flax |
-| Marshes | Depths: some enemies submerge; wisps switch targets | area attacks, cleansing | amber, herbs |
-| Bald Mountain | Storm: lightning strikes a random character; dodge it in a QTE | block, cleansing | ore, thunderstone |
-| Old Forest | Misleading: the party's formation shuffles; enemies stay hidden until Marked | Mark, control | wood, resin |
-| Nav | Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire | fast damage, fire | Nav essence |
+| Rye Fields | Noon Heat: every 3rd turn, characters without a Shield lose part of their HP | Shields, tempo | Flax · Wolf Pelt · Last Sheaf |
+| Marshes | Depths: some enemies submerge; wisps switch targets | area attacks, cleansing | Marsh Herbs · Amber · Wisp in a Jar |
+| Bald Mountain | Storm: lightning strikes a random character; dodge it in a QTE | block, cleansing | Brimstone · Mountain Ore · Thunderstone |
+| Old Forest | Misleading: the party's formation shuffles; enemies stay hidden until Marked | Mark, control | Yew Wood · Tinder Fungus · Old Oak Heartwood |
+| Nav | Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire | fast damage, fire | Bone Ash · Gromnica Wax · Nav Essence |
 
 Progress and forcing:
 - Party strength = party level (the average level of the 3 picked heroes) + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
@@ -182,13 +182,18 @@ The shop can also offer equipment.
 
 **Salvage:** equipment (not potions) can be salvaged. The item is destroyed and the player gets materials back. Items cannot be sold.
 
-**Materials:** every land has 4 kinds of materials: Common, Uncommon, Rare and Legendary. Materials are used to forge equipment and to brew potions. They come from level rewards, Salvage and the shop.
+**Materials:** every land has 3 materials of its own, one Common, one Uncommon and one Rare (listed with the lands). Four Epic and three Legendary materials are universal: any land can drop them, rarely, and Legendary ones more rarely than Epic. Materials are used to forge equipment and to brew potions. They come from level rewards, Salvage and the shop.
 
-**Schematics** are a kind of level reward and can also be bought in the shop. A schematic unlocks a recipe: without it the matching item cannot be forged, or the matching potion brewed.
+| Rarity | Universal materials |
+|---|---|
+| Epic | Firebird Feather, Dead Water, Serpent King's Crown, Kupala Dew |
+| Legendary | Fern Flower, Living Water, Alatyr Stone |
+
+**Schematics** are a kind of level reward and can also be bought in the shop. A schematic unlocks a recipe: without it the matching item cannot be forged, or the matching potion brewed. A schematic is the fixed reward of predefined side activities; once it is won, they leave the pool. The map and the preparation only show that a fight rewards a schematic, not which one. Some schematics are in the pool from the start, others join at a story threshold.
 
 **Forge:** the player picks a recipe unlocked by a schematic, puts in materials and gold, and plays a forging minigame. The forged item goes to the Storage. *TODO:* the minigame; the current proposal is a timing ring like the attack's, with three strikes (see Open questions).
 
-**Potions** (healing, cleansing, Rage) are brewed at the Wise Woman's Hut from a schematic, materials and gold. They are single-use. The player takes at most 3 potions into a battle, chosen beforehand from the potion bag. In battle, using a potion replaces a hero's action.
+**Potions** (healing, cleansing, Rage, protection, thrown potions against enemies, and rare ones that revive; the list and recipes are in [`design/potions.md`](design/potions.md)) are brewed at the Wise Woman's Hut from a schematic, materials and gold; the Healing Draught needs no schematic. They are single-use. The player takes at most 3 potions into a battle, chosen beforehand from the potion bag. In battle the picked potions sit in a tile in the lower left corner, and during the player's turn the player drags a potion onto its target with no timing QTE; it is an extra action that uses up no hero's action.
 
 **Shop:** a merchant with 3 slots, each holding a random item from the shop's pool: materials, schematics, equipment or potions. The offer changes on a timer, for now every 24 hours.
 
@@ -196,6 +201,7 @@ The shop can also offer equipment.
 |---|---|---|
 | Gold | battles | forge, potions, shop |
 | Land materials | levels in that land, Salvage, shop | recipes (forging and brewing) |
+| Universal materials (Epic, Legendary) | rare drops in levels of any land | recipes (forging and brewing) |
 
 ## Art direction and platform
 
@@ -220,8 +226,8 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
 - Which story missions and side activities unlock which heroes.
 - Where equipment of each rarity comes from (level loot, forge, shop).
-- Materials use Common, Uncommon, Rare and Legendary, while equipment uses Common, Rare, Epic and Legendary: should the two scales differ?
-- The names of the 4 materials of each land.
+- Materials use Common, Uncommon, Rare, Epic and Legendary, while equipment uses Common, Rare, Epic and Legendary: should the two scales differ?
+- How rare the universal Epic and Legendary materials are, and whether Salvage or the shop can give them.
 - How Salvage pays out: how many and which materials come back, and whether an item a hero wears can be salvaged.
 - The forging minigame: the proposal is a timing ring like the attack's, with three strikes. Does the result affect the item's quality?
 - Costs of forging and brewing, shop prices, and what happens to a shop slot after a purchase.

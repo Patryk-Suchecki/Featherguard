@@ -21,5 +21,7 @@ namespace Featherguard.Meta
         public WorldProgress CreateWorld(WorldDefinition world, IRandomSource random) => new(world, Data, store, random);
 
         public HeroRoster CreateRoster(IReadOnlyList<UnitDefinition> heroes, int seats) => new(heroes, seats, Data, store);
+
+        public MaterialStorage CreateStorage(MaterialConfig materials) => new(materials != null ? materials.materials : new MaterialDefinition[0], Data, store);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Featherguard.Battle;
+using Featherguard.Meta;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,7 @@ namespace Featherguard.UI
         CanvasGroup group;
         Text partyCount;
         Overlay details;
+        Overlay storage;
 
         public bool DetailsOpen => details != null;
 
@@ -71,7 +73,9 @@ namespace Featherguard.UI
             group.alpha = visible ? 1f : 0f;
             group.blocksRaycasts = visible;
             group.interactable = visible;
-            if (!visible) CloseDetails();
+            if (visible) return;
+            CloseDetails();
+            CloseStorage();
         }
 
         public void Refresh(IReadOnlyList<(string Name, SeatState State)> states, int inParty, int partySize)
@@ -117,6 +121,22 @@ namespace Featherguard.UI
         {
             details?.Close();
             details = null;
+        }
+
+        public void ShowStorage(IReadOnlyList<MaterialStack> owned)
+        {
+            CloseStorage();
+            storage = Overlay.Create(root, "Storage", 0.75f);
+            var close = storage.Dim.gameObject.AddComponent<Button>();
+            close.transition = Selectable.Transition.None;
+            close.onClick.AddListener(CloseStorage);
+            StorageView.Build(storage.Content, owned, CloseStorage);
+        }
+
+        public void CloseStorage()
+        {
+            storage?.Close();
+            storage = null;
         }
 
         void LateUpdate()

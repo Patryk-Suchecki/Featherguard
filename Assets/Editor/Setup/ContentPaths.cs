@@ -8,6 +8,7 @@ namespace Featherguard.EditorTools
         public const string Materials = "Assets/Art/Materials";
         public const string Icons = "Assets/Art/UI/Icons";
         public const string Portraits = "Assets/Art/UI/Portraits";
+        public const string MaterialIcons = "Assets/Art/UI/Materials";
         public const string AppIcon = "Assets/Art/UI/AppIcon.png";
         public const string Sounds = "Assets/Audio/Sfx";
         public const string Animation = "Assets/Animation";
@@ -19,6 +20,7 @@ namespace Featherguard.EditorTools
         public const string UnitVisuals = "Assets/Data/UnitVisuals";
         public const string StatusVisuals = "Assets/Data/StatusVisuals";
         public const string Encounters = "Assets/Data/Encounters";
+        public const string MaterialData = "Assets/Data/Materials";
         public const string PostProfile = "Assets/Settings/BattlePostFX.asset";
         public const string Scene = "Assets/Scenes/Battle.unity";
         public const string StrongholdScene = "Assets/Scenes/Stronghold.unity";
