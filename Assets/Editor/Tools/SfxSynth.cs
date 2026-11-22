@@ -134,6 +134,21 @@ namespace Featherguard.EditorTools
                     Tone(b, 0f, 0.25f, 330f, 320f, 0.4f, 0.005f, 6f, Wave.Square);
                     Tone(b, 0.22f, 0.5f, 247f, 200f, 0.4f, 0.005f, 4f, Wave.Square);
                     break;
+                case SfxId.Perfect:
+                    b = Buffer(0.7f);
+                    Tone(b, 0f, 0.65f, 1568f, 1568f, 0.45f, 0.001f, 5f, Wave.Sine);
+                    Tone(b, 0f, 0.65f, 3136f, 3136f, 0.2f, 0.001f, 7f, Wave.Sine);
+                    Tone(b, 0.06f, 0.6f, 2349f, 2349f, 0.4f, 0.001f, 5f, Wave.Sine);
+                    Tone(b, 0.06f, 0.6f, 4698f, 4698f, 0.15f, 0.001f, 8f, Wave.Sine);
+                    Noise(b, rng, 0f, 0.04f, 0.25f, 0.0005f, 60f, 0.9f, 0.9f);
+                    break;
+                case SfxId.Block:
+                    b = Buffer(0.35f);
+                    Tone(b, 0f, 0.3f, 880f, 820f, 0.5f, 0.0005f, 14f, Wave.Square);
+                    Tone(b, 0f, 0.3f, 1320f, 1250f, 0.3f, 0.0005f, 16f, Wave.Triangle);
+                    Tone(b, 0f, 0.18f, 150f, 90f, 0.6f, 0.001f, 20f, Wave.Sine);
+                    Noise(b, rng, 0f, 0.05f, 0.6f, 0.0005f, 70f, 0.8f, 0.3f);
+                    break;
                 default:
                     b = Buffer(0.05f);
                     break;
