@@ -49,5 +49,19 @@ namespace Featherguard.Battle
         public bool onSelf;
         [Tooltip("PerfectTiming: only applied when the action's attack timing is Perfect.")]
         public StatusCondition condition;
+
+        public string Summary
+        {
+            get
+            {
+                if (status == null) return "";
+                string text = $"{(onSelf ? "gives itself" : "applies")} {status.displayName} for {turns} {(turns == 1 ? "turn" : "turns")}";
+                if (status.DealsDamageOverTime && potency > 0) text += $" ({potency} damage a turn)";
+                else if (status.AbsorbsDamage && potency > 0) text += $" ({potency} points)";
+                if (chance < 1f) text += $", {Math.Round(chance * 100f)}% chance";
+                if (condition == StatusCondition.PerfectTiming) text += " on a perfect timing";
+                return text;
+            }
+        }
     }
 }

@@ -11,8 +11,9 @@ namespace Featherguard.Battle.Presentation
         public readonly bool Moved;
         public readonly UnitView Unit;
         public readonly Vector2 Screen;
+        public readonly float HeldFor;
 
-        public UnitPointer(bool pressed, bool held, bool released, bool moved, UnitView unit, Vector2 screen)
+        public UnitPointer(bool pressed, bool held, bool released, bool moved, UnitView unit, Vector2 screen, float heldFor = 0f)
         {
             Pressed = pressed;
             Held = held;
@@ -20,6 +21,7 @@ namespace Featherguard.Battle.Presentation
             Moved = moved;
             Unit = unit;
             Screen = screen;
+            HeldFor = heldFor;
         }
     }
 

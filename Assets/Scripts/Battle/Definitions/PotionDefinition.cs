@@ -17,5 +17,14 @@ namespace Featherguard.Battle
         public bool TargetsEnemies => target is PotionTarget.Enemy or PotionTarget.AllEnemies;
         public bool TargetsAll => target is PotionTarget.AllHeroes or PotionTarget.AllEnemies;
         public bool TargetsFallen => target == PotionTarget.FallenHero || effects.Any(e => e != null && e.Revives);
+
+        public string TargetText => target switch
+        {
+            PotionTarget.Hero => "One hero",
+            PotionTarget.FallenHero => "One fallen hero",
+            PotionTarget.AllHeroes => "Every hero",
+            PotionTarget.Enemy => "One enemy",
+            _ => "Every enemy",
+        };
     }
 }

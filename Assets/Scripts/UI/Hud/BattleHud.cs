@@ -22,6 +22,8 @@ namespace Featherguard.UI
         DragArrowView dragArrow;
         RageButtonView rageButton;
         PotionBeltView potionBelt;
+        PotionPouch potionPouch;
+        BattleInfoView info;
         PauseMenu pauseMenu;
         BannerView banners;
         Text hint;
@@ -77,9 +79,14 @@ namespace Featherguard.UI
             commands = playerCommands;
             rage = rageMeter;
             rageButton = new RageButtonView(safe, commands.ToggleSpecial);
+            info = new BattleInfoView(safe);
         }
 
-        public void BindPotions(IPotionCommands potions, PotionPouch pouch) => potionBelt = new PotionBeltView(safe, potions, pouch);
+        public void BindPotions(IPotionCommands potions, PotionPouch pouch, float holdTime)
+        {
+            potionPouch = pouch;
+            potionBelt = new PotionBeltView(safe, potions, pouch, holdTime);
+        }
 
         public void SetHudVisible(bool visible)
         {
@@ -132,12 +139,14 @@ namespace Featherguard.UI
             rageButton.Update(rage, commands);
             dragArrow.Update(commands);
             potionBelt?.Update();
+            info.Update(commands, potionPouch);
             hint.text = HintText();
         }
 
         string HintText()
         {
             if (!commands.AcceptingInput) return "";
+            if (commands.Inspected != null || commands.InspectedPotion != null) return "";
             if (commands.HeldPotion != null)
                 return $"{commands.HeldPotion.displayName}: drop on a glowing target";
             var selected = commands.Selected;
