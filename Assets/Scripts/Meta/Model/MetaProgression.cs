@@ -26,6 +26,8 @@ namespace Featherguard.Meta
 
         public HeroRoster CreateRoster(IReadOnlyList<UnitDefinition> heroes, int seats) => new(heroes, seats, Data, store);
 
+        public MaterialStorage CreateStorage(MaterialConfig materials) => new(materials != null ? materials.materials : new MaterialDefinition[0], Data, store);
+
         public int Level(PerkDefinition perk) => Data.perks.FirstOrDefault(p => p.id == perk.Id)?.level ?? 0;
         public bool IsMaxed(PerkDefinition perk) => Level(perk) >= perk.maxLevel;
         public int Cost(PerkDefinition perk) => perk.CostFor(Level(perk));

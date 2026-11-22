@@ -32,7 +32,7 @@ namespace Featherguard.EditorTools
 
             var icons = IconFactory.CreateAll(ContentPaths.Icons);
             var sprites = icons.Values.ToList();
-            foreach (var path in Directory.GetFiles(ContentPaths.Portraits, "*.png"))
+            foreach (var path in Directory.GetFiles(ContentPaths.Portraits, "*.png").Concat(Directory.GetFiles(ContentPaths.MaterialIcons, "*.png")))
                 sprites.Add(IconFactory.ImportSprite(path.Replace('\\', '/'), Vector4.zero));
 
             return new PresentationAssets

@@ -21,6 +21,8 @@ namespace Featherguard.Game
         public BattleRules rules;
         public RunDefinition run;
         public MetaConfig meta;
+        [Tooltip("Every material, and how fights reward them.")]
+        public MaterialConfig materials;
 
         [Header("Presentation")]
         public BattlePresentationConfig presentation;
