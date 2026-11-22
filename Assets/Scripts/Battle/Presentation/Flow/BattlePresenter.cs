@@ -28,6 +28,7 @@ namespace Featherguard.Battle.Presentation
             stage.Register(router);
             new BattleAnnouncer(config, view, feedback, stage, Rage).Register(router);
             new ActionPlayback(config, visuals, view, feedback, host, stage, router).Register();
+            new PotionPlayback(config, view, feedback, stage).Register(router);
         }
 
         public UnitView ViewOf(BattleUnit unit) => stage.ViewOf(unit);

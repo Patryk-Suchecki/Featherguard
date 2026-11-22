@@ -59,7 +59,9 @@ namespace Featherguard.Game
         {
             var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory, SavedGame.Storage(config), config.materials, UnityRandomSource.Shared, SavedGame.Recipes(config));
             hud.Init(battleCamera, visuals, flow.Abandon, () => true);
-            StartBattle(testEncounter != null ? ActivityBattle.CreateSetup(testEncounter, Party()) : ActivityBattle.CreateSetup(activity, Party()));
+            var setup = testEncounter != null ? ActivityBattle.CreateSetup(testEncounter, Party()) : ActivityBattle.CreateSetup(activity, Party());
+            setup.Potions = SavedGame.Loadout(config).Picked.Select(p => new BattlePotion(p.Potion, p.Count)).ToList();
+            StartBattle(setup);
             yield return battle.Run();
             yield return flow.Conclude(battle.Result);
         }
@@ -86,6 +88,8 @@ namespace Featherguard.Game
         {
             setup.AwaitBlocks = config.presentation.timingPrompts;
             var model = new BattleModel(setup, config.rules, UnityRandomSource.Shared);
+            var bag = SavedGame.Potions(config);
+            model.PotionSpent += potion => bag.Remove(potion);
             toon ??= new ToonMaterials(config.toonMaterial);
             battle = new BattleController(model, new BattleServices
             {
@@ -101,6 +105,7 @@ namespace Featherguard.Game
                 UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
             });
             hud.BindBattle(battle.Commands, battle.Presenter.Rage);
+            hud.BindPotions(battle.Potions, model.Potions);
             DebugTools.Track(battle);
         }
 

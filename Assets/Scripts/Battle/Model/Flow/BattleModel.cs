@@ -18,6 +18,7 @@ namespace Featherguard.Battle
         readonly WaveSpawner waves;
         readonly BossPhases bosses;
         readonly EnemyTurn enemyTurn;
+        readonly PotionResolver potions;
 
         public BattleState State { get; }
         public RageMeter Rage => State.Rage;
@@ -29,8 +30,10 @@ namespace Featherguard.Battle
         public bool IsFinished => Phase == BattlePhase.Finished;
         public int Turn { get; private set; }
         public BattleResult Result { get; private set; }
+        public PotionPouch Potions { get; }
 
         public event Action<BattleUnit> EnemyKilled;
+        public event Action<PotionDefinition> PotionSpent;
 
         public BattleModel(BattleSetup setup, BattleRules rules, IRandomSource random, IEnemyBrain brain = null)
         {
@@ -45,6 +48,8 @@ namespace Featherguard.Battle
             waves = new WaveSpawner(State, setup);
             bosses = new BossPhases(State, waves);
             enemyTurn = new EnemyTurn(State, resolver, ticker, bosses, brain ?? new DefaultEnemyBrain(random), log, setup.AwaitBlocks);
+            potions = new PotionResolver(State);
+            Potions = new PotionPouch(setup.Potions);
         }
 
         public IReadOnlyList<BattleEvent> Start()
@@ -93,6 +98,23 @@ namespace Featherguard.Battle
                 State.ConsumeRage();
             hero.HasActed = true;
             resolver.Execute(hero, ability, target, IsTimed(hero, ability) ? ActionTiming.ForAttack(timing) : ActionTiming.None);
+            bosses.Check();
+            Advance();
+            return log.Flush();
+        }
+
+        public bool CanUsePotion(PotionDefinition potion, BattleUnit target) =>
+            AwaitingInput && potion != null && Potions.Count(potion) > 0 && PotionTargeting.IsValid(potion, target, Heroes, Enemies);
+
+        public IEnumerable<BattleUnit> PotionCandidates(PotionDefinition potion) =>
+            potion != null ? PotionTargeting.Candidates(potion, Heroes, Enemies) : Enumerable.Empty<BattleUnit>();
+
+        public IReadOnlyList<BattleEvent> UsePotion(PotionDefinition potion, BattleUnit target)
+        {
+            if (!CanUsePotion(potion, target)) return Array.Empty<BattleEvent>();
+            Potions.Take(potion);
+            PotionSpent?.Invoke(potion);
+            potions.Use(potion, target);
             bosses.Check();
             Advance();
             return log.Flush();

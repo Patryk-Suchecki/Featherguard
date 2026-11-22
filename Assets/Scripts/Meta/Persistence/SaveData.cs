@@ -11,6 +11,7 @@ namespace Featherguard.Meta
         public List<ItemCount> materials = new();
         public List<ItemCount> potions = new();
         public List<string> schematics = new();
+        public List<ItemCount> battlePotions = new();
     }
 
     [Serializable]

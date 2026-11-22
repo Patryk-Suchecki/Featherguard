@@ -32,6 +32,7 @@ namespace Featherguard.Battle.Presentation
         public BattleModel Model { get; }
         public BattlePresenter Presenter { get; }
         public IPlayerCommands Commands => commands;
+        public IPotionCommands Potions => commands;
         public BattleResult Result => Model.Result;
 
         public BattleController(BattleModel model, BattleServices services)
@@ -64,9 +65,15 @@ namespace Featherguard.Battle.Presentation
                 }
 
                 commands.Open();
-                while (commands.Chosen == null && forcedEnd == null)
+                while (commands.Chosen == null && commands.ChosenPotion == null && forcedEnd == null)
                     yield return null;
                 if (forcedEnd != null) break;
+                if (commands.ChosenPotion != null)
+                {
+                    var potion = commands.TakeChosenPotion();
+                    yield return Play(Model.UsePotion(potion.Potion, potion.Target));
+                    continue;
+                }
                 var command = commands.TakeChosen();
                 var timing = TimingResult.Miss;
                 if (prompt != null && Model.IsTimed(command.Hero, command.Ability))

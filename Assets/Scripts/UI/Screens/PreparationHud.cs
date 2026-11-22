@@ -21,6 +21,7 @@ namespace Featherguard.UI
         public RewardKind Reward;
         public IReadOnlyList<string> Party;
         public bool PartyComplete;
+        public string Potions;
     }
 
     public class PreparationHud : MonoBehaviour
@@ -37,12 +38,16 @@ namespace Featherguard.UI
 
         Text toast;
         Coroutine toastRoutine;
+        RectTransform root;
+        Text potions;
+        Overlay picker;
 
         public void Init(PreparationInfo info, Action onBack, Action onChangeParty, Action onPotions, Action onFight)
         {
-            var safe = SafeArea.Create(ScreenCanvas.Create("PreparationHUD"));
+            root = ScreenCanvas.Create("PreparationHUD");
+            var safe = SafeArea.Create(root);
 
-            var panel = Ui.Rect("Details", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -132f), new Vector2(660f, 640f));
+            var panel = Ui.Rect("Details", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -132f), new Vector2(660f, 690f));
             Ui.Panel(panel, PanelColor);
             float y = -28f;
             if (info.Story)
@@ -58,7 +63,9 @@ namespace Featherguard.UI
             y = Line(panel, info.Reward == RewardKind.None ? "No reward" : $"Reward: {ActivityText.RewardName(info.Reward)}", 34, Ui.GoldColor, y, 48f);
             y -= 18f;
             y = Line(panel, "Party", 30, TextColor, y, 40f);
-            Line(panel, info.PartyComplete ? string.Join(", ", info.Party) : "Pick 3 heroes in the Camp", 28, info.PartyComplete ? Color.white : WarningColor, y, 40f);
+            y = Line(panel, info.PartyComplete ? string.Join(", ", info.Party) : "Pick 3 heroes in the Camp", 28, info.PartyComplete ? Color.white : WarningColor, y, 40f);
+            potions = Ui.Label(Ui.Rect("Potions", panel, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(32f, y), new Vector2(596f, 40f)), "", 28, TextAnchor.MiddleLeft, TextColor);
+            SetPotions(info.Potions);
 
             Button(safe, "Back", new Vector2(0f, 1f), new Vector2(24f, -24f), new Vector2(240f, 84f), ButtonColor, onBack);
             Button(safe, "Change party", new Vector2(0f, 0f), new Vector2(24f, 24f), new Vector2(320f, 96f), ButtonColor, onChangeParty);
@@ -66,6 +73,21 @@ namespace Featherguard.UI
             Button(safe, "Fight", new Vector2(1f, 0f), new Vector2(-24f, 24f), new Vector2(420f, 132f), Ui.GoColor, onFight, 52);
             toast = Ui.Label(Ui.Rect("Toast", safe, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(240f, 170f), new Vector2(1200f, 70f)),
                 "", 40, TextAnchor.MiddleCenter, StoryColor);
+        }
+
+        public void SetPotions(string text) => potions.text = string.IsNullOrEmpty(text) ? "Potions: none" : $"Potions: {text}";
+
+        public RectTransform OpenPicker()
+        {
+            ClosePicker();
+            picker = Overlay.Create(root, "Potions", 0.75f);
+            return picker.Content;
+        }
+
+        public void ClosePicker()
+        {
+            picker?.Close();
+            picker = null;
         }
 
         public void Toast(string text)

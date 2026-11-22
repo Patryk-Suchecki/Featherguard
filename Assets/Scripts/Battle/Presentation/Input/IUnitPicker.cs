@@ -26,5 +26,6 @@ namespace Featherguard.Battle.Presentation
     public interface IUnitPicker
     {
         UnitPointer Read(IEnumerable<UnitView> candidates);
+        UnitView At(Vector2 screen, IEnumerable<UnitView> candidates);
     }
 }

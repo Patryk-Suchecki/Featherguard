@@ -115,6 +115,12 @@ namespace Featherguard.Battle
         public BattleUnit Unit;
     }
 
+    public sealed class PotionUsed : BattleEvent
+    {
+        public PotionDefinition Potion;
+        public List<BattleUnit> Targets;
+    }
+
     public sealed class Enraged : BattleEvent
     {
         public BattleUnit Boss;

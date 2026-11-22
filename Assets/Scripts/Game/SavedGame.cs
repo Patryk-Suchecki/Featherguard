@@ -22,6 +22,8 @@ namespace Featherguard.Game
 
         public static RecipeBook Recipes(GameConfig config) => Meta(config).CreateRecipeBook(config.potions);
 
+        public static PotionLoadout Loadout(GameConfig config) => Meta(config).CreateLoadout(config.potions);
+
         public static PotionBrewer Brewer(GameConfig config) =>
             new(Recipes(config), Storage(config), Potions(config), config.potions != null ? config.potions.maxBrew : 1);
 

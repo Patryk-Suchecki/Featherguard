@@ -4,6 +4,8 @@ namespace Featherguard.Battle.Presentation
 {
     public sealed class TargetHighlighter
     {
+        const float CandidateAlpha = 0.45f;
+
         readonly BattlePresenter presenter;
         readonly BattlePresentationConfig config;
 
@@ -25,6 +27,17 @@ namespace Featherguard.Battle.Presentation
             foreach (var unit in presenter.Views)
                 if (unit.IsAlive)
                     unit.Ring.ShowBase(unit.Team == Team.Enemies || ready.Contains(unit.Unit));
+        }
+
+        public void ShowCandidates(IEnumerable<BattleUnit> candidates, BattleUnit hovered)
+        {
+            Clear();
+            var dim = config.hoverRing;
+            dim.a *= CandidateAlpha;
+            foreach (var unit in candidates)
+                presenter.ViewOf(unit)?.Ring.Show(dim);
+            if (hovered != null)
+                presenter.ViewOf(hovered)?.Ring.Show(config.hoverRing, true);
         }
 
         public void ShowHovered(BattleUnit hovered)

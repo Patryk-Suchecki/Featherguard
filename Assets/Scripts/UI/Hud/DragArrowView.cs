@@ -41,7 +41,7 @@ namespace Featherguard.UI
             if (!show) return;
 
             float scale = Mathf.Max(0.0001f, root.lossyScale.x);
-            Vector2 from = view.WorldToScreenPoint(commands.DragOrigin);
+            Vector2 from = commands.DragScreenOrigin ?? (Vector2)view.WorldToScreenPoint(commands.DragOrigin);
             var to = commands.DragPointer;
             var delta = (to - from) / scale;
             float length = delta.magnitude;
@@ -98,7 +98,7 @@ namespace Featherguard.UI
         {
             var target = commands.DragTarget;
             if (target == null) return Free;
-            return target.Team == commands.Selected.Team ? OnAlly : OnEnemy;
+            return target.Team == Team.Heroes ? OnAlly : OnEnemy;
         }
     }
 }
