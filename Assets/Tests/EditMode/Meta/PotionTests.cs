@@ -108,6 +108,18 @@ namespace Featherguard.Tests
         }
 
         [Test]
+        public void ForgettingSchematics_KeepsOnlyTheRecipesKnownFromTheStart()
+        {
+            book.LearnAll();
+            Assert.IsTrue(book.Knows(cleansingRecipe));
+
+            book.ForgetAll();
+
+            Assert.IsFalse(book.Knows(cleansingRecipe));
+            Assert.IsTrue(book.Knows(healingRecipe));
+        }
+
+        [Test]
         public void ThePotionBagAndTheSchematics_AreSaved()
         {
             bag.Add(healing, 3);

@@ -29,6 +29,12 @@ namespace Featherguard.Meta
             store.Save(data);
         }
 
+        public void ForgetAll()
+        {
+            data.schematics.Clear();
+            store.Save(data);
+        }
+
         public void LearnAll()
         {
             foreach (var recipe in recipes.Where(r => !Knows(r)))

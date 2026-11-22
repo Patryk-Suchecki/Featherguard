@@ -225,6 +225,7 @@ namespace Featherguard.UI
             if (action.KeepOpen) status.text = $"Done: {action.Label}";
             else Close();
             action.Run();
+            if (action.KeepOpen) Refresh();
         }
 
         void Disarm()
