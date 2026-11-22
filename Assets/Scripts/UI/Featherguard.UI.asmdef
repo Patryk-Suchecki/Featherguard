@@ -3,7 +3,6 @@
     "rootNamespace": "Featherguard.UI",
     "references": [
         "Featherguard.Battle.Presentation",
-        "Featherguard.Run",
         "Featherguard.Meta",
         "Featherguard.Battle",
         "Featherguard.Feedback",

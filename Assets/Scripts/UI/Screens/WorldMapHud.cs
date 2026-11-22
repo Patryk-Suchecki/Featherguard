@@ -44,7 +44,7 @@ namespace Featherguard.UI
         Camera sceneCamera;
         Canvas canvas;
 
-        public void Init(Camera camera, IReadOnlyList<MapLand> lands, int storyWon, int storyCount, Action onBack, Action onPrototype)
+        public void Init(Camera camera, IReadOnlyList<MapLand> lands, int storyWon, int storyCount, Action onBack)
         {
             sceneCamera = camera;
             var root = ScreenCanvas.Create("WorldMapHUD");
@@ -59,7 +59,6 @@ namespace Featherguard.UI
 
             var safe = SafeArea.Create(root);
             Button(safe, "Back", new Vector2(0f, 1f), new Vector2(24f, -24f), onBack);
-            Button(safe, "Prototype run", new Vector2(0f, 0f), new Vector2(24f, 24f), onPrototype, 320f);
             Ui.Label(Ui.Rect("Story", safe, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(900f, 50f)),
                 storyWon >= storyCount ? "The story is complete" : $"Story missions {storyWon} / {storyCount}", 34, TextAnchor.MiddleCenter, StoryColor);
             Legend(safe);

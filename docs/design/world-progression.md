@@ -93,7 +93,7 @@ The world map is where the player decides what to do next. The story pulls them 
 - **Stronghold:** **Embark** opens the world map; returning from the map goes back to the Stronghold.
 - **Sacred Oak:** shows the story progress, the next story mission with its rating, and *Show on map*. It plays the story scenes.
 - **Screens:** world map, battle preparation (single fight and waves fight), battle result (victory and defeat).
-- **Current build:** this replaces the bird run and its 9 encounters (`RunDefinition`), as epic #28 plans.
+- **Current build:** this replaced the bird run; its 9 encounters are now the placeholder encounters of the story missions and side activities.
 
 ## 6. Feedback
 

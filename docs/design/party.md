@@ -31,12 +31,12 @@ The player builds a party for each fight from the heroes they have collected. Th
 - **The saved party is empty after dropping**: the first 3 heroes are used, as in rule 3.
 - **Fewer than 3 heroes have joined**: the party can't be completed, so Embark stays blocked. This can't happen today, because the roster starts with 3.
 - **Tapping an empty seat** changes nothing; the player is told the seat waits for a hero.
-- **The party changes during a run**: it can't, because the Camp is in the Stronghold scene and a run lives in the battle scene.
+- **The party changes during a battle**: it can't, because the Camp is in the Stronghold scene; the battle preparation's **Change party** opens it before a fight.
 
 ## 5. Connections
 
-- **Run:** `RunSession.Start` receives the party.
-- **Save:** the party lives in the same `SaveData` as feathers and perks (`MetaProgression.CreateRoster`), so one save file holds everything. Both scenes share one `MetaProgression` (`SavedGame`).
+- **Battle:** `ActivityBattle.CreateSetup` receives the party.
+- **Save:** the party lives in the same `SaveData` as the world progress (`MetaProgression.CreateRoster`), so one save file holds everything. Both scenes share one `MetaProgression` (`SavedGame`).
 - **Stronghold:** only party members stand at the fire in the Stronghold view; all joined heroes sit in the Camp view.
 - **Later:** levels, equipment, Storage and potions plug into the hero details and the Camp buttons.
 

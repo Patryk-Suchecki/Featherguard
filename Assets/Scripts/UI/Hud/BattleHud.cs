@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Featherguard.Battle;
 using Featherguard.Battle.Presentation;
-using Featherguard.Run;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -72,8 +71,6 @@ namespace Featherguard.UI
             return (RectTransform)canvasObject.transform;
         }
 
-        public void BindWallet(Wallet wallet) => topBar.Bind(wallet);
-
         public void BindBattle(IPlayerCommands playerCommands, RageMeter rageMeter)
         {
             commands = playerCommands;
@@ -119,11 +116,6 @@ namespace Featherguard.UI
         {
             if (bars.Remove(unit, out var bar) && bar != null)
                 Destroy(bar.gameObject);
-        }
-
-        void OnDestroy()
-        {
-            topBar?.Unbind();
         }
 
         void Update()

@@ -37,9 +37,9 @@ namespace Featherguard.EditorTools
                 p.units = unitVisuals;
                 p.statuses = statusVisuals;
             });
-            var run = RunCatalog.Build(seeder, units, art);
+            EncounterCatalog.Build(seeder, units);
             var world = WorldCatalog.Build(seeder);
-            var meta = MetaCatalog.Build(seeder, art);
+            var meta = MetaCatalog.Build(seeder);
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
             {
@@ -48,7 +48,6 @@ namespace Featherguard.EditorTools
             {
                 c.rules = rules;
                 c.presentation = presentation;
-                c.run = run;
                 c.meta = meta;
                 c.world = world;
                 c.flashMaterial = art.Flash;
