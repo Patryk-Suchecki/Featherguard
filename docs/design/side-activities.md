@@ -43,7 +43,7 @@ Side activities are the player's answer to "the next story mission is too hard",
 13. **Unlocks** are set by hand: a template with a fixed unlock (a hero, for example) always gives it. Once won, the template leaves the pool for good.
 14. **Amount and rarity grow with the threat level and the type:**
     - EXP and gold: a base amount that grows with the threat level, times the type multiplier (Waves and Elite pay more than a Single fight, a returning Boss the most);
-    - materials: from the land the offer is in; more of them, and a better chance of a rarer kind, at a higher threat and a harder type;
+    - materials: the Common, Uncommon and Rare materials of the land the offer is in; more of them, and a better chance of a rarer kind, at a higher threat and a harder type. The universal Epic and Legendary materials ([GDD](../GDD.md#equipment-forge-and-economy)) can also drop, rarely, in any land;
     - loot and schematics: one item; the threat level and type raise the chance of a higher rarity. Epic and Legendary loot only come from Elites and Bosses.
 15. **Daring multiplier** on top of rule 14: Easy and Even ×1, Dangerous ×1.5, Madness ×2. It multiplies the amount of EXP, gold and materials, and multiplies the chance of a higher rarity for materials, loot and schematics. It never affects unlocks.
 16. EXP goes to the 3 heroes who fought ([`party.md`](party.md)). **A fight that does not reward EXP gives none**, so the player chooses when to level and which heroes take part.
@@ -68,7 +68,7 @@ Side activities are the player's answer to "the next story mission is too hard",
 - **Main quest:** the story missions' threat curve sets the world level.
 - **Party:** party strength gives the rating; EXP rewards go to the fighters.
 - **Combat:** the battle setup scales enemy health and damage by the offer's threat (`ActivityBattle`).
-- **Economy and equipment:** gold, materials, loot and schematics go to the save and the Storage. Materials are only found in their land, so every land stays worth visiting.
+- **Economy and equipment:** gold, materials, loot and schematics go to the save and the Storage. A land's own materials are only found in that land, so every land stays worth visiting; the universal Epic and Legendary ones can come from any land.
 
 ## 6. Feedback
 
