@@ -52,7 +52,7 @@ namespace Featherguard.Game
             hud = gameObject.AddComponent<StrongholdHud>();
             hud.Init(sceneCamera, places.Select(p => (p.LabelAnchor, p.DisplayName)), () => hud.ComingSoon("Settings"));
             campHud = gameObject.AddComponent<CampHud>();
-            campHud.Init(sceneCamera, seats.Select(s => s.LabelAnchor).ToList(), LeaveCamp, () => campHud.ShowStorage(SavedGame.Storage(config).Owned), () => hud.ComingSoon("Potions"));
+            campHud.Init(sceneCamera, seats.Select(s => s.LabelAnchor).ToList(), LeaveCamp, () => campHud.ShowStorage(SavedGame.Storage(config).Owned), () => campHud.ShowPotions(SavedGame.Potions(config).Owned));
             ShowSeats();
             fromPreparation = SavedGame.World(config).Chosen != null;
             if (fromPreparation) EnterCamp(instant: true);
@@ -60,7 +60,7 @@ namespace Featherguard.Game
 
         void Update()
         {
-            if (leaving || flight.Flying) return;
+            if (leaving || flight.Flying || hud.PanelOpen) return;
             var gesture = gestures.Read(holds: inCamp);
             switch (gesture.Kind)
             {
@@ -128,6 +128,9 @@ namespace Featherguard.Game
                 case StrongholdPlaceKind.Camp:
                     EnterCamp();
                     return;
+                case StrongholdPlaceKind.WiseWomansHut:
+                    OpenHut();
+                    return;
                 case StrongholdPlaceKind.Embark when !roster.IsPartyComplete:
                     hud.Toast($"Pick {HeroRoster.PartySize} heroes at the campfire first");
                     return;
@@ -140,6 +143,12 @@ namespace Featherguard.Game
                     hud.ComingSoon(place.DisplayName);
                     return;
             }
+        }
+
+        void OpenHut()
+        {
+            FeedbackHub.Ui(SfxId.Whoosh);
+            HutView.Build(hud.OpenPanel("Hut"), SavedGame.Recipes(config), SavedGame.Potions(config), SavedGame.Storage(config), SavedGame.Brewer(config), hud.ClosePanel);
         }
 
         void EnterCamp(bool instant = false)

@@ -21,6 +21,8 @@ namespace Featherguard.Game
         public MetaConfig meta;
         [Tooltip("Every material, and how fights reward them.")]
         public MaterialConfig materials;
+        [Tooltip("Every potion recipe, brewing and how many potions go into a battle.")]
+        public PotionConfig potions;
 
         [Header("Presentation")]
         public BattlePresentationConfig presentation;

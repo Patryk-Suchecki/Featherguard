@@ -126,6 +126,26 @@ namespace Featherguard.Tests
         }
 
         [Test]
+        public void ASchematicFight_LeavesThePoolOnceItsSchematicIsLearned()
+        {
+            var recipe = ScriptableObject.CreateInstance<RecipeDefinition>();
+            recipe.name = "Recipe";
+            var fight = Activity("Schematic", fields);
+            fight.reward = RewardKind.Schematic;
+            fight.schematic = recipe;
+            fields.sideActivities = new[] { fight };
+            var config = ScriptableObject.CreateInstance<PotionConfig>();
+            config.recipes = new[] { recipe };
+            var progress = meta.CreateWorld(world, new FakeRandom(0.99f));
+            CollectionAssert.Contains(progress.ActivitiesIn(fields).ToList(), fight);
+
+            meta.CreateRecipeBook(config).Learn(recipe);
+            progress.Reroll();
+
+            CollectionAssert.DoesNotContain(progress.ActivitiesIn(fields).ToList(), fight);
+        }
+
+        [Test]
         public void SideActivities_RespectAvailableAfterAndTheBossRule()
         {
             var progress = meta.CreateWorld(world, new FakeRandom(0.99f));

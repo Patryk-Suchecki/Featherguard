@@ -66,7 +66,7 @@ namespace Featherguard.Tests
         public void SavedMaterialsThatNoLongerExist_AreNotListed()
         {
             var data = store.Load();
-            data.materials.Add(new MaterialCount { id = "Removed", count = 5 });
+            data.materials.Add(new ItemCount { id = "Removed", count = 5 });
             store.Save(data);
 
             Assert.IsEmpty(Load().Owned);

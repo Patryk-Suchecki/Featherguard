@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ba399dc6fae8540ab821c78976677f, type: 3}
+  m_Name: GromnicaLight
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.PotionDefinition
+  displayName: Gromnica Light
+  description: Hallows the party for 3 turns against the Chill of Nav.
+  target: 2
+  effects:
+  - rid: 2988852451796844567
+  references:
+    version: 2
+    RefIds:
+    - rid: 2988852451796844567
+      type: {class: StatusPotion, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        application:
+          status: {fileID: 11400000, guid: 2290e1c42a664bb48ab7cd566d29e9ee, type: 2}
+          turns: 3
+          potency: 0
+          chance: 1
+          onSelf: 0
+          condition: 0
+        times: 1

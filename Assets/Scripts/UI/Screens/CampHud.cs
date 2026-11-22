@@ -26,6 +26,7 @@ namespace Featherguard.UI
         Text partyCount;
         Overlay details;
         Overlay storage;
+        Overlay potions;
 
         public bool DetailsOpen => details != null;
 
@@ -76,6 +77,7 @@ namespace Featherguard.UI
             if (visible) return;
             CloseDetails();
             CloseStorage();
+            ClosePotions();
         }
 
         public void Refresh(IReadOnlyList<(string Name, SeatState State)> states, int inParty, int partySize)
@@ -137,6 +139,22 @@ namespace Featherguard.UI
         {
             storage?.Close();
             storage = null;
+        }
+
+        public void ShowPotions(IReadOnlyList<PotionStack> owned)
+        {
+            ClosePotions();
+            potions = Overlay.Create(root, "Potions", 0.75f);
+            var close = potions.Dim.gameObject.AddComponent<Button>();
+            close.transition = Selectable.Transition.None;
+            close.onClick.AddListener(ClosePotions);
+            PotionBagView.Build(potions.Content, owned, ClosePotions);
+        }
+
+        public void ClosePotions()
+        {
+            potions?.Close();
+            potions = null;
         }
 
         void LateUpdate()

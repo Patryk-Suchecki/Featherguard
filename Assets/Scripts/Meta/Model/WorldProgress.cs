@@ -111,7 +111,10 @@ namespace Featherguard.Meta
             string.IsNullOrEmpty(id) ? null : world.lands.Where(IsOpen).SelectMany(ActivitiesIn).FirstOrDefault(a => a.name == id);
 
         IEnumerable<ActivityDefinition> Drawable(LandDefinition land) =>
-            land.sideActivities.Where(a => a != null && a.availableAfter <= StoryWon && (a.type != ActivityType.BossFight || IsBossBeaten(land)));
+            land.sideActivities.Where(a => a != null && a.availableAfter <= StoryWon && (a.type != ActivityType.BossFight || IsBossBeaten(land)) && !IsSchematicLearned(a));
+
+        bool IsSchematicLearned(ActivityDefinition activity) =>
+            activity.reward == RewardKind.Schematic && (activity.schematic == null || RecipeBook.IsKnown(activity.schematic, data));
 
         bool RestoreSideActivities()
         {

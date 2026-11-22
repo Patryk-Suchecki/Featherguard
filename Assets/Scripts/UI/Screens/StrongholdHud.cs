@@ -23,11 +23,15 @@ namespace Featherguard.UI
         RectTransform settingsButton;
         Text toast;
         Coroutine toastRoutine;
+        RectTransform root;
+        Overlay panel;
+
+        public bool PanelOpen => panel != null;
 
         public void Init(Camera camera, IEnumerable<(Transform Anchor, string Name)> places, Action onSettings)
         {
             sceneCamera = camera;
-            var root = ScreenCanvas.Create("StrongholdHUD");
+            root = ScreenCanvas.Create("StrongholdHUD");
             canvas = root.GetComponent<Canvas>();
 
             labelLayer = Ui.Stretch("Labels", root);
@@ -45,6 +49,22 @@ namespace Featherguard.UI
 
             toast = Ui.Label(Ui.Rect("Toast", safe, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 120f), new Vector2(1200f, 70f)),
                 "", 46, TextAnchor.MiddleCenter, ToastColor);
+        }
+
+        public RectTransform OpenPanel(string name)
+        {
+            ClosePanel();
+            panel = Overlay.Create(root, name, 0.75f);
+            var close = panel.Dim.gameObject.AddComponent<Button>();
+            close.transition = Selectable.Transition.None;
+            close.onClick.AddListener(ClosePanel);
+            return panel.Content;
+        }
+
+        public void ClosePanel()
+        {
+            panel?.Close();
+            panel = null;
         }
 
         public void ComingSoon(string place) => Toast($"{place}: coming soon");

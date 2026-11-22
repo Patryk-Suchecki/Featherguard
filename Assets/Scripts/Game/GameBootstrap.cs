@@ -57,7 +57,7 @@ namespace Featherguard.Game
 
         IEnumerator FightActivity(WorldProgress world, ActivityDefinition activity, EncounterDefinition testEncounter)
         {
-            var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory, SavedGame.Storage(config), config.materials, UnityRandomSource.Shared);
+            var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory, SavedGame.Storage(config), config.materials, UnityRandomSource.Shared, SavedGame.Recipes(config));
             hud.Init(battleCamera, visuals, flow.Abandon, () => true);
             StartBattle(testEncounter != null ? ActivityBattle.CreateSetup(testEncounter, Party()) : ActivityBattle.CreateSetup(activity, Party()));
             yield return battle.Run();

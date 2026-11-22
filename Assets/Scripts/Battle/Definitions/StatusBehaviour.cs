@@ -17,6 +17,18 @@ namespace Featherguard.Battle
         public virtual bool ConsumedByCriticalHit => false;
         public virtual bool Retaliates => false;
         public virtual IEnumerable<StatusApplication> RetaliationStatuses => Array.Empty<StatusApplication>();
+        public virtual bool Blocks(StatusDefinition status) => false;
+    }
+
+    [Serializable]
+    public sealed class BlockStatuses : StatusBehaviour
+    {
+        [Tooltip("Blocks every harmful status.")]
+        public bool harmful;
+        [Tooltip("Blocks these statuses.")]
+        public StatusDefinition[] statuses = new StatusDefinition[0];
+
+        public override bool Blocks(StatusDefinition status) => status != null && (harmful && status.harmful || Array.IndexOf(statuses, status) >= 0);
     }
 
     [Serializable]

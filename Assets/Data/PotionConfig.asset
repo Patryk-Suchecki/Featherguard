@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f919940cbdefd504db8afc52dec4e4dd, type: 3}
+  m_Name: PotionConfig
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.PotionConfig
+  recipes:
+  - {fileID: 11400000, guid: 95919cf3a13150c4f8f0cccf25b6b0f5, type: 2}
+  - {fileID: 11400000, guid: c053ca08f3d9a7c4288e9531ba20c0cc, type: 2}
+  - {fileID: 11400000, guid: a2a04c7a915300d48a023249ad73f646, type: 2}
+  - {fileID: 11400000, guid: 34a908fd81936bf4ba291f1c679fa399, type: 2}
+  - {fileID: 11400000, guid: 73ae53cc83d24664fb0b0cf6aac290cc, type: 2}
+  - {fileID: 11400000, guid: bcad7b89fbb7b5145b83fb308343fa43, type: 2}
+  - {fileID: 11400000, guid: 807c1051afa1b694797f3050288a64bf, type: 2}
+  - {fileID: 11400000, guid: 81171ecd6e1c25a4a80a9c154ff8282d, type: 2}
+  - {fileID: 11400000, guid: 5d74156860cac0b43beb3605a3bd6a05, type: 2}
+  - {fileID: 11400000, guid: 44a748632f7582a4e9f36985f7b76fc0, type: 2}
+  - {fileID: 11400000, guid: 0a6cd9995ff5049479acb1d6bc79a9d7, type: 2}
+  - {fileID: 11400000, guid: f05082fb24e04e643946ccbf152dfb93, type: 2}
+  - {fileID: 11400000, guid: 1207004f90e144f4092a0cfc90be0be6, type: 2}
+  - {fileID: 11400000, guid: 60ba34d74cba4cd4ebcd7ae803a59949, type: 2}
+  - {fileID: 11400000, guid: ddcf09bf6256db942ac58087a1d50f60, type: 2}
+  battleSlots: 3
+  maxBrew: 10

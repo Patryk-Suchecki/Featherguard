@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ba399dc6fae8540ab821c78976677f, type: 3}
+  m_Name: KupalaDewElixir
+  m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.PotionDefinition
+  displayName: Kupala Dew Elixir
+  description: Every hero heals 30% of max health and loses every harmful status.
+  target: 2
+  effects:
+  - rid: 2988852451796844558
+  - rid: 2988852451796844559
+  references:
+    version: 2
+    RefIds:
+    - rid: 2988852451796844558
+      type: {class: HealPercentPotion, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        fraction: 0.3
+    - rid: 2988852451796844559
+      type: {class: CleansePotion, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data: 
