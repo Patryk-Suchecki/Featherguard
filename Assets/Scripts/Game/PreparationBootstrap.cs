@@ -55,7 +55,8 @@ namespace Featherguard.Game
                 Reward = activity.reward,
                 Party = roster.Party.Select(h => h.displayName).ToList(),
                 PartyComplete = roster.IsPartyComplete,
-            }, Back, ChangeParty, () => hud.Toast("Potions: coming soon"), Fight);
+                Potions = PotionText(),
+            }, Back, ChangeParty, OpenPotions, Fight);
         }
 
         void PlaceUnits(ActivityDefinition activity)
@@ -82,6 +83,16 @@ namespace Featherguard.Game
             if (leaving) return;
             Leave(GameScenes.Stronghold, SfxId.Whoosh);
         }
+
+        void OpenPotions()
+        {
+            if (leaving) return;
+            FeedbackHub.Ui(SfxId.Click);
+            PotionPickerView.Build(hud.OpenPicker(), SavedGame.Potions(config), SavedGame.Loadout(config), () => hud.SetPotions(PotionText()), hud.ClosePicker);
+        }
+
+        string PotionText() =>
+            string.Join(", ", SavedGame.Loadout(config).Picked.Select(s => s.Count > 1 ? $"{s.Potion.displayName} ×{s.Count}" : s.Potion.displayName));
 
         void Fight()
         {

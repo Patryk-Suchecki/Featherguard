@@ -29,6 +29,8 @@ namespace Featherguard.Meta
 
         public RecipeBook CreateRecipeBook(PotionConfig potions) => new(Recipes(potions), Data, store);
 
+        public PotionLoadout CreateLoadout(PotionConfig potions) => new(CreatePotionBag(potions), potions != null ? potions.battleSlots : 0, Data, store);
+
         static RecipeDefinition[] Recipes(PotionConfig potions) => potions != null ? potions.recipes.Where(r => r != null).ToArray() : new RecipeDefinition[0];
     }
 }

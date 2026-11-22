@@ -56,17 +56,19 @@ namespace Featherguard.Battle.Presentation
             return uiHits.Count > 0;
         }
 
-        UnitView Pick(Vector2 position, IEnumerable<UnitView> candidates)
+        public UnitView At(Vector2 screen, IEnumerable<UnitView> candidates) => Pick(screen, candidates.ToList(), false);
+
+        UnitView Pick(Vector2 position, IEnumerable<UnitView> candidates, bool living = true)
         {
             if (Physics.Raycast(camera.ScreenPointToRay(position), out var hit, 100f))
             {
                 var direct = hit.collider.GetComponentInParent<UnitView>();
-                if (direct != null && direct.IsAlive) return direct;
+                if (direct != null && (living ? direct.IsAlive : candidates.Contains(direct))) return direct;
             }
 
             UnitView best = null;
             float bestDistance = Screen.height * tolerance;
-            foreach (var unit in candidates.Where(u => u.IsAlive))
+            foreach (var unit in candidates.Where(u => !living || u.IsAlive))
             {
                 float distance = DistanceToSegment(position, camera.WorldToScreenPoint(unit.transform.position), camera.WorldToScreenPoint(unit.Top));
                 if (distance < bestDistance)

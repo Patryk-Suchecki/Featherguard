@@ -20,6 +20,7 @@ namespace Featherguard.Battle
         public int EncounterCount = 1;
         public bool Elite;
         public bool AwaitBlocks;
+        public IReadOnlyList<BattlePotion> Potions = System.Array.Empty<BattlePotion>();
     }
 
     public sealed class BattleResult

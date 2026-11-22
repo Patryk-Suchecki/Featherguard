@@ -21,6 +21,7 @@ namespace Featherguard.UI
         TimingCueView timingCue;
         DragArrowView dragArrow;
         RageButtonView rageButton;
+        PotionBeltView potionBelt;
         PauseMenu pauseMenu;
         BannerView banners;
         Text hint;
@@ -78,6 +79,8 @@ namespace Featherguard.UI
             rageButton = new RageButtonView(safe, commands.ToggleSpecial);
         }
 
+        public void BindPotions(IPotionCommands potions, PotionPouch pouch) => potionBelt = new PotionBeltView(safe, potions, pouch);
+
         public void SetHudVisible(bool visible)
         {
             var group = safe.GetComponent<CanvasGroup>();
@@ -128,12 +131,15 @@ namespace Featherguard.UI
             if (commands == null) return;
             rageButton.Update(rage, commands);
             dragArrow.Update(commands);
+            potionBelt?.Update();
             hint.text = HintText();
         }
 
         string HintText()
         {
             if (!commands.AcceptingInput) return "";
+            if (commands.HeldPotion != null)
+                return $"{commands.HeldPotion.displayName}: drop on a glowing target";
             var selected = commands.Selected;
             if (selected == null)
                 return commands.SpecialArmed ? "Rage: drag or tap a glowing hero" : "Drag a glowing hero: enemy = attack, ally or tap = skill";
