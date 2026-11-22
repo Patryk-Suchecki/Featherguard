@@ -39,8 +39,8 @@ Side activities are the player's answer to "the next story mission is too hard",
 
 ### Rewards
 
-12. **A side offer gives exactly one reward.** Its kind is drawn by weight when the offer is drawn: EXP, gold, materials, loot or schematic. A kind that cannot be given yet (for example schematics before they exist) is not drawn.
-13. **Unlocks** are set by hand: a template with a fixed unlock (a hero, for example) always gives it. Once won, the template leaves the pool for good.
+12. **A side offer gives exactly one reward.** Its kind is drawn by weight when the offer is drawn: EXP, gold, materials or loot. A kind that cannot be given yet is not drawn.
+13. **Unlocks and schematics** are set by hand: a template with a fixed unlock (a hero, for example) or a fixed schematic always gives it. Once won, the template leaves the pool for good ([`potions.md`](potions.md) for schematics).
 14. **Amount and rarity grow with the threat level and the type:**
     - EXP and gold: a base amount that grows with the threat level, times the type multiplier (Waves and Elite pay more than a Single fight, a returning Boss the most);
     - materials: the Common, Uncommon and Rare materials of the land the offer is in; more of them, and a better chance of a rarer kind, at a higher threat and a harder type. The universal Epic and Legendary materials ([GDD](../GDD.md#equipment-forge-and-economy)) can also drop, rarely, in any land;
@@ -87,7 +87,7 @@ Side activities are the player's answer to "the next story mission is too hard",
 | Type weights | Single 35, Waves 35, Elite 20, returning Boss 10 | `WorldDefinition.typeWeights` |
 | Type bonus to threat | Elite +1, returning Boss +2 | `WorldDefinition` |
 | Enemy growth per threat level | +15% health, +10% damage | `WorldDefinition.threatHealthStep`, `threatDamageStep` |
-| Reward kind weights | EXP 30, gold 25, materials 25, loot 15, schematic 5 | `WorldDefinition.rewardWeights` |
+| Reward kind weights | EXP 30, gold 25, materials 25, loot 20 | `WorldDefinition.rewardWeights` |
 | Gold | 20 + 10 × threat | `WorldDefinition` |
 | EXP | comes with the party levels spec | – |
 | Type multiplier | Single ×1, Waves ×1.5, Elite ×2, returning Boss ×3 | `WorldDefinition` |
@@ -105,7 +105,7 @@ EditMode tests on the world progress model:
 - story missions keep their fixed threat;
 - enemy health and damage grow per threat level above the encounter's base;
 - every win grants exactly one reward kind; EXP only after an EXP fight;
-- an unlock template gives its unlock and leaves the pool once won;
+- an unlock or schematic template gives its reward and leaves the pool once won;
 - gold follows threat × type, and the Daring multiplier is ×1, ×1.5 and ×2 by rating, never on unlocks;
 - offers with their threat and reward are saved and restored; old ones without them are drawn again.
 
