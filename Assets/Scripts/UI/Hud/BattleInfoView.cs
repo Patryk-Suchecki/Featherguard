@@ -10,7 +10,7 @@ namespace Featherguard.UI
     {
         const float Width = 1080f;
 
-        static readonly Color PanelColor = new(0.05f, 0.05f, 0.08f, 0.94f);
+        static readonly Color PanelColor = new(0.05f, 0.05f, 0.08f, 0.98f);
         static readonly Color HeroColor = new(1f, 0.85f, 0.45f);
         static readonly Color EnemyColor = new(1f, 0.52f, 0.44f);
         static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
