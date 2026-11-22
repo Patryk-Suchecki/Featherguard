@@ -38,7 +38,7 @@ namespace Featherguard.UI
             float left = -(Columns - 1) * CellWidth / 2f;
             for (int i = 0; i < owned.Count; i++)
             {
-                var cell = new Vector2(left + i % Columns * CellWidth, 240f - i / Columns * CellHeight);
+                var cell = new Vector2(left + i % Columns * CellWidth, 196f - i / Columns * CellHeight);
                 var material = owned[i].Material;
                 MaterialTile.Create(panel, material, owned[i].Count, cell + new Vector2(0f, 18f), Tile);
                 Ui.Label(Ui.Centered("Name", panel, cell + new Vector2(0f, -76f), new Vector2(CellWidth, 34f)),
