@@ -71,7 +71,7 @@ namespace Featherguard.Game
             yield return battle.Run();
             yield return new WaitForSeconds(config.presentation.afterVictory);
             if (battle.Result.Victory)
-                ActivityResultScreen.ShowVictory(hud, encounter.displayName, "Test encounter", null, () => Load(GameScenes.WorldMap));
+                ActivityResultScreen.ShowVictory(hud, encounter.displayName, "Test encounter", null, null, () => Load(GameScenes.WorldMap));
             else
                 ActivityResultScreen.ShowDefeat(hud, encounter.displayName, "test", () => Load(GameScenes.Battle), () => Load(GameScenes.WorldMap));
         }
