@@ -168,12 +168,13 @@ The whole Stronghold is on screen at once, so the budget is shared.
 - Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); it can reuse `export_static_fbx` in `Art/Blender/featherkit.py`. Until then, export by hand with the same settings: **Selected Objects**, Apply Scalings **FBX All**, Forward **−Z**, Up **Y**, Smoothing **Face**, no animation.
 - Lock and commit exactly as for characters (see [Version control](#version-control)): one `art/` PR per model or kit.
 
-## Material icons
+## Material and potion icons
 
-The material icons and the rarity frames are vector art drawn by an Illustrator script, so the whole set stays consistent and can be redrawn at once.
+The material icons, the potion icons and the rarity frames are vector art drawn by Illustrator scripts, so each set stays consistent and can be redrawn at once.
 
-- **Source:** `Art/Illustrator/material_icons.jsx`. It holds the frame per rarity, one drawing function per material and the colours.
+- **Source:** `Art/Illustrator/icon_kit.jsx` holds the colours, the frame per rarity, the drawing helpers and the export; `material_icons.jsx` and `potion_icons.jsx` hold one drawing function per icon and write to `Assets/Art/UI/Materials` and `Assets/Art/UI/Potions`. Potions have no rarity, so their icons have no frame.
 - **Run it:** in Illustrator, File > Scripts > Other Script..., or `Illustrator.exe Art/Illustrator/material_icons.jsx`. It opens a new document with one artboard and layer per icon (editable vectors) and exports a 256 × 256 PNG per artboard to `Assets/Art/UI/Materials` (`Frame_<Rarity>.png` for the empty frames, `<Material>.png` for the icons).
+- **Redrawing:** the PNGs are lockable LFS files and read-only until locked; lock them (`git lfs lock`) before running a script again, or Illustrator cannot overwrite them.
 - **Import:** the PNGs are sprites (`TextureImporterType.Sprite`, single, no mipmaps, alpha is transparency), like the generated icons.
 - **Change a look:** change the script and run it again rather than editing a PNG, so the next run keeps the change. A new material is a new drawing function and a row entry.
 
