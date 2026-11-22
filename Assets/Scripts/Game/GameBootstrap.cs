@@ -55,7 +55,7 @@ namespace Featherguard.Game
 
         IEnumerator FightActivity(WorldProgress world, ActivityDefinition activity)
         {
-            var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory);
+            var flow = new ActivityFlow(hud, world, activity, config.presentation.afterVictory, SavedGame.Storage(config), config.materials, UnityRandomSource.Shared);
             hud.Init(battleCamera, visuals, flow.Abandon, () => true);
             hud.BindWallet(new Wallet());
             var roster = SavedGame.Roster(config);

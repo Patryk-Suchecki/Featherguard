@@ -16,6 +16,8 @@ namespace Featherguard.Game
 
         public static WorldProgress World(GameConfig config) => Meta(config).CreateWorld(config.world, UnityRandomSource.Shared);
 
+        public static MaterialStorage Storage(GameConfig config) => Meta(config).CreateStorage(config.materials);
+
         public static void ResetProgress(GameConfig config)
         {
             Store(config).Save(new SaveData());

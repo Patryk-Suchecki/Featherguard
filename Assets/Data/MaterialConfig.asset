@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f58c52610295746a186422c7e2fcb2, type: 3}
+  m_Name: MaterialConfig
+  m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.MaterialConfig
+  materials:
+  - {fileID: 11400000, guid: cc50fe6a13fbdbb408f227420ab2fdb2, type: 2}
+  - {fileID: 11400000, guid: bc21b40cee5794d439ab6788ec555203, type: 2}
+  - {fileID: 11400000, guid: ce0228d4bcdbeee4d8165c00a5d63173, type: 2}
+  - {fileID: 11400000, guid: dd8ef0b0ad5255549aaaa5c55652f67e, type: 2}
+  - {fileID: 11400000, guid: 4fc8449436f352a41878ba749e1512f4, type: 2}
+  - {fileID: 11400000, guid: dec1fd77cf4cfa4438a75e87fa39ad6c, type: 2}
+  - {fileID: 11400000, guid: 6c0724753770b254e87175e1a972ca48, type: 2}
+  - {fileID: 11400000, guid: 3435fe40b6b93a741a03576d9c97547c, type: 2}
+  - {fileID: 11400000, guid: 333ad62fd7815484b8fa5669f4e93504, type: 2}
+  - {fileID: 11400000, guid: 32b3ba4f365c7774e8903cd2dc54b45c, type: 2}
+  - {fileID: 11400000, guid: 76279cc58af877148a1399130cd40bb9, type: 2}
+  - {fileID: 11400000, guid: 96dc8f2f6d1cec04f937762cd7970f17, type: 2}
+  - {fileID: 11400000, guid: 860307221389412409c4333f902d0c24, type: 2}
+  - {fileID: 11400000, guid: f695c9c937768cb479b2f516abd9907d, type: 2}
+  - {fileID: 11400000, guid: 9d5965dfc3237f94ab3a3465bcc23718, type: 2}
+  - {fileID: 11400000, guid: dc2f7be208cd2a94fbec9c5c6cf9dd9b, type: 2}
+  - {fileID: 11400000, guid: 00ed37b11a149cd429875a69cec74301, type: 2}
+  - {fileID: 11400000, guid: 0f2f9f335dad8514ea5972e22fcb3cc6, type: 2}
+  - {fileID: 11400000, guid: d31de6a44c3d5eb4a9dfe4c289288c58, type: 2}
+  - {fileID: 11400000, guid: 880b065ad132b61498232b3024528bcd, type: 2}
+  - {fileID: 11400000, guid: 2e48c5dcbd877c3468ef9a81f18cb8b6, type: 2}
+  - {fileID: 11400000, guid: 00ec7a9dbe74d084b926f0ccc2f7827b, type: 2}
+  amountByType: 0200000003000000020000000300000004000000i
+  commonWeight: 70
+  uncommonWeight: 25
+  rareWeight: 5
+  uncommonPerThreat: 3
+  rarePerThreat: 1.5
+  epicChance: 0.02
+  legendaryChance: 0.003

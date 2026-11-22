@@ -52,7 +52,7 @@ namespace Featherguard.Game
             hud = gameObject.AddComponent<StrongholdHud>();
             hud.Init(sceneCamera, places.Select(p => (p.LabelAnchor, p.DisplayName)), () => hud.ComingSoon("Settings"));
             campHud = gameObject.AddComponent<CampHud>();
-            campHud.Init(sceneCamera, seats.Select(s => s.LabelAnchor).ToList(), LeaveCamp, () => hud.ComingSoon("Storage"), () => hud.ComingSoon("Potions"));
+            campHud.Init(sceneCamera, seats.Select(s => s.LabelAnchor).ToList(), LeaveCamp, () => campHud.ShowStorage(SavedGame.Storage(config).Owned), () => hud.ComingSoon("Potions"));
             ShowSeats();
             fromPreparation = SavedGame.World(config).Chosen != null;
             if (fromPreparation) EnterCamp(instant: true);

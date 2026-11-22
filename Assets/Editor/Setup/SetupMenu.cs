@@ -39,6 +39,7 @@ namespace Featherguard.EditorTools
             });
             var run = RunCatalog.Build(seeder, units, art);
             var world = WorldCatalog.Build(seeder);
+            var materials = MaterialCatalog.Build(seeder, world);
             var meta = MetaCatalog.Build(seeder, art);
 
             var config = seeder.Seed<GameConfig>($"{ContentPaths.Data}/GameConfig.asset", c =>
@@ -51,6 +52,7 @@ namespace Featherguard.EditorTools
                 c.run = run;
                 c.meta = meta;
                 c.world = world;
+                c.materials = materials;
                 c.flashMaterial = art.Flash;
                 c.particleMaterial = art.Particle;
                 c.ringMaterial = art.Ring;

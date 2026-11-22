@@ -39,8 +39,8 @@ SOLID rules:
 ## Data and balance
 
 All tuning lives in ScriptableObjects under `Assets/Data`:
-- Units, UnitVisuals, Abilities, AbilityVisuals, Statuses, StatusVisuals, Encounters, Upgrades, Perks, World/Lands, World/Activities.
-- Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `EconomyConfig`, `SlotConfig`, `RunDefinition`, `MetaConfig`, `GameConfig`, `World/WorldDefinition`.
+- Units, UnitVisuals, Abilities, AbilityVisuals, Statuses, StatusVisuals, Encounters, Materials, Upgrades, Perks, World/Lands, World/Activities.
+- Single assets, each named after its class: `BattleRules`, `BattlePresentationConfig`, `EconomyConfig`, `SlotConfig`, `RunDefinition`, `MetaConfig`, `MaterialConfig`, `GameConfig`, `World/WorldDefinition`.
 
 Change balance by editing those assets, not code.
 
