@@ -25,8 +25,8 @@ Capacity: about 10 hours a week each, 20 hours a week together. Dates are target
 
 | Milestone | Target | Goal | Done when |
 |---|---|---|---|
-| **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test character (the Bies) goes through the full art pipeline (model, baked texture, rig, animations, toon shader, in Unity); one music track and the perfect-timing sound are made with our audio workflow; the timing combat prototype feels good; all MVP screens are wireframed; at the end, the M0 build is tested on an Android phone (until then everything is checked in the editor) |
-| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → world map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, music, SFX, UI and texts; we know how long each kind of asset takes |
+| **M0 Pre-production** | 2026-12-20 | Settle the style, the pipelines and how combat feels | Style guide is in the repo; one test character (the Bies) goes through the full art pipeline (model, baked texture, rig, animations, toon shader, in Unity); the timing combat prototype feels good, with placeholder perfect-timing and block sounds; all MVP screens are wireframed; at the end, the M0 build is tested on an Android phone (until then everything is checked in the editor) |
+| **M1 Vertical slice** | 2027-03-14 | One land in final quality, every discipline together | Stronghold → world map → the Rye Fields story missions, side activities and Lady Midday are playable on an Android phone with final art, animation, VFX, UI and texts and placeholder sounds; we know how long each kind of asset takes |
 | **M2 Alpha** | 2027-06-06 | Every system works | All 3 MVP lands can be finished (placeholder art is fine); roster, party pick, levels, equipment, Storage and Salvage, schematics, forge, potions, shop, saving and settings work; tutorial exists |
 | **M3 Beta** | 2027-09-26 | Content complete | All MVP art, animation, VFX, music, SFX and texts are in; balance pass done; final title decided; only bug fixes and polish after this |
 | **M4 Release** | 2027-11-07 | Ship it on Google Play | Runs smoothly on a mid-range Android phone; signed release build; store page, content rating and privacy policy done |
@@ -80,10 +80,11 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Hits, crits, deaths, Law effects per land, UI effects (rewards, level up).
 
 ### Audio
+Our own music and sounds come in M3; until then the game uses generic placeholder sounds.
 - Music: Stronghold, world map, battle per land, boss per land, victory and defeat stingers.
-- SFX per ability, statuses, hits, blocks and the perfect-timing sound (part of the mechanic, M0).
+- SFX per ability, statuses, hits, blocks and the perfect-timing sound (part of the mechanic: generic placeholders until M3).
 - Ambient per land, UI sounds.
-- Mixer setup, volume settings, ducking (M1).
+- Mixer setup, volume settings, ducking (M2, with the settings).
 
 ### Narrative and text
 - Main story outline and ending, once the GDD open questions are answered (M1).
