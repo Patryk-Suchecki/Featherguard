@@ -6,9 +6,9 @@ How the fights in one land play. Copy this file to `lands/<land>.md` (for exampl
 
 The motif, palette and light of the battlefield, in line with the land's section in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#colour).
 
-## Law
+## Enemy ideas
 
-The land's Law from the GDD, and how it changes these fights: which enemies it helps, which tactics it punishes.
+Lands have no Laws: a land's fights differ by its enemies and their abilities. The ideas for this land's enemy and boss abilities from the GDD, and which tactics they punish.
 
 ## Roster and roles
 
@@ -31,7 +31,7 @@ The fight compositions this land uses, built from the roster above. Each later b
 
 ## Counters
 
-Which heroes shine here and why, against which enemies and under the Law.
+Which heroes shine here and why, against which enemies and abilities.
 
 ## Open questions
 

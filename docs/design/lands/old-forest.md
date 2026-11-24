@@ -16,13 +16,13 @@ Concept: `Art/Concepts/OldForest.png`.
 - **Palette and light:** the Old Forest palette in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#old-forest): dark bark, roots and moss, pale mushrooms, cold moonlight from above. The witch light and the eyes are the only saturated colours.
 - **What the 3D backdrop should do differently from the concept:**
   - the battle camera is side-on at a slight angle, so the glade is shallower and the characters fill more of the frame;
-  - leave dark gaps between the trunks on the enemies' side, where hidden enemies can wait unseen, so Misleading reads in the scene;
+  - leave dark gaps between the trunks on the enemies' side, where hidden enemies can wait unseen, so hiding enemies read in the scene;
   - the glowing eyes and the witch light are effects;
   - roots and mushrooms in the foreground stay low, so they never cover the characters' feet or the timing rings.
 
-## Law
+## Enemy ideas
 
-**Misleading** (from the GDD): the party's formation shuffles; enemies stay hidden until Marked. How it changes these fights comes with the land's spec.
+Lands have no Laws: these fights differ by their enemies. The former Law becomes an idea for enemy and boss abilities here: enemies hidden until Marked, and the Leshy shuffling the party's formation. How they play comes with the land's enemy sheets.
 
 ## Roster and roles
 

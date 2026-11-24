@@ -6,7 +6,7 @@ Agreed by Aurel and Patryk on 2026-11-07. This is the **target design** the game
 
 A turn-based RPG set in a dark fairy-tale world of Slavic folklore. A party of heroes from the Sacred Oak Stronghold travels through five lands.
 
-Genre core: party-versus-party turn-based combat, a shared party Rage, and collecting and forging equipment (a weapon adds damage, an artifact adds HP).
+Genre core: party-versus-party turn-based combat, a Rage action for every hero, and collecting and forging equipment (a weapon adds damage, an artifact adds HP).
 
 What sets us apart:
 - **Every class is a separate character.** The player collects heroes and builds a party of 3 for each specific fight.
@@ -94,9 +94,9 @@ Round flow:
 
 Every hero has its own gestures, and the stronger the action, the harder the gesture; a miss always gives the normal effect. The gestures are listed in the [timing spec](design/combat/timing.md). The enemy wind-up has a random length, so the rhythm cannot be memorised. The auto-timing accessibility option always gives "good", never "perfect". Some effects only work with perfect timing (for example an extra Burn stack or a guaranteed Stun).
 
-### Party Rage
+### Rage
 
-A shared meter filled by hits dealt and taken and by perfect timings. A full meter lets one character use its special action. Rage does not use up that character's move, affects the whole side and is timed with the character's hardest gesture.
+*Being reworked.* Every hero has a Rage action, timed with the hero's hardest gesture, but Rage will not be a shared party meter: the current way of using it is not intuitive, and the new rules are still to be agreed. Until then the build keeps the meter described in [`design/combat/rage.md`](design/combat/rage.md).
 
 ### Statuses
 
@@ -147,21 +147,19 @@ The game has 5 lands on a single map. At the start only the Rye Fields are open;
 
 **Rewards:** every fight gives one reward, of one kind: materials, gold, loot (equipment), schematic, EXP or unlock. Side activities draw theirs; story missions have their own unique rewards and also advance the story.
 
-A land's **Law** is a combat rule that applies to battles in that land. Every land also has 3 materials of its own, one of each rarity (see Materials):
+Lands have no special combat rules (no Laws): a land's battles differ by its enemies and their abilities. Every land also has 3 materials of its own, one of each rarity (see Materials). The ideas below once were Laws and now wait for the enemies and bosses of each land:
 
-| Land | Law | Who shines | Materials (Common · Uncommon · Rare) |
+| Land | Enemy ability ideas | Who shines | Materials (Common · Uncommon · Rare) |
 |---|---|---|---|
-| Rye Fields | Noon Heat: every 3rd turn, characters without a Shield lose part of their HP | Shields, tempo | Flax · Wolf Pelt · Last Sheaf |
-| Marshes | Depths: some enemies submerge; wisps switch targets | area attacks, cleansing | Marsh Herbs · Amber · Wisp in a Jar |
-| Bald Mountain | Storm: lightning strikes a random character; dodge it in a QTE | block, cleansing | Brimstone · Mountain Ore · Thunderstone |
-| Old Forest | Misleading: the party's formation shuffles; enemies stay hidden until Marked | Mark, control | Yew Wood · Tinder Fungus · Old Oak Heartwood |
-| Nav | Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire | fast damage, fire | Bone Ash · Gromnica Wax · Nav Essence |
+| Rye Fields | midday heat that hurts heroes without a Shield (Lady Midday and her fields) | Shields, tempo | Flax · Wolf Pelt · Last Sheaf |
+| Marshes | enemies that submerge; wisps that switch targets | area attacks, cleansing | Marsh Herbs · Amber · Wisp in a Jar |
+| Bald Mountain | lightning called down on a random hero, dodged in a QTE | block, cleansing | Brimstone · Mountain Ore · Thunderstone |
+| Old Forest | enemies hidden until Marked; the Leshy shuffling the party's formation | Mark, control | Yew Wood · Tinder Fungus · Old Oak Heartwood |
+| Nav | enemies that halve healing; fallen enemies rising as ghosts unless finished with fire | fast damage, fire | Bone Ash · Gromnica Wax · Nav Essence |
 
 Progress and forcing:
 - Party strength = party level (the average level of the 3 picked heroes) + equipment + heroes. Before a battle the player sees a threat rating relative to their party (Easy, Even, Dangerous, Madness), not a power number.
 - Every unlocked story mission and activity can be attempted right away. Winning above your strength grants **Daring**: the reward is worth ×1.5 at Dangerous and ×2 at Madness (more of it, or a better chance of a higher rarity).
-
-After the MVP: Land Favour (a merchant and a blessing that weakens the Law).
 
 ## Equipment, forge and economy
 
@@ -220,8 +218,8 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 ## Open questions
 
 - What drives the main story and how it ends.
+- How Rage works: it is not a shared party meter; who fills it, how and what it unlocks.
 - The boss of Nav.
-- Whether a land's Law grows stronger as the player progresses through that land.
 - How threat levels (1–10) are assigned to story missions (side activities follow them).
 - How a Puzzle fight plays, and how Lady Midday's riddles (special QTE) relate to it.
 - Which story missions and side activities unlock which heroes.
@@ -236,4 +234,3 @@ The style is dark cartoon with good-looking characters: a thick hand-drawn outli
 - Where Buyan Island is entered.
 - The battle preparation screens show "Difficulty: Medium / Hard", while the threat rating uses Easy, Even, Dangerous and Madness: which names do we use?
 - The wireframes show equipment rarity and material kind only by the colour of the frame, while the interface must read by shape and sound, not only colour.
-- Whether the merchant of Land Favour is the Stronghold shop or a separate one.

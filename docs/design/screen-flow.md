@@ -13,7 +13,7 @@ The wireframes show layout and flow only. Game rules live in [`GDD.md`](../GDD.m
 | II | World map | Pick a land and an activity |
 | IIIa | Single fight preparation | Difficulty, rewards, party and potions before a single fight |
 | IIIb | Waves fight preparation | The same for a waves fight, with the number of waves |
-| IV | Battle | Combat HUD, timing, Rage, Law and statuses |
+| IV | Battle | Combat HUD, timing, Rage and statuses |
 | V | Camp | Pick the party; hero details, Storage and potions |
 | VIa / VIb | Battle result | Victory with rewards and EXP, or defeat |
 | VII | Tavern | Entrances to Endless Run and Arena |

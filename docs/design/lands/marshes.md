@@ -16,13 +16,13 @@ Concept: `Art/Concepts/Marshes.png`.
 - **Palette and light:** the Marshes palette in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#marshes): black water, mud, reeds and moss, a violet-grey dusk sky and cold pale light from the heroes' side. The pale blue-green wisps are the only saturated colour.
 - **What the 3D backdrop should do differently from the concept:**
   - the battle camera is side-on at a slight angle, so the island is shallower and the characters fill more of the frame;
-  - leave open water near the enemies' side where submerging enemies can sink and rise, so Depths reads in the scene;
+  - leave open water near the enemies' side where submerging enemies can sink and rise, so submerging enemies read in the scene;
   - the wisps are effects, not part of the backdrop model;
   - the foreground jetty and reeds stay low, so they never cover the characters' feet or the timing rings.
 
-## Law
+## Enemy ideas
 
-**Depths** (from the GDD): some enemies submerge; wisps switch targets. How it changes these fights comes with the land's spec.
+Lands have no Laws: these fights differ by their enemies. The former Law becomes an idea for enemy and boss abilities here: enemies that submerge, and wisps that switch targets. How they play comes with the land's enemy sheets.
 
 ## Roster and roles
 

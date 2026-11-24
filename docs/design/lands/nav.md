@@ -16,12 +16,12 @@ Concept: `Art/Concepts/Nav.png`.
 - **Palette and light:** the Nav palette in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#nav): ash and bone, cold fog and a flat grey light from above. The ghost light is the only saturated colour.
 - **What the 3D backdrop should do differently from the concept:**
   - the battle camera is side-on at a slight angle, so the clearing is shallower and the characters fill more of the frame;
-  - the ghosts in the distance and the river smoke are effects; fallen units rising as ghosts (the Law) use the same look;
+  - the ghosts in the distance and the river smoke are effects; fallen units rising as ghosts (an enemy ability) use the same look;
   - the graves and the bridge rail in the foreground stay low, so they never cover the characters' feet or the timing rings.
 
-## Law
+## Enemy ideas
 
-**Chill of Nav** (from the GDD): healing is halved; the fallen rise as ghosts unless finished with fire. How it changes these fights comes with the land's spec.
+Lands have no Laws: these fights differ by their enemies. The former Law becomes an idea for enemy and boss abilities here: enemies that halve healing, and fallen enemies rising as ghosts unless finished with fire. How they play comes with the land's enemy sheets.
 
 ## Roster and roles
 
