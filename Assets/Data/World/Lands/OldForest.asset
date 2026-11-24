@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: OldForest
   m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
   displayName: Old Forest
-  law: 'Misleading: the party''s formation shuffles; enemies stay hidden until Marked.'
   sideActivities:
   - {fileID: 11400000, guid: 6f324c47f383bb64bbd6f1c9ef0c84f9, type: 2}
   - {fileID: 11400000, guid: 4e5c161fe6270a4459c4c9ea3ec792fb, type: 2}

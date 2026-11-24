@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: GromnicaLight
   m_EditorClassIdentifier: Featherguard.Battle::Featherguard.Battle.PotionDefinition
   displayName: Gromnica Light
-  description: Hallows the party for 3 turns against the Chill of Nav.
+  description: Removes Burn; no Burn can be applied for 3 turns.
   target: 2
   effects:
-  - rid: 2988852451796844567
+  - rid: 2988852490437656577
+  - rid: 2988852490437656578
   references:
     version: 2
     RefIds:
-    - rid: 2988852451796844567
+    - rid: 2988852490437656577
+      type: {class: RemoveStatusPotion, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        status: {fileID: 11400000, guid: 272451c494335614e83c122a2bfc7f0c, type: 2}
+    - rid: 2988852490437656578
       type: {class: StatusPotion, ns: Featherguard.Battle, asm: Featherguard.Battle}
       data:
         application:

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Marshes
   m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
   displayName: Marshes
-  law: 'Depths: some enemies submerge; wisps switch targets.'
   sideActivities:
   - {fileID: 11400000, guid: 3578df0d4f7e07441895b2f24e20f0df, type: 2}
   - {fileID: 11400000, guid: 4682ac86c5187114d9697b2f63c1aa1d, type: 2}

@@ -17,7 +17,14 @@ MonoBehaviour:
   harmful: 0
   stacking: 0
   maxStacks: 1
-  behaviours: []
+  behaviours:
+  - rid: 2988852490437656576
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2988852490437656576
+      type: {class: BlockStatuses, ns: Featherguard.Battle, asm: Featherguard.Battle}
+      data:
+        harmful: 0
+        statuses:
+        - {fileID: 11400000, guid: 272451c494335614e83c122a2bfc7f0c, type: 2}

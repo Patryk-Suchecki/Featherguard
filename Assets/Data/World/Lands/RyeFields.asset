@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: RyeFields
   m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
   displayName: Rye Fields
-  law: 'Noon Heat: every 3rd turn, characters without a Shield lose part of their HP.'
   sideActivities:
   - {fileID: 11400000, guid: 18e9ed1cd3040e545a3592c993233c7a, type: 2}
   - {fileID: 11400000, guid: dc913c42b7d18834c877b86b8f0cc295, type: 2}

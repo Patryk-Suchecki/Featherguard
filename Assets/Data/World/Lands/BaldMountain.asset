@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: BaldMountain
   m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
   displayName: Bald Mountain
-  law: 'Storm: lightning strikes a random character; dodge it in a QTE.'
   sideActivities:
   - {fileID: 11400000, guid: 126ead3717a70db418b98867e47d5e8d, type: 2}
   - {fileID: 11400000, guid: df025ee62c5071844bbd11747bdbaf4f, type: 2}
