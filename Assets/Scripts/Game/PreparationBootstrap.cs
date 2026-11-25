@@ -49,7 +49,6 @@ namespace Featherguard.Game
                 Type = activity.type,
                 Waves = ActivityBattle.Waves(activity),
                 Land = activity.land.displayName,
-                Law = activity.land.law,
                 Rating = rating,
                 Daring = world.IsDaring(rating),
                 Reward = activity.reward,

@@ -15,7 +15,6 @@ namespace Featherguard.UI
         public ActivityType Type;
         public int Waves;
         public string Land;
-        public string Law;
         public ThreatRating Rating;
         public bool Daring;
         public RewardKind Reward;
@@ -30,7 +29,6 @@ namespace Featherguard.UI
         const float ToastFade = 0.4f;
 
         static readonly Color TextColor = new(0.9f, 0.86f, 0.78f);
-        static readonly Color MutedColor = new(0.66f, 0.66f, 0.72f);
         static readonly Color StoryColor = new(1f, 0.8f, 0.42f);
         static readonly Color WarningColor = new(1f, 0.45f, 0.38f);
         static readonly Color ButtonColor = new(0.1f, 0.1f, 0.13f, 0.92f);
@@ -47,7 +45,7 @@ namespace Featherguard.UI
             root = ScreenCanvas.Create("PreparationHUD");
             var safe = SafeArea.Create(root);
 
-            var panel = Ui.Rect("Details", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -132f), new Vector2(660f, 690f));
+            var panel = Ui.Rect("Details", safe, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -132f), new Vector2(660f, 580f));
             Ui.Panel(panel, PanelColor);
             float y = -28f;
             if (info.Story)
@@ -56,9 +54,7 @@ namespace Featherguard.UI
             y = Line(panel, ActivityText.Describe(info.Type, info.Waves), 30, TextColor, y, 44f);
             y -= 18f;
             y = Line(panel, info.Land, 34, TextColor, y, 44f);
-            Ui.Wrapped(Ui.Rect("Law", panel, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(32f, y), new Vector2(596f, 110f)),
-                string.IsNullOrEmpty(info.Law) ? "No Law" : $"Law: {info.Law}", 26, TextAnchor.UpperLeft, MutedColor);
-            y -= 128f;
+            y -= 18f;
             y = Line(panel, info.Daring ? $"Threat: {info.Rating}   ·   Daring +50%" : $"Threat: {info.Rating}", 34, ActivityText.RatingColor(info.Rating), y, 48f);
             y = Line(panel, info.Reward == RewardKind.None ? "No reward" : $"Reward: {ActivityText.RewardName(info.Reward)}", 34, Ui.GoldColor, y, 48f);
             y -= 18f;

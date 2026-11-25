@@ -55,7 +55,7 @@ namespace Featherguard.EditorTools
             Add("Warded", "Warded", "Warded", new Color(0.75f, 0.92f, 1f), "Defense", false, new BlockStatuses { harmful = true });
             Add("Grounded", "Grounded", "Grounded", new Color(0.55f, 0.65f, 1f), "Defense", false, new BlockStatuses { statuses = new[] { statuses["Stun"] } });
             Add("Might", "Might", "Mighty!", new Color(1f, 0.45f, 0.2f), "Empower", false, Modify(StatType.Damage, multiply: 0.3f));
-            Add("Hallowed", "Hallowed", "Hallowed", new Color(1f, 0.85f, 0.45f), "Heal", false);
+            Add("Hallowed", "Hallowed", "Hallowed", new Color(1f, 0.85f, 0.45f), "Heal", false, new BlockStatuses { statuses = new[] { statuses["Burn"] } });
             return (statuses, visuals.ToArray());
         }
     }

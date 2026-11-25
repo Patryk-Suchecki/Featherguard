@@ -8,13 +8,13 @@ namespace Featherguard.EditorTools
 {
     public static class WorldCatalog
     {
-        static readonly (string Id, string Name, string Law)[] LandRows =
+        static readonly (string Id, string Name)[] LandRows =
         {
-            ("RyeFields", "Rye Fields", "Noon Heat: every 3rd turn, characters without a Shield lose part of their HP."),
-            ("Marshes", "Marshes", "Depths: some enemies submerge; wisps switch targets."),
-            ("BaldMountain", "Bald Mountain", "Storm: lightning strikes a random character; dodge it in a QTE."),
-            ("OldForest", "Old Forest", "Misleading: the party's formation shuffles; enemies stay hidden until Marked."),
-            ("Nav", "Nav", "Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire."),
+            ("RyeFields", "Rye Fields"),
+            ("Marshes", "Marshes"),
+            ("BaldMountain", "Bald Mountain"),
+            ("OldForest", "Old Forest"),
+            ("Nav", "Nav"),
         };
 
         static readonly string[] StoryOrder =
@@ -42,7 +42,6 @@ namespace Featherguard.EditorTools
             var lands = LandRows.ToDictionary(row => row.Id, row => seeder.Seed<LandDefinition>($"{ContentPaths.Lands}/{row.Id}.asset", land =>
             {
                 land.displayName = row.Name;
-                land.law = row.Law;
             }));
 
             var story = new List<ActivityDefinition>();

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Nav
   m_EditorClassIdentifier: Featherguard.Meta::Featherguard.Meta.LandDefinition
   displayName: Nav
-  law: 'Chill of Nav: healing is halved; the fallen rise as ghosts unless finished with fire.'
   sideActivities:
   - {fileID: 11400000, guid: 702b95f7d5bb4b549b6ee6df20f7ee06, type: 2}
   - {fileID: 11400000, guid: 6c32709d1065a4e48960a046f01ab5f7, type: 2}
