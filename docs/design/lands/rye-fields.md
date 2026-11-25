@@ -16,7 +16,7 @@ Concept: `Art/Concepts/RyeFields.png`.
 - **Palette and light:** the Rye Fields palette in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#rye-fields): faded olive-ochre rye, dusty earth, a hazy grey-green noon sky and a warm, faded key light from above and slightly from the heroes' side. The backdrop stays darker and less saturated than the characters.
 - **What the 3D backdrop should do differently from the concept:**
   - the camera is the battle camera (side-on at a slight angle), so the clearing is shallower than in the concept and the characters fill more of the frame;
-  - stronger noon light: short hard shadows straight under objects and a heat shimmer over the far fields, so Noon Heat reads before it strikes;
+  - stronger noon light: short hard shadows straight under objects and a heat shimmer over the far fields, so the midday heat reads before it strikes;
   - the near-black outline on foreground shapes, like on the characters;
   - the foreground rye at the bottom edge stays low, so it never covers the characters' feet or the timing rings.
 
@@ -36,9 +36,9 @@ The backdrop is built from these models (#149). Each sheet is in `Art/Concepts/R
 
 The clearing ground with the field balk is shaped in the scene, not from a sheet.
 
-## Law
+## Enemy ideas
 
-**Noon Heat** (from the GDD): every 3rd turn, characters without a Shield lose part of their HP. How it changes these fights comes with the Rye Fields spec.
+Lands have no Laws: these fights differ by their enemies. The former Law becomes an idea for enemy and boss abilities here: the midday heat that hurts heroes without a Shield, for Lady Midday and the enemies of her fields. How they play comes with the land's enemy sheets.
 
 ## Roster and roles
 

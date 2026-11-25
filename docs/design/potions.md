@@ -4,7 +4,7 @@ System 7 of the other systems (see [`README.md`](README.md)). The GDD covers pot
 
 ## 1. Goal
 
-Potions are the player's single-use trump cards: a heal at the right moment, an answer to a land's Law, a revived hero. They can swing a fight, so they cost materials the player has to fight for, and the player chooses before each battle which three to bring. Learning a new recipe should feel like a reward from the map, and each land should teach potions that help against its own and later Laws.
+Potions are the player's single-use trump cards: a heal at the right moment, an answer to an enemy's ability, a revived hero. They can swing a fight, so they cost materials the player has to fight for, and the player chooses before each battle which three to bring. Learning a new recipe should feel like a reward from the map, and each land should teach potions that help against its own and later Laws.
 
 ## 2. Concepts
 
@@ -27,13 +27,13 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
     | Healing Draught | heals 35% of max health | one hero | Marsh Herbs ×2, Flax ×1 |
     | Cleansing Brew | removes every harmful status; no harmful status can be applied to the hero until their next turn | one hero | Flax ×2, Amber ×1 |
     | Wolf's Fury | +40 Rage | the party | Wolf Pelt ×1, Flax ×2 |
-    | Sheaf Ward | Shield of 15% of max health for 1 turn (the Rye Fields' Noon Heat spares Shielded heroes) | every hero | Last Sheaf ×1, Flax ×2 |
-    | Wisp Oil | Mark for 2 turns; hidden enemies are revealed (the Old Forest's Misleading) | every enemy | Wisp in a Jar ×1, Amber ×1 |
+    | Sheaf Ward | Shield of 15% of max health for 1 turn | every hero | Last Sheaf ×1, Flax ×2 |
+    | Wisp Oil | Mark for 2 turns | every enemy | Wisp in a Jar ×1, Amber ×1 |
     | Bog Mist | Weaken for 2 turns | every enemy | Marsh Herbs ×2, Amber ×1 |
-    | Fire Flask | 30 damage and 2 stacks of Burn; fire, so the fallen in Nav do not rise | one enemy | Brimstone ×2, Flax ×1 |
-    | Storm Draught | immune to Stun and to the Bald Mountain's lightning for 3 turns | one hero | Thunderstone ×1, Marsh Herbs ×1 |
+    | Fire Flask | 30 damage and 2 stacks of Burn; it counts as fire (for Nav's enemies that rise unless finished with fire) | one enemy | Brimstone ×2, Flax ×1 |
+    | Storm Draught | immune to Stun for 3 turns | one hero | Thunderstone ×1, Marsh Herbs ×1 |
     | Heartwood Brew | +30% damage for 3 turns | one hero | Old Oak Heartwood ×1, Tinder Fungus ×1 |
-    | Gromnica Light | for 3 turns the party's healing is not halved and fallen enemies do not rise (Nav's Chill of Nav) | the party | Gromnica Wax ×1, Bone Ash ×2 |
+    | Gromnica Light | removes Burn; no Burn can be applied for 3 turns | every hero | Gromnica Wax ×1, Bone Ash ×2 |
     | Firebird Draught | a fallen hero returns with 40% of max health | one fallen hero | Firebird Feather ×1, Brimstone ×2 |
     | Dead Water Tincture | heals to full and removes Bleed | one hero | Dead Water ×1, Marsh Herbs ×2 |
     | Kupala Dew Elixir | heals 30% of max health and removes every harmful status | every hero | Kupala Dew ×1, Marsh Herbs ×2 |
@@ -42,7 +42,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 
 2. Mountain Ore, Yew Wood, Serpent King's Crown and Alatyr Stone are in no recipe; they are left for the forge.
 3. Every recipe also costs gold.
-4. Effects are built from the existing blocks: healing, statuses ([`combat/statuses.md`](combat/statuses.md)), Rage ([`combat/rage.md`](combat/rage.md)) and damage. Reviving a fallen hero, healing that ignores Chill of Nav and stopping the fallen from rising are new effects the potions add.
+4. Effects are built from the existing blocks: healing, statuses ([`combat/statuses.md`](combat/statuses.md)), Rage ([`combat/rage.md`](combat/rage.md)) and damage. Reviving a fallen hero and blocking a status are new effects the potions add.
 
 ### Brewing (Wise Woman's Hut)
 
@@ -86,7 +86,7 @@ Potions are the player's single-use trump cards: a heal at the right moment, an 
 - **Materials and Storage:** recipes take materials from the Storage ([`side-activities.md`](side-activities.md), the GDD's Materials).
 - **Side activities:** schematic fights are side activity templates with a fixed schematic reward, like unlocks there (rule 13); their kind is never drawn by weight.
 - **Battle preparation:** the Potions button picks the battle potions.
-- **Battle:** potions use the drag-to-act input and arrow; their effects use the statuses, Rage and the new effects of rule 4. Laws: Sheaf Ward (Noon Heat), Wisp Oil (Misleading), Storm Draught (Storm), Fire Flask and Gromnica Light (Chill of Nav).
+- **Battle:** potions use the drag-to-act input and arrow; their effects use the statuses, Rage and the new effects of rule 4.
 - **Economy:** gold costs of recipes, and later schematics and potions in the shop.
 
 ## 6. Feedback

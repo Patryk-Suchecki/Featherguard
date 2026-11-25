@@ -16,12 +16,12 @@ Concept: `Art/Concepts/BaldMountain.png`.
 - **Palette and light:** the Bald Mountain palette in [`STYLE_GUIDE.md`](../../STYLE_GUIDE.md#bald-mountain): dark basalt and grey rock under a storm sky, cold lightning from above, the dragon fire as the only warm colour.
 - **What the 3D backdrop should do differently from the concept:**
   - the battle camera is side-on at a slight angle, so the plateau is shallower and the characters fill more of the frame;
-  - the lightning is an effect that strikes when the Law does, not a painted bolt; between strikes the sky only flickers;
+  - the lightning is an effect that strikes when an enemy calls it down, not a painted bolt; between strikes the sky only flickers;
   - the standing stones in the foreground stay low, so they never cover the characters' feet or the timing rings.
 
-## Law
+## Enemy ideas
 
-**Storm** (from the GDD): lightning strikes a random character; dodge it in a QTE. How it changes these fights comes with the land's spec.
+Lands have no Laws: these fights differ by their enemies. The former Law becomes an idea for enemy and boss abilities here: lightning called down on a random hero, dodged in a QTE. How they play comes with the land's enemy sheets.
 
 ## Roster and roles
 

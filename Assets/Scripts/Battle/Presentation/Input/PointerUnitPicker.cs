@@ -16,6 +16,7 @@ namespace Featherguard.Battle.Presentation
         bool tracking;
         bool moved;
         Vector2 pressedAt;
+        float pressedTime;
 
         public PointerUnitPicker(Camera camera, float tolerance)
         {
@@ -35,6 +36,7 @@ namespace Featherguard.Battle.Presentation
                 tracking = true;
                 moved = false;
                 pressedAt = position;
+                pressedTime = Time.unscaledTime;
                 return new UnitPointer(true, true, false, false, Pick(position, candidates), position);
             }
             if (!tracking) return default;
@@ -43,9 +45,9 @@ namespace Featherguard.Battle.Presentation
             if (pointer.press.wasReleasedThisFrame || !pointer.press.isPressed)
             {
                 tracking = false;
-                return new UnitPointer(false, false, true, moved, Pick(position, candidates), position);
+                return new UnitPointer(false, false, true, moved, Pick(position, candidates), position, Time.unscaledTime - pressedTime);
             }
-            return new UnitPointer(false, true, false, moved, Pick(position, candidates), position);
+            return new UnitPointer(false, true, false, moved, Pick(position, candidates), position, Time.unscaledTime - pressedTime);
         }
 
         bool OverUi(Vector2 position)

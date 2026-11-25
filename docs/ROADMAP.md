@@ -43,10 +43,9 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - Balance passes with simulations in EditMode tests (every phase).
 
 ### Programming
-- Battle model: timing results, party Rage, new statuses, enemy brains per archetype, boss mechanics (M0 prototype, M1).
+- Battle model: timing results, the reworked Rage, new statuses, enemy brains per archetype, boss mechanics (M0 prototype, M1).
 - Progression: Stronghold, world map, story missions, side activities, land and hero unlocks, character levels; replaces the bird run and its gambling rewards (M1–M2).
 - Roster and party pick in the Camp, equipment, Storage and Salvage, sets, schematics, forge, potions, shop (M2).
-- Laws of the lands (M2).
 - Save system and data migration between versions (M2).
 - Content pipeline: catalogs and importers for new heroes, enemies and items (M1).
 - Android build: signing and versioning (M1 first build, M4 release).
@@ -77,7 +76,7 @@ Each workstream becomes one or more epics. The phase in brackets is when it must
 - One effect per ability (attack, support, Rage) for every hero and enemy.
 - Status effects: Bleed, Burn, Freeze, Curse, Shield, Taunt, Stun, Mark, Empower.
 - Timing feedback: shrinking ring, good and perfect hits, BLOCK! flash.
-- Hits, crits, deaths, Law effects per land, UI effects (rewards, level up).
+- Hits, crits, deaths, enemy ability effects per land, UI effects (rewards, level up).
 
 ### Audio
 Our own music and sounds come in M3; until then the game uses generic placeholder sounds.

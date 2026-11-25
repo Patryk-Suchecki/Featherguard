@@ -16,6 +16,8 @@ namespace Featherguard.Battle.Presentation
         BattleUnit DragTarget { get; }
         PotionDefinition HeldPotion { get; }
         Vector2? DragScreenOrigin { get; }
+        BattleUnit Inspected { get; }
+        PotionDefinition InspectedPotion { get; }
         void ToggleSpecial();
     }
 
@@ -25,6 +27,8 @@ namespace Featherguard.Battle.Presentation
         void GrabPotion(PotionDefinition potion, Vector2 screen);
         void MovePotion(Vector2 screen);
         void DropPotion(Vector2 screen);
+        void InspectPotion(PotionDefinition potion);
+        void EndInspectPotion();
     }
 
     public readonly struct PotionCommand
@@ -63,6 +67,7 @@ namespace Featherguard.Battle.Presentation
         readonly TargetHighlighter highlighter;
         readonly ISoundPlayer sounds;
         readonly IPopupView view;
+        readonly float holdTime;
 
         public BattleUnit Selected { get; private set; }
         public bool SpecialArmed { get; private set; }
@@ -76,11 +81,14 @@ namespace Featherguard.Battle.Presentation
         public Vector3 DragOrigin => Selected != null && presenter.ViewOf(Selected) != null ? presenter.ViewOf(Selected).Center : Vector3.zero;
         public Vector2 DragPointer { get; private set; }
         public BattleUnit DragTarget { get; private set; }
+        public BattleUnit Inspected { get; private set; }
+        public PotionDefinition InspectedPotion { get; private set; }
 
         bool moved;
         Vector2 potionOrigin;
+        BattleUnit pressed;
 
-        public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, TargetHighlighter highlighter, ISoundPlayer sounds, IPopupView view)
+        public PlayerCommands(BattleModel model, BattlePresenter presenter, IUnitPicker picker, TargetHighlighter highlighter, ISoundPlayer sounds, IPopupView view, float holdTime)
         {
             this.model = model;
             this.presenter = presenter;
@@ -88,6 +96,7 @@ namespace Featherguard.Battle.Presentation
             this.highlighter = highlighter;
             this.sounds = sounds;
             this.view = view;
+            this.holdTime = holdTime;
         }
 
         public bool SpecialAvailable => CanCommand && model.Rage.Ready && model.Heroes.Any(h => model.CanCommand(h) && h.Definition.special != null);
@@ -99,6 +108,8 @@ namespace Featherguard.Battle.Presentation
             Selected = null;
             HeldPotion = null;
             DragTarget = null;
+            Inspected = null;
+            pressed = null;
             RefreshHighlights();
         }
 
@@ -109,6 +120,8 @@ namespace Featherguard.Battle.Presentation
             Selected = null;
             HeldPotion = null;
             DragTarget = null;
+            Inspected = null;
+            pressed = null;
             RefreshHighlights();
         }
 
@@ -175,7 +188,8 @@ namespace Featherguard.Battle.Presentation
             var pointer = picker.Read(presenter.Views);
             if (pointer.Pressed)
             {
-                var hero = pointer.Unit?.Unit;
+                pressed = pointer.Unit?.Unit;
+                var hero = pressed;
                 if (hero == null || !model.CanCommand(hero) || SpecialArmed && hero.Definition.special == null) return;
                 Selected = hero;
                 moved = false;
@@ -183,6 +197,10 @@ namespace Featherguard.Battle.Presentation
                 DragPointer = pointer.Screen;
                 sounds.Play(SfxId.Click);
                 RefreshHighlights();
+            }
+            else if (pointer.Held && Inspected == null && pressed != null && !pointer.Moved && pointer.HeldFor >= holdTime)
+            {
+                Inspect(pressed);
             }
             else if (pointer.Held && Selected != null)
             {
@@ -194,8 +212,15 @@ namespace Featherguard.Battle.Presentation
                 DragTarget = target;
                 RefreshHighlights();
             }
-            else if (pointer.Released && Selected != null)
+            else if (pointer.Released)
             {
+                pressed = null;
+                if (Inspected != null)
+                {
+                    Inspected = null;
+                    return;
+                }
+                if (Selected == null) return;
                 var hero = Selected;
                 Selected = null;
                 moved = false;
@@ -204,6 +229,20 @@ namespace Featherguard.Battle.Presentation
                 RefreshHighlights();
             }
         }
+
+        void Inspect(BattleUnit unit)
+        {
+            Inspected = unit;
+            Selected = null;
+            moved = false;
+            DragTarget = null;
+            sounds.Play(SfxId.Click);
+            RefreshHighlights();
+        }
+
+        public void InspectPotion(PotionDefinition potion) => InspectedPotion = potion;
+
+        public void EndInspectPotion() => InspectedPotion = null;
 
         bool IsValidDrop(BattleUnit hero, BattleUnit over) =>
             over != null

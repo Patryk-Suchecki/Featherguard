@@ -32,6 +32,7 @@ namespace Featherguard.Battle
         public virtual bool Heals => false;
         public virtual int ExpectedDamage => 0;
         public virtual StatusDefinition StatusOnTarget => null;
+        public abstract string Summary { get; }
         public abstract void Apply(in EffectContext context);
     }
 
@@ -42,6 +43,7 @@ namespace Featherguard.Battle
 
         public override bool Damages => true;
         public override int ExpectedDamage => power;
+        public override string Summary => $"{power} damage";
 
         public override void Apply(in EffectContext context) => context.State.DealDamage(context.Actor, context.Target, power, context.Ability, context.Timing);
     }
@@ -55,6 +57,7 @@ namespace Featherguard.Battle
         [Min(1)] public int overflowShieldTurns = 2;
 
         public override bool Heals => true;
+        public override string Summary => overflowShield != null ? $"heals {power}; healing past full health becomes a Shield for {overflowShieldTurns} turns" : $"heals {power}";
 
         public override void Apply(in EffectContext context)
         {
@@ -73,6 +76,7 @@ namespace Featherguard.Battle
 
         public override bool Damages => true;
         public override int ExpectedDamage => power;
+        public override string Summary => $"{power} damage, then jumps to every other enemy, keeping {Math.Round(falloff * 100f)}% of the hit each time";
 
         public override void Apply(in EffectContext context)
         {
@@ -98,6 +102,7 @@ namespace Featherguard.Battle
         [SerializeReference, SubclassSelector] public AbilityEffect effect;
 
         public override bool AppliesPerTarget => effect == null || effect.AppliesPerTarget;
+        public override string Summary => effect != null ? $"on a perfect timing, {effect.Summary}" : "";
 
         public override void Apply(in EffectContext context)
         {
@@ -113,6 +118,7 @@ namespace Featherguard.Battle
 
         public override bool AppliesPerTarget => !application.onSelf;
         public override StatusDefinition StatusOnTarget => application.onSelf ? null : application.status;
+        public override string Summary => application.Summary;
 
         public override void Apply(in EffectContext context)
         {
@@ -124,6 +130,8 @@ namespace Featherguard.Battle
     [Serializable]
     public sealed class CleanseEffect : AbilityEffect
     {
+        public override string Summary => "removes every harmful status";
+
         public override void Apply(in EffectContext context) => context.State.Cleanse(context.Target);
     }
 }

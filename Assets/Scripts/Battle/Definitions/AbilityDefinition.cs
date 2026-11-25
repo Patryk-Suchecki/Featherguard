@@ -24,5 +24,23 @@ namespace Featherguard.Battle
         public bool HasDirectImpact => effects.Any(e => e.Damages || e.Heals);
         public int ExpectedDamage => effects.Sum(e => e.ExpectedDamage);
         public IEnumerable<StatusDefinition> StatusesOnTarget => effects.Select(e => e.StatusOnTarget).Where(s => s != null);
+
+        public string TargetText => target switch
+        {
+            AbilityTarget.Enemy => "One enemy",
+            AbilityTarget.AllEnemies => "Every enemy",
+            AbilityTarget.Ally => "One ally",
+            _ => "Every ally",
+        };
+
+        public string Summary
+        {
+            get
+            {
+                var parts = effects.Where(e => e != null).Select(e => e.Summary).Where(s => !string.IsNullOrEmpty(s));
+                string text = $"{TargetText}: {string.Join("; ", parts)}";
+                return hits > 1 ? $"{text}, {hits} hits." : $"{text}.";
+            }
+        }
     }
 }

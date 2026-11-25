@@ -105,7 +105,7 @@ namespace Featherguard.Game
                 UnitPicker = new PointerUnitPicker(battleCamera, config.presentation.tapTolerance),
             });
             hud.BindBattle(battle.Commands, battle.Presenter.Rage);
-            hud.BindPotions(battle.Potions, model.Potions);
+            hud.BindPotions(battle.Potions, model.Potions, config.presentation.holdToInspect);
             DebugTools.Track(battle);
         }
 

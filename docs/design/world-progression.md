@@ -8,7 +8,7 @@ The world map is where the player decides what to do next. The story pulls them 
 
 ## 2. Concepts
 
-- **Land:** one of the five areas on the map (Rye Fields, Marshes, Bald Mountain, Old Forest, Nav). A land is **locked** or **open**, has a **Law** (a combat rule for its battles), its own enemies and materials, and a **side activity pool**. Data: `LandDefinition`.
+- **Land:** one of the five areas on the map (Rye Fields, Marshes, Bald Mountain, Old Forest, Nav). A land is **locked** or **open**, has its own enemies (which set its battles apart; lands have no Laws) and materials, and a **side activity pool**. Data: `LandDefinition`.
 - **Activity:** something the player can start from the map: a Single fight, Waves fight, Puzzle fight, Elite fight or Boss fight in a land, with a **threat level** and **rewards**. It wraps an `EncounterDefinition`. Data: `ActivityDefinition`.
 - **Story mission:** an activity shown as **Main quest**, at a fixed place in the **story order**: one list across all lands (`WorldDefinition.storyMissions`). The Sacred Oak plays the story scene before or after it.
 - **Side activity:** an activity drawn from a land's pool.
@@ -88,7 +88,7 @@ The world map is where the player decides what to do next. The story pulls them 
 ## 5. Connections
 
 - **Party** ([`party.md`](party.md)): the party's levels give the party strength; EXP from rewards goes to the heroes who fought.
-- **Combat:** an activity starts a battle with its `EncounterDefinition`, the land's Law and the party; the battle reports victory or defeat back.
+- **Combat:** an activity starts a battle with its `EncounterDefinition` and the party; the battle reports victory or defeat back.
 - **Economy and equipment:** rewards add gold, materials, loot and schematics to the save and the Storage.
 - **Stronghold:** **Embark** opens the world map; returning from the map goes back to the Stronghold.
 - **Sacred Oak:** shows the story progress, the next story mission with its rating, and *Show on map*. It plays the story scenes.
@@ -98,7 +98,7 @@ The world map is where the player decides what to do next. The story pulls them 
 ## 6. Feedback
 
 - **World map:** every land is shown; locked ones with a lock. An open land shows its 1 to 3 activities as icons by type, and the Main quest icon stands out in the land that holds it. Types are told apart by shape, not only colour.
-- **Tapping an activity** opens its preparation screen: name, type, threat rating, the Law, the reward (with the Daring multiplier when it applies), the number of waves for a waves fight, and a way to change the party (the Camp) and potions.
+- **Tapping an activity** opens its preparation screen: name, type, threat rating, the land, the reward (with the Daring multiplier when it applies), the number of waves for a waves fight, and a way to change the party (the Camp) and potions.
 - **Victory screen:** the reward and the Daring multiplier when earned; EXP per hero and level-ups after a fight that rewards EXP. **Defeat screen:** the rating it had, "no rewards", tips to get stronger, Retry and back to the map.
 - **Returning to the map after a win:** the side activities change with a short shuffle, so the player sees the reroll.
 - **Sacred Oak:** *Story missions n / 25*, missions won per land, and the next story mission.
@@ -134,7 +134,6 @@ These become EditMode tests on the world progress model:
 
 - **MVP scope vs. the story order:** the roadmap plans 3 lands and 15 story missions for the first release, but the first 15 missions of this order already reach 5 lands (the Old Forest at 11 and 14, Nav at 15). Either the MVP keeps fewer missions of the first lands, or its 3 lands are chosen differently.
 - What drives the main story and how it ends (from the GDD), and the boss of Nav.
-- Whether a land's Law grows stronger as the story advances in that land (from the GDD).
 - How the threat levels of story missions rise through the story (side activities follow them, see [`side-activities.md`](side-activities.md)).
 - How equipment and hero choice count in the party strength (rule 14 uses levels only).
 - How a Puzzle fight plays (from the GDD).

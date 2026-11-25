@@ -115,7 +115,6 @@ Modifiers of the same stat add up; there is no cap except that a multiplier neve
 - **Timing:** the action's attack timing feeds the `Perfect timing` condition; the timing multiplier is step 3 of the damage calculation ([timing](timing.md)).
 - **Rage:** damage over time gives Rage to its source side like a hit; damage soaked by a Shield gives no Rage to either side. The Rage spec sets the amounts.
 - **Enemy behaviour:** Act last changes the order of the enemy turn (`EnemyTurn`); brains read statuses to pick targets and actions (the enemy behaviour spec).
-- **Laws of the lands:** Noon Heat spares units with an Absorb damage status ("without a Shield").
 - **Presentation:** `StatusApplied`, `StatusTicked` and the new events below drive popups, icons and VFX.
 - **Content:** each status is a `StatusDefinition` asset with a `StatusVisuals` asset, seeded by `StatusCatalog`.
 
