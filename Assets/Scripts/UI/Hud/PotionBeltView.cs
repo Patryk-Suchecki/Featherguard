@@ -19,7 +19,7 @@ namespace Featherguard.UI
         readonly PotionPouch pouch;
         readonly List<(PotionDefinition Potion, CanvasGroup Group, Text Count)> slots = new();
 
-        public PotionBeltView(RectTransform parent, IPotionCommands commands, PotionPouch pouch)
+        public PotionBeltView(RectTransform parent, IPotionCommands commands, PotionPouch pouch, float holdTime)
         {
             this.commands = commands;
             this.pouch = pouch;
@@ -39,7 +39,7 @@ namespace Featherguard.UI
                 var badge = Ui.Rect("Count", rect, new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(4f, -4f), new Vector2(Slot * 0.46f, Slot * 0.3f));
                 Ui.Panel(badge, BadgeColor);
                 var count = Ui.Label(Ui.Stretch("Label", badge), "", Mathf.RoundToInt(Slot * 0.2f), TextAnchor.MiddleCenter, Color.white);
-                rect.gameObject.AddComponent<PotionSlot>().Init(commands, potion);
+                rect.gameObject.AddComponent<PotionSlot>().Init(commands, potion, holdTime);
                 slots.Add((potion, rect.gameObject.AddComponent<CanvasGroup>(), count));
             }
         }

@@ -63,6 +63,8 @@ namespace Featherguard.Battle.Presentation
         public Color hoverRing = new(1f, 1f, 1f, 1f);
         [Tooltip("Tap tolerance around units as a fraction of screen height.")]
         [Range(0f, 0.3f)] public float tapTolerance = 0.12f;
+        [Tooltip("How long a unit or potion is held still before its info shows, in seconds.")]
+        [Range(0.1f, 2f)] public float holdToInspect = 0.45f;
 
         public Color BaseColor(UnitDefinition unit) => unit.team == Team.Enemies ? enemyBase : unit.heroClass switch
         {
