@@ -1,6 +1,8 @@
-# Party Rage
+# Rage (current build)
 
-Layer 8 of the combat specs (see [`../README.md`](../README.md)), next to [timing](timing.md). The summary is the GDD's "Party Rage" section; this spec is the exact rule set the battle model follows.
+> **Being reworked.** Rage will not be a shared party meter: the way of using it described here is not intuitive, and new rules are still to be agreed (GDD, "Rage"). This spec describes how the current build works until a new spec replaces it.
+
+Layer 8 of the combat specs (see [`../README.md`](../README.md)), next to [timing](timing.md). The summary is the GDD's "Rage" section; this spec is the exact rule set the battle model follows today.
 
 ## 1. Goal
 
