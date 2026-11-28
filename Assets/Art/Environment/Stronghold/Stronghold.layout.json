@@ -1,0 +1,386 @@
+{
+  "camera": {
+    "position": [
+      0.0,
+      1.7,
+      0.0
+    ],
+    "forward": [
+      0.0,
+      -0.096,
+      0.995
+    ],
+    "up": [
+      0.0,
+      0.995,
+      0.096
+    ],
+    "fieldOfView": 37.32
+  },
+  "campfire": [
+    0.002,
+    -0.158,
+    8.204
+  ],
+  "models": [
+    {
+      "name": "Forge",
+      "position": [
+        1.86,
+        0.438,
+        15.874
+      ],
+      "yaw": 14.29,
+      "scale": 1.0,
+      "height": 2.585,
+      "place": "Forge"
+    },
+    {
+      "name": "WiseWomansHut",
+      "position": [
+        -2.123,
+        1.36,
+        17.321
+      ],
+      "yaw": -14.0,
+      "scale": 1.0,
+      "height": 4.012,
+      "place": "WiseWomansHut"
+    },
+    {
+      "name": "Tavern",
+      "position": [
+        4.425,
+        -0.232,
+        12.753
+      ],
+      "yaw": 54.0,
+      "scale": 1.0,
+      "height": 2.257,
+      "place": "Tavern"
+    },
+    {
+      "name": "Shop",
+      "position": [
+        -2.79,
+        -0.093,
+        7.22
+      ],
+      "yaw": -70.0,
+      "scale": 1.0,
+      "height": 1.314,
+      "place": "Shop"
+    },
+    {
+      "name": "Signpost",
+      "position": [
+        1.322,
+        -0.127,
+        3.024
+      ],
+      "yaw": 32.62,
+      "scale": 1.0,
+      "height": 1.387,
+      "place": "Embark"
+    },
+    {
+      "name": "Campfire",
+      "position": [
+        0.002,
+        -0.158,
+        8.204
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 0.29,
+      "place": "Camp"
+    },
+    {
+      "name": "SacredOak",
+      "position": [
+        -6.393,
+        -0.059,
+        15.326
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 7.194,
+      "place": "SacredOak"
+    },
+    {
+      "name": "SacredOakCrown",
+      "position": [
+        -6.393,
+        -0.059,
+        15.326
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 9.613
+    },
+    {
+      "name": "Stump",
+      "position": [
+        1.422,
+        -0.234,
+        9.589
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 0.022
+    },
+    {
+      "name": "LanternPost",
+      "position": [
+        -2.844,
+        0.408,
+        12.533
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 1.32
+    },
+    {
+      "name": "Graveyard",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 1.095
+    },
+    {
+      "name": "Palisade",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 3.492
+    },
+    {
+      "name": "DeadTree",
+      "position": [
+        9.893,
+        -0.236,
+        18.313
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 7.173
+    },
+    {
+      "name": "Ground",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 2.344
+    },
+    {
+      "name": "GroundDetails",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": -0.0,
+      "scale": 1.0,
+      "height": 2.476
+    }
+  ],
+  "seats": [
+    {
+      "position": [
+        -1.27,
+        -0.075,
+        9.503
+      ],
+      "yaw": 135.6
+    },
+    {
+      "position": [
+        -0.768,
+        -0.068,
+        10.328
+      ],
+      "yaw": 160.07
+    },
+    {
+      "position": [
+        -0.162,
+        -0.065,
+        10.655
+      ],
+      "yaw": 176.17
+    },
+    {
+      "position": [
+        0.468,
+        -0.104,
+        10.506
+      ],
+      "yaw": -168.56
+    },
+    {
+      "position": [
+        1.019,
+        -0.201,
+        10.193
+      ],
+      "yaw": -152.92
+    },
+    {
+      "position": [
+        1.422,
+        -0.234,
+        9.589
+      ],
+      "yaw": -134.28
+    }
+  ],
+  "lights": [
+    {
+      "name": "Shrine candle light",
+      "group": "Oak",
+      "position": [
+        -4.385,
+        1.993,
+        14.459
+      ],
+      "color": [
+        1.0,
+        0.5,
+        0.16
+      ],
+      "energy": 27.2
+    },
+    {
+      "name": "Campfire VFX light",
+      "group": "Fire",
+      "position": [
+        0.002,
+        0.481,
+        8.204
+      ],
+      "color": [
+        1.0,
+        0.29,
+        0.055
+      ],
+      "energy": 74.4
+    },
+    {
+      "name": "Lantern warm glow",
+      "group": "Lantern",
+      "position": [
+        -2.705,
+        0.961,
+        12.534
+      ],
+      "color": [
+        1.0,
+        0.57,
+        0.24
+      ],
+      "energy": 18.0
+    },
+    {
+      "name": "Chata | swiatlo_latarni",
+      "group": "Hut",
+      "position": [
+        -0.625,
+        2.539,
+        17.241
+      ],
+      "color": [
+        0.45,
+        1.0,
+        0.35
+      ],
+      "energy": 9.0
+    },
+    {
+      "name": "Chata | swiatlo_okna",
+      "group": "Hut",
+      "position": [
+        -2.689,
+        2.187,
+        16.862
+      ],
+      "color": [
+        1.0,
+        0.65,
+        0.3
+      ],
+      "energy": 6.0
+    },
+    {
+      "name": "Kuznia | palenisko.001",
+      "group": "Forge",
+      "position": [
+        2.54,
+        0.972,
+        17.429
+      ],
+      "color": [
+        1.0,
+        0.5,
+        0.18
+      ],
+      "energy": 140.0
+    },
+    {
+      "name": "Karczma | swiatlo_latarni",
+      "group": "Tavern",
+      "position": [
+        3.594,
+        0.683,
+        13.318
+      ],
+      "color": [
+        1.0,
+        0.62,
+        0.28
+      ],
+      "energy": 14.0
+    },
+    {
+      "name": "Karczma | swiatlo_okna_1",
+      "group": "Tavern",
+      "position": [
+        4.604,
+        0.478,
+        12.0
+      ],
+      "color": [
+        1.0,
+        0.6,
+        0.28
+      ],
+      "energy": 8.0
+    },
+    {
+      "name": "V3 | ciepla latarnia straganu",
+      "group": "Shop",
+      "position": [
+        -2.246,
+        0.734,
+        7.79
+      ],
+      "color": [
+        1.0,
+        0.6,
+        0.26
+      ],
+      "energy": 13.0
+    }
+  ]
+}

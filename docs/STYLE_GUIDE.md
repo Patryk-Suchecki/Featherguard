@@ -157,7 +157,7 @@ A muddy road through an empty field at night before a fight: the heroes' side on
 
 Night around old oak, logs and stone; warm firelight against cold mist and a cool sky. The concept is [`Art/Concepts/Stronghold.png`](../Art/Concepts/Stronghold.png).
 
-- **View:** light top-down three-quarter view of the whole camp, like a tabletop diorama, with dark ground around it.
+- **View:** at eye level from the road by the signpost, looking across the campfire at the buildings, with the forest and the mountains behind them; tapping the campfire flies the camera to it.
 - **Layout:** the campfire in the centre with six stump seats behind it; the forge back left (a log smithy on a stone foundation with a stone chimney and an open, glowing door); the Wise Woman's Hut back centre (crooked, mossy, herbs and skulls, green glow); the Sacred Oak back right, the tallest shape, with a shrine and candles at its roots; the tavern right (log walls, thatched roof, lit windows); the shop front left (a stall with an awning and crates); the signpost front right where the road leaves the camp. A broken palisade of sharpened logs runs around it.
 - **Mood:** ground mist, dead leafless trees at the edges, a graveyard front left with wooden markers, crosses, bones and blue-green wisps, lanterns on posts along the paths.
 - **Light:** the campfire, the forge hearth and the tavern windows are the only warm light; the hut's glow and the wisps are the only cold accents.

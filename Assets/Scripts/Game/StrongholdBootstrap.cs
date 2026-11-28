@@ -19,6 +19,7 @@ namespace Featherguard.Game
         [SerializeField] Transform campfire;
         [SerializeField] Transform campView;
         [SerializeField] CampSeat[] seats;
+        [SerializeField, Min(0.1f)] float heroScale = 1f;
 
         StrongholdHud hud;
         CampHud campHud;
@@ -193,7 +194,9 @@ namespace Featherguard.Game
                 var hero = roster.AtSeat(seat.Index);
                 if (hero == null) continue;
                 var model = UnitModels.Place(visuals.Of(hero), seat.transform, campfire.position - seat.transform.position);
-                if (model != null) seat.Hero = model;
+                if (model == null) continue;
+                model.transform.localScale *= heroScale;
+                seat.Hero = model;
             }
         }
 

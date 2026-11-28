@@ -1,21 +1,59 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Featherguard.Game;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Featherguard.EditorTools
 {
     public sealed class StrongholdSceneBuilder
     {
-        static readonly Vector3 CampfirePosition = Vector3.zero;
-        static readonly Vector3 SignpostPosition = new(8f, 0f, -4.5f);
+        const string Models = ContentPaths.Environment + "/Stronghold";
+        const string LayoutPath = Models + "/Stronghold.layout.json";
+        const string Materials = Models + "/Materials";
+        const string StumpModel = "Stump";
+        const string FireGroup = "Fire";
+        const float SeatInFront = 0.3f;
+        const float HeroScale = 0.55f;
+        const float LeafCutoff = 0.45f;
+        const string LeafShader = "Featherguard/Toon Leaves";
+        const float LabelGap = 0.12f;
+        const float LabelMaxHeight = 3f;
+        const float NearCamera = 5f;
+        const float NearLabelHeight = 0.85f;
+        const float FarClip = 400f;
+        const float MoonIntensity = 1.4f;
+        const float FogDensity = 0.006f;
+        const float SkyRotation = 90f;
+        const string SkyTexture = Models + "/Textures/Sky_Panorama.png";
+        const float Saturation = -12f;
 
-        const float SeatRadius = 2.6f;
-        const float SeatArcStart = 165f;
-        const float SeatArcEnd = 15f;
+        static readonly Color Horizon = new(0.34f, 0.39f, 0.49f);
+        static readonly Color Moonlight = new(0.72f, 0.74f, 0.86f);
+        static readonly Color ToonShadow = new(0.38f, 0.38f, 0.48f);
+        static readonly Color ColorFilter = new(1f, 0.97f, 0.94f);
+        static readonly Quaternion ImportTurn = Quaternion.Euler(90f, 0f, 0f);
 
-        NightPalette palette;
+        static readonly Dictionary<string, (StrongholdPlaceKind Kind, string Name)> Places = new()
+        {
+            ["Forge"] = (StrongholdPlaceKind.Forge, "Forge"),
+            ["WiseWomansHut"] = (StrongholdPlaceKind.WiseWomansHut, "Wise Woman's Hut"),
+            ["SacredOak"] = (StrongholdPlaceKind.SacredOak, "Sacred Oak"),
+            ["Tavern"] = (StrongholdPlaceKind.Tavern, "Tavern"),
+            ["Shop"] = (StrongholdPlaceKind.Shop, "Shop"),
+            ["Camp"] = (StrongholdPlaceKind.Camp, "Campfire"),
+            ["Embark"] = (StrongholdPlaceKind.Embark, "Signpost"),
+        };
+
+        static readonly HashSet<string> LeafCards = new() { "SacredOakCrown" };
+
+        static readonly Dictionary<string, float> Flicker = new() { [FireGroup] = 0.35f, ["Forge"] = 0.3f };
+
+        Vector3 campfirePosition;
 
         [MenuItem("Featherguard/Rebuild Stronghold Scene")]
         public static void Run()
@@ -35,26 +73,40 @@ namespace Featherguard.EditorTools
 
         void Create(GameConfig config)
         {
+            var layout = StrongholdLayout.Load(LayoutPath);
+            if (layout == null)
+            {
+                Debug.LogError($"Featherguard: {LayoutPath} is missing. Export it from the camp scene in Blender.");
+                return;
+            }
+
             string configPath = AssetDatabase.GetAssetPath(config);
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             config = AssetDatabase.LoadAssetAtPath<GameConfig>(configPath);
-            palette = new NightPalette();
+            campfirePosition = StrongholdLayout.Point(layout.campfire);
             NightScene.PostFX(ContentPaths.StrongholdPostProfile);
-
-            NightScene.ConfigureLighting();
-            var camera = NightScene.CreateCamera(new Vector3(0f, 18f, -17.5f), new Vector3(0f, 0f, 3.2f), 40f);
+            WarmPostFX();
+            var moon = NightScene.ConfigureLighting();
+            moon.intensity = MoonIntensity;
+            moon.color = Moonlight;
+            RenderSettings.fogColor = Horizon;
+            RenderSettings.fogDensity = FogDensity;
+            RenderSettings.skybox = SkyMaterial();
+            var camera = Camera(layout.camera);
 
             var world = new GameObject("World").transform;
-            Ground(world);
-            var (campfire, seats) = Campfire(world, config.campSeats);
-            Forge(world, new Vector3(-8f, 0f, 3f));
-            WiseWomansHut(world, new Vector3(-4f, 0f, 8f));
-            SacredOak(world, new Vector3(4.5f, 0f, 9f));
-            Tavern(world, new Vector3(8.5f, 0f, 3.5f));
-            Shop(world, new Vector3(-8f, 0f, -4f));
-            Signpost(world, SignpostPosition);
-            Graveyard(world);
-            DeadTrees(world);
+            Transform campfire = null;
+            foreach (var model in layout.models.Where(m => m.name != StumpModel))
+            {
+                var root = Model(world, model, camera.transform.position);
+                if (model.place == "Camp") campfire = root;
+            }
+            var lights = new GameObject("Lights").transform;
+            lights.SetParent(world, false);
+            foreach (var light in layout.lights)
+                Light(lights, light);
+            Flame(campfire, lights.Find(layout.lights.First(l => l.group == FireGroup).name));
+            var seats = Seats(world, layout.seats, layout.models.First(m => m.name == StumpModel), config.campSeats);
 
             var bootstrap = new GameObject("Game").AddComponent<StrongholdBootstrap>();
             var serialized = new SerializedObject(bootstrap);
@@ -62,6 +114,7 @@ namespace Featherguard.EditorTools
             serialized.FindProperty("sceneCamera").objectReferenceValue = camera;
             serialized.FindProperty("campfire").objectReferenceValue = campfire;
             serialized.FindProperty("campView").objectReferenceValue = CampView(world);
+            serialized.FindProperty("heroScale").floatValue = HeroScale;
             var seatsProperty = serialized.FindProperty("seats");
             seatsProperty.arraySize = seats.Length;
             for (int i = 0; i < seats.Length; i++)
@@ -74,58 +127,151 @@ namespace Featherguard.EditorTools
             AssetDatabase.SaveAssets();
         }
 
-        void Ground(Transform world)
+        static Camera Camera(CameraPlacement placement)
         {
-            NightScene.Ground(world, palette.Ground);
-            Road(world, CampfirePosition, SignpostPosition);
-            Road(world, SignpostPosition, SignpostPosition + new Vector3(8f, 0f, -4.5f));
+            var position = StrongholdLayout.Point(placement.position);
+            var forward = StrongholdLayout.Point(placement.forward);
+            var camera = NightScene.CreateCamera(position, position + forward, placement.fieldOfView);
+            camera.transform.rotation = Quaternion.LookRotation(forward, StrongholdLayout.Point(placement.up));
+            camera.farClipPlane = FarClip;
+            camera.clearFlags = CameraClearFlags.Skybox;
+            return camera;
         }
 
-        void Road(Transform world, Vector3 from, Vector3 to)
+        static Material SkyMaterial()
         {
-            var direction = to - from;
-            var road = NightScene.Part(PrimitiveType.Cube, "Road", world, (from + to) * 0.5f + Vector3.up * 0.01f,
-                new Vector3(direction.magnitude, 0.02f, 1.4f), palette.Road, new Vector3(0f, -Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg, 0f));
-            Object.DestroyImmediate(road.GetComponent<Collider>());
-        }
-
-        (Transform, CampSeat[]) Campfire(Transform world, int seatCount)
-        {
-            var camp = Place(world, "Campfire", StrongholdPlaceKind.Camp, "Camp", CampfirePosition, new Vector3(0f, -0.3f, -1.8f));
-            for (int i = 0; i < 8; i++)
+            var importer = (TextureImporter)AssetImporter.GetAtPath(SkyTexture);
+            if (importer.mipmapEnabled || importer.maxTextureSize != 4096 || importer.wrapModeV != TextureWrapMode.Clamp)
             {
-                float angle = i * Mathf.PI * 2f / 8f;
-                NightScene.Part(PrimitiveType.Sphere, "Stone", camp, new Vector3(Mathf.Cos(angle) * 0.75f, 0.1f, Mathf.Sin(angle) * 0.75f), new Vector3(0.38f, 0.26f, 0.38f), palette.StoneDark);
+                importer.mipmapEnabled = false;
+                importer.maxTextureSize = 4096;
+                importer.wrapModeU = TextureWrapMode.Repeat;
+                importer.wrapModeV = TextureWrapMode.Clamp;
+                importer.SaveAndReimport();
             }
-            for (int i = 0; i < 3; i++)
-                NightScene.Part(PrimitiveType.Cylinder, "Log", camp, new Vector3(0f, 0.16f, 0f), new Vector3(0.16f, 0.55f, 0.16f), palette.WoodDark, new Vector3(90f, i * 60f, 0f));
-            var flame = NightScene.Part(PrimitiveType.Sphere, "Flame", camp, new Vector3(0f, 0.55f, 0f), new Vector3(0.5f, 0.9f, 0.5f), palette.Flame).transform;
-            NightScene.Lamp(camp, "Fire Light", new Vector3(0f, 1.3f, 0f), new Color(1f, 0.55f, 0.2f), 14f, 16f, null, 0.35f, flame);
-
-            NightScene.FitCollider(camp, 1.6f);
-            return (camp, Seats(world, seatCount));
+            string path = $"{Materials}/Sky.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null)
+            {
+                Seeder.EnsureFolder(Materials);
+                material = new Material(Shader.Find("Skybox/Panoramic"));
+                AssetDatabase.CreateAsset(material, path);
+            }
+            material.shader = Shader.Find("Skybox/Panoramic");
+            material.SetTexture("_MainTex", AssetDatabase.LoadAssetAtPath<Texture2D>(SkyTexture));
+            material.SetFloat("_Mapping", 1f);
+            material.SetFloat("_ImageType", 0f);
+            material.SetFloat("_Rotation", SkyRotation);
+            EditorUtility.SetDirty(material);
+            return material;
         }
 
-        CampSeat[] Seats(Transform world, int count)
+        static Transform Model(Transform world, ModelPlacement placement, Vector3 camera)
+        {
+            bool tappable = placement.place != null && Places.ContainsKey(placement.place);
+            var root = tappable
+                ? Place(world, placement, Places[placement.place].Kind, Places[placement.place].Name)
+                : Group(world, placement.name, StrongholdLayout.Point(placement.position));
+            Instance(root, placement.name, Quaternion.Euler(0f, placement.yaw, 0f), placement.scale);
+            if (tappable)
+            {
+                NightScene.FitCollider(root, placement.place == "Camp" ? 1.6f : 0f);
+                PlaceLabel(root, camera);
+            }
+            return root;
+        }
+
+        static Transform Group(Transform parent, string name, Vector3 position)
+        {
+            var group = new GameObject(name).transform;
+            group.SetParent(parent, false);
+            group.position = position;
+            return group;
+        }
+
+        static GameObject Instance(Transform parent, string name, Quaternion rotation, float scale)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{Models}/{name}.fbx");
+            if (prefab == null) throw new InvalidOperationException($"Featherguard: {Models}/{name}.fbx is missing.");
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+            instance.transform.localPosition = Vector3.zero;
+            instance.transform.localRotation = rotation * ImportTurn;
+            instance.transform.localScale = Vector3.one * scale;
+            var material = ToonMaterial(name);
+            foreach (var renderer in instance.GetComponentsInChildren<Renderer>())
+                renderer.sharedMaterial = material;
+            return instance;
+        }
+
+        static Material ToonMaterial(string name)
+        {
+            string path = $"{Materials}/{name}.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null)
+            {
+                Seeder.EnsureFolder(Materials);
+                material = new Material(Shader.Find("Featherguard/Toon"));
+                AssetDatabase.CreateAsset(material, path);
+            }
+            material.shader = Shader.Find("Featherguard/Toon");
+            material.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{Models}/Textures/{name}_Albedo.png"));
+            material.SetColor("_BaseColor", Color.white);
+            material.SetColor("_ShadowColor", ToonShadow);
+            if (LeafCards.Contains(name)) Leaves(material, name);
+            EditorUtility.SetDirty(material);
+            return material;
+        }
+
+        static void Leaves(Material material, string name)
+        {
+            var importer = (TextureImporter)AssetImporter.GetAtPath($"{Models}/Textures/{name}_Albedo.png");
+            if (!importer.alphaIsTransparency)
+            {
+                importer.alphaIsTransparency = true;
+                importer.SaveAndReimport();
+            }
+            material.shader = Shader.Find(LeafShader);
+            material.SetFloat("_Cutoff", LeafCutoff);
+        }
+
+        static void WarmPostFX()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(ContentPaths.StrongholdPostProfile);
+            if (profile == null || !profile.TryGet<ColorAdjustments>(out var color)) return;
+            color.saturation.Override(Saturation);
+            color.colorFilter.Override(ColorFilter);
+            EditorUtility.SetDirty(profile);
+        }
+
+        void Flame(Transform campfire, Transform fireLight)
+        {
+            var flame = CampfireEffect.Create(campfire, Materials);
+            var flickering = fireLight != null ? fireLight.GetComponent<FlickeringLight>() : null;
+            if (flickering == null) return;
+            var serialized = new SerializedObject(flickering);
+            serialized.FindProperty("flame").objectReferenceValue = flame;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        static CampSeat[] Seats(Transform world, SeatPlacement[] placements, ModelPlacement stump, int count)
         {
             var party = new GameObject("Seats").transform;
             party.SetParent(world, false);
-            return Enumerable.Range(0, count).Select(i =>
+            return placements.Take(count).Select((placement, i) =>
             {
-                float angle = Mathf.Lerp(SeatArcStart, SeatArcEnd, count > 1 ? i / (count - 1f) : 0.5f) * Mathf.Deg2Rad;
-                var direction = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+                var rotation = Quaternion.Euler(0f, placement.yaw, 0f);
                 var seat = new GameObject($"Seat {i + 1}").transform;
                 seat.SetParent(party, false);
-                seat.position = CampfirePosition + direction * SeatRadius;
-                seat.rotation = Quaternion.LookRotation(-direction);
-                NightScene.Decoration(PrimitiveType.Cylinder, "Stump", seat, new Vector3(0f, 0.18f, -0.55f), new Vector3(0.45f, 0.18f, 0.45f), palette.WoodDark);
+                seat.SetPositionAndRotation(StrongholdLayout.Point(placement.position) + rotation * Vector3.forward * SeatInFront, rotation);
+                var model = Instance(seat, StumpModel, Quaternion.identity, stump.scale);
+                model.transform.localPosition = Vector3.back * SeatInFront;
                 var collider = seat.gameObject.AddComponent<CapsuleCollider>();
-                collider.center = Vector3.up * 0.8f;
-                collider.height = 1.7f;
-                collider.radius = 0.6f;
+                collider.center = Vector3.up * 0.8f * HeroScale;
+                collider.height = 1.7f * HeroScale;
+                collider.radius = 0.6f * HeroScale;
                 var label = new GameObject("Label").transform;
                 label.SetParent(seat, false);
-                label.localPosition = Vector3.up * 2.1f;
+                label.localPosition = Vector3.up * 2.1f * HeroScale;
                 var component = new SerializedObject(seat.gameObject.AddComponent<CampSeat>());
                 component.FindProperty("index").intValue = i;
                 component.FindProperty("labelAnchor").objectReferenceValue = label;
@@ -134,138 +280,41 @@ namespace Featherguard.EditorTools
             }).ToArray();
         }
 
-        static Transform CampView(Transform world)
+        static void Light(Transform parent, LightPlacement placement)
+        {
+            var color = placement.group == FireGroup ? NightScene.WarmLight : new Color(placement.color[0], placement.color[1], placement.color[2]);
+            float intensity = Mathf.Clamp(placement.energy / 30f, 0.5f, 3f);
+            float range = Mathf.Clamp(4f + placement.energy / 10f, 4f, 12f);
+            float flicker = Flicker.TryGetValue(placement.group, out float value) ? value : 0.1f;
+            NightScene.Lamp(parent, placement.name, StrongholdLayout.Point(placement.position) - Vector3.up * 0.2f, color, intensity, range, null, flicker);
+        }
+
+        Transform CampView(Transform world)
         {
             var view = new GameObject("Camp View").transform;
             view.SetParent(world, false);
-            view.position = CampfirePosition + new Vector3(0f, 6.5f, -7f);
-            view.rotation = Quaternion.LookRotation(CampfirePosition + new Vector3(0f, 0.8f, 1.4f) - view.position);
+            view.position = campfirePosition + new Vector3(0f, 2.3f, -3.4f);
+            view.rotation = Quaternion.LookRotation(campfirePosition + new Vector3(0f, 0.45f, 0.8f) - view.position);
             return view;
         }
 
-        void Forge(Transform world, Vector3 position)
+        static void PlaceLabel(Transform root, Vector3 camera)
         {
-            var forge = Place(world, "Forge", StrongholdPlaceKind.Forge, "Forge", position, Vector3.up * 4.4f);
-            House(forge, 3.2f, 2.2f, 2.6f, palette.Stone, palette.RoofDark, Vector3.zero, palette.Window);
-            NightScene.Lamp(forge, "Forge Glow", new Vector3(0f, 0.5f, -1.45f), new Color(1f, 0.38f, 0.12f), 12f, 9f, palette.Ember, 0.3f, scale: new Vector3(0.6f, 0.35f, 0.15f));
-            NightScene.Part(PrimitiveType.Cube, "Chimney", forge, new Vector3(0.9f, 3.2f, 0.4f), new Vector3(0.5f, 2.2f, 0.5f), palette.StoneDark);
-            NightScene.Part(PrimitiveType.Cube, "Anvil Base", forge, new Vector3(2.1f, 0.25f, -1.2f), new Vector3(0.35f, 0.5f, 0.35f), palette.Iron);
-            NightScene.Part(PrimitiveType.Cube, "Anvil", forge, new Vector3(2.1f, 0.6f, -1.2f), new Vector3(0.8f, 0.2f, 0.35f), palette.Iron);
-            NightScene.FitCollider(forge);
+            var renderers = root.GetComponentsInChildren<MeshRenderer>();
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers)
+                bounds.Encapsulate(renderer.bounds);
+            float height = Vector3.Distance(camera, bounds.center) < NearCamera
+                ? bounds.min.y + bounds.size.y * NearLabelHeight
+                : Mathf.Min(bounds.max.y, bounds.min.y + LabelMaxHeight) + LabelGap;
+            root.Find("Label").position = new Vector3(bounds.center.x, height, bounds.center.z);
         }
 
-        void WiseWomansHut(Transform world, Vector3 position)
+        static Transform Place(Transform world, ModelPlacement placement, StrongholdPlaceKind kind, string displayName)
         {
-            var hut = Place(world, "Wise Woman's Hut", StrongholdPlaceKind.WiseWomansHut, "Wise Woman's Hut", position, Vector3.up * 3.8f);
-            House(hut, 2.4f, 1.8f, 2.2f, palette.WoodDark, palette.RoofMoss, new Vector3(0f, 7f, 5f), palette.WitchGlow);
-            NightScene.Part(PrimitiveType.Cylinder, "Cauldron", hut, new Vector3(1.6f, 0.35f, -1.2f), new Vector3(0.7f, 0.35f, 0.7f), palette.Iron);
-            NightScene.Lamp(hut, "Cauldron Glow", new Vector3(1.6f, 0.72f, -1.2f), new Color(0.45f, 1f, 0.4f), 9f, 8f, palette.WitchGlow, 0.25f, scale: new Vector3(0.6f, 0.08f, 0.6f));
-            NightScene.Part(PrimitiveType.Cylinder, "Pole", hut, new Vector3(-1.6f, 0.8f, -1.1f), new Vector3(0.06f, 0.8f, 0.06f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Sphere, "Skull", hut, new Vector3(-1.6f, 1.7f, -1.1f), Vector3.one * 0.3f, palette.Bone);
-            NightScene.FitCollider(hut);
-        }
-
-        void SacredOak(Transform world, Vector3 position)
-        {
-            var oak = Place(world, "Sacred Oak", StrongholdPlaceKind.SacredOak, "Sacred Oak", position, Vector3.up * 5.6f);
-            NightScene.Part(PrimitiveType.Cylinder, "Trunk", oak, new Vector3(0f, 2.6f, 0f), new Vector3(1.2f, 2.6f, 1.2f), palette.Bark);
-            var branches = new[] { new Vector3(0f, 0f, 38f), new Vector3(0f, 90f, 42f), new Vector3(0f, 200f, 35f), new Vector3(0f, 300f, 48f) };
-            foreach (var euler in branches)
-                NightScene.Part(PrimitiveType.Cylinder, "Branch", oak, Quaternion.Euler(0f, euler.y, 0f) * new Vector3(0.9f, 5.4f, 0f), new Vector3(0.3f, 1.3f, 0.3f), palette.Bark, euler);
-            NightScene.Part(PrimitiveType.Sphere, "Withered Crown", oak, new Vector3(-1.2f, 6.4f, 0.3f), new Vector3(2.6f, 1.6f, 2.4f), palette.Withered);
-            NightScene.Part(PrimitiveType.Sphere, "Withered Crown", oak, new Vector3(1.4f, 6.1f, -0.2f), new Vector3(2f, 1.3f, 2f), palette.Withered);
-            for (int i = 0; i < 3; i++)
-                NightScene.Part(PrimitiveType.Cube, "Shrine Stone", oak, new Vector3(-1f + i, 0.3f, -1.6f), new Vector3(0.5f, 0.6f + i % 2 * 0.3f, 0.4f), palette.StoneDark);
-            NightScene.Lamp(oak, "Grave Candles", new Vector3(0f, 0.95f, -1.6f), NightScene.WarmLight, 8f, 8f, palette.Lantern, 0.3f, scale: new Vector3(0.12f, 0.18f, 0.12f));
-            NightScene.FitCollider(oak);
-        }
-
-        void Tavern(Transform world, Vector3 position)
-        {
-            var tavern = Place(world, "Tavern", StrongholdPlaceKind.Tavern, "Tavern", position, Vector3.up * 5f);
-            House(tavern, 3.8f, 2.6f, 3f, palette.Wood, palette.RoofDark, Vector3.zero, palette.Window);
-            NightScene.Part(PrimitiveType.Cylinder, "Sign Post", tavern, new Vector3(-2.3f, 1.2f, -1.6f), new Vector3(0.1f, 1.2f, 0.1f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Cube, "Sign", tavern, new Vector3(-2.3f, 2f, -1.6f), new Vector3(0.9f, 0.55f, 0.08f), palette.Wood);
-            NightScene.Lamp(tavern, "Lantern", new Vector3(-2.3f, 1.5f, -1.8f), NightScene.WarmLight, 10f, 9f, palette.Lantern, 0.15f, scale: Vector3.one * 0.24f);
-            NightScene.FitCollider(tavern);
-        }
-
-        void Shop(Transform world, Vector3 position)
-        {
-            var shop = Place(world, "Shop", StrongholdPlaceKind.Shop, "Shop", position, Vector3.up * 3.2f);
-            NightScene.Part(PrimitiveType.Cube, "Counter", shop, new Vector3(0f, 0.45f, 0f), new Vector3(2.4f, 0.9f, 1.1f), palette.Wood);
-            NightScene.Part(PrimitiveType.Cylinder, "Post", shop, new Vector3(-1.2f, 1f, 0.5f), new Vector3(0.09f, 1f, 0.09f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Cylinder, "Post", shop, new Vector3(1.2f, 1f, 0.5f), new Vector3(0.09f, 1f, 0.09f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Cube, "Awning", shop, new Vector3(0f, 2f, 0.1f), new Vector3(2.9f, 0.08f, 1.7f), palette.Cloth, new Vector3(-18f, 0f, 0f));
-            NightScene.Part(PrimitiveType.Cube, "Crate", shop, new Vector3(-1.7f, 0.3f, -0.8f), Vector3.one * 0.6f, palette.WoodDark, new Vector3(0f, 15f, 0f));
-            NightScene.Part(PrimitiveType.Cube, "Crate", shop, new Vector3(1.8f, 0.25f, -0.7f), Vector3.one * 0.5f, palette.WoodDark, new Vector3(0f, -10f, 0f));
-            NightScene.Lamp(shop, "Lantern", new Vector3(0f, 1.45f, -0.75f), NightScene.WarmLight, 9f, 8f, palette.Lantern, 0.15f, scale: Vector3.one * 0.22f);
-            NightScene.FitCollider(shop);
-        }
-
-        void Signpost(Transform world, Vector3 position)
-        {
-            var sign = Place(world, "Signpost", StrongholdPlaceKind.Embark, "Embark", position, Vector3.up * 3.4f);
-            NightScene.Part(PrimitiveType.Cylinder, "Post", sign, new Vector3(0f, 1.3f, 0f), new Vector3(0.14f, 1.3f, 0.14f), palette.WoodDark);
-            NightScene.Part(PrimitiveType.Cube, "Board", sign, new Vector3(0.45f, 2.3f, 0f), new Vector3(1.4f, 0.32f, 0.08f), palette.Wood, new Vector3(0f, 25f, 6f));
-            NightScene.Part(PrimitiveType.Cube, "Board", sign, new Vector3(-0.35f, 1.8f, 0f), new Vector3(1.1f, 0.28f, 0.08f), palette.Wood, new Vector3(0f, -20f, -5f));
-            NightScene.Part(PrimitiveType.Sphere, "Skull", sign, new Vector3(0f, 2.75f, 0f), Vector3.one * 0.28f, palette.Bone);
-            NightScene.Lamp(sign, "Lantern", new Vector3(0.2f, 1.4f, -0.2f), NightScene.WarmLight, 10f, 9f, palette.Lantern, 0.15f, scale: Vector3.one * 0.24f);
-            NightScene.FitCollider(sign, 1.2f);
-        }
-
-        void Graveyard(Transform world)
-        {
-            var graves = new GameObject("Graveyard").transform;
-            graves.SetParent(world, false);
-            var spots = new[] { new Vector3(-0.6f, 0f, 6.2f), new Vector3(0.8f, 0f, 6.6f), new Vector3(2.1f, 0f, 6f), new Vector3(-1.2f, 0f, 4.6f), new Vector3(0.4f, 0f, 4.9f) };
-            for (int i = 0; i < spots.Length; i++)
-            {
-                float tilt = (i % 3 - 1) * 9f;
-                NightScene.Decoration(PrimitiveType.Sphere, "Mound", graves, spots[i] + new Vector3(0f, 0.02f, -0.5f), new Vector3(0.9f, 0.25f, 1.5f), palette.Road);
-                if (i % 2 == 0)
-                {
-                    NightScene.Decoration(PrimitiveType.Cube, "Headstone", graves, spots[i] + Vector3.up * 0.4f, new Vector3(0.6f, 0.8f, 0.15f), palette.StoneDark, new Vector3(tilt, 0f, tilt * 0.5f));
-                    continue;
-                }
-                NightScene.Decoration(PrimitiveType.Cube, "Cross", graves, spots[i] + Vector3.up * 0.5f, new Vector3(0.12f, 1f, 0.12f), palette.WoodDark, new Vector3(0f, 0f, tilt));
-                NightScene.Decoration(PrimitiveType.Cube, "Cross Bar", graves, spots[i] + Vector3.up * 0.72f, new Vector3(0.55f, 0.12f, 0.12f), palette.WoodDark, new Vector3(0f, 0f, tilt));
-            }
-            var bones = new[] { new Vector3(3.5f, 0.05f, -2.6f), new Vector3(-3f, 0.05f, 1.5f), new Vector3(1.6f, 0.05f, 4.3f), new Vector3(9.8f, 0.05f, -3.4f) };
-            for (int i = 0; i < bones.Length; i++)
-                NightScene.Decoration(PrimitiveType.Capsule, "Bone", graves, bones[i], new Vector3(0.08f, 0.22f, 0.08f), palette.Bone, new Vector3(90f, i * 47f, 0f));
-
-            NightScene.Lamp(graves, "Wisp", new Vector3(0.6f, 1.3f, 5.8f), NightScene.SpiritLight, 7f, 7f, palette.Spirit, 0.5f, scale: Vector3.one * 0.2f);
-            NightScene.Lamp(graves, "Wisp", new Vector3(3.2f, 1.6f, 7.4f), NightScene.SpiritLight, 6f, 7f, palette.Spirit, 0.5f, scale: Vector3.one * 0.16f);
-        }
-
-        void DeadTrees(Transform world)
-        {
-            var trees = new GameObject("Dead Trees").transform;
-            trees.SetParent(world, false);
-            var spots = new[] { new Vector3(-13f, 0f, 9f), new Vector3(13f, 0f, 10f), new Vector3(-12.5f, 0f, -1f), new Vector3(13.5f, 0f, -1.5f), new Vector3(-0.5f, 0f, 12f), new Vector3(-8f, 0f, 12.5f), new Vector3(10f, 0f, 12.5f), new Vector3(-3f, 0f, -8f) };
-            for (int i = 0; i < spots.Length; i++)
-                NightScene.DeadTree(trees, spots[i], i * 53f, 2f + i % 3 * 0.4f, palette.Bark);
-        }
-
-        void House(Transform parent, float width, float height, float depth, Material walls, Material roof, Vector3 roofTilt, Material windows)
-        {
-            NightScene.Part(PrimitiveType.Cube, "Walls", parent, new Vector3(0f, height * 0.5f, 0f), new Vector3(width, height, depth), walls);
-            float side = width * 0.74f;
-            NightScene.Part(PrimitiveType.Cube, "Roof", parent, new Vector3(0f, height, 0f), new Vector3(side, side, depth * 1.12f), roof, new Vector3(roofTilt.x, roofTilt.y, 45f + roofTilt.z));
-            NightScene.Part(PrimitiveType.Cube, "Door", parent, new Vector3(0f, height * 0.3f, -depth * 0.5f - 0.02f), new Vector3(width * 0.22f, height * 0.6f, 0.05f), palette.Door);
-            foreach (float x in new[] { -width * 0.3f, width * 0.3f })
-                NightScene.Part(PrimitiveType.Cube, "Window", parent, new Vector3(x, height * 0.58f, -depth * 0.5f - 0.02f), new Vector3(width * 0.15f, height * 0.2f, 0.04f), windows);
-        }
-
-        static Transform Place(Transform world, string name, StrongholdPlaceKind kind, string displayName, Vector3 position, Vector3 labelOffset)
-        {
-            var root = new GameObject(name).transform;
-            root.SetParent(world, false);
-            root.position = position;
+            var root = Group(world, displayName, StrongholdLayout.Point(placement.position));
             var label = new GameObject("Label").transform;
             label.SetParent(root, false);
-            label.localPosition = labelOffset;
             var place = new SerializedObject(root.gameObject.AddComponent<StrongholdPlace>());
             place.FindProperty("kind").enumValueIndex = (int)kind;
             place.FindProperty("displayName").stringValue = displayName;
