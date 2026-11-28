@@ -185,17 +185,6 @@
       "height": 2.344
     },
     {
-      "name": "GroundFar",
-      "position": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "yaw": -0.0,
-      "scale": 1.0,
-      "height": 1.988
-    },
-    {
       "name": "GroundDetails",
       "position": [
         0.0,
@@ -205,17 +194,6 @@
       "yaw": -0.0,
       "scale": 1.0,
       "height": 2.476
-    },
-    {
-      "name": "Forest",
-      "position": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "yaw": -0.0,
-      "scale": 1.0,
-      "height": 6.741
     }
   ],
   "seats": [

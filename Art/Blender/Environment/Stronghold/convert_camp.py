@@ -12,7 +12,7 @@ emission and a light ambient occlusion) into one albedo atlas, and writes:
 With no names given it converts every model and also writes
 Assets/Art/Environment/Stronghold/Stronghold.layout.json: where every model, seat,
 light and label stands and the camera, in Unity coordinates (x, z, y of Blender), and
-renders the sky, the moon and the far mountains into the 360 degree skybox
+renders the sky, the moon, the mountains, the forest and the far ground into the 360 degree skybox
 Assets/Art/Environment/Stronghold/Textures/Sky_Panorama.png.
 """
 
@@ -106,16 +106,16 @@ MODELS = {
     "DeadTree": dict(parts=starting("V4 | galaziste drzewo"), tris=2500, origin="base", ray=0.4, size=512, remesh=0.04),
     "Ground": dict(parts=starting("Teren", "V4 | zwirowe pobocza", "Sciezka_do_wiedzmy"), tris=9000, origin="world", size=2048,
                    faces=near, ray=0.4),
-    "GroundFar": dict(parts=starting("Teren"), tris=4000, origin="world", faces=lambda c: not near(c), ray=1.5),
     "GroundDetails": dict(parts=starting("Kamien", "V4 | kamienie osadzone", "V4 | kepka", "V3 | skala w zboczu", "V3 | lupki",
                                          "V4 | przyziemne rozety", "Stopien", "Karczma | trawa"),
                           tris=9000, origin="world", ray=0.15),
-    "Forest": dict(parts=starting("V4 | dalsza warstwa lasu", "V4 | las z galezistymi"), tris=8000, origin="world", ray=1.5, remesh=0.6),
 }
 
-SKY_PARTS = ("Ksiezyc", "V4 | rzezba odleglych gor")
+SKY_PARTS = ("Ksiezyc", "V4 | rzezba odleglych gor", "V4 | dalsza warstwa lasu", "V4 | las z galezistymi")
+SKY_GROUND = "Teren"
 SKY_LIGHT = "Swiatlo ksiezyca"
 SKY_SIZE = (4096, 2048)
+FLAME_IMAGES = {"Campfire_Flame_8x8": "Campfire_Flame.png"}
 
 SEATS = "V4 | pieniek "
 LIGHTS = {
@@ -252,6 +252,20 @@ def average_colour(image_name):
     return np.where(srgb <= 0.04045, srgb / 12.92, np.power((srgb + 0.055) / 1.055, 2.4))
 
 
+def leaves(image_name, size, tiles=8, shade=0.45):
+    image = bpy.data.images[image_name]
+    width, height = image.size
+    atlas = np.array(image.pixels[:], dtype=np.float32).reshape(height, width, 4)
+    rows = (np.arange(size) * tiles * height // size) % height
+    cols = (np.arange(size) * tiles * width // size) % width
+    tiled = atlas[rows][:, cols]
+    linear = np.where(tiled[..., :3] <= 0.04045, tiled[..., :3] / 12.92, np.power((tiled[..., :3] + 0.055) / 1.055, 2.4))
+    alpha = tiled[..., 3:4]
+    color = np.ones((size, size, 4), dtype=np.float32)
+    color[..., :3] = linear * alpha + average_colour(image_name) * shade * (1.0 - alpha)
+    return color
+
+
 def bake_albedo(name, low, sources, size, ray, tint=None):
     material = bpy.data.materials.new(name)
     material.use_nodes = True
@@ -262,8 +276,7 @@ def bake_albedo(name, low, sources, size, ray, tint=None):
     scene.cycles.device = "CPU"
     scene.cycles.samples = 4
     if tint:
-        color = np.ones((size, size, 4), dtype=np.float32)
-        color[..., :3] = average_colour(tint)
+        color = leaves(tint, size)
     else:
         color = bake_pass(low, sources, "DIFFUSE", size, ray)
     if any(emits(s) for s in sources):
@@ -387,11 +400,22 @@ def camera():
     return dict(position=unity(cam.matrix_world.translation), forward=unity(forward), up=unity(up), fieldOfView=round(math.degrees(vertical), 2))
 
 
+def flame():
+    for name, target in FLAME_IMAGES.items():
+        image = bpy.data.images[name]
+        image.filepath_raw = os.path.join(TEXTURE_DIR, target)
+        image.file_format = "PNG"
+        image.save()
+        print("Flame:", image.filepath_raw)
+
+
 def sky():
     scene = bpy.context.scene
-    keep = {o for o in scene.objects if o.name.startswith(SKY_PARTS) or o.name == SKY_LIGHT}
+    keep = {o for o in scene.objects if o.name.startswith(SKY_PARTS) or o.name == SKY_LIGHT or (o.type == "LIGHT" and o.data.type == "AREA")}
     for obj in scene.objects:
         obj.hide_render = obj not in keep
+    far = evaluated_copy(bpy.data.objects[SKY_GROUND], bpy.context.evaluated_depsgraph_get(), lambda c: not near(c))
+    far.hide_render = False
     cam = bpy.data.objects.new("SkyCamera", bpy.data.cameras.new("SkyCamera"))
     scene.collection.objects.link(cam)
     cam.location = scene.camera.matrix_world.translation
@@ -415,7 +439,7 @@ def sky():
 
 def main():
     args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    names = args or list(MODELS) + ["Sky"]
+    names = args or list(MODELS) + ["Sky", "Flame"]
     models = [convert(name) for name in names if name in MODELS]
     if args and os.path.exists(LAYOUT):
         with open(LAYOUT, encoding="utf-8") as file:
@@ -426,6 +450,8 @@ def main():
     with open(LAYOUT, "w", encoding="utf-8") as file:
         json.dump(layout, file, indent=2)
     print("Layout:", LAYOUT)
+    if "Flame" in names:
+        flame()
     if "Sky" in names:
         sky()
 

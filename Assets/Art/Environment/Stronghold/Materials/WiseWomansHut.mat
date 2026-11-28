@@ -35,6 +35,6 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0.06999998, g: 0.049999982, b: 0.059999965, a: 1}
-    - _ShadowColor: {r: 0.41999996, g: 0.45999992, b: 0.62, a: 1}
+    - _ShadowColor: {r: 0.38, g: 0.38, b: 0.48, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

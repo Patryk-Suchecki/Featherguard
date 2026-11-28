@@ -5,6 +5,8 @@ using Featherguard.Game;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Featherguard.EditorTools
 {
@@ -22,8 +24,13 @@ namespace Featherguard.EditorTools
         const float FogDensity = 0.006f;
         const float SkyRotation = 90f;
         const string SkyTexture = Models + "/Textures/Sky_Panorama.png";
+        const string FlameTexture = Models + "/Textures/Campfire_Flame.png";
+        const float Saturation = -12f;
 
         static readonly Color Horizon = new(0.34f, 0.39f, 0.49f);
+        static readonly Color Moonlight = new(0.72f, 0.74f, 0.86f);
+        static readonly Color ToonShadow = new(0.38f, 0.38f, 0.48f);
+        static readonly Color ColorFilter = new(1f, 0.97f, 0.94f);
         static readonly Quaternion ImportTurn = Quaternion.Euler(90f, 0f, 0f);
 
         static readonly Dictionary<string, (StrongholdPlaceKind Kind, string Name)> Places = new()
@@ -39,7 +46,6 @@ namespace Featherguard.EditorTools
 
         static readonly Dictionary<string, float> Flicker = new() { [FireGroup] = 0.35f, ["Forge"] = 0.3f };
 
-        NightPalette palette;
         Vector3 campfirePosition;
 
         [MenuItem("Featherguard/Rebuild Stronghold Scene")]
@@ -70,10 +76,12 @@ namespace Featherguard.EditorTools
             string configPath = AssetDatabase.GetAssetPath(config);
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             config = AssetDatabase.LoadAssetAtPath<GameConfig>(configPath);
-            palette = new NightPalette();
             campfirePosition = StrongholdLayout.Point(layout.campfire);
             NightScene.PostFX(ContentPaths.StrongholdPostProfile);
-            NightScene.ConfigureLighting().intensity = MoonIntensity;
+            WarmPostFX();
+            var moon = NightScene.ConfigureLighting();
+            moon.intensity = MoonIntensity;
+            moon.color = Moonlight;
             RenderSettings.fogColor = Horizon;
             RenderSettings.fogDensity = FogDensity;
             RenderSettings.skybox = SkyMaterial();
@@ -197,13 +205,23 @@ namespace Featherguard.EditorTools
             material.shader = Shader.Find("Featherguard/Toon");
             material.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{Models}/Textures/{name}_Albedo.png"));
             material.SetColor("_BaseColor", Color.white);
+            material.SetColor("_ShadowColor", ToonShadow);
             EditorUtility.SetDirty(material);
             return material;
         }
 
+        static void WarmPostFX()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(ContentPaths.StrongholdPostProfile);
+            if (profile == null || !profile.TryGet<ColorAdjustments>(out var color)) return;
+            color.saturation.Override(Saturation);
+            color.colorFilter.Override(ColorFilter);
+            EditorUtility.SetDirty(profile);
+        }
+
         void Flame(Transform campfire, Transform fireLight)
         {
-            var flame = NightScene.Decoration(PrimitiveType.Sphere, "Flame", campfire, new Vector3(0f, 0.35f, 0f), new Vector3(0.3f, 0.55f, 0.3f), palette.Flame).transform;
+            var flame = CampfireEffect.Create(campfire, FlameTexture, Materials);
             var flickering = fireLight != null ? fireLight.GetComponent<FlickeringLight>() : null;
             if (flickering == null) return;
             var serialized = new SerializedObject(flickering);
@@ -241,8 +259,8 @@ namespace Featherguard.EditorTools
         static void Light(Transform parent, LightPlacement placement)
         {
             var color = placement.group == FireGroup ? NightScene.WarmLight : new Color(placement.color[0], placement.color[1], placement.color[2]);
-            float intensity = Mathf.Clamp(placement.energy / 12f, 1f, 6f);
-            float range = Mathf.Clamp(5f + placement.energy / 8f, 5f, 16f);
+            float intensity = Mathf.Clamp(placement.energy / 30f, 0.5f, 3f);
+            float range = Mathf.Clamp(4f + placement.energy / 10f, 4f, 12f);
             float flicker = Flicker.TryGetValue(placement.group, out float value) ? value : 0.1f;
             NightScene.Lamp(parent, placement.name, StrongholdLayout.Point(placement.position) - Vector3.up * 0.2f, color, intensity, range, null, flicker);
         }

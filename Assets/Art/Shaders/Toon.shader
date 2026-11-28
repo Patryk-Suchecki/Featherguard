@@ -95,8 +95,9 @@ Shader "Featherguard/Toon"
                 LIGHT_LOOP_BEGIN(lightCount)
                     Light lamp = GetAdditionalLight(lightIndex, input.positionWS, half4(1, 1, 1, 1));
                     half facing = dot(normal, lamp.direction) * 0.5h + 0.5h;
-                    half strength = saturate(lamp.distanceAttenuation * facing);
-                    light += lamp.color * (floor(strength * steps) / steps);
+                    half3 lit = lamp.color * (lamp.distanceAttenuation * facing);
+                    half brightness = max(lit.r, max(lit.g, lit.b));
+                    light += lit * (floor(brightness * steps) / steps / max(brightness, 0.0001h));
                 LIGHT_LOOP_END
             #endif
                 return light;
