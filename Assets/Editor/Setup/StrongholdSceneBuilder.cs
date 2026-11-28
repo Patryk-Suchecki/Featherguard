@@ -76,7 +76,7 @@ namespace Featherguard.EditorTools
             var layout = StrongholdLayout.Load(LayoutPath);
             if (layout == null)
             {
-                Debug.LogError($"Featherguard: {LayoutPath} is missing. Export it with Art/Blender/Environment/Stronghold/convert_camp.py.");
+                Debug.LogError($"Featherguard: {LayoutPath} is missing. Export it from the camp scene in Blender.");
                 return;
             }
 
