@@ -21,7 +21,10 @@ namespace Featherguard.EditorTools
         const float HeroScale = 0.55f;
         const float LeafCutoff = 0.45f;
         const string LeafShader = "Featherguard/Toon Leaves";
-        const float LabelGap = 0.6f;
+        const float LabelGap = 0.12f;
+        const float LabelMaxHeight = 3f;
+        const float NearCamera = 5f;
+        const float NearLabelHeight = 0.85f;
         const float FarClip = 400f;
         const float MoonIntensity = 1.4f;
         const float FogDensity = 0.006f;
@@ -42,8 +45,8 @@ namespace Featherguard.EditorTools
             ["SacredOak"] = (StrongholdPlaceKind.SacredOak, "Sacred Oak"),
             ["Tavern"] = (StrongholdPlaceKind.Tavern, "Tavern"),
             ["Shop"] = (StrongholdPlaceKind.Shop, "Shop"),
-            ["Camp"] = (StrongholdPlaceKind.Camp, "Camp"),
-            ["Embark"] = (StrongholdPlaceKind.Embark, "Embark"),
+            ["Camp"] = (StrongholdPlaceKind.Camp, "Campfire"),
+            ["Embark"] = (StrongholdPlaceKind.Embark, "Signpost"),
         };
 
         static readonly HashSet<string> LeafCards = new() { "SacredOakCrown" };
@@ -95,7 +98,7 @@ namespace Featherguard.EditorTools
             Transform campfire = null;
             foreach (var model in layout.models.Where(m => m.name != StumpModel))
             {
-                var root = Model(world, model);
+                var root = Model(world, model, camera.transform.position);
                 if (model.place == "Camp") campfire = root;
             }
             var lights = new GameObject("Lights").transform;
@@ -163,7 +166,7 @@ namespace Featherguard.EditorTools
             return material;
         }
 
-        static Transform Model(Transform world, ModelPlacement placement)
+        static Transform Model(Transform world, ModelPlacement placement, Vector3 camera)
         {
             bool tappable = placement.place != null && Places.ContainsKey(placement.place);
             var root = tappable
@@ -171,7 +174,10 @@ namespace Featherguard.EditorTools
                 : Group(world, placement.name, StrongholdLayout.Point(placement.position));
             Instance(root, placement.name, Quaternion.Euler(0f, placement.yaw, 0f), placement.scale);
             if (tappable)
+            {
                 NightScene.FitCollider(root, placement.place == "Camp" ? 1.6f : 0f);
+                PlaceLabel(root, camera);
+            }
             return root;
         }
 
@@ -292,12 +298,23 @@ namespace Featherguard.EditorTools
             return view;
         }
 
+        static void PlaceLabel(Transform root, Vector3 camera)
+        {
+            var renderers = root.GetComponentsInChildren<MeshRenderer>();
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers)
+                bounds.Encapsulate(renderer.bounds);
+            float height = Vector3.Distance(camera, bounds.center) < NearCamera
+                ? bounds.min.y + bounds.size.y * NearLabelHeight
+                : Mathf.Min(bounds.max.y, bounds.min.y + LabelMaxHeight) + LabelGap;
+            root.Find("Label").position = new Vector3(bounds.center.x, height, bounds.center.z);
+        }
+
         static Transform Place(Transform world, ModelPlacement placement, StrongholdPlaceKind kind, string displayName)
         {
             var root = Group(world, displayName, StrongholdLayout.Point(placement.position));
             var label = new GameObject("Label").transform;
             label.SetParent(root, false);
-            label.localPosition = Vector3.up * (placement.height + LabelGap);
             var place = new SerializedObject(root.gameObject.AddComponent<StrongholdPlace>());
             place.FindProperty("kind").enumValueIndex = (int)kind;
             place.FindProperty("displayName").stringValue = displayName;
