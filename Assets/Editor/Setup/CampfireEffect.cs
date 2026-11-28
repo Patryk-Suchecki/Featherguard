@@ -7,26 +7,23 @@ namespace Featherguard.EditorTools
     public static class CampfireEffect
     {
         const string Shader = "Universal Render Pipeline/Particles/Unlit";
-        const string FlameShader = "Featherguard/Flame Billboard";
-        const float BaseHeight = 0.1f;
+        const string FlameShader = "Featherguard/Toon Flame";
+        const float BaseHeight = 0.04f;
         const string SparkSource = ContentPaths.Materials + "/Particle.mat";
-
-        static readonly Color FlameTint = new(1.8f, 1.25f, 0.9f, 1f);
 
         static readonly (Vector2 Offset, Vector2 Size)[] Tongues =
         {
-            (new Vector2(0f, 0f), new Vector2(0.48f, 0.97f)),
-            (new Vector2(-0.17f, 0.1f), new Vector2(0.35f, 0.7f)),
-            (new Vector2(0.16f, 0.05f), new Vector2(0.38f, 0.81f)),
-            (new Vector2(0.03f, -0.13f), new Vector2(0.35f, 0.59f)),
+            (new Vector2(0f, 0f), new Vector2(0.4f, 0.56f)),
+            (new Vector2(-0.1f, 0.06f), new Vector2(0.3f, 0.38f)),
+            (new Vector2(0.1f, 0.03f), new Vector2(0.32f, 0.44f)),
         };
         static readonly Color SparkTint = new(3f, 1.4f, 0.4f, 1f);
 
-        public static Transform Create(Transform parent, string flipbookPath, string materialFolder)
+        public static Transform Create(Transform parent, string materialFolder)
         {
             var root = new GameObject("Fire").transform;
             root.SetParent(parent, false);
-            Flames(root, FlameMaterial($"{materialFolder}/Flame.mat", AssetDatabase.LoadAssetAtPath<Texture2D>(flipbookPath)));
+            Flames(root, FlameMaterial($"{materialFolder}/Flame.mat"));
             var dot = AssetDatabase.LoadAssetAtPath<Material>(SparkSource);
             Sparks(root, Additive($"{materialFolder}/Spark.mat", dot != null ? dot.mainTexture : null, SparkTint));
             return root;
@@ -49,7 +46,7 @@ namespace Featherguard.EditorTools
             }
         }
 
-        static Material FlameMaterial(string path, Texture texture)
+        static Material FlameMaterial(string path)
         {
             var shader = UnityEngine.Shader.Find(FlameShader);
             var material = AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -59,8 +56,6 @@ namespace Featherguard.EditorTools
                 AssetDatabase.CreateAsset(material, path);
             }
             material.shader = shader;
-            material.SetTexture("_BaseMap", texture);
-            material.SetColor("_Tint", FlameTint);
             EditorUtility.SetDirty(material);
             return material;
         }

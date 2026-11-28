@@ -27,7 +27,6 @@ namespace Featherguard.EditorTools
         const float FogDensity = 0.006f;
         const float SkyRotation = 90f;
         const string SkyTexture = Models + "/Textures/Sky_Panorama.png";
-        const string FlameTexture = Models + "/Textures/Campfire_Flame.png";
         const float Saturation = -12f;
 
         static readonly Color Horizon = new(0.34f, 0.39f, 0.49f);
@@ -240,7 +239,7 @@ namespace Featherguard.EditorTools
 
         void Flame(Transform campfire, Transform fireLight)
         {
-            var flame = CampfireEffect.Create(campfire, FlameTexture, Materials);
+            var flame = CampfireEffect.Create(campfire, Materials);
             var flickering = fireLight != null ? fireLight.GetComponent<FlickeringLight>() : null;
             if (flickering == null) return;
             var serialized = new SerializedObject(flickering);

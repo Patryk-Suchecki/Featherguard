@@ -116,7 +116,6 @@ SKY_PARTS = ("Ksiezyc", "V4 | rzezba odleglych gor", "V4 | dalsza warstwa lasu",
 SKY_GROUND = "Teren"
 SKY_LIGHT = "Swiatlo ksiezyca"
 SKY_SIZE = (4096, 2048)
-FLAME_IMAGES = {"Campfire_Flame_8x8": "Campfire_Flame.png"}
 
 SEATS = "V4 | pieniek "
 LIGHTS = {
@@ -372,7 +371,7 @@ def campfire_part(name, mesh_op, material, location, rotation=(0, 0, 0), scale=(
     return obj
 
 
-def campfire(centre, ring=0.68, seed=7):
+def campfire(centre, ring=0.42, seed=7):
     import random
     rng = random.Random(seed)
     stone = flat_material("CampfireStone", (0.13, 0.125, 0.12))
@@ -384,30 +383,30 @@ def campfire(centre, ring=0.68, seed=7):
     parts = [campfire_part("Ash", bpy.ops.mesh.primitive_cylinder_add, ash, (centre.x, centre.y, ground + 0.01),
                            scale=(ring * 0.85, ring * 0.85, 0.02), vertices=16)]
     parts.append(campfire_part("Embers", bpy.ops.mesh.primitive_ico_sphere_add, ember, (centre.x, centre.y, ground + 0.02),
-                               scale=(0.32, 0.32, 0.07), subdivisions=2))
-    count = 13
+                               scale=(0.2, 0.2, 0.05), subdivisions=2))
+    count = 12
     for i in range(count):
         angle = 2 * math.pi * (i + rng.uniform(-0.2, 0.2)) / count
         radius = ring + rng.uniform(-0.04, 0.04)
-        size = rng.uniform(0.14, 0.2)
+        size = rng.uniform(0.08, 0.11)
         parts.append(campfire_part(f"Stone{i}", bpy.ops.mesh.primitive_ico_sphere_add, stone,
                                    (centre.x + math.cos(angle) * radius, centre.y + math.sin(angle) * radius, ground + size * 0.3),
                                    rotation=(rng.uniform(0, 3), rng.uniform(0, 3), rng.uniform(0, 3)),
                                    scale=(size * 1.3, size, size * 0.75), subdivisions=1))
     for i in range(6):
         angle = 2 * math.pi * i / 6 + rng.uniform(-0.15, 0.15)
-        length = rng.uniform(0.7, 0.85)
+        length = rng.uniform(0.42, 0.5)
         tilt = math.radians(rng.uniform(28, 36))
-        base = Vector((centre.x + math.cos(angle) * 0.32, centre.y + math.sin(angle) * 0.32, ground))
+        base = Vector((centre.x + math.cos(angle) * 0.19, centre.y + math.sin(angle) * 0.19, ground))
         direction = Vector((-math.cos(angle) * math.sin(tilt), -math.sin(angle) * math.sin(tilt), math.cos(tilt)))
         middle = base + direction * length / 2
         rotation = direction.to_track_quat("Z", "Y").to_euler()
-        radius = rng.uniform(0.045, 0.065)
+        radius = rng.uniform(0.026, 0.036)
         parts.append(campfire_part(f"Log{i}", bpy.ops.mesh.primitive_cylinder_add, bark if i % 2 else char, middle,
                                    rotation=rotation, scale=(radius, radius, length / 2), vertices=7))
     for i, angle in enumerate((0.4, 2.1)):
-        parts.append(campfire_part(f"Lying{i}", bpy.ops.mesh.primitive_cylinder_add, char, (centre.x, centre.y, ground + 0.06),
-                                   rotation=(math.pi / 2, 0, angle), scale=(0.065, 0.065, ring * 0.75), vertices=7))
+        parts.append(campfire_part(f"Lying{i}", bpy.ops.mesh.primitive_cylinder_add, char, (centre.x, centre.y, ground + 0.04),
+                                   rotation=(math.pi / 2, 0, angle), scale=(0.04, 0.04, ring * 0.75), vertices=7))
     return parts
 
 
@@ -511,15 +510,6 @@ def camera():
     return dict(position=unity(cam.matrix_world.translation), forward=unity(forward), up=unity(up), fieldOfView=round(math.degrees(vertical), 2))
 
 
-def flame():
-    for name, target in FLAME_IMAGES.items():
-        image = bpy.data.images[name]
-        image.filepath_raw = os.path.join(TEXTURE_DIR, target)
-        image.file_format = "PNG"
-        image.save()
-        print("Flame:", image.filepath_raw)
-
-
 def sky():
     scene = bpy.context.scene
     keep = {o for o in scene.objects if o.name.startswith(SKY_PARTS) or o.name == SKY_LIGHT or (o.type == "LIGHT" and o.data.type == "AREA")}
@@ -550,7 +540,7 @@ def sky():
 
 def main():
     args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    names = args or list(MODELS) + ["Sky", "Flame"]
+    names = args or list(MODELS) + ["Sky"]
     models = [convert(name) for name in names if name in MODELS]
     if args and os.path.exists(LAYOUT):
         with open(LAYOUT, encoding="utf-8") as file:
@@ -561,8 +551,6 @@ def main():
     with open(LAYOUT, "w", encoding="utf-8") as file:
         json.dump(layout, file, indent=2)
     print("Layout:", LAYOUT)
-    if "Flame" in names:
-        flame()
     if "Sky" in names:
         sky()
 
