@@ -47,6 +47,8 @@ Shader "Featherguard/Toon"
             #pragma fragment Frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -82,15 +84,34 @@ Shader "Featherguard/Toon"
                 return output;
             }
 
+            half3 PointLights(Varyings input, half3 normal, half steps)
+            {
+                half3 light = 0;
+            #if defined(_ADDITIONAL_LIGHTS) || defined(_ADDITIONAL_LIGHTS_VERTEX) || USE_CLUSTER_LIGHT_LOOP
+                InputData inputData = (InputData)0;
+                inputData.positionWS = input.positionWS;
+                inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+                uint lightCount = GetAdditionalLightsCount();
+                LIGHT_LOOP_BEGIN(lightCount)
+                    Light lamp = GetAdditionalLight(lightIndex, input.positionWS, half4(1, 1, 1, 1));
+                    half facing = dot(normal, lamp.direction) * 0.5h + 0.5h;
+                    half strength = saturate(lamp.distanceAttenuation * facing);
+                    light += lamp.color * (floor(strength * steps) / steps);
+                LIGHT_LOOP_END
+            #endif
+                return light;
+            }
+
             half4 Frag(Varyings input) : SV_Target
             {
                 half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
+                half3 normal = normalize(input.normalWS);
                 Light light = GetMainLight(TransformWorldToShadowCoord(input.positionWS));
-                half halfLambert = dot(normalize(input.normalWS), light.direction) * 0.5h + 0.5h;
+                half halfLambert = dot(normal, light.direction) * 0.5h + 0.5h;
                 half lit = saturate(halfLambert * light.shadowAttenuation + _LightThreshold);
                 half steps = max(2.0h, round(_Bands));
                 half band = saturate(floor(lit * steps) / (steps - 1.0h));
-                half3 color = albedo.rgb * lerp(_ShadowColor.rgb, light.color, band);
+                half3 color = albedo.rgb * (lerp(_ShadowColor.rgb, light.color, band) + PointLights(input, normal, steps));
                 return half4(MixFog(color, input.fogFactor), 1.0h);
             }
             ENDHLSL

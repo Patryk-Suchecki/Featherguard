@@ -209,8 +209,8 @@ namespace Featherguard.EditorTools
 
         static void Light(Transform parent, LightPlacement placement)
         {
-            var color = new Color(placement.color[0], placement.color[1], placement.color[2]);
-            float intensity = Mathf.Clamp(placement.energy / 6f, 1f, 12f);
+            var color = placement.group == FireGroup ? NightScene.WarmLight : new Color(placement.color[0], placement.color[1], placement.color[2]);
+            float intensity = Mathf.Clamp(placement.energy / 12f, 1f, 6f);
             float range = Mathf.Clamp(5f + placement.energy / 8f, 5f, 16f);
             float flicker = Flicker.TryGetValue(placement.group, out float value) ? value : 0.1f;
             NightScene.Lamp(parent, placement.name, StrongholdLayout.Point(placement.position) - Vector3.up * 0.2f, color, intensity, range, null, flicker);
