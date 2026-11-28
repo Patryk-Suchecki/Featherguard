@@ -17,7 +17,10 @@ namespace Featherguard.EditorTools
         const string Materials = Models + "/Materials";
         const string StumpModel = "Stump";
         const string FireGroup = "Fire";
-        const float SeatInFront = 0.55f;
+        const float SeatInFront = 0.3f;
+        const float HeroScale = 0.55f;
+        const float LeafCutoff = 0.45f;
+        const string LeafShader = "Featherguard/Toon Leaves";
         const float LabelGap = 0.6f;
         const float FarClip = 400f;
         const float MoonIntensity = 1.4f;
@@ -43,6 +46,8 @@ namespace Featherguard.EditorTools
             ["Camp"] = (StrongholdPlaceKind.Camp, "Camp"),
             ["Embark"] = (StrongholdPlaceKind.Embark, "Embark"),
         };
+
+        static readonly HashSet<string> LeafCards = new() { "SacredOakCrown" };
 
         static readonly Dictionary<string, float> Flicker = new() { [FireGroup] = 0.35f, ["Forge"] = 0.3f };
 
@@ -107,6 +112,7 @@ namespace Featherguard.EditorTools
             serialized.FindProperty("sceneCamera").objectReferenceValue = camera;
             serialized.FindProperty("campfire").objectReferenceValue = campfire;
             serialized.FindProperty("campView").objectReferenceValue = CampView(world);
+            serialized.FindProperty("heroScale").floatValue = HeroScale;
             var seatsProperty = serialized.FindProperty("seats");
             seatsProperty.arraySize = seats.Length;
             for (int i = 0; i < seats.Length; i++)
@@ -206,8 +212,21 @@ namespace Featherguard.EditorTools
             material.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{Models}/Textures/{name}_Albedo.png"));
             material.SetColor("_BaseColor", Color.white);
             material.SetColor("_ShadowColor", ToonShadow);
+            if (LeafCards.Contains(name)) Leaves(material, name);
             EditorUtility.SetDirty(material);
             return material;
+        }
+
+        static void Leaves(Material material, string name)
+        {
+            var importer = (TextureImporter)AssetImporter.GetAtPath($"{Models}/Textures/{name}_Albedo.png");
+            if (!importer.alphaIsTransparency)
+            {
+                importer.alphaIsTransparency = true;
+                importer.SaveAndReimport();
+            }
+            material.shader = Shader.Find(LeafShader);
+            material.SetFloat("_Cutoff", LeafCutoff);
         }
 
         static void WarmPostFX()
@@ -242,12 +261,12 @@ namespace Featherguard.EditorTools
                 var model = Instance(seat, StumpModel, Quaternion.identity, stump.scale);
                 model.transform.localPosition = Vector3.back * SeatInFront;
                 var collider = seat.gameObject.AddComponent<CapsuleCollider>();
-                collider.center = Vector3.up * 0.8f;
-                collider.height = 1.7f;
-                collider.radius = 0.6f;
+                collider.center = Vector3.up * 0.8f * HeroScale;
+                collider.height = 1.7f * HeroScale;
+                collider.radius = 0.6f * HeroScale;
                 var label = new GameObject("Label").transform;
                 label.SetParent(seat, false);
-                label.localPosition = Vector3.up * 2.1f;
+                label.localPosition = Vector3.up * 2.1f * HeroScale;
                 var component = new SerializedObject(seat.gameObject.AddComponent<CampSeat>());
                 component.FindProperty("index").intValue = i;
                 component.FindProperty("labelAnchor").objectReferenceValue = label;
@@ -269,8 +288,8 @@ namespace Featherguard.EditorTools
         {
             var view = new GameObject("Camp View").transform;
             view.SetParent(world, false);
-            view.position = campfirePosition + new Vector3(0f, 3.4f, -4.6f);
-            view.rotation = Quaternion.LookRotation(campfirePosition + new Vector3(0f, 0.7f, 0.9f) - view.position);
+            view.position = campfirePosition + new Vector3(0f, 2.3f, -3.4f);
+            view.rotation = Quaternion.LookRotation(campfirePosition + new Vector3(0f, 0.45f, 0.8f) - view.position);
             return view;
         }
 

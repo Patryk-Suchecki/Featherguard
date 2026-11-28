@@ -94,10 +94,11 @@ MODELS = {
     "Tavern": dict(parts=under("Site_Karczma"), tris=5500, origin="Site_Karczma", place="Tavern"),
     "Shop": dict(parts=under("Site_Stragan_V5"), tris=4000, origin="Site_Stragan_V5", place="Shop"),
     "Signpost": dict(parts=under("Site_Drogowskaz"), tris=1500, origin="Site_Drogowskaz", place="Embark"),
-    "Campfire": dict(parts=unlit(under("Site_Fire")), tris=800, origin="Site_Fire", place="Camp"),
+    "Campfire": dict(parts=lambda: campfire(bpy.data.objects["Site_Fire"].matrix_world.translation), tris=1500, origin="Site_Fire",
+                     place="Camp", size=512, ray=0.05),
     "SacredOak": dict(parts=lambda: starting("Dab | pien", "Dab | swiece", "V3 | rzezbiony opiekun", "V3 | kaptur posagu")() + under("Site_Oak")(),
                       tris=4500, origin="base:Dab | pien, konary i korzenie", place="SacredOak", ray=0.6),
-    "SacredOakCrown": dict(parts=starting("Dab | korona"), tris=2000, origin="base:Dab | pien, konary i korzenie", clumps=True, ray=1.2, tint="Dab_liscie_atlas"),
+    "SacredOakCrown": dict(parts=starting("Dab | korona"), tris=6000, origin="base:Dab | pien, konary i korzenie", cards="Dab_liscie_atlas", grow=1.55),
     "Stump": dict(parts=starting("V4 | pieniek 0"), tris=175, origin="base", size=256),
     "LanternPost": dict(parts=starting("Camp_LanternPost"), tris=540, origin="base", size=256),
     "Graveyard": dict(parts=starting("Camp_Graveyard", "Nagrobek_"), tris=800, origin="world", size=512),
@@ -174,6 +175,45 @@ def clumps(low, radius=0.55, every=3):
     old = low.data
     low.data = mesh
     bpy.data.meshes.remove(old)
+
+
+def build_cards(name, parts, spec, seed=11):
+    import random
+    rng = random.Random(seed)
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    copies = [evaluated_copy(p, depsgraph) for p in parts]
+    select_only(copies)
+    bpy.ops.object.join()
+    low = bpy.context.view_layer.objects.active
+    low.name = name
+    low.data.name = name
+    bm = bmesh.new()
+    bm.from_mesh(low.data)
+    keep = spec["tris"] / max(1, sum(len(f.verts) - 2 for f in bm.faces))
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if rng.random() > keep], context="FACES")
+    for face in bm.faces:
+        centre = face.calc_center_median()
+        for vert in face.verts:
+            vert.co = centre + (vert.co - centre) * spec.get("grow", 1.0)
+    bm.to_mesh(low.data)
+    bm.free()
+    low.data.materials.clear()
+    image = bpy.data.images[spec["cards"]]
+    os.makedirs(TEXTURE_DIR, exist_ok=True)
+    copy = image.copy()
+    copy.filepath_raw = os.path.join(TEXTURE_DIR, f"{name}_Albedo.png")
+    copy.file_format = "PNG"
+    copy.save()
+    material = bpy.data.materials.new(name)
+    material.use_nodes = True
+    texture = material.node_tree.nodes.new("ShaderNodeTexImage")
+    texture.image = copy
+    bsdf = next(n for n in material.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    material.node_tree.links.new(texture.outputs["Color"], bsdf.inputs["Base Color"])
+    material.node_tree.links.new(texture.outputs["Alpha"], bsdf.inputs["Alpha"])
+    low.data.materials.append(material)
+    print(f"  {name}: {triangles(low.data)} card triangles")
+    return low
 
 
 def build_low(name, parts, spec):
@@ -304,6 +344,73 @@ def bake_albedo(name, low, sources, size, ray, tint=None):
     bsdf.inputs["Roughness"].default_value = 1.0
 
 
+def flat_material(name, colour, emission=None, noise=0.25):
+    material = bpy.data.materials.new(name)
+    material.use_nodes = True
+    nodes, links = material.node_tree.nodes, material.node_tree.links
+    bsdf = next(n for n in nodes if n.type == "BSDF_PRINCIPLED")
+    texture = nodes.new("ShaderNodeTexNoise")
+    texture.inputs["Scale"].default_value = 14.0
+    ramp = nodes.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].color = [c * (1 - noise) for c in colour[:3]] + [1]
+    ramp.color_ramp.elements[1].color = [min(1.0, c * (1 + noise)) for c in colour[:3]] + [1]
+    links.new(texture.outputs["Fac"], ramp.inputs["Fac"])
+    links.new(ramp.outputs["Color"], bsdf.inputs["Base Color"])
+    if emission:
+        bsdf.inputs["Emission Color"].default_value = emission + (1,)
+        bsdf.inputs["Emission Strength"].default_value = 1.0
+    return material
+
+
+def campfire_part(name, mesh_op, material, location, rotation=(0, 0, 0), scale=(1, 1, 1), **kwargs):
+    mesh_op(location=location, rotation=rotation, **kwargs)
+    obj = bpy.context.view_layer.objects.active
+    obj.name = name
+    obj.scale = scale
+    obj.data.materials.append(material)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    return obj
+
+
+def campfire(centre, ring=0.68, seed=7):
+    import random
+    rng = random.Random(seed)
+    stone = flat_material("CampfireStone", (0.13, 0.125, 0.12))
+    bark = flat_material("CampfireBark", (0.22, 0.14, 0.08))
+    char = flat_material("CampfireChar", (0.05, 0.04, 0.04), noise=0.5)
+    ash = flat_material("CampfireAsh", (0.16, 0.15, 0.14), noise=0.4)
+    ember = flat_material("CampfireEmber", (0.6, 0.18, 0.03), emission=(1.0, 0.35, 0.05), noise=0.6)
+    ground = centre.z + 0.01
+    parts = [campfire_part("Ash", bpy.ops.mesh.primitive_cylinder_add, ash, (centre.x, centre.y, ground + 0.01),
+                           scale=(ring * 0.85, ring * 0.85, 0.02), vertices=16)]
+    parts.append(campfire_part("Embers", bpy.ops.mesh.primitive_ico_sphere_add, ember, (centre.x, centre.y, ground + 0.02),
+                               scale=(0.32, 0.32, 0.07), subdivisions=2))
+    count = 13
+    for i in range(count):
+        angle = 2 * math.pi * (i + rng.uniform(-0.2, 0.2)) / count
+        radius = ring + rng.uniform(-0.04, 0.04)
+        size = rng.uniform(0.14, 0.2)
+        parts.append(campfire_part(f"Stone{i}", bpy.ops.mesh.primitive_ico_sphere_add, stone,
+                                   (centre.x + math.cos(angle) * radius, centre.y + math.sin(angle) * radius, ground + size * 0.3),
+                                   rotation=(rng.uniform(0, 3), rng.uniform(0, 3), rng.uniform(0, 3)),
+                                   scale=(size * 1.3, size, size * 0.75), subdivisions=1))
+    for i in range(6):
+        angle = 2 * math.pi * i / 6 + rng.uniform(-0.15, 0.15)
+        length = rng.uniform(0.7, 0.85)
+        tilt = math.radians(rng.uniform(28, 36))
+        base = Vector((centre.x + math.cos(angle) * 0.32, centre.y + math.sin(angle) * 0.32, ground))
+        direction = Vector((-math.cos(angle) * math.sin(tilt), -math.sin(angle) * math.sin(tilt), math.cos(tilt)))
+        middle = base + direction * length / 2
+        rotation = direction.to_track_quat("Z", "Y").to_euler()
+        radius = rng.uniform(0.045, 0.065)
+        parts.append(campfire_part(f"Log{i}", bpy.ops.mesh.primitive_cylinder_add, bark if i % 2 else char, middle,
+                                   rotation=rotation, scale=(radius, radius, length / 2), vertices=7))
+    for i, angle in enumerate((0.4, 2.1)):
+        parts.append(campfire_part(f"Lying{i}", bpy.ops.mesh.primitive_cylinder_add, char, (centre.x, centre.y, ground + 0.06),
+                                   rotation=(math.pi / 2, 0, angle), scale=(0.065, 0.065, ring * 0.75), vertices=7))
+    return parts
+
+
 def bottom_centre(objs):
     corners = [o.matrix_world @ Vector(c) for o in objs for c in o.bound_box]
     return Vector(((min(c.x for c in corners) + max(c.x for c in corners)) / 2,
@@ -319,7 +426,8 @@ def origin_matrix(spec, parts):
         return Matrix.Translation(bottom_centre(parts))
     if origin.startswith("base:"):
         return Matrix.Translation(bottom_centre([bpy.data.objects[origin[5:]]]))
-    return bpy.data.objects[origin].matrix_world.copy()
+    location, rotation, _ = bpy.data.objects[origin].matrix_world.decompose()
+    return Matrix.LocRotScale(location, rotation, None)
 
 
 def write_outputs(name, low):
@@ -356,8 +464,11 @@ def convert(name):
     parts = spec["parts"]()
     print(f"{name}: {len(parts)} parts")
     matrix = origin_matrix(spec, parts)
-    low = build_low(name, parts, spec)
-    bake_albedo(name, low, parts, spec.get("size", 1024), spec.get("ray", 0.25), spec.get("tint"))
+    if spec.get("cards"):
+        low = build_cards(name, parts, spec)
+    else:
+        low = build_low(name, parts, spec)
+        bake_albedo(name, low, parts, spec.get("size", 1024), spec.get("ray", 0.25), spec.get("tint"))
     low.data.transform(matrix.inverted())
     low.matrix_world = Matrix.Identity(4)
     corners = [Vector(c) for c in low.bound_box]

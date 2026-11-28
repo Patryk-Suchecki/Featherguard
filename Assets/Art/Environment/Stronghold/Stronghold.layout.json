@@ -31,8 +31,8 @@
         15.874
       ],
       "yaw": 14.29,
-      "scale": 0.92,
-      "height": 2.378,
+      "scale": 1.0,
+      "height": 2.585,
       "place": "Forge"
     },
     {
@@ -43,8 +43,8 @@
         17.321
       ],
       "yaw": -14.0,
-      "scale": 0.88,
-      "height": 3.53,
+      "scale": 1.0,
+      "height": 4.012,
       "place": "WiseWomansHut"
     },
     {
@@ -55,8 +55,8 @@
         12.753
       ],
       "yaw": 54.0,
-      "scale": 0.4255,
-      "height": 0.96,
+      "scale": 1.0,
+      "height": 2.257,
       "place": "Tavern"
     },
     {
@@ -91,8 +91,8 @@
         8.204
       ],
       "yaw": -0.0,
-      "scale": 0.2899,
-      "height": -0.046,
+      "scale": 1.0,
+      "height": 0.607,
       "place": "Camp"
     },
     {
@@ -116,7 +116,7 @@
       ],
       "yaw": -0.0,
       "scale": 1.0,
-      "height": 9.704
+      "height": 9.613
     },
     {
       "name": "Stump",

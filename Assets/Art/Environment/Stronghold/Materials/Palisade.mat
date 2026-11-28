@@ -29,7 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0
     - _Bands: 3
+    - _Cull: 2
+    - _Cutoff: 0.5
     - _LightThreshold: 0
     - _OutlineWidth: 0.35
     m_Colors:

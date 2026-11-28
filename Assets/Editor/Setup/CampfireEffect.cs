@@ -7,17 +7,26 @@ namespace Featherguard.EditorTools
     public static class CampfireEffect
     {
         const string Shader = "Universal Render Pipeline/Particles/Unlit";
-        const int FlipbookTiles = 8;
+        const string FlameShader = "Featherguard/Flame Billboard";
+        const float BaseHeight = 0.1f;
         const string SparkSource = ContentPaths.Materials + "/Particle.mat";
 
-        static readonly Color FlameTint = new(2.4f, 1.5f, 0.9f, 1f);
+        static readonly Color FlameTint = new(1.8f, 1.25f, 0.9f, 1f);
+
+        static readonly (Vector2 Offset, Vector2 Size)[] Tongues =
+        {
+            (new Vector2(0f, 0f), new Vector2(0.48f, 0.97f)),
+            (new Vector2(-0.17f, 0.1f), new Vector2(0.35f, 0.7f)),
+            (new Vector2(0.16f, 0.05f), new Vector2(0.38f, 0.81f)),
+            (new Vector2(0.03f, -0.13f), new Vector2(0.35f, 0.59f)),
+        };
         static readonly Color SparkTint = new(3f, 1.4f, 0.4f, 1f);
 
         public static Transform Create(Transform parent, string flipbookPath, string materialFolder)
         {
             var root = new GameObject("Fire").transform;
             root.SetParent(parent, false);
-            Flames(root, Additive($"{materialFolder}/Flame.mat", AssetDatabase.LoadAssetAtPath<Texture2D>(flipbookPath), FlameTint));
+            Flames(root, FlameMaterial($"{materialFolder}/Flame.mat", AssetDatabase.LoadAssetAtPath<Texture2D>(flipbookPath)));
             var dot = AssetDatabase.LoadAssetAtPath<Material>(SparkSource);
             Sparks(root, Additive($"{materialFolder}/Spark.mat", dot != null ? dot.mainTexture : null, SparkTint));
             return root;
@@ -25,29 +34,35 @@ namespace Featherguard.EditorTools
 
         static void Flames(Transform root, Material material)
         {
-            var system = Emitter(root, "Flames", material);
-            var main = system.main;
-            main.startLifetime = new ParticleSystem.MinMaxCurve(0.55f, 0.85f);
-            main.startSpeed = new ParticleSystem.MinMaxCurve(0.35f, 0.6f);
-            main.startSize = new ParticleSystem.MinMaxCurve(0.55f, 0.85f);
-            main.startRotation = new ParticleSystem.MinMaxCurve(-0.15f, 0.15f);
-            main.maxParticles = 24;
-            var emission = system.emission;
-            emission.rateOverTime = 16f;
-            var shape = system.shape;
-            shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.angle = 6f;
-            shape.radius = 0.18f;
-            shape.rotation = new Vector3(-90f, 0f, 0f);
-            var sheet = system.textureSheetAnimation;
-            sheet.enabled = true;
-            sheet.numTilesX = FlipbookTiles;
-            sheet.numTilesY = FlipbookTiles;
-            sheet.startFrame = new ParticleSystem.MinMaxCurve(0f, FlipbookTiles * FlipbookTiles - 1);
-            var size = system.sizeOverLifetime;
-            size.enabled = true;
-            size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(new Keyframe(0f, 0.7f), new Keyframe(0.3f, 1f), new Keyframe(1f, 0.35f)));
-            Fade(system, 0.15f, 0.6f);
+            foreach (var (offset, size) in Tongues)
+            {
+                var quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                Object.DestroyImmediate(quad.GetComponent<Collider>());
+                quad.name = "Flame";
+                quad.transform.SetParent(root, false);
+                quad.transform.localPosition = new Vector3(offset.x, BaseHeight + size.y * 0.5f, offset.y);
+                quad.transform.localScale = new Vector3(size.x, size.y, 1f);
+                var renderer = quad.GetComponent<MeshRenderer>();
+                renderer.sharedMaterial = material;
+                renderer.shadowCastingMode = ShadowCastingMode.Off;
+                renderer.receiveShadows = false;
+            }
+        }
+
+        static Material FlameMaterial(string path, Texture texture)
+        {
+            var shader = UnityEngine.Shader.Find(FlameShader);
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null)
+            {
+                material = new Material(shader);
+                AssetDatabase.CreateAsset(material, path);
+            }
+            material.shader = shader;
+            material.SetTexture("_BaseMap", texture);
+            material.SetColor("_Tint", FlameTint);
+            EditorUtility.SetDirty(material);
+            return material;
         }
 
         static void Sparks(Transform root, Material material)
