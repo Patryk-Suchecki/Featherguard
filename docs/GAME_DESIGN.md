@@ -143,7 +143,7 @@ Nine encounters (`Assets/Data/Encounters`, seeded by `EncounterCatalog`); the ac
 
 ## Presentation
 
-- **Visuals:** low-poly characters, generated procedurally in Blender (`Art/Blender`), with animations Idle, Attack, Cast, Hit, Death and Victory. Portraits are rendered from the same models.
+- **Visuals:** low-poly characters, generated procedurally in Blender, with animations Idle, Attack, Cast, Hit, Death and Victory. Portraits are rendered from the same models.
 - **Toon shading:** every unit is drawn with the `Featherguard/Toon` shader: flat light bands, a cool shadow colour and a dark outline. The settings live in `Assets/Art/Materials/Toon.mat`; each unit keeps its own texture and colour.
 - **Impact effects:** an ability can draw an extra effect on the target when its hit lands (`AbilityVisuals.impactEffect`). The Bies' Rending Claws draws three ember claw slashes with a dark outline that cut in, hold and fade within about 0.35 s; their shape and colours are tuned on its AbilityVisuals asset.
 - **Timing prompts (temporary, `BattlePresentationConfig.timingPrompts`):** every timed hero action plays the gesture on its `AbilityVisuals.gesture`. Without one, it shows a white ring shrinking onto a gold circle on the target for 0.8 s; a tap anywhere or Space is judged against the moment they meet: within 0.06 s Perfect, within 0.15 s Good, otherwise Miss (windows in `BattleRules`, scaled by the gesture's `windowScale`). The other gestures play in a panel in the middle of the screen:

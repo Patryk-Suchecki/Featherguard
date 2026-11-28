@@ -29,10 +29,10 @@ For a variant of the same character (another colouring, a possessed version), ha
 
 ## 3. Blender reference images
 
-`scripts/make_refs.py` in this folder cuts the views out of the concept sheet and places them as packed reference image empties in a new `.blend`, as `ART_PIPELINE.md` asks (front on XZ, side on YZ facing −Y, back facing +Y, feet on Z = 0, origin between the feet, visible in orthographic views only):
+The `.blend` files and the Blender scripts live on the developer's own disk, never in the repo; ask the developer where their Blender folder is. Their `make_refs.py` cuts the views out of the concept sheet and places them as packed reference image empties in a new `.blend`, as `ART_PIPELINE.md` asks (front on XZ, side on YZ facing −Y, back facing +Y, feet on Z = 0, origin between the feet, visible in orthographic views only):
 
 ```bash
-"<blender.exe>" -b --factory-startup --python .claude/skills/featherguard-character/scripts/make_refs.py -- --image Art/Concepts/<Name>.png --blend Art/Blender/Characters/<Name>.blend --name <Name> --length 1.6
+"<blender.exe>" -b --factory-startup --python <blender folder>/make_refs.py -- --image Art/Concepts/<Name>.png --blend <blender folder>/<Name>.blend --name <Name> --length 1.6
 ```
 
 - Scale by a measurement from the sheet: `--length <metres>` (the side view from end to end, good for quadrupeds) or `--height <metres>` (the tallest point in the side view, good for upright characters).
@@ -51,11 +51,11 @@ For a variant of the same character (another colouring, a possessed version), ha
 ## 5. Rig, animation and export
 
 - Rig and clips follow `ART_PIPELINE.md` steps 6–7; a new kind of body (the first quadruped, the first flyer) adds its section to `ART_PIPELINE.md` in the same PR.
-- Export only with the export script, from the command line:
+- Export only with the export script from the developer's Blender folder, into the repo:
   ```bash
-  "<blender.exe>" -b Art/Blender/Characters/<Name>.blend -P Art/Blender/export_character.py
+  "<blender.exe>" -b <blender folder>/<Name>.blend -P <blender folder>/export_character.py -- <repo>/Assets/Art/Characters
   ```
   Use the height it prints for the unit's `UnitVisuals.height`.
-- Lock existing binaries before changing them (`git lfs lock`), open the model and the rig as `art/` PRs with no gameplay changes, and bring the character into the game (`UnitCatalog`, `UnitVisuals`, an encounter) in its own feature PR (see `featherguard-task`).
+- Commit only the export, the texture and the concept, never the `.blend`. Lock existing binaries before changing them (`git lfs lock`), open the model and the rig as `art/` PRs with no gameplay changes, and bring the character into the game (`UnitCatalog`, `UnitVisuals`, an encounter) in its own feature PR (see `featherguard-task`).
 - Tick the asset checklist in the character's sheet as each step lands.
 - A PR that moves an enemy or boss to a new stage updates its row in `docs/design/enemies.md`.

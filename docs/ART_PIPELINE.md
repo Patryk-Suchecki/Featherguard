@@ -2,11 +2,13 @@
 
 How a hand-made 3D character goes from an idea to the game; buildings and props follow the same steps without the rig, with the differences in [Environment models](#environment-models). How it should look (proportions, heights by role, fur, textures, colours, VFX) is in [`STYLE_GUIDE.md`](STYLE_GUIDE.md); this file covers the technical rules every character follows, so Unity and the battle code can use it without special cases.
 
+**Only what the game uses goes into the repo:** the exported `.fbx`, the `.clips.json`, the textures and the concept. The `.blend` files and the Blender scripts (export, reference images) stay on the disk of the developer who makes the model, never in the repo.
+
 ## Steps
 
 1. **Character sheet:** copy [`design/characters/TEMPLATE.md`](design/characters/TEMPLATE.md) to `docs/design/characters/<Name>.md` and fill in role, look, abilities, animations, VFX and sounds.
 2. **Concept:** a concept sheet in `Art/Concepts/<Name>.png` (front and side silhouette, colours, key features, battle pose).
-3. **Model** in `Art/Blender/Characters/<Name>.blend`.
+3. **Model** in `<Name>.blend`, on your own disk.
 4. **Texture:** bake the albedo texture from the sculpt in the same `.blend`.
 5. **Rig and animate** in the same `.blend`.
 6. **Export** with the export script (below) into `Assets/Art/Characters`.
@@ -21,7 +23,7 @@ The character name is one English word or PascalCase phrase, the same everywhere
 |---|---|
 | Character sheet | `docs/design/characters/<Name>.md` |
 | Concept | `Art/Concepts/<Name>.png` |
-| Blender source | `Art/Blender/Characters/<Name>.blend` |
+| Blender source | `<Name>.blend` on your own disk, never in the repo |
 | Exported model | `Assets/Art/Characters/<Name>.fbx` |
 | Clip data | `Assets/Art/Characters/<Name>.clips.json` (written by the export script) |
 | Texture | `Assets/Art/Characters/Textures/<Name>_Albedo.png` (written by the export script) |
@@ -83,10 +85,10 @@ Up to six characters are on screen on a phone at once.
 
 ## Export
 
-From the repository root:
+The export script (`export_character.py`) is kept with the Blender files, outside the repo. Run it with the repository folder as the target:
 
 ```bash
-blender -b Art/Blender/Characters/Bies.blend -P Art/Blender/export_character.py
+blender -b <your folder>/Bies.blend -P <your folder>/export_character.py -- <repo>/Assets/Art/Characters
 ```
 
 `blender` is your Blender 5.x executable; use its full path if it is not on `PATH`. The script:
@@ -98,13 +100,13 @@ blender -b Art/Blender/Characters/Bies.blend -P Art/Blender/export_character.py
 - exports the material through its Principled BSDF, so a preview node setup (toon ramp, mix shaders) may stay in the `.blend`;
 - prints the triangle count, bone count and height, measured on the first frame of `Idle`, the pose the unit stands in (use the height for the unit's `height`).
 
-Pass a folder after `--` to export somewhere else for a test, for example `-- Temp/ExportTest`.
+Pass another folder after `--` to export somewhere else for a test.
 
 ## Version control
 
-- Every binary (`.blend`, `.fbx`, `.png`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
+- Every binary in the repo (`.fbx`, `.png`) is in Git LFS and lockable. Lock each existing file before you change it and unlock it after the merge, as [`CONTRIBUTING.md`](CONTRIBUTING.md) shows.
 - A character is added or changed in its own `art/` PR, with no gameplay rule changes. Code that puts the character into the game comes in its own PR.
-- Commit the `.blend`, the export, the texture and the concept together with their `.meta` files.
+- Commit the export, the texture and the concept together with their `.meta` files; never the `.blend`.
 
 ## Environment models
 
@@ -117,7 +119,7 @@ The model name is the concept sheet's name: `Forge`, `SacredOak`, `Palisade`. On
 | What | Where |
 |---|---|
 | Concept | `Art/Concepts/<Place>/<Name>.png` (for example `Art/Concepts/Stronghold/Forge.png`) |
-| Blender source | `Art/Blender/Environment/<Place>/<Name>.blend` |
+| Blender source | `<Name>.blend` on your own disk, never in the repo |
 | Exported model | `Assets/Art/Environment/<Place>/<Object>.fbx`, one per object |
 | Texture | `Assets/Art/Environment/<Place>/Textures/<Name>_Albedo.png`, one per `.blend` |
 
@@ -165,7 +167,7 @@ The whole Stronghold is on screen at once, so the budget is shared.
 
 ### Export
 
-- Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. An export script for environment models comes with the first model (#132); it can reuse `export_static_fbx` in `Art/Blender/featherkit.py`. Until then, export by hand with the same settings: **Selected Objects**, Apply Scalings **FBX All**, Forward **−Z**, Up **Y**, Smoothing **Face**, no animation.
+- Every object in the `.blend` is exported to its own FBX at its origin, with the shared texture, into `Assets/Art/Environment/<Place>`. Export by hand or with your own script, with these settings: **Selected Objects**, Apply Scalings **FBX All**, Forward **−Z**, Up **Y**, Smoothing **Face**, no animation.
 - Lock and commit exactly as for characters (see [Version control](#version-control)): one `art/` PR per model or kit.
 
 ## Material and potion icons
@@ -297,7 +299,7 @@ What the Wolf, the first quadruped, uses:
   - the references,
   - the fur or hair flow guide.
 - Name temporary backups with a `_Pre` suffix (`Attack_PreRebuild`, `Body_PreRig`) and delete them when the step is done.
-- Purge orphan data (File → Clean Up) before committing.
+- Purge orphan data (File → Clean Up) before you export.
 - The `Outline` Solidify preview modifier may stay; the export leaves it out.
 
 ### 9. Unity import
