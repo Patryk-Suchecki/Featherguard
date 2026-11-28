@@ -44,7 +44,7 @@ How the two of us work on this repo, step by step. The rules themselves (archite
 8. **Tests:** Window → General → Test Runner → EditMode → Run All. Everything must be green.
 9. **Claude Code:** install it from https://claude.com/claude-code (desktop app or CLI) and open it in the repo folder. It loads `CLAUDE.md`, `.claude/settings.json` and the shared skills in `.claude/skills/` automatically. Your own Claude memory and personal skills are not shared with the other developer: anything you both need goes into `CLAUDE.md` or a shared skill through a PR.
 10. **Optional tools:**
-    - **Blender 5.x** – for character and environment models in `Art/Blender`.
+    - **Blender 5.x** – for character and environment models, kept on your own disk; only the exported `.fbx` and textures go into the repo.
     - **Unity CLI (`unity`)** – lets Claude run tests and drive an open editor from the terminal. Without it, run tests in the Test Runner when Claude asks.
     - Your IDE (Rider or Visual Studio) picks up `.editorconfig`, which keeps formatting and naming the same for both of us.
 
