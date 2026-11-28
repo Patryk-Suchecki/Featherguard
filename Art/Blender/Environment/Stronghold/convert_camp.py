@@ -11,7 +11,9 @@ emission and a light ambient occlusion) into one albedo atlas, and writes:
     Assets/Art/Environment/Stronghold/Textures/<Name>_Albedo.png
 With no names given it converts every model and also writes
 Assets/Art/Environment/Stronghold/Stronghold.layout.json: where every model, seat,
-light and label stands and the camera, in Unity coordinates (x, z, y of Blender).
+light and label stands and the camera, in Unity coordinates (x, z, y of Blender), and
+renders the sky, the moon and the far mountains into the 360 degree skybox
+Assets/Art/Environment/Stronghold/Textures/Sky_Panorama.png.
 """
 
 import json
@@ -108,9 +110,12 @@ MODELS = {
     "GroundDetails": dict(parts=starting("Kamien", "V4 | kamienie osadzone", "V4 | kepka", "V3 | skala w zboczu", "V3 | lupki",
                                          "V4 | przyziemne rozety", "Stopien", "Karczma | trawa"),
                           tris=9000, origin="world", ray=0.15),
-    "Backdrop": dict(parts=starting("V4 | dalsza warstwa lasu", "V4 | las z galezistymi", "V4 | rzezba odleglych gor"),
-                     tris=9000, origin="world", ray=3.0, remesh=0.6),
+    "Forest": dict(parts=starting("V4 | dalsza warstwa lasu", "V4 | las z galezistymi"), tris=8000, origin="world", ray=1.5, remesh=0.6),
 }
+
+SKY_PARTS = ("Ksiezyc", "V4 | rzezba odleglych gor")
+SKY_LIGHT = "Swiatlo ksiezyca"
+SKY_SIZE = (4096, 2048)
 
 SEATS = "V4 | pieniek "
 LIGHTS = {
@@ -382,19 +387,47 @@ def camera():
     return dict(position=unity(cam.matrix_world.translation), forward=unity(forward), up=unity(up), fieldOfView=round(math.degrees(vertical), 2))
 
 
+def sky():
+    scene = bpy.context.scene
+    keep = {o for o in scene.objects if o.name.startswith(SKY_PARTS) or o.name == SKY_LIGHT}
+    for obj in scene.objects:
+        obj.hide_render = obj not in keep
+    cam = bpy.data.objects.new("SkyCamera", bpy.data.cameras.new("SkyCamera"))
+    scene.collection.objects.link(cam)
+    cam.location = scene.camera.matrix_world.translation
+    cam.rotation_euler = (math.radians(90), 0, 0)
+    cam.data.type = "PANO"
+    cam.data.panorama_type = "EQUIRECTANGULAR"
+    cam.data.clip_end = 20000
+    scene.camera = cam
+    scene.render.engine = "CYCLES"
+    scene.cycles.device = "CPU"
+    scene.cycles.samples = 32
+    scene.cycles.use_denoising = True
+    scene.render.use_compositing = False
+    scene.render.resolution_x, scene.render.resolution_y = SKY_SIZE
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = os.path.join(TEXTURE_DIR, "Sky_Panorama.png")
+    bpy.ops.render.render(write_still=True)
+    print("Sky:", scene.render.filepath)
+
+
 def main():
     args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    names = args or list(MODELS)
-    models = [convert(name) for name in names]
+    names = args or list(MODELS) + ["Sky"]
+    models = [convert(name) for name in names if name in MODELS]
     if args and os.path.exists(LAYOUT):
         with open(LAYOUT, encoding="utf-8") as file:
             converted = {m["name"]: m for m in models}
-            models = [converted.pop(m["name"], m) for m in json.load(file)["models"]] + list(converted.values())
+            models = [converted.pop(m["name"], m) for m in json.load(file)["models"] if m["name"] in MODELS] + list(converted.values())
     fire = bpy.data.objects["Site_Fire"].matrix_world.translation
     layout = dict(camera=camera(), campfire=unity(fire), models=models, seats=seats(), lights=lights())
     with open(LAYOUT, "w", encoding="utf-8") as file:
         json.dump(layout, file, indent=2)
     print("Layout:", LAYOUT)
+    if "Sky" in names:
+        sky()
 
 
 main()

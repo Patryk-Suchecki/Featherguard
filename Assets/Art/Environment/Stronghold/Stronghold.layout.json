@@ -207,7 +207,7 @@
       "height": 2.476
     },
     {
-      "name": "Backdrop",
+      "name": "Forest",
       "position": [
         0.0,
         0.0,
@@ -215,7 +215,7 @@
       ],
       "yaw": -0.0,
       "scale": 1.0,
-      "height": 148.801
+      "height": 6.741
     }
   ],
   "seats": [

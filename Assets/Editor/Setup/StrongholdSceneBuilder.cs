@@ -19,9 +19,11 @@ namespace Featherguard.EditorTools
         const float LabelGap = 0.6f;
         const float FarClip = 400f;
         const float MoonIntensity = 1.4f;
-        const float FogDensity = 0.009f;
+        const float FogDensity = 0.006f;
+        const float SkyRotation = 90f;
+        const string SkyTexture = Models + "/Textures/Sky_Panorama.png";
 
-        static readonly Color Sky = new(0.13f, 0.16f, 0.24f);
+        static readonly Color Horizon = new(0.34f, 0.39f, 0.49f);
         static readonly Quaternion ImportTurn = Quaternion.Euler(90f, 0f, 0f);
 
         static readonly Dictionary<string, (StrongholdPlaceKind Kind, string Name)> Places = new()
@@ -72,8 +74,9 @@ namespace Featherguard.EditorTools
             campfirePosition = StrongholdLayout.Point(layout.campfire);
             NightScene.PostFX(ContentPaths.StrongholdPostProfile);
             NightScene.ConfigureLighting().intensity = MoonIntensity;
-            RenderSettings.fogColor = Sky;
+            RenderSettings.fogColor = Horizon;
             RenderSettings.fogDensity = FogDensity;
+            RenderSettings.skybox = SkyMaterial();
             var camera = Camera(layout.camera);
 
             var world = new GameObject("World").transform;
@@ -115,8 +118,36 @@ namespace Featherguard.EditorTools
             var camera = NightScene.CreateCamera(position, position + forward, placement.fieldOfView);
             camera.transform.rotation = Quaternion.LookRotation(forward, StrongholdLayout.Point(placement.up));
             camera.farClipPlane = FarClip;
-            camera.backgroundColor = Sky;
+            camera.clearFlags = CameraClearFlags.Skybox;
             return camera;
+        }
+
+        static Material SkyMaterial()
+        {
+            var importer = (TextureImporter)AssetImporter.GetAtPath(SkyTexture);
+            if (importer.mipmapEnabled || importer.maxTextureSize != 4096 || importer.wrapModeV != TextureWrapMode.Clamp)
+            {
+                importer.mipmapEnabled = false;
+                importer.maxTextureSize = 4096;
+                importer.wrapModeU = TextureWrapMode.Repeat;
+                importer.wrapModeV = TextureWrapMode.Clamp;
+                importer.SaveAndReimport();
+            }
+            string path = $"{Materials}/Sky.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null)
+            {
+                Seeder.EnsureFolder(Materials);
+                material = new Material(Shader.Find("Skybox/Panoramic"));
+                AssetDatabase.CreateAsset(material, path);
+            }
+            material.shader = Shader.Find("Skybox/Panoramic");
+            material.SetTexture("_MainTex", AssetDatabase.LoadAssetAtPath<Texture2D>(SkyTexture));
+            material.SetFloat("_Mapping", 1f);
+            material.SetFloat("_ImageType", 0f);
+            material.SetFloat("_Rotation", SkyRotation);
+            EditorUtility.SetDirty(material);
+            return material;
         }
 
         static Transform Model(Transform world, ModelPlacement placement)
